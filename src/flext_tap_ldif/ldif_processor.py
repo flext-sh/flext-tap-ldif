@@ -1,20 +1,13 @@
-"""Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT.
-"""
-
-from __future__ import annotations
-
-from flext_core import FlextTypes
-
 """LDIF file processing module for FLEXT Tap LDIF using flext-ldif infrastructure.
 
-Copyright (c) 2025 Flext. All rights reserved.
+Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 
 This module eliminates code duplication by using the FLEXT LDIF infrastructure
 implementation from flext-ldif project.
 """
 
+from __future__ import annotations
 
 from collections.abc import Generator
 from pathlib import Path
@@ -33,7 +26,7 @@ LDIFProcessor = FlextLDIFAPI
 class FlextLDIFProcessorWrapper:
     """Wrapper for FlextLDIFProcessor to maintain API compatibility."""
 
-    def __init__(self, config: FlextTypes.Core.Dict) -> None:
+    def __init__(self, config: dict[str, object]) -> None:
         """Initialize the LDIF processor using flext-ldif infrastructure.
 
         Args:
@@ -77,7 +70,7 @@ class FlextLDIFProcessorWrapper:
             max_file_size_mb=max_file_size_mb,
         )
 
-    def process_file(self, file_path: Path) -> Generator[FlextTypes.Core.Dict]:
+    def process_file(self, file_path: Path) -> Generator[dict[str, object]]:
         """Process a single LDIF file and yield records using flext-ldif.
 
         Args:
@@ -87,7 +80,7 @@ class FlextLDIFProcessorWrapper:
             Dictionary records representing LDIF entries.
 
         Returns:
-            Generator[FlextTypes.Core.Dict]:: Description of return value.
+            Generator[dict[str, object]]: Dictionary records representing LDIF entries.
 
         """
         logger.info("Processing LDIF file: %s", file_path)
@@ -100,11 +93,11 @@ class FlextLDIFProcessorWrapper:
             with file_path.open("r", encoding=encoding) as file:
                 content = file.read()
                 parse_result = self._api.parse(content)
-                if not parse_result.success:
+                if parse_result.is_failure:
                     msg: str = f"Failed to parse LDIF: {parse_result.error}"
                     self._raise_parse_error(msg)
                     return
-                entries = parse_result.data
+                entries = parse_result.value
 
                 if entries is None:
                     logger.warning("No entries found in file: %s", file_path)
@@ -133,7 +126,7 @@ class FlextLDIFProcessorWrapper:
 # Create the original class name for backward compatibility
 FlextLDIFProcessor: type[FlextLDIFProcessorWrapper] = FlextLDIFProcessorWrapper
 
-__all__: FlextTypes.Core.StringList = [
+__all__: list[str] = [
     "FlextLDIFProcessor",
     "LDIFProcessor",
 ]

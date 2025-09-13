@@ -6,14 +6,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_core import FlextTypes
-
-"""
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-"""
-
-
 import tempfile
 from collections.abc import Iterable, Mapping
 from pathlib import Path
@@ -23,16 +15,6 @@ from flext_meltano import Stream, singer_typing as th
 
 from flext_tap_ldif.ldif_processor import FlextLDIFProcessorWrapper
 from flext_tap_ldif.tap import TapLDIF
-
-logger = FlextLogger(__name__)
-
-
-class LDIFEntriesStream(Stream):
-    """LDIF entries stream using flext-ldif for ALL processing."""
-
-
-from flext_core import FlextLogger
-from flext_meltano import Stream
 
 logger = FlextLogger(__name__)
 
@@ -82,7 +64,7 @@ class LDIFEntriesStream(Stream):
                         exc,
                     )
 
-    def _get_schema(self) -> FlextTypes.Core.Dict:
+    def _get_schema(self) -> dict[str, object]:
         """Get schema for LDIF entries."""
         return th.PropertiesList(
             th.Property("dn", th.StringType, description="Distinguished Name"),
@@ -109,7 +91,7 @@ class LDIFEntriesStream(Stream):
     def get_records(
         self,
         _context: Mapping[str, object] | None = None,
-    ) -> Iterable[FlextTypes.Core.Dict]:
+    ) -> Iterable[dict[str, object]]:
         """Return a generator of record-type dictionary objects.
 
         Args:

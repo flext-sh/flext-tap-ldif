@@ -1,24 +1,16 @@
-"""Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT.
-"""
-
-from __future__ import annotations
-
-from flext_core import FlextTypes
-
 """LDIF tap exception hierarchy using flext-core DRY patterns.
 
-Copyright (c) 2025 FLEXT Contributors
+Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 
 Domain-specific exceptions using factory pattern to eliminate duplication.
 """
 
+from __future__ import annotations
 
 from typing import cast
 
 from flext_core import FlextExceptions, create_module_exception_classes
-from flext_core.exceptions import FlextExceptions
 
 type FlextExceptionType = type[FlextExceptions.Base.FlextExceptionsMixin]
 
@@ -126,7 +118,7 @@ class FlextTapLdifStreamError(FlextTapLdifError):
         super().__init__(f"LDIF tap stream: {message}", context=context)
 
 
-__all__: FlextTypes.Core.StringList = [
+__all__: list[str] = [
     "FlextTapLdifConfigurationError",
     "FlextTapLdifError",
     "FlextTapLdifFileError",
