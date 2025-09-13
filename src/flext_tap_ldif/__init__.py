@@ -1,23 +1,17 @@
-"""Copyright (c) 2025 FLEXT Team. All rights reserved.
+"""FLEXT Tap LDIF - Enterprise Singer Tap for LDIF Data Extraction.
+
+Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT.
 """
 
 from __future__ import annotations
-
-from flext_core import FlextTypes
-
-"""FLEXT Tap LDIF - Enterprise Singer Tap for LDIF Data Extraction."""
-"""
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-"""
-
 
 import importlib.metadata
 
 # flext-core imports
 from flext_core import FlextLogger, FlextModels, FlextResult
 
+# flext-core imports
 # === FLEXT-MELTANO COMPLETE INTEGRATION ===
 # Re-export ALL flext-meltano facilities for full ecosystem integration
 from flext_meltano import (
@@ -81,7 +75,7 @@ except importlib.metadata.PackageNotFoundError:
 __version_info__ = tuple(int(x) for x in __version__.split(".") if x.isdigit())
 
 # Complete public API exports
-__all__: FlextTypes.Core.StringList = [
+__all__: list[str] = [
     "BatchSink",
     # Legacy processor classes
     "FlextLDIFProcessor",

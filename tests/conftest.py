@@ -1,13 +1,3 @@
-"""Test configuration for flext-tap-ldif.
-
-Provides pytest fixtures and configuration for testing LDIF tap functionality
-using Singer protocol and real LDIF file processing.
-
-
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-"""
-
 from __future__ import annotations
 
 import os
@@ -141,6 +131,7 @@ sn: User
 givenName: Test
 mail: test.user@example.com
 """
+
     (ldif_dir / "additional.ldif").write_text(additional_content, encoding="utf-8")
 
     return ldif_dir
@@ -403,6 +394,7 @@ def mock_ldif_tap() -> object:
 
     class MockLDIFTap:
         def __init__(self, config: FlextTypes.Core.Dict) -> None:
+            """Initialize the instance."""
             self.config = config
             self.discovered_streams: list[FlextTypes.Core.Dict] = []
 
@@ -430,6 +422,7 @@ def mock_ldif_parser() -> object:
 
     class MockLDIFParser:
         def __init__(self, config: FlextTypes.Core.Dict) -> None:
+            """Initialize the instance."""
             self.config = config
             self.parsed_entries: list[FlextTypes.Core.Dict] = []
 

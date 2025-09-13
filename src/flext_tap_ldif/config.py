@@ -6,17 +6,9 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_core import FlextTypes
-
-"""
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-"""
-
-
 from flext_core import FlextModels, FlextResult
 from flext_meltano import validate_directory_path, validate_file_path
-from pydantic import Field, field_validator
+from pydantic import ConfigDict, Field, field_validator
 
 # Constants for validation limits
 MAX_BATCH_SIZE = 10000
@@ -24,72 +16,69 @@ MAX_FILE_SIZE_MB = 1000
 
 
 class TapLDIFConfig(FlextModels.Config):
-    """Configuration for the LDIF tap."""
+    """Configuration for the LDIF tap with optimized Python 3.13+ patterns."""
 
-    # File Input Configuration
+    model_config = ConfigDict(
+        validate_assignment=True,
+        use_enum_values=True,
+        arbitrary_types_allowed=True,
+        str_strip_whitespace=True,
+        validate_default=True,
+        extra="forbid",
+    )
+
+    # File Input Configuration - using Python 3.13+ type union syntax
     file_path: str | None = Field(
-        default=None,
-        description="Path to the LDIF file to extract data from",
+        default=None, description="Path to the LDIF file to extract data from"
     )
 
     file_pattern: str | None = Field(
-        default=None,
-        description="Pattern for multiple LDIF files (e.g., '*.ldif')",
+        default=None, description="Pattern for multiple LDIF files (e.g., '*.ldif')"
     )
 
     directory_path: str | None = Field(
-        default=None,
-        description="Directory containing LDIF files",
+        default=None, description="Directory containing LDIF files"
     )
 
-    # Filtering Configuration
+    # Filtering Configuration with optimized defaults
     base_dn_filter: str | None = Field(
-        default=None,
-        description="Filter entries by base DN pattern",
+        default=None, description="Filter entries by base DN pattern"
     )
 
-    object_class_filter: FlextTypes.Core.StringList | None = Field(
-        default=None,
-        description="Filter entries by object class",
+    object_class_filter: list[str] = Field(
+        default_factory=list, description="Filter entries by object class"
     )
 
-    attribute_filter: FlextTypes.Core.StringList | None = Field(
-        default=None,
-        description="Include only specified attributes",
+    attribute_filter: list[str] = Field(
+        default_factory=list, description="Include only specified attributes"
     )
 
-    exclude_attributes: FlextTypes.Core.StringList | None = Field(
-        default=None,
-        description="Exclude specified attributes",
+    exclude_attributes: list[str] = Field(
+        default_factory=list, description="Exclude specified attributes"
     )
 
-    # Processing Configuration
-    encoding: str = Field(
-        default="utf-8",
-        description="File encoding (default: utf-8)",
-    )
+    # Processing Configuration with proper constraints
+    encoding: str = Field(default="utf-8", description="File encoding (default: utf-8)")
 
     batch_size: int = Field(
         default=1000,
         ge=1,
-        le=10000,
+        le=MAX_BATCH_SIZE,
         description="Number of entries to process in each batch",
     )
 
     include_operational_attributes: bool = Field(
-        default=False,
-        description="Include operational attributes in output",
+        default=False, description="Include operational attributes in output"
     )
 
     strict_parsing: bool = Field(
-        default=True,
-        description="Enable strict LDIF parsing (fail on errors)",
+        default=True, description="Enable strict LDIF parsing (fail on errors)"
     )
 
     max_file_size_mb: int = Field(
         default=100,
         ge=1,
-        le=1000,
+        le=MAX_FILE_SIZE_MB,
         description="Maximum file size in MB to process",
     )
 
@@ -111,27 +100,17 @@ class TapLDIFConfig(FlextModels.Config):
 
         # Delegate to business rules validation
         validation_result = self.validate_business_rules()
-        if not validation_result.success:
+        if validation_result.is_failure:
             raise ValueError(validation_result.error)
 
     def validate_business_rules(self) -> FlextResult[None]:
         """Validate LDIF tap configuration business rules."""
-        # Validate input sources
-        input_validation = self._validate_input_sources()
-        if not input_validation.success:
-            return input_validation
-
-        # Validate constraints
-        constraints_validation = self._validate_constraints()
-        if not constraints_validation.success:
-            return constraints_validation
-
-        # Validate filters
-        filters_validation = self._validate_filters()
-        if not filters_validation.success:
-            return filters_validation
-
-        return FlextResult[None].ok(None)
+        # Validate input sources using FlextResult chaining
+        return (
+            self._validate_input_sources()
+            .flat_map(lambda _: self._validate_constraints())
+            .flat_map(lambda _: self._validate_filters())
+        )
 
     def _validate_input_sources(self) -> FlextResult[None]:
         """Validate input source configuration."""
@@ -174,7 +153,7 @@ class TapLDIFConfig(FlextModels.Config):
         return FlextResult[None].ok(None)
 
     @property
-    def ldif_config(self) -> FlextTypes.Core.Dict:
+    def ldif_config(self) -> dict[str, object]:
         """Get LDIF-specific configuration as a dictionary."""
         return {
             "file_path": self.file_path,

@@ -1,23 +1,5 @@
-"""tap-ldif main tap class.
-
-This module implements the main tap class for LDIF file format data extraction.
-
-
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-"""
-
 from __future__ import annotations
 
-from flext_core import FlextTypes
-
-"""
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-"""
-
-
-# MIGRATED: Singer SDK imports centralized via flext-meltano
 from typing import ClassVar
 
 from flext_core import FlextLogger
@@ -35,7 +17,7 @@ class TapLDIF(Tap):
     name: str = "tap-ldif"
     config_class = TapLDIFConfig
     # Schema combining file-based configuration with LDIF-specific properties
-    config_jsonschema: ClassVar[FlextTypes.Core.Dict] = th.PropertiesList(
+    config_jsonschema: ClassVar[dict[str, object]] = th.PropertiesList(
         # File-based properties
         th.Property(
             "file_path",
@@ -111,7 +93,7 @@ class TapLDIF(Tap):
             LDIFEntriesStream(tap=self),
         ]
 
-    def _get_ldif_entries_schema(self) -> FlextTypes.Core.Dict:
+    def _get_ldif_entries_schema(self) -> dict[str, object]:
         """Get the schema for LDIF entries stream.
 
         Returns:
