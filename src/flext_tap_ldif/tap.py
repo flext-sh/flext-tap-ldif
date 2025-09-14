@@ -1,3 +1,9 @@
+"""FLEXT Tap LDIF - Singer protocol implementation for LDIF file data extraction.
+
+Copyright (c) 2025 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
+"""
+
 from __future__ import annotations
 
 from typing import ClassVar
