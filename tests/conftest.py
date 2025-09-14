@@ -1,3 +1,5 @@
+"""Test configuration and fixtures for flext-tap-ldif tests."""
+
 from __future__ import annotations
 
 import os
