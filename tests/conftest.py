@@ -426,7 +426,7 @@ def mock_ldif_parser() -> object:
             self.config = config
             self.parsed_entries: list[FlextTypes.Core.Dict] = []
 
-        async def parse_file(self, file_path: str) -> FlextTypes.Core.Dict:
+        async def parse_file(self, _file_path: str) -> FlextTypes.Core.Dict:
             return {
                 "success": True,
                 "entries": self.parsed_entries,
