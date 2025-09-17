@@ -6,9 +6,10 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from pydantic import ConfigDict, Field, field_validator
+
 from flext_core import FlextModels, FlextResult
 from flext_meltano import validate_directory_path, validate_file_path
-from pydantic import ConfigDict, Field, field_validator
 
 # Constants for validation limits
 MAX_BATCH_SIZE = 10000

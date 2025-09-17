@@ -3,56 +3,24 @@
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 
-Domain-specific exceptions using factory pattern to eliminate duplication.
+Domain-specific exceptions using direct inheritance from flext-core.
 """
 
 from __future__ import annotations
 
-from typing import cast
+from flext_core import FlextExceptions
 
-from flext_core import FlextExceptions, create_module_exception_classes
-
-type FlextExceptionType = type[FlextExceptions.Base.FlextExceptionsMixin]
-
-# Create all standard exception classes using factory pattern - avoids heavy
-# conditional imports and ensures runtime availability without TYPE_CHECKING.
-ldif_exceptions = create_module_exception_classes("flext_tap_ldif")
-_prefix = "FLEXT_TAP_LDIF"
-_mapping = {
-    "FlextTapLdifError": f"{_prefix}Error",
-    "FlextTapLdifValidationError": f"{_prefix}ValidationError",
-    "FlextTapLdifConfigurationError": f"{_prefix}ConfigurationError",
-    "FlextTapLdifConnectionError": f"{_prefix}ConnectionError",
-    "FlextTapLdifProcessingError": f"{_prefix}ProcessingError",
-    "FlextTapLdifAuthenticationError": f"{_prefix}AuthenticationError",
-    "FlextTapLdifTimeoutError": f"{_prefix}TimeoutError",
-}
-
-# Type cast to help MyPy understand these are class types, not variables
-FlextTapLdifError = cast(
-    "FlextExceptionType", ldif_exceptions[_mapping["FlextTapLdifError"]]
-)
-FlextTapLdifValidationError = cast(
-    "FlextExceptionType", ldif_exceptions[_mapping["FlextTapLdifValidationError"]]
-)
-FlextTapLdifConfigurationError = cast(
-    "FlextExceptionType", ldif_exceptions[_mapping["FlextTapLdifConfigurationError"]]
-)
-FlextTapLdifConnectionError = cast(
-    "FlextExceptionType", ldif_exceptions[_mapping["FlextTapLdifConnectionError"]]
-)
-FlextTapLdifProcessingError = cast(
-    "FlextExceptionType", ldif_exceptions[_mapping["FlextTapLdifProcessingError"]]
-)
-FlextTapLdifAuthenticationError = cast(
-    "FlextExceptionType", ldif_exceptions[_mapping["FlextTapLdifAuthenticationError"]]
-)
-FlextTapLdifTimeoutError = cast(
-    "FlextExceptionType", ldif_exceptions[_mapping["FlextTapLdifTimeoutError"]]
-)
+# Use flext-core exception classes directly for proper type safety
+FlextTapLdifError = FlextExceptions.Error
+FlextTapLdifValidationError = FlextExceptions.ValidationError
+FlextTapLdifConfigurationError = FlextExceptions.ConfigurationError
+FlextTapLdifConnectionError = FlextExceptions.ConnectionError
+FlextTapLdifProcessingError = FlextExceptions.ProcessingError
+FlextTapLdifAuthenticationError = FlextExceptions.AuthenticationError
+FlextTapLdifTimeoutError = FlextExceptions.TimeoutError
 
 
-class FlextTapLdifParseError(FlextExceptions.ProcessingError):
+class FlextTapLdifParseError(FlextExceptions._ProcessingError):
     """LDIF tap parsing errors with LDIF-specific context."""
 
     def __init__(
@@ -78,7 +46,7 @@ class FlextTapLdifParseError(FlextExceptions.ProcessingError):
             setattr(self, key, value)
 
 
-class FlextTapLdifFileError(FlextTapLdifError):
+class FlextTapLdifFileError(FlextExceptions._Error):
     """LDIF tap file operation errors with file-specific context."""
 
     def __init__(
@@ -98,7 +66,7 @@ class FlextTapLdifFileError(FlextTapLdifError):
         super().__init__(f"LDIF tap file: {message}", context=context)
 
 
-class FlextTapLdifStreamError(FlextTapLdifError):
+class FlextTapLdifStreamError(FlextExceptions._Error):
     """LDIF tap stream processing errors with stream-specific context."""
 
     def __init__(
