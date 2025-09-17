@@ -10,7 +10,6 @@ from typing import ClassVar
 
 from flext_core import FlextLogger
 from flext_meltano import Stream, Tap, singer_typing as th
-
 from flext_tap_ldif.config import TapLDIFConfig
 from flext_tap_ldif.streams import LDIFEntriesStream
 

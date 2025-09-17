@@ -12,8 +12,7 @@ from pathlib import Path
 
 from flext_core import FlextLogger
 from flext_meltano import Stream, singer_typing as th
-
-from flext_tap_ldif.ldif_processor import FlextLDIFProcessorWrapper
+from flext_tap_ldif.ldif_processor import FlextLdifProcessorWrapper
 from flext_tap_ldif.tap import TapLDIF
 
 logger = FlextLogger(__name__)
@@ -33,7 +32,7 @@ class LDIFEntriesStream(Stream):
 
         """
         super().__init__(tap, name="ldif_entries", schema=self._get_schema())
-        self._processor = FlextLDIFProcessorWrapper(dict(tap.config))
+        self._processor = FlextLdifProcessorWrapper(dict(tap.config))
         self._tap = tap
 
         # Ensure a sample LDIF file exists in temp for default tests if none provided

@@ -51,8 +51,8 @@ from flext_tap_ldif.exceptions import (
     FlextTapLdifValidationError,
 )
 from flext_tap_ldif.ldif_processor import (
-    FlextLDIFProcessor,
-    FlextLDIFProcessorWrapper,
+    FlextLdifProcessor,
+    FlextLdifProcessorWrapper,
     LDIFProcessor,
 )
 from flext_tap_ldif.streams import LDIFEntriesStream
@@ -78,8 +78,8 @@ __version_info__ = tuple(int(x) for x in __version__.split(".") if x.isdigit())
 __all__: list[str] = [
     "BatchSink",
     # Legacy processor classes
-    "FlextLDIFProcessor",
-    "FlextLDIFProcessorWrapper",
+    "FlextLdifProcessor",
+    "FlextLdifProcessorWrapper",
     "FlextLogger",
     # Bridge integration
     "FlextMeltanoBridge",

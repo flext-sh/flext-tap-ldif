@@ -14,17 +14,17 @@ from pathlib import Path
 from typing import NoReturn
 
 from flext_core import FlextLogger, FlextResult
-from flext_ldif import FlextLDIFAPI
+from flext_ldif import FlextLdifAPI
 
 logger = FlextLogger(__name__)
 # Use flext-ldif processor instead of reimplementing LDIF functionality
-LDIFProcessor = FlextLDIFAPI
+LDIFProcessor = FlextLdifAPI
 
 # Backward compatibility alias removed (causes self-assignment warning)
 
 
-class FlextLDIFProcessorWrapper:
-    """Wrapper for FlextLDIFProcessor to maintain API compatibility."""
+class FlextLdifProcessorWrapper:
+    """Wrapper for FlextLdifProcessor to maintain API compatibility."""
 
     def __init__(self, config: dict[str, object]) -> None:
         """Initialize the LDIF processor using flext-ldif infrastructure.
@@ -37,7 +37,7 @@ class FlextLDIFProcessorWrapper:
 
         """
         self.config = config
-        self._api = FlextLDIFAPI()
+        self._api = FlextLdifAPI()
 
     def _raise_parse_error(self, msg: str) -> NoReturn:
         """Raise parse error with message."""
@@ -104,7 +104,7 @@ class FlextLDIFProcessorWrapper:
                     return
 
                 for entry in entries:
-                    # Convert FlextLDIFEntry to expected dictionary format
+                    # Convert FlextLdifEntry to expected dictionary format
                     yield {
                         "dn": str(entry.dn),
                         "attributes": entry.attributes.attributes,
@@ -124,9 +124,9 @@ class FlextLDIFProcessorWrapper:
 
 
 # Create the original class name for backward compatibility
-FlextLDIFProcessor: type[FlextLDIFProcessorWrapper] = FlextLDIFProcessorWrapper
+FlextLdifProcessor: type[FlextLdifProcessorWrapper] = FlextLdifProcessorWrapper
 
 __all__: list[str] = [
-    "FlextLDIFProcessor",
+    "FlextLdifProcessor",
     "LDIFProcessor",
 ]
