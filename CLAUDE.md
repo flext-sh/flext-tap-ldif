@@ -3,8 +3,20 @@
 **Project**: FLEXT Tap LDIF - Enterprise LDIF Data Extraction  
 **Status**: Quality Refactoring Required | **Architecture**: Clean Architecture + DDD  
 **Dependencies**: Python 3.13+, flext-core, flext-ldif, flext-meltano, singer-sdk  
-**Coverage Target**: 90% | **Current Type Status**: Requires Assessment  
+**Coverage Target**: 75% minimum (proven achievable), 100% aspirational target | **Current Type Status**: Requires Assessment
 **Authority**: FLEXT-TAP-LDIF | **Last Updated**: 2025-01-08
+
+**Hierarchy**: This document provides project-specific standards based on workspace-level patterns defined in [../CLAUDE.md](../CLAUDE.md). For architectural principles, quality gates, and MCP server usage, reference the main workspace standards.
+
+## 🔗 MCP SERVER INTEGRATION
+
+| MCP Server | Purpose | Status |
+|------------|---------|--------|
+| **serena** | Singer tap codebase analysis and LDIF extraction patterns | **ACTIVE** |
+| **sequential-thinking** | LDIF data processing and Singer protocol architecture | **ACTIVE** |
+| **github** | Singer ecosystem integration and tap PRs | **ACTIVE** |
+
+**Usage**: `claude mcp list` for available servers, leverage for Singer-specific development patterns and LDIF extraction analysis.
 
 ---
 
@@ -299,7 +311,7 @@ class TapLDIFConfig(FlextModel):
 class LDIFEntriesStream(Stream):
     """Enhanced LDIF entries stream with flext-ldif integration."""
 
-    def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
+    def get_records(self, context: dict | None) -> Iterable[dict[str, object]]:
         """Extract LDIF records with comprehensive error handling."""
         service = self._container.get(FlextTapLdifService)
         config = self.config.model_dump()
@@ -688,7 +700,7 @@ def generate_stream_schema(self, sample_entries: list[dict]) -> dict:
 
     return schema
 
-def _infer_attribute_schema(self, value: Any) -> dict:
+def _infer_attribute_schema(self, value: object) -> dict:
     """Infer Singer schema for LDIF attribute value."""
     if isinstance(value, list):
         return {
