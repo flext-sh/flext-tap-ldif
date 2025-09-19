@@ -30,32 +30,39 @@ class TapLDIFConfig(FlextModels.Config):
 
     # File Input Configuration - using Python 3.13+ type union syntax
     file_path: str | None = Field(
-        default=None, description="Path to the LDIF file to extract data from",
+        default=None,
+        description="Path to the LDIF file to extract data from",
     )
 
     file_pattern: str | None = Field(
-        default=None, description="Pattern for multiple LDIF files (e.g., '*.ldif')",
+        default=None,
+        description="Pattern for multiple LDIF files (e.g., '*.ldif')",
     )
 
     directory_path: str | None = Field(
-        default=None, description="Directory containing LDIF files",
+        default=None,
+        description="Directory containing LDIF files",
     )
 
     # Filtering Configuration with optimized defaults
     base_dn_filter: str | None = Field(
-        default=None, description="Filter entries by base DN pattern",
+        default=None,
+        description="Filter entries by base DN pattern",
     )
 
     object_class_filter: list[str] = Field(
-        default_factory=list, description="Filter entries by object class",
+        default_factory=list,
+        description="Filter entries by object class",
     )
 
     attribute_filter: list[str] = Field(
-        default_factory=list, description="Include only specified attributes",
+        default_factory=list,
+        description="Include only specified attributes",
     )
 
     exclude_attributes: list[str] = Field(
-        default_factory=list, description="Exclude specified attributes",
+        default_factory=list,
+        description="Exclude specified attributes",
     )
 
     # Processing Configuration with proper constraints
@@ -69,11 +76,13 @@ class TapLDIFConfig(FlextModels.Config):
     )
 
     include_operational_attributes: bool = Field(
-        default=False, description="Include operational attributes in output",
+        default=False,
+        description="Include operational attributes in output",
     )
 
     strict_parsing: bool = Field(
-        default=True, description="Enable strict LDIF parsing (fail on errors)",
+        default=True,
+        description="Enable strict LDIF parsing (fail on errors)",
     )
 
     max_file_size_mb: int = Field(
