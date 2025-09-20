@@ -99,10 +99,6 @@ class FlextLdifProcessorWrapper:
                     return
                 entries = parse_result.value
 
-                if entries is None:
-                    logger.warning("No entries found in file: %s", file_path)
-                    return
-
                 for entry in entries:
                     # Convert FlextLdifEntry to expected dictionary format
                     yield {
