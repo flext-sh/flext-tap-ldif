@@ -17,6 +17,7 @@ from flext_core import FlextLogger, FlextResult
 from flext_ldif import FlextLdifAPI
 
 logger = FlextLogger(__name__)
+
 # Use flext-ldif processor instead of reimplementing LDIF functionality
 LDIFProcessor = FlextLdifAPI
 

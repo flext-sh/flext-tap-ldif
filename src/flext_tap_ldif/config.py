@@ -11,10 +11,6 @@ from pydantic import ConfigDict, Field, field_validator
 from flext_core import FlextModels, FlextResult
 from flext_meltano import validate_directory_path, validate_file_path
 
-# Constants for validation limits
-MAX_BATCH_SIZE = 10000
-MAX_FILE_SIZE_MB = 1000
-
 
 class TapLDIFConfig(FlextModels.Config):
     """Configuration for the LDIF tap with optimized Python 3.13+ patterns."""
