@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from pydantic import ConfigDict, Field, field_validator
 
-from flext_core import FlextModels, FlextResult
+from flext_core import FlextConstants, FlextModels, FlextResult
 from flext_meltano import validate_directory_path, validate_file_path
 
 
@@ -67,7 +67,7 @@ class TapLDIFConfig(FlextModels.Config):
     batch_size: int = Field(
         default=1000,
         ge=1,
-        le=MAX_BATCH_SIZE,
+        le=FlextConstants.Performance.MAX_BATCH_SIZE_VALIDATION,
         description="Number of entries to process in each batch",
     )
 
@@ -84,7 +84,7 @@ class TapLDIFConfig(FlextModels.Config):
     max_file_size_mb: int = Field(
         default=100,
         ge=1,
-        le=MAX_FILE_SIZE_MB,
+        le=FlextConstants.Logging.MAX_FILE_SIZE // (1024 * 1024),  # Convert bytes to MB
         description="Maximum file size in MB to process",
     )
 
@@ -131,15 +131,17 @@ class TapLDIFConfig(FlextModels.Config):
         # Validate batch size constraints
         if self.batch_size <= 0:
             return FlextResult[None].fail("Batch size must be positive")
-        if self.batch_size > MAX_BATCH_SIZE:
-            return FlextResult[None].fail(f"Batch size cannot exceed {MAX_BATCH_SIZE}")
+        max_batch = FlextConstants.Performance.MAX_BATCH_SIZE_VALIDATION
+        if self.batch_size > max_batch:
+            return FlextResult[None].fail(f"Batch size cannot exceed {max_batch}")
 
         # Validate file size constraints
         if self.max_file_size_mb <= 0:
             return FlextResult[None].fail("Max file size must be positive")
-        if self.max_file_size_mb > MAX_FILE_SIZE_MB:
+        max_file_mb = FlextConstants.Logging.MAX_FILE_SIZE // (1024 * 1024)
+        if self.max_file_size_mb > max_file_mb:
             return FlextResult[None].fail(
-                f"Max file size cannot exceed {MAX_FILE_SIZE_MB} MB",
+                f"Max file size cannot exceed {max_file_mb} MB",
             )
 
         # Validate encoding
