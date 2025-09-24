@@ -37,7 +37,7 @@ class FlextLdifProcessorWrapper:
             object: Description of return value.
 
         """
-        self.config = config
+        self.config: dict[str, object] = config
         self._api = FlextLdifAPI()
 
     def _raise_parse_error(self, msg: str) -> NoReturn:
@@ -93,7 +93,7 @@ class FlextLdifProcessorWrapper:
 
             with file_path.open("r", encoding=encoding) as file:
                 content = file.read()
-                parse_result = self._api.parse(content)
+                parse_result: FlextResult[object] = self._api.parse(content)
                 if parse_result.is_failure:
                     msg: str = f"Failed to parse LDIF: {parse_result.error}"
                     self._raise_parse_error(msg)

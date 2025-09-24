@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from pydantic import ConfigDict, Field, field_validator
 
-from flext_core import FlextConstants, FlextModels, FlextResult
+from flext_core import FlextConstants, FlextModels, FlextResult, FlextUtilities
 
 
 class TapLDIFConfig(FlextModels.ArbitraryTypesModel):
@@ -91,24 +91,26 @@ class TapLDIFConfig(FlextModels.ArbitraryTypesModel):
     @classmethod
     def validate_file_path_field(cls, v: str | None) -> str | None:
         """Use consolidated file path validation."""
-        return validate_file_path(v)
+        result = FlextUtilities.Validation.validate_file_path(v)
+        return result.data if result.success else None
 
     @field_validator("directory_path")
     @classmethod
     def validate_directory_path_field(cls, v: str | None) -> str | None:
         """Use consolidated directory path validation."""
-        return validate_directory_path(v)
+        result = FlextUtilities.Validation.validate_directory_path(v)
+        return result.data if result.success else None
 
     def model_post_init(self, __context: object, /) -> None:
         """Validate configuration after initialization using FlextConfig.BaseModel pattern."""
         super().model_post_init(__context)
 
         # Delegate to business rules validation
-        validation_result = self.validate_business_rules()
+        validation_result: FlextResult[object] = self.validate_business_rules()
         if validation_result.is_failure:
             raise ValueError(validation_result.error)
 
-    def validate_business_rules(self) -> FlextResult[None]:
+    def validate_business_rules(self: object) -> FlextResult[None]:
         """Validate LDIF tap configuration business rules."""
         # Validate input sources using FlextResult chaining
         return (
@@ -117,7 +119,7 @@ class TapLDIFConfig(FlextModels.ArbitraryTypesModel):
             .flat_map(lambda _: self._validate_filters())
         )
 
-    def _validate_input_sources(self) -> FlextResult[None]:
+    def _validate_input_sources(self: object) -> FlextResult[None]:
         """Validate input source configuration."""
         if not any([self.file_path, self.file_pattern, self.directory_path]):
             return FlextResult[None].fail(
@@ -125,7 +127,7 @@ class TapLDIFConfig(FlextModels.ArbitraryTypesModel):
             )
         return FlextResult[None].ok(None)
 
-    def _validate_constraints(self) -> FlextResult[None]:
+    def _validate_constraints(self: object) -> FlextResult[None]:
         """Validate configuration constraints."""
         # Validate batch size constraints
         if self.batch_size <= 0:
@@ -149,7 +151,7 @@ class TapLDIFConfig(FlextModels.ArbitraryTypesModel):
 
         return FlextResult[None].ok(None)
 
-    def _validate_filters(self) -> FlextResult[None]:
+    def _validate_filters(self: object) -> FlextResult[None]:
         """Validate filter configuration."""
         if self.attribute_filter and self.exclude_attributes:
             overlapping = set(self.attribute_filter) & set(self.exclude_attributes)
@@ -160,7 +162,7 @@ class TapLDIFConfig(FlextModels.ArbitraryTypesModel):
         return FlextResult[None].ok(None)
 
     @property
-    def ldif_config(self) -> dict[str, object]:
+    def ldif_config(self: object) -> dict[str, object]:
         """Get LDIF-specific configuration as a dictionary."""
         return {
             "file_path": self.file_path,

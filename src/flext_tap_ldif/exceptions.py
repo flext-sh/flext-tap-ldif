@@ -20,7 +20,7 @@ FlextTapLdifAuthenticationError = FlextExceptions.AuthenticationError
 FlextTapLdifTimeoutError = FlextExceptions.TimeoutError
 
 
-class FlextTapLdifParseError(FlextExceptions._ProcessingError):
+class FlextTapLdifParseError(Exception):
     """LDIF tap parsing errors with LDIF-specific context."""
 
     def __init__(
@@ -46,7 +46,7 @@ class FlextTapLdifParseError(FlextExceptions._ProcessingError):
             setattr(self, key, value)
 
 
-class FlextTapLdifFileError(FlextExceptions._Error):
+class FlextTapLdifFileError(Exception):
     """LDIF tap file operation errors with file-specific context."""
 
     def __init__(
@@ -66,7 +66,7 @@ class FlextTapLdifFileError(FlextExceptions._Error):
         super().__init__(f"LDIF tap file: {message}", context=context)
 
 
-class FlextTapLdifStreamError(FlextExceptions._Error):
+class FlextTapLdifStreamError(Exception):
     """LDIF tap stream processing errors with stream-specific context."""
 
     def __init__(
