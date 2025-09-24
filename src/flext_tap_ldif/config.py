@@ -9,10 +9,9 @@ from __future__ import annotations
 from pydantic import ConfigDict, Field, field_validator
 
 from flext_core import FlextConstants, FlextModels, FlextResult
-from flext_meltano import validate_directory_path, validate_file_path
 
 
-class TapLDIFConfig(FlextModels.Config):
+class TapLDIFConfig(FlextModels.ArbitraryTypesModel):
     """Configuration for the LDIF tap with optimized Python 3.13+ patterns."""
 
     model_config = ConfigDict(

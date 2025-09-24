@@ -15,28 +15,14 @@ from flext_core import FlextLogger, FlextModels, FlextResult
 # === FLEXT-MELTANO COMPLETE INTEGRATION ===
 # Re-export ALL flext-meltano facilities for full ecosystem integration
 from flext_meltano import (
-    BatchSink,
     # Bridge integration
     FlextMeltanoBridge,
     # Configuration and validation
     FlextMeltanoConfig,
     # Enterprise services
-    FlextMeltanoTapService,
-    # Authentication patterns
-    OAuthAuthenticator,
+    FlextMeltanoService,
     # Typing definitions
-    PropertiesList,
-    Property,
-    Sink,
-    SQLSink,
-    # Core Singer SDK classes (centralized from flext-meltano)
-    Stream,
-    Tap,
-    Target,
-    # Testing utilities
-    get_tap_test_class,
-    # Singer typing utilities (centralized)
-    singer_typing,
+    FlextMeltanoTypes,
 )
 
 # Legacy imports for backward compatibility - maintain ALL existing imports
@@ -129,5 +115,5 @@ __all__: list[str] = [
     # Testing
     "get_tap_test_class",
     # Singer typing
-    "singer_typing",
+    "singer_typing", "FlextMeltanoService", "FlextMeltanoTypes",
 ]

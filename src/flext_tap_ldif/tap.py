@@ -9,9 +9,9 @@ from __future__ import annotations
 from typing import ClassVar
 
 from flext_core import FlextLogger
-from flext_meltano import Stream, Tap, singer_typing as th
+from singer_sdk import Tap, Stream
+from singer_sdk.typing import PropertiesList, Property, StringType, IntegerType, BooleanType, ArrayType, ObjectType
 from flext_tap_ldif.config import TapLDIFConfig
-from flext_tap_ldif.streams import LDIFEntriesStream
 
 logger = FlextLogger(__name__)
 
@@ -22,66 +22,66 @@ class TapLDIF(Tap):
     name: str = "tap-ldif"
     config_class = TapLDIFConfig
     # Schema combining file-based configuration with LDIF-specific properties
-    config_jsonschema: ClassVar[dict[str, object]] = th.PropertiesList(
+    config_jsonschema: ClassVar[dict[str, object]] = PropertiesList(
         # File-based properties
-        th.Property(
+        Property(
             "file_path",
-            th.StringType,
+            StringType,
             description="Path to single LDIF file",
         ),
-        th.Property(
+        Property(
             "directory_path",
-            th.StringType,
+            StringType,
             description="Directory containing LDIF files",
         ),
-        th.Property(
+        Property(
             "file_pattern",
-            th.StringType,
+            StringType,
             default="*.ldif",
             description="File pattern for matching LDIF files in directory",
         ),
-        th.Property(
+        Property(
             "encoding",
-            th.StringType,
+            StringType,
             default="utf-8",
             description="Text encoding for LDIF files",
         ),
         # LDIF-specific additional properties
-        th.Property(
+        Property(
             "base_dn_filter",
-            th.StringType,
+            StringType,
             description="Filter entries by base DN pattern",
         ),
-        th.Property(
+        Property(
             "object_class_filter",
-            th.ArrayType(th.StringType),
+            ArrayType(StringType),
             description="Filter entries by object class",
         ),
-        th.Property(
+        Property(
             "attribute_filter",
-            th.ArrayType(th.StringType),
+            ArrayType(StringType),
             description="Include only specified attributes",
         ),
-        th.Property(
+        Property(
             "exclude_attributes",
-            th.ArrayType(th.StringType),
+            ArrayType(StringType),
             description="Exclude specified attributes",
         ),
-        th.Property(
+        Property(
             "include_operational_attributes",
-            th.BooleanType,
+            BooleanType,
             default=False,
             description="Include operational attributes in output",
         ),
-        th.Property(
+        Property(
             "strict_parsing",
-            th.BooleanType,
+            BooleanType,
             default=True,
             description="Enable strict LDIF parsing (fail on errors)",
         ),
-        th.Property(
+        Property(
             "max_file_size_mb",
-            th.IntegerType,
+            IntegerType,
             default=100,
             description="Maximum file size in MB to process",
         ),
@@ -94,6 +94,7 @@ class TapLDIF(Tap):
             A list of discovered streams.
 
         """
+        from flext_tap_ldif.streams import LDIFEntriesStream
         return [
             LDIFEntriesStream(tap=self),
         ]
@@ -105,29 +106,29 @@ class TapLDIF(Tap):
             Schema definition for LDIF entries.
 
         """
-        return th.PropertiesList(
-            th.Property(
+        return PropertiesList(
+            Property(
                 "dn",
-                th.StringType,
+                StringType,
                 required=True,
                 description="Distinguished Name",
             ),
-            th.Property(
+            Property(
                 "object_class",
-                th.ArrayType(th.StringType),
+                ArrayType(StringType),
                 description="Object classes",
             ),
-            th.Property("attributes", th.ObjectType(), description="LDAP attributes"),
-            th.Property("change_type", th.StringType, description="LDIF change type"),
-            th.Property("source_file", th.StringType, description="Source LDIF file"),
-            th.Property(
+            Property("attributes", ObjectType(), description="LDAP attributes"),
+            Property("change_type", StringType, description="LDIF change type"),
+            Property("source_file", StringType, description="Source LDIF file"),
+            Property(
                 "line_number",
-                th.IntegerType,
+                IntegerType,
                 description="Line number in source file",
             ),
-            th.Property(
+            Property(
                 "entry_size",
-                th.IntegerType,
+                IntegerType,
                 description="Size of entry in bytes",
             ),
         ).to_dict()
