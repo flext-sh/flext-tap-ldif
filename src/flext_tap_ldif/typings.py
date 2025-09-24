@@ -6,14 +6,11 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_core import FlextTypes as CoreFlextTypes
+from flext_core import FlextTypes
 
 
-class FlextTapLdifTypes:
-    """Type definitions for flext-tap-ldif."""
-
-    # Re-export core types for convenience
-    Core = CoreFlextTypes
+class FlextTapLdifTypes(FlextTypes):
+    """Type definitions for flext-tap-ldif extending FlextTypes."""
 
     # Tap-specific type aliases
     LDIFEntry = dict[str, list[str]]

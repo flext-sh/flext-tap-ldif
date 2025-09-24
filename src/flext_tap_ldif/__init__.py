@@ -62,24 +62,16 @@ __version_info__ = tuple(int(x) for x in __version__.split(".") if x.isdigit())
 
 # Complete public API exports
 __all__: list[str] = [
-    "BatchSink",
-    # Legacy processor classes
     "FlextLdifProcessor",
     "FlextLdifProcessorWrapper",
     "FlextLogger",
-    # Bridge integration
     "FlextMeltanoBridge",
-    # Configuration patterns
     "FlextMeltanoConfig",
-    # Enterprise services
-    "FlextMeltanoTapService",
+    "FlextMeltanoService",
+    "FlextMeltanoTypes",
     "FlextModels",
-    # === FLEXT-CORE RE-EXPORTS ===
     "FlextResult",
-    # === BACKWARD COMPATIBILITY ===
     "FlextTapLDIF",
-    "FlextTapLDIFConfig",
-    # Legacy exception classes
     "FlextTapLdifConfigurationError",
     "FlextTapLdifError",
     "FlextTapLdifFileError",
@@ -87,33 +79,10 @@ __all__: list[str] = [
     "FlextTapLdifProcessingError",
     "FlextTapLdifStreamError",
     "FlextTapLdifValidationError",
-    # Legacy stream classes
     "LDIFEntriesStream",
     "LDIFProcessor",
-    "LDIFTap",
-    # Legacy config classes
     "LegacyTapLDIF",
     "LegacyTapLDIFConfig",
-    # Authentication
-    "OAuthAuthenticator",
-    "PropertiesList",
-    "Property",
-    "SQLSink",
-    "Sink",
-    # === FLEXT-MELTANO COMPLETE RE-EXPORTS ===
-    # Singer SDK core classes
-    "Stream",
-    "Tap",
-    "TapConfig",
-    # === PRIMARY TAP CLASSES ===
-    "TapLDIF",
-    "TapLDIFConfig",
-    "Target",
-    # === METADATA ===
     "__version__",
     "__version_info__",
-    # Testing
-    "get_tap_test_class",
-    # Singer typing
-    "singer_typing", "FlextMeltanoService", "FlextMeltanoTypes",
 ]

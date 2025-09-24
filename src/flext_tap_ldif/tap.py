@@ -8,10 +8,20 @@ from __future__ import annotations
 
 from typing import ClassVar
 
+from singer_sdk import Stream, Tap
+from singer_sdk.typing import (
+    ArrayType,
+    BooleanType,
+    IntegerType,
+    ObjectType,
+    PropertiesList,
+    Property,
+    StringType,
+)
+
 from flext_core import FlextLogger
-from singer_sdk import Tap, Stream
-from singer_sdk.typing import PropertiesList, Property, StringType, IntegerType, BooleanType, ArrayType, ObjectType
 from flext_tap_ldif.config import TapLDIFConfig
+from flext_tap_ldif.streams import LDIFEntriesStream
 
 logger = FlextLogger(__name__)
 
@@ -87,19 +97,18 @@ class TapLDIF(Tap):
         ),
     ).to_dict()
 
-    def discover_streams(self) -> list[Stream]:
+    def discover_streams(self: object) -> list[Stream]:
         """Return a list of discovered streams.
 
         Returns:
             A list of discovered streams.
 
         """
-        from flext_tap_ldif.streams import LDIFEntriesStream
         return [
             LDIFEntriesStream(tap=self),
         ]
 
-    def _get_ldif_entries_schema(self) -> dict[str, object]:
+    def _get_ldif_entries_schema(self: object) -> dict[str, object]:
         """Get the schema for LDIF entries stream.
 
         Returns:

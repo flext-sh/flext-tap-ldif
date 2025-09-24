@@ -9,14 +9,23 @@ from __future__ import annotations
 import tempfile
 from collections.abc import Iterable, Mapping
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from singer_sdk import Stream
-from singer_sdk.typing import PropertiesList, Property, StringType, IntegerType, ObjectType, ArrayType
+from singer_sdk.typing import (
+    ArrayType,
+    IntegerType,
+    ObjectType,
+    PropertiesList,
+    Property,
+    StringType,
+)
 
 from flext_core import FlextLogger
 from flext_tap_ldif.ldif_processor import FlextLdifProcessorWrapper
 
-# from flext_tap_ldif.tap import TapLDIF  # Circular import - removed
+if TYPE_CHECKING:
+    from flext_tap_ldif.tap import TapLDIF
 
 logger = FlextLogger(__name__)
 
@@ -66,7 +75,7 @@ class LDIFEntriesStream(Stream):
                         exc,
                     )
 
-    def _get_schema(self) -> dict[str, object]:
+    def _get_schema(self: object) -> dict[str, object]:
         """Get schema for LDIF entries."""
         return PropertiesList(
             Property("dn", StringType, description="Distinguished Name"),
@@ -103,7 +112,7 @@ class LDIFEntriesStream(Stream):
             Dictionary representations of LDIF entries.
 
         """
-        config = dict(self._tap.config)
+        config: dict[str, object] = dict(self._tap.config)
         sample_path = getattr(self, "_sample_file_path", None)
         if sample_path:
             config["file_path"] = sample_path
