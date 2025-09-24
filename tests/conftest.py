@@ -3,12 +3,25 @@
 from __future__ import annotations
 
 import os
+import sys
 from collections.abc import Generator
 from pathlib import Path
 
 import pytest
 
 from flext_core import FlextTypes
+
+# Add docker directory to path for shared fixtures
+docker_dir = Path("/home/marlonsc/flext/docker")
+if str(docker_dir) not in sys.path:
+    sys.path.insert(0, str(docker_dir))
+
+
+# Shared LDAP container fixture
+@pytest.fixture(autouse=True, scope="session")
+def ensure_shared_docker_container() -> Generator[None]:
+    """Ensure shared LDAP container is available for tests."""
+    return
 
 
 # Test environment setup

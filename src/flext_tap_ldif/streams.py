@@ -10,10 +10,13 @@ import tempfile
 from collections.abc import Iterable, Mapping
 from pathlib import Path
 
+from singer_sdk import Stream
+from singer_sdk.typing import PropertiesList, Property, StringType, IntegerType, ObjectType, ArrayType
+
 from flext_core import FlextLogger
-from flext_meltano import Stream, singer_typing as th
 from flext_tap_ldif.ldif_processor import FlextLdifProcessorWrapper
-from flext_tap_ldif.tap import TapLDIF
+
+# from flext_tap_ldif.tap import TapLDIF  # Circular import - removed
 
 logger = FlextLogger(__name__)
 
@@ -65,24 +68,24 @@ class LDIFEntriesStream(Stream):
 
     def _get_schema(self) -> dict[str, object]:
         """Get schema for LDIF entries."""
-        return th.PropertiesList(
-            th.Property("dn", th.StringType, description="Distinguished Name"),
-            th.Property("attributes", th.ObjectType(), description="Entry attributes"),
-            th.Property(
+        return PropertiesList(
+            Property("dn", StringType, description="Distinguished Name"),
+            Property("attributes", ObjectType(), description="Entry attributes"),
+            Property(
                 "object_class",
-                th.ArrayType(th.StringType),
+                ArrayType(StringType),
                 description="Object classes",
             ),
-            th.Property("change_type", th.StringType, description="Change type"),
-            th.Property("source_file", th.StringType, description="Source file path"),
-            th.Property(
+            Property("change_type", StringType, description="Change type"),
+            Property("source_file", StringType, description="Source file path"),
+            Property(
                 "line_number",
-                th.IntegerType,
+                IntegerType,
                 description="Line number in file",
             ),
-            th.Property(
+            Property(
                 "entry_size",
-                th.IntegerType,
+                IntegerType,
                 description="Entry size in bytes",
             ),
         ).to_dict()
