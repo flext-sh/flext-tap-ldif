@@ -13,7 +13,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import TypeVar
+from typing import Literal
 
 from flext_core import FlextTypes
 
@@ -21,17 +21,8 @@ from flext_core import FlextTypes
 # TAP LDIF-SPECIFIC TYPE VARIABLES - Domain-specific TypeVars for Singer LDIF operations
 # =============================================================================
 
+
 # Singer LDIF tap domain TypeVars
-TTapLdif = TypeVar("TTapLdif")
-TLdifStream = TypeVar("TLdifStream")
-TLdifCatalog = TypeVar("TLdifCatalog")
-TLdifConfig = TypeVar("TLdifConfig")
-TLdifProcessor = TypeVar("TLdifProcessor")
-TLdifExtractor = TypeVar("TLdifExtractor")
-TSingerMessage = TypeVar("TSingerMessage")
-TSingerRecord = TypeVar("TSingerRecord")
-
-
 class FlextTapLdifTypes(FlextTypes):
     """Singer LDIF tap-specific type definitions extending FlextTypes.
 
@@ -166,21 +157,56 @@ class FlextTapLdifTypes(FlextTypes):
             dict[str, str | int | dict[str, FlextTypes.Core.JsonValue]]
         ]
 
+    # =========================================================================
+    # SINGER TAP LDIF PROJECT TYPES - Domain-specific project types extending FlextTypes
+    # =========================================================================
+
+    class Project(FlextTypes.Project):
+        """Singer Tap LDIF-specific project types extending FlextTypes.Project.
+
+        Adds Singer tap LDIF-specific project types while inheriting
+        generic types from FlextTypes. Follows domain separation principle:
+        Singer tap LDIF domain owns LDIF extraction and Singer protocol-specific types.
+        """
+
+        # Singer tap LDIF-specific project types extending the generic ones
+        type ProjectType = Literal[
+            # Generic types inherited from FlextTypes.Project
+            "library",
+            "application",
+            "service",
+            # Singer tap LDIF-specific types
+            "singer-tap",
+            "ldif-extractor",
+            "data-extractor",
+            "singer-tap-ldif",
+            "tap-ldif",
+            "ldif-connector",
+            "data-connector",
+            "singer-protocol",
+            "ldif-processor",
+            "file-extractor",
+            "ldif-parser",
+            "singer-stream",
+            "etl-tap",
+            "data-pipeline",
+            "ldif-integration",
+            "singer-integration",
+        ]
+
+        # Singer tap LDIF-specific project configurations
+        type SingerTapLdifProjectConfig = dict[
+            str, FlextTypes.Core.ConfigValue | object
+        ]
+        type LdifExtractorConfig = dict[str, str | int | bool | list[str]]
+        type SingerProtocolConfig = dict[str, bool | str | dict[str, object]]
+        type TapLdifPipelineConfig = dict[str, FlextTypes.Core.ConfigValue | object]
+
 
 # =============================================================================
 # PUBLIC API EXPORTS - Singer LDIF tap TypeVars and types
 # =============================================================================
 
 __all__: list[str] = [
-    # LDIF Tap Types class
     "FlextTapLdifTypes",
-    # Singer LDIF tap-specific TypeVars
-    "TLdifCatalog",
-    "TLdifConfig",
-    "TLdifExtractor",
-    "TLdifProcessor",
-    "TLdifStream",
-    "TSingerMessage",
-    "TSingerRecord",
-    "TTapLdif",
 ]

@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from collections.abc import Generator
 from pathlib import Path
-from typing import NoReturn
+from typing import NoReturn, override
 
 from flext_core import FlextLogger, FlextResult
 from flext_ldif import FlextLdifAPI
@@ -27,6 +27,7 @@ LDIFProcessor = FlextLdifAPI
 class FlextLdifProcessorWrapper:
     """Wrapper for FlextLdifProcessor to maintain API compatibility."""
 
+    @override
     def __init__(self, config: dict[str, object]) -> None:
         """Initialize the LDIF processor using flext-ldif infrastructure.
 
@@ -81,7 +82,7 @@ class FlextLdifProcessorWrapper:
             Dictionary records representing LDIF entries.
 
         Returns:
-            Generator[dict[str, object]]: Dictionary records representing LDIF entries.
+            Generator[dict["str", "object"]]: Dictionary records representing LDIF entries.
 
         """
         logger.info("Processing LDIF file: %s", file_path)
@@ -91,7 +92,7 @@ class FlextLdifProcessorWrapper:
             if not isinstance(encoding, str):
                 encoding = "utf-8"
 
-            with file_path.open("r", encoding=encoding) as file:
+            with file_path.open(r, encoding=encoding) as file:
                 content = file.read()
                 parse_result: FlextResult[object] = self._api.parse(content)
                 if parse_result.is_failure:
@@ -109,7 +110,7 @@ class FlextLdifProcessorWrapper:
                             "objectClass",
                             [],
                         ),
-                        "change_type": None,  # Change records not supported in simple parse
+                        "change_type": "None",  # Change records not supported in simple parse
                         "source_file": str(file_path),
                         "line_number": 0,  # Line numbers not available in simplified parse
                         "entry_size": len(str(entry).encode("utf-8")),

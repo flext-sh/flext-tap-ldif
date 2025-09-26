@@ -123,7 +123,7 @@ class TapLDIFConfig(FlextModels.ArbitraryTypesModel):
         """Validate input source configuration."""
         if not any([self.file_path, self.file_pattern, self.directory_path]):
             return FlextResult[None].fail(
-                "At least one input source must be specified: file_path, file_pattern, or directory_path",
+                'At least one input source must be specified: "file_path", "file_pattern", or "directory_path"',
             )
         return FlextResult[None].ok(None)
 
