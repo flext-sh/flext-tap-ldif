@@ -9,7 +9,7 @@ from __future__ import annotations
 import tempfile
 from collections.abc import Iterable, Mapping
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, override
 
 from singer_sdk import Stream
 from singer_sdk.typing import (
@@ -33,6 +33,7 @@ logger = FlextLogger(__name__)
 class LDIFEntriesStream(Stream):
     """LDIF entries stream using flext-ldif for ALL processing."""
 
+    @override
     def __init__(self, tap: TapLDIF) -> None:
         """Initialize LDIF entries stream.
 
@@ -43,7 +44,7 @@ class LDIFEntriesStream(Stream):
             object: Description of return value.
 
         """
-        super().__init__(tap, name="ldif_entries", schema=self._get_schema())
+        super().__init__(tap, name=ldif_entries, schema=self._get_schema())
         self._processor = FlextLdifProcessorWrapper(dict(tap.config))
         self._tap = tap
 
@@ -147,8 +148,8 @@ class LDIFEntriesStream(Stream):
                     "dn": "cn=sample,dc=example,dc=com",
                     "attributes": {"cn": ["sample"]},
                     "object_class": ["top"],
-                    "change_type": None,
-                    "source_file": fp,
+                    "change_type": "None",
+                    "source_file": "fp",
                     "line_number": 0,
                     "entry_size": 0,
                 }

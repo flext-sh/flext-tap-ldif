@@ -8,6 +8,8 @@ Domain-specific exceptions using direct inheritance from flext-core.
 
 from __future__ import annotations
 
+from typing import override
+
 from flext_core import FlextExceptions
 
 # Use flext-core exception classes directly for proper type safety
@@ -23,6 +25,9 @@ FlextTapLdifTimeoutError = FlextExceptions.TimeoutError
 class FlextTapLdifParseError(Exception):
     """LDIF tap parsing errors with LDIF-specific context."""
 
+    @override
+    @override
+    @override
     def __init__(
         self,
         message: str = "LDIF tap parsing failed",
@@ -49,6 +54,9 @@ class FlextTapLdifParseError(Exception):
 class FlextTapLdifFileError(Exception):
     """LDIF tap file operation errors with file-specific context."""
 
+    @override
+    @override
+    @override
     def __init__(
         self,
         message: str = "LDIF tap file error",
@@ -69,6 +77,9 @@ class FlextTapLdifFileError(Exception):
 class FlextTapLdifStreamError(Exception):
     """LDIF tap stream processing errors with stream-specific context."""
 
+    @override
+    @override
+    @override
     def __init__(
         self,
         message: str = "LDIF tap stream error",
