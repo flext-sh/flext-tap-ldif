@@ -20,7 +20,7 @@ from singer_sdk.typing import (
 )
 
 from flext_core import FlextLogger
-from flext_tap_ldif.config import TapLDIFConfig
+from flext_tap_ldif.config import FlextTapLdifConfig
 from flext_tap_ldif.streams import LDIFEntriesStream
 
 logger = FlextLogger(__name__)
@@ -30,7 +30,7 @@ class TapLDIF(Tap):
     """Singer tap for LDIF file format data extraction."""
 
     name: str = "tap-ldif"
-    config_class = TapLDIFConfig
+    config_class = FlextTapLdifConfig
     # Schema combining file-based configuration with LDIF-specific properties
     config_jsonschema: ClassVar[dict[str, object]] = PropertiesList(
         # File-based properties

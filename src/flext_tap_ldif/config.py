@@ -6,21 +6,34 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from pydantic import ConfigDict, Field, field_validator
+from typing import Self
 
-from flext_core import FlextConstants, FlextModels, FlextResult, FlextUtilities
+from pydantic import Field, field_validator
+from pydantic_settings import SettingsConfigDict
+
+from flext_core import (
+    FlextConfig,
+    FlextConstants,
+    FlextResult,
+    FlextUtilities,
+)
 
 
-class TapLDIFConfig(FlextModels.ArbitraryTypesModel):
+class FlextTapLdifConfig(FlextConfig):
     """Configuration for the LDIF tap with optimized Python 3.13+ patterns."""
 
-    model_config = ConfigDict(
-        validate_assignment=True,
+    model_config = SettingsConfigDict(
+        env_prefix="FLEXT_TAP_LDIF_",
+        case_sensitive=False,
+        extra="ignore",
+        env_file=".env",
+        env_file_encoding="utf-8",
+        env_nested_delimiter="__",
         use_enum_values=True,
-        arbitrary_types_allowed=True,
-        str_strip_whitespace=True,
+        validate_assignment=True,
         validate_default=True,
-        extra="forbid",
+        frozen=False,
+        str_strip_whitespace=True,
     )
 
     # File Input Configuration - using Python 3.13+ type union syntax
@@ -164,6 +177,54 @@ class TapLDIFConfig(FlextModels.ArbitraryTypesModel):
     @property
     def ldif_config(self: object) -> dict[str, object]:
         """Get LDIF-specific configuration as a dictionary."""
+        # Enhanced singleton pattern methods
+
+    @classmethod
+    def get_global_instance(cls) -> Self:
+        """Get the global singleton instance using enhanced FlextConfig pattern."""
+        return cls.get_or_create_shared_instance(project_name="flext-tap-ldif")
+
+    @classmethod
+    def create_for_development(cls, **overrides) -> Self:
+        """Create development configuration instance."""
+        dev_defaults = {
+            "file_path": "./test.ldif",
+            "batch_size": 100,
+            "strict_parsing": False,
+            "max_file_size_mb": 10,
+            "encoding": "utf-8",
+        }
+        dev_defaults.update(overrides)
+        return cls(**dev_defaults)
+
+    @classmethod
+    def create_for_production(cls, **overrides) -> Self:
+        """Create production configuration instance."""
+        prod_defaults = {
+            "batch_size": 5000,
+            "strict_parsing": True,
+            "max_file_size_mb": 500,
+            "include_operational_attributes": False,
+        }
+        prod_defaults.update(overrides)
+        return cls(**prod_defaults)
+
+    @classmethod
+    def create_for_testing(cls, **overrides) -> Self:
+        """Create testing configuration instance."""
+        test_defaults = {
+            "file_path": "./tests/test_data/sample.ldif",
+            "batch_size": 50,
+            "strict_parsing": True,
+            "max_file_size_mb": 1,
+            "encoding": "utf-8",
+        }
+        test_defaults.update(overrides)
+        return cls(**test_defaults)
+
+    @property
+    def ldif_config(self: object) -> dict[str, object]:
+        """Get LDIF-specific configuration as a dictionary."""
         return {
             "file_path": self.file_path,
             "file_pattern": self.file_pattern,
@@ -178,3 +239,9 @@ class TapLDIFConfig(FlextModels.ArbitraryTypesModel):
             "strict_parsing": self.strict_parsing,
             "max_file_size_mb": self.max_file_size_mb,
         }
+
+
+# Export main configuration class
+__all__ = [
+    "FlextTapLdifConfig",
+]
