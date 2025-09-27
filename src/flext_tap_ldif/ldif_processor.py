@@ -92,7 +92,7 @@ class FlextLdifProcessorWrapper:
             if not isinstance(encoding, str):
                 encoding = "utf-8"
 
-            with file_path.open(r, encoding=encoding) as file:
+            with file_path.open("r", encoding=encoding) as file:
                 content = file.read()
                 parse_result: FlextResult[object] = self._api.parse(content)
                 if parse_result.is_failure:

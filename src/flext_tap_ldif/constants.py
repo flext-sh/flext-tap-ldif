@@ -18,9 +18,9 @@ class FlextTapLdifConstants(FlextConstants):
     DEFAULT_LDIF_ENCODING = "utf-8"
     SUPPORTED_ENCODINGS: ClassVar[list[str]] = ["utf-8", "utf-16", "latin-1"]
 
-    # Singer Tap Configuration
-    DEFAULT_BATCH_SIZE = 1000
-    MAX_BATCH_SIZE = 10000
+    # Singer Tap Configuration - using FlextConstants composition
+    DEFAULT_BATCH_SIZE = FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE
+    MAX_BATCH_SIZE = FlextConstants.Performance.BatchProcessing.MAX_ITEMS
     MAX_FILE_SIZE_MB = 100
 
     # LDIF Change Types

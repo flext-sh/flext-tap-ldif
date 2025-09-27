@@ -44,7 +44,7 @@ class LDIFEntriesStream(Stream):
             object: Description of return value.
 
         """
-        super().__init__(tap, name=ldif_entries, schema=self._get_schema())
+        super().__init__(tap, name="ldif_entries", schema=self._get_schema())
         self._processor = FlextLdifProcessorWrapper(dict(tap.config))
         self._tap = tap
 

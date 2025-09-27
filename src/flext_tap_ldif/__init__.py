@@ -26,7 +26,7 @@ from flext_meltano import (
 )
 
 # Legacy imports for backward compatibility - maintain ALL existing imports
-from flext_tap_ldif.config import TapLDIFConfig, TapLDIFConfig as LegacyTapLDIFConfig
+from flext_tap_ldif.config import FlextTapLdifConfig
 from flext_tap_ldif.exceptions import (
     FlextTapLdifConfigurationError,
     FlextTapLdifError,
@@ -41,16 +41,22 @@ from flext_tap_ldif.ldif_processor import (
     FlextLdifProcessorWrapper,
     LDIFProcessor,
 )
+
+# Standardized [Project]Models pattern
+from flext_tap_ldif.models import FlextTapLdifModels
 from flext_tap_ldif.streams import LDIFEntriesStream
 
 # === PEP8 REORGANIZATION: Import from new structure ===
 from flext_tap_ldif.tap import TapLDIF, TapLDIF as LegacyTapLDIF
+from flext_tap_ldif.utilities import FlextTapLdifUtilities
 
 # Enterprise-grade aliases for backward compatibility
 FlextTapLDIF = TapLDIF
-FlextTapLDIFConfig = TapLDIFConfig
+# Legacy aliases for backward compatibility
+TapLDIFConfig = FlextTapLdifConfig
+FlextTapLDIFConfig = FlextTapLdifConfig
 LDIFTap = TapLDIF
-TapConfig = TapLDIFConfig
+TapConfig = FlextTapLdifConfig
 
 # Version following semantic versioning
 try:
@@ -72,17 +78,20 @@ __all__: list[str] = [
     "FlextModels",
     "FlextResult",
     "FlextTapLDIF",
+    "FlextTapLdifConfig",
     "FlextTapLdifConfigurationError",
     "FlextTapLdifError",
     "FlextTapLdifFileError",
+    "FlextTapLdifModels",
     "FlextTapLdifParseError",
     "FlextTapLdifProcessingError",
     "FlextTapLdifStreamError",
+    "FlextTapLdifUtilities",
     "FlextTapLdifValidationError",
     "LDIFEntriesStream",
     "LDIFProcessor",
     "LegacyTapLDIF",
-    "LegacyTapLDIFConfig",
+    "TapLDIFConfig",  # Legacy alias
     "__version__",
     "__version_info__",
 ]
