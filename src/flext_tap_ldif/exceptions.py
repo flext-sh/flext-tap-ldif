@@ -26,8 +26,6 @@ class FlextTapLdifParseError(Exception):
     """LDIF tap parsing errors with LDIF-specific context."""
 
     @override
-    @override
-    @override
     def __init__(
         self,
         message: str = "LDIF tap parsing failed",
@@ -55,8 +53,6 @@ class FlextTapLdifFileError(Exception):
     """LDIF tap file operation errors with file-specific context."""
 
     @override
-    @override
-    @override
     def __init__(
         self,
         message: str = "LDIF tap file error",
@@ -77,8 +73,6 @@ class FlextTapLdifFileError(Exception):
 class FlextTapLdifStreamError(Exception):
     """LDIF tap stream processing errors with stream-specific context."""
 
-    @override
-    @override
     @override
     def __init__(
         self,
