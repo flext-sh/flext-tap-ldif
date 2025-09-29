@@ -19,7 +19,7 @@ from singer_sdk.typing import (
     StringType,
 )
 
-from flext_core import FlextLogger
+from flext_core import FlextConstants, FlextLogger
 from flext_tap_ldif.config import FlextTapLdifConfig
 from flext_tap_ldif.streams import LDIFEntriesStream
 
@@ -92,7 +92,7 @@ class TapLDIF(Tap):
         Property(
             "max_file_size_mb",
             IntegerType,
-            default=100,
+            default=FlextConstants.Logging.MAX_FILE_SIZE // (1024 * 1024),
             description="Maximum file size in MB to process",
         ),
     ).to_dict()
