@@ -44,6 +44,7 @@ from flext_tap_ldif.ldif_processor import (
 
 # Standardized [Project]Models pattern
 from flext_tap_ldif.models import FlextTapLdifModels
+from flext_tap_ldif.protocols import FlextTapLdifProtocols
 from flext_tap_ldif.streams import LDIFEntriesStream
 
 # === PEP8 REORGANIZATION: Import from new structure ===
@@ -85,6 +86,7 @@ __all__: list[str] = [
     "FlextTapLdifModels",
     "FlextTapLdifParseError",
     "FlextTapLdifProcessingError",
+    "FlextTapLdifProtocols",
     "FlextTapLdifStreamError",
     "FlextTapLdifUtilities",
     "FlextTapLdifValidationError",

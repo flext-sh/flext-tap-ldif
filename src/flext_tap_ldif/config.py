@@ -77,7 +77,7 @@ class FlextTapLdifConfig(FlextConfig):
     encoding: str = Field(default="utf-8", description="File encoding (default: utf-8)")
 
     batch_size: int = Field(
-        default=1000,
+        default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE,
         ge=1,
         le=FlextConstants.Performance.MAX_BATCH_SIZE_VALIDATION,
         description="Number of entries to process in each batch",
@@ -94,7 +94,7 @@ class FlextTapLdifConfig(FlextConfig):
     )
 
     max_file_size_mb: int = Field(
-        default=100,
+        default=FlextConstants.Logging.MAX_FILE_SIZE // (1024 * 1024),
         ge=1,
         le=FlextConstants.Logging.MAX_FILE_SIZE // (1024 * 1024),  # Convert bytes to MB
         description="Maximum file size in MB to process",
@@ -189,7 +189,7 @@ class FlextTapLdifConfig(FlextConfig):
         """Create development configuration instance."""
         dev_defaults = {
             "file_path": "./test.ldif",
-            "batch_size": 100,
+            "batch_size": FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE // 10,
             "strict_parsing": False,
             "max_file_size_mb": 10,
             "encoding": "utf-8",
@@ -201,7 +201,7 @@ class FlextTapLdifConfig(FlextConfig):
     def create_for_production(cls, **overrides) -> Self:
         """Create production configuration instance."""
         prod_defaults = {
-            "batch_size": 5000,
+            "batch_size": FlextConstants.Performance.BatchProcessing.MAX_ITEMS // 2,
             "strict_parsing": True,
             "max_file_size_mb": 500,
             "include_operational_attributes": False,
@@ -214,7 +214,7 @@ class FlextTapLdifConfig(FlextConfig):
         """Create testing configuration instance."""
         test_defaults = {
             "file_path": "./tests/test_data/sample.ldif",
-            "batch_size": 50,
+            "batch_size": FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE // 20,
             "strict_parsing": True,
             "max_file_size_mb": 1,
             "encoding": "utf-8",
