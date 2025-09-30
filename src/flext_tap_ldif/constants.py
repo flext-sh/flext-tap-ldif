@@ -8,17 +8,19 @@ from __future__ import annotations
 
 from typing import ClassVar
 
+from flext_ldif.constants import FlextLdifConstants
+
 from flext_core import FlextConstants
 
 
 class FlextTapLdifConstants(FlextConstants):
     """LDIF tap extraction-specific constants following flext-core patterns.
 
-    Composes with FlextLdifConstants to avoid duplication and ensure consistency.
+    Composes with FlextTapLdifConstants to avoid duplication and ensure consistency.
     """
 
     # Import LDIF-specific constants from flext-ldif (composition pattern)
-    from flext_ldif.constants import FlextLdifConstants
+    from flext_ldif.constants import FlextTapLdifConstants
 
     # LDIF File Configuration using composition
     DEFAULT_LDIF_ENCODING = FlextLdifConstants.Encoding.DEFAULT_ENCODING
@@ -31,7 +33,7 @@ class FlextTapLdifConstants(FlextConstants):
     MAX_BATCH_SIZE = FlextConstants.Performance.BatchProcessing.MAX_ITEMS
     MAX_FILE_SIZE_MB = 100
 
-    # LDIF Change Types from FlextLdifConstants
+    # LDIF Change Types from FlextTapLdifConstants
     LDIF_CHANGE_TYPES: ClassVar[list[str]] = [
         FlextLdifConstants.EntryModification.ADD,
         FlextLdifConstants.EntryModification.MODIFY,
