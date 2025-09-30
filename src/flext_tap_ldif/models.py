@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from datetime import UTC, datetime
+
 """Models for LDIF tap operations.
 
 This module provides data models for LDIF tap operations.
@@ -12,6 +14,7 @@ from typing import Any, Self
 from pydantic import (
     ConfigDict,
     Field,
+    FieldSerializationInfo,
     computed_field,
     field_serializer,
     model_validator,
