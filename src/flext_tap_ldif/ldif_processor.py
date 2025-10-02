@@ -14,12 +14,12 @@ from pathlib import Path
 from typing import NoReturn, override
 
 from flext_core import FlextLogger, FlextResult
-from flext_ldif import FlextLdifAPI
+from flext_ldif import FlextLdif
 
 logger = FlextLogger(__name__)
 
 # Use flext-ldif processor instead of reimplementing LDIF functionality
-LDIFProcessor = FlextLdifAPI
+LDIFProcessor = FlextLdif
 
 # Backward compatibility alias removed (causes self-assignment warning)
 
@@ -39,7 +39,7 @@ class FlextLdifProcessorWrapper:
 
         """
         self.config: dict[str, object] = config
-        self._api = FlextLdifAPI()
+        self._api = FlextLdif()
 
     def _raise_parse_error(self, msg: str) -> NoReturn:
         """Raise parse error with message."""
