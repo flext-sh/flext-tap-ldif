@@ -8,15 +8,14 @@ from __future__ import annotations
 
 from typing import Self
 
-from pydantic import Field, field_validator
-from pydantic_settings import SettingsConfigDict
-
 from flext_core import (
     FlextConfig,
     FlextConstants,
     FlextResult,
     FlextUtilities,
 )
+from pydantic import Field, field_validator
+from pydantic_settings import SettingsConfigDict
 
 
 class FlextTapLdifConfig(FlextConfig):
