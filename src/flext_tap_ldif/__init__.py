@@ -6,26 +6,19 @@ SPDX-License-Identifier: MIT.
 
 from __future__ import annotations
 
+from flext_core.metadata import build_metadata_exports
+
+globals().update(build_metadata_exports(__file__))
 import importlib.metadata
 
-# flext-core imports
 from flext_core import FlextLogger, FlextModels, FlextResult
-
-# flext-core imports
-# === FLEXT-MELTANO COMPLETE INTEGRATION ===
-# Re-export ALL flext-meltano facilities for full ecosystem integration
 from flext_meltano import (
-    # Bridge integration
     FlextMeltanoBridge,
-    # Configuration and validation
     FlextMeltanoConfig,
-    # Enterprise services
     FlextMeltanoService,
-    # Typing definitions
     FlextMeltanoTypes,
 )
 
-# Legacy imports for backward compatibility - maintain ALL existing imports
 from flext_tap_ldif.config import FlextTapLdifConfig
 from flext_tap_ldif.exceptions import (
     FlextTapLdifConfigurationError,
@@ -41,33 +34,25 @@ from flext_tap_ldif.ldif_processor import (
     FlextLdifProcessorWrapper,
     LDIFProcessor,
 )
-
-# Standardized [Project]Models pattern
 from flext_tap_ldif.models import FlextTapLdifModels
 from flext_tap_ldif.protocols import FlextTapLdifProtocols
 from flext_tap_ldif.streams import LDIFEntriesStream
-
-# === PEP8 REORGANIZATION: Import from new structure ===
 from flext_tap_ldif.tap import TapLDIF, TapLDIF as LegacyTapLDIF
 from flext_tap_ldif.utilities import FlextTapLdifUtilities
 
-# Enterprise-grade aliases for backward compatibility
 FlextTapLDIF = TapLDIF
-# Legacy aliases for backward compatibility
 TapLDIFConfig = FlextTapLdifConfig
 FlextTapLDIFConfig = FlextTapLdifConfig
 LDIFTap = TapLDIF
 TapConfig = FlextTapLdifConfig
 
-# Version following semantic versioning
 try:
     __version__ = importlib.metadata.version("flext-tap-ldif")
+    __version_info__: tuple[int | str, ...] = VERSION.version_info
 except importlib.metadata.PackageNotFoundError:
     __version__ = "0.9.0-enterprise"
 
-__version_info__ = tuple(int(x) for x in __version__.split(".") if x.isdigit())
 
-# Complete public API exports
 __all__: list[str] = [
     "FlextLdifProcessor",
     "FlextLdifProcessorWrapper",
@@ -93,7 +78,7 @@ __all__: list[str] = [
     "LDIFEntriesStream",
     "LDIFProcessor",
     "LegacyTapLDIF",
-    "TapLDIFConfig",  # Legacy alias
+    "TapLDIFConfig",
     "__version__",
     "__version_info__",
 ]

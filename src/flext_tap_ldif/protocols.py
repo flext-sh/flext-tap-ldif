@@ -31,7 +31,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[list[dict[str, object]]]: Parsed LDIF entries or error
 
             """
-            ...
 
         def parse_ldif_stream(
             self,
@@ -48,7 +47,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[list[dict[str, object]]]: Parsed LDIF entries or error
 
             """
-            ...
 
         def validate_ldif_format(
             self, file_path: str
@@ -62,7 +60,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[dict[str, object]]: Validation results or error
 
             """
-            ...
 
         def extract_ldif_metadata(
             self, file_path: str
@@ -76,7 +73,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[dict[str, object]]: LDIF metadata or error
 
             """
-            ...
 
     @runtime_checkable
     class LdifTransformationProtocol(FlextProtocols.Domain.Service, Protocol):
@@ -97,7 +93,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[list[dict[str, object]]]: Transformed entries or error
 
             """
-            ...
 
         def normalize_attribute_values(
             self,
@@ -114,7 +109,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[list[dict[str, object]]]: Normalized entries or error
 
             """
-            ...
 
         def resolve_change_records(
             self,
@@ -131,7 +125,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[list[dict[str, object]]]: Resolved entries or error
 
             """
-            ...
 
         def apply_schema_mapping(
             self,
@@ -148,7 +141,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[list[dict[str, object]]]: Mapped entries or error
 
             """
-            ...
 
     @runtime_checkable
     class StreamGenerationProtocol(FlextProtocols.Domain.Service, Protocol):
@@ -167,7 +159,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[list[dict[str, object]]]: Discovered stream definitions or error
 
             """
-            ...
 
         def generate_schema_from_ldif(
             self,
@@ -184,7 +175,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[dict[str, object]]: Generated JSON schema or error
 
             """
-            ...
 
         def create_entry_stream(
             self,
@@ -201,7 +191,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[dict[str, object]]: Stream definition or error
 
             """
-            ...
 
         def create_change_stream(
             self,
@@ -218,7 +207,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[dict[str, object]]: Change stream definition or error
 
             """
-            ...
 
     @runtime_checkable
     class ValidationProtocol(FlextProtocols.Domain.Service, Protocol):
@@ -239,7 +227,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[dict[str, object]]: Validation results or error
 
             """
-            ...
 
         def validate_dn_syntax(
             self, entries: list[dict[str, object]]
@@ -253,7 +240,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[dict[str, object]]: DN validation results or error
 
             """
-            ...
 
         def check_referential_integrity(
             self,
@@ -270,7 +256,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[dict[str, object]]: Integrity check results or error
 
             """
-            ...
 
         def detect_duplicate_entries(
             self, entries: list[dict[str, object]]
@@ -284,7 +269,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[list[dict[str, object]]]: Detected duplicates or error
 
             """
-            ...
 
     @runtime_checkable
     class FileProcessingProtocol(FlextProtocols.Domain.Service, Protocol):
@@ -303,7 +287,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[dict[str, object]]: Processing results or error
 
             """
-            ...
 
         def process_directory(
             self, directory_path: str, processing_config: dict[str, object]
@@ -318,7 +301,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[list[dict[str, object]]]: Processing results or error
 
             """
-            ...
 
         def handle_large_files(
             self, file_path: str, streaming_config: dict[str, object]
@@ -333,7 +315,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[object]: Streaming processor or error
 
             """
-            ...
 
         def monitor_file_processing(
             self, processing_id: str
@@ -347,7 +328,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[dict[str, object]]: Processing status or error
 
             """
-            ...
 
     @runtime_checkable
     class PerformanceProtocol(FlextProtocols.Domain.Service, Protocol):
@@ -365,7 +345,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[dict[str, object]]: Optimized configuration or error
 
             """
-            ...
 
         def configure_memory_management(
             self, memory_config: dict[str, object]
@@ -379,7 +358,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[dict[str, object]]: Memory configuration result or error
 
             """
-            ...
 
         def monitor_processing_performance(
             self, performance_metrics: dict[str, object]
@@ -393,7 +371,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[dict[str, object]]: Performance analysis or error
 
             """
-            ...
 
         def optimize_stream_generation(
             self, stream_config: dict[str, object]
@@ -407,7 +384,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[dict[str, object]]: Optimization results or error
 
             """
-            ...
 
     @runtime_checkable
     class MonitoringProtocol(FlextProtocols.Domain.Service, Protocol):
@@ -426,7 +402,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[bool]: Metric tracking success status
 
             """
-            ...
 
         def monitor_file_health(self, file_path: str) -> FlextResult[dict[str, object]]:
             """Monitor LDIF file health status.
@@ -438,7 +413,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[dict[str, object]]: File health status or error
 
             """
-            ...
 
         def get_processing_status(
             self, processing_id: str
@@ -452,7 +426,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[dict[str, object]]: Processing status or error
 
             """
-            ...
 
         def create_monitoring_dashboard(
             self, dashboard_config: dict[str, object]
@@ -466,7 +439,6 @@ class FlextTapLdifProtocols(FlextProtocols):
                 FlextResult[dict[str, object]]: Dashboard creation result or error
 
             """
-            ...
 
     # Convenience aliases for easier downstream usage
     TapLdifParsingProtocol = LdifParsingProtocol

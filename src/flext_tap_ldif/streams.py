@@ -9,8 +9,9 @@ from __future__ import annotations
 import tempfile
 from collections.abc import Iterable, Mapping
 from pathlib import Path
-from typing import TYPE_CHECKING, override
+from typing import override
 
+from flext_core import FlextLogger
 from singer_sdk import Stream
 from singer_sdk.typing import (
     ArrayType,
@@ -21,7 +22,6 @@ from singer_sdk.typing import (
     StringType,
 )
 
-from flext_core import FlextLogger
 from flext_tap_ldif.ldif_processor import FlextLdifProcessorWrapper
 
 if TYPE_CHECKING:
