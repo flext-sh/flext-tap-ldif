@@ -19,7 +19,7 @@ from singer_sdk.typing import (
     StringType,
 )
 
-from flext_core import FlextConstants, FlextLogger
+from flext_core import FlextConstants, FlextLogger, FlextTypes
 from flext_tap_ldif.config import FlextTapLdifConfig
 from flext_tap_ldif.streams import LDIFEntriesStream
 
@@ -32,7 +32,7 @@ class TapLDIF(Tap):
     name: str = "tap-ldif"
     config_class = FlextTapLdifConfig
     # Schema combining file-based configuration with LDIF-specific properties
-    config_jsonschema: ClassVar[dict[str, object]] = PropertiesList(
+    config_jsonschema: ClassVar[FlextTypes.Dict] = PropertiesList(
         # File-based properties
         Property(
             "file_path",
@@ -108,7 +108,7 @@ class TapLDIF(Tap):
             LDIFEntriesStream(tap=self),
         ]
 
-    def _get_ldif_entries_schema(self: object) -> dict[str, object]:
+    def _get_ldif_entries_schema(self: object) -> FlextTypes.Dict:
         """Get the schema for LDIF entries stream.
 
         Returns:

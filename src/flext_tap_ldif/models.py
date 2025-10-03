@@ -10,7 +10,6 @@ This module provides data models for LDIF tap operations.
 """
 from typing import Self
 
-from flext_core import FlextConstants, FlextModels
 from pydantic import (
     ConfigDict,
     Field,
@@ -19,6 +18,8 @@ from pydantic import (
     field_serializer,
     model_validator,
 )
+
+from flext_core import FlextConstants, FlextModels, FlextTypes
 
 
 class FlextTapLdifModels(FlextModels):
@@ -94,7 +95,7 @@ class FlextTapLdifModels(FlextModels):
 
     @computed_field
     @property
-    def ldif_tap_system_summary(self) -> dict[str, object]:
+    def ldif_tap_system_summary(self) -> FlextTypes.Dict:
         """Comprehensive Singer LDIF tap system summary with file processing capabilities."""
         return {
             "total_models": self.active_ldif_tap_models_count,
@@ -176,14 +177,14 @@ class FlextTapLdifModels(FlextModels):
         return value
 
     # Legacy type aliases for backward compatibility
-    LdifRecord = dict[str, object]
+    LdifRecord = FlextTypes.Dict
     LdifRecords = list[LdifRecord]
 
     class UtilityFunctions:
         """Utility functions for LDIF data processing."""
 
         @staticmethod
-        def parse_dn(dn: str) -> dict[str, str]:
+        def parse_dn(dn: str) -> FlextTypes.StringDict:
             """Parse Distinguished Name into components."""
             components = {}
             parts = dn.split(",")
@@ -235,10 +236,10 @@ class FlextTapLdifModels(FlextModels):
         )
 
         dn: str = Field(..., description="Distinguished Name")
-        attributes: dict[str, list[str]] = Field(
+        attributes: dict[str, FlextTypes.StringList] = Field(
             default_factory=dict, description="Entry attributes"
         )
-        object_classes: list[str] = Field(
+        object_classes: FlextTypes.StringList = Field(
             default_factory=list, description="Object classes"
         )
 
@@ -257,13 +258,13 @@ class FlextTapLdifModels(FlextModels):
             description="Extraction timestamp",
         )
         processed: bool = Field(default=False, description="Processing status")
-        validation_errors: list[str] = Field(
+        validation_errors: FlextTypes.StringList = Field(
             default_factory=list, description="Validation errors"
         )
 
         @computed_field
         @property
-        def ldif_entry_summary(self) -> dict[str, object]:
+        def ldif_entry_summary(self) -> FlextTypes.Dict:
             """LDIF entry analysis summary."""
             return {
                 "dn": self.dn,
@@ -290,7 +291,7 @@ class FlextTapLdifModels(FlextModels):
 
             return self
 
-        def get_attribute_values(self, name: str) -> list[str]:
+        def get_attribute_values(self, name: str) -> FlextTypes.StringList:
             """Get attribute values by name (case-insensitive)."""
             normalized_name = name.lower()
             for attr_name, values in self.attributes.items():
@@ -327,7 +328,7 @@ class FlextTapLdifModels(FlextModels):
         change_type: str = Field(
             ..., description="Type of change (add, modify, delete, modrdn)"
         )
-        changes: list[dict[str, object]] = Field(
+        changes: list[FlextTypes.Dict] = Field(
             default_factory=list, description="List of changes"
         )
 
@@ -344,13 +345,13 @@ class FlextTapLdifModels(FlextModels):
             description="Extraction timestamp",
         )
         applied: bool = Field(default=False, description="Change application status")
-        application_errors: list[str] = Field(
+        application_errors: FlextTypes.StringList = Field(
             default_factory=list, description="Application errors"
         )
 
         @computed_field
         @property
-        def change_record_summary(self) -> dict[str, object]:
+        def change_record_summary(self) -> FlextTypes.Dict:
             """LDIF change record summary."""
             return {
                 "dn": self.dn,
@@ -422,19 +423,19 @@ class FlextTapLdifModels(FlextModels):
         last_processed_line: int = Field(
             default=0, description="Last processed line number"
         )
-        processing_errors: list[str] = Field(
+        processing_errors: FlextTypes.StringList = Field(
             default_factory=list, description="Processing errors"
         )
 
         # Validation results
         is_valid_ldif: bool = Field(default=True, description="LDIF format validity")
-        validation_errors: list[str] = Field(
+        validation_errors: FlextTypes.StringList = Field(
             default_factory=list, description="Format validation errors"
         )
 
         @computed_field
         @property
-        def ldif_file_summary(self) -> dict[str, object]:
+        def ldif_file_summary(self) -> FlextTypes.Dict:
             """LDIF file processing summary."""
             progress = 0.0
             if self.total_lines > 0:
@@ -498,7 +499,7 @@ class FlextTapLdifModels(FlextModels):
         replication_method: str = Field(
             default="FULL_TABLE", description="Replication method"
         )
-        key_properties: list[str] = Field(
+        key_properties: FlextTypes.StringList = Field(
             default_factory=lambda: ["dn"], description="Key properties"
         )
 
@@ -506,7 +507,7 @@ class FlextTapLdifModels(FlextModels):
         include_change_records: bool = Field(
             default=True, description="Include LDIF change records"
         )
-        filter_object_classes: list[str] = Field(
+        filter_object_classes: FlextTypes.StringList = Field(
             default_factory=list, description="Filter by object classes"
         )
         batch_size: int = Field(
@@ -515,16 +516,14 @@ class FlextTapLdifModels(FlextModels):
         )
 
         # Stream schema
-        schema: dict[str, object] = Field(
-            default_factory=dict, description="JSON schema"
-        )
-        metadata: list[dict[str, object]] = Field(
+        schema: FlextTypes.Dict = Field(default_factory=dict, description="JSON schema")
+        metadata: list[FlextTypes.Dict] = Field(
             default_factory=list, description="Stream metadata"
         )
 
         @computed_field
         @property
-        def ldif_stream_summary(self) -> dict[str, object]:
+        def ldif_stream_summary(self) -> FlextTypes.Dict:
             """LDIF stream configuration summary."""
             return {
                 "stream_id": self.tap_stream_id,
@@ -573,7 +572,9 @@ class FlextTapLdifModels(FlextModels):
         )
 
         batch_id: str = Field(..., description="Unique batch identifier")
-        file_paths: list[str] = Field(..., description="List of LDIF files to process")
+        file_paths: FlextTypes.StringList = Field(
+            ..., description="List of LDIF files to process"
+        )
         batch_size: int = Field(
             default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE,
             description="Processing batch size",
@@ -606,13 +607,13 @@ class FlextTapLdifModels(FlextModels):
         )
 
         # Error tracking
-        file_errors: dict[str, list[str]] = Field(
+        file_errors: dict[str, FlextTypes.StringList] = Field(
             default_factory=dict, description="Errors by file"
         )
 
         @computed_field
         @property
-        def batch_processing_summary(self) -> dict[str, object]:
+        def batch_processing_summary(self) -> FlextTypes.Dict:
             """LDIF batch processing summary."""
             duration = 0.0
             if self.started_at and self.completed_at:
@@ -699,7 +700,7 @@ class FlextTapLdifModels(FlextModels):
         )
 
         # Error tracking
-        processing_errors: list[dict[str, object]] = Field(
+        processing_errors: list[FlextTypes.Dict] = Field(
             default_factory=list, description="Processing errors with context"
         )
         recoverable_errors: int = Field(
@@ -713,7 +714,7 @@ class FlextTapLdifModels(FlextModels):
 
         @computed_field
         @property
-        def processing_progress_summary(self) -> dict[str, object]:
+        def processing_progress_summary(self) -> FlextTypes.Dict:
             """LDIF processing progress summary."""
             total_errors = self.recoverable_errors + self.fatal_errors
             duration = 0.0
@@ -781,7 +782,7 @@ class FlextTapLdifModels(FlextModels):
         ldif_directory: str | None = Field(
             default=None, description="LDIF files directory"
         )
-        file_patterns: list[str] = Field(
+        file_patterns: FlextTypes.StringList = Field(
             default_factory=lambda: ["*.ldif"], description="LDIF file patterns"
         )
         recursive_search: bool = Field(
@@ -819,7 +820,7 @@ class FlextTapLdifModels(FlextModels):
 
         @computed_field
         @property
-        def tap_config_summary(self) -> dict[str, object]:
+        def tap_config_summary(self) -> FlextTypes.Dict:
             """LDIF tap configuration summary."""
             return {
                 "source": {
@@ -876,7 +877,7 @@ class FlextTapLdifModels(FlextModels):
         )
 
         stream: str = Field(..., description="Source stream name")
-        record: dict[str, object] = Field(..., description="LDIF record data")
+        record: FlextTypes.Dict = Field(..., description="LDIF record data")
         record_type: str = Field(default="entry", description="Type of LDIF record")
 
         # Source metadata
@@ -894,7 +895,7 @@ class FlextTapLdifModels(FlextModels):
 
         @computed_field
         @property
-        def ldif_record_summary(self) -> dict[str, object]:
+        def ldif_record_summary(self) -> FlextTypes.Dict:
             """LDIF record analysis summary."""
             return {
                 "stream": self.stream,
@@ -942,10 +943,10 @@ class FlextTapLdifModels(FlextModels):
         is_valid: bool = Field(..., description="Overall validation result")
 
         # Validation results
-        validation_errors: list[dict[str, object]] = Field(
+        validation_errors: list[FlextTypes.Dict] = Field(
             default_factory=list, description="Validation errors with details"
         )
-        warnings: list[dict[str, object]] = Field(
+        warnings: list[FlextTypes.Dict] = Field(
             default_factory=list, description="Validation warnings"
         )
 
@@ -962,7 +963,7 @@ class FlextTapLdifModels(FlextModels):
 
         @computed_field
         @property
-        def validation_summary(self) -> dict[str, object]:
+        def validation_summary(self) -> FlextTypes.Dict:
             """LDIF validation comprehensive summary."""
             success_rate = 0.0
             if self.total_entries > 0:
@@ -1061,7 +1062,7 @@ class FlextTapLdifModels(FlextModels):
 
         @computed_field
         @property
-        def performance_analysis_summary(self) -> dict[str, object]:
+        def performance_analysis_summary(self) -> FlextTypes.Dict:
             """LDIF tap performance analysis summary."""
             success_rate = 0.0
             if self.files_processed > 0:

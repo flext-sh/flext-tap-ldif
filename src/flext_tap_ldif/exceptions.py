@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from typing import override
 
-from flext_core import FlextExceptions
+from flext_core import FlextExceptions, FlextTypes
 
 # Use flext-core exception classes directly for proper type safety
 FlextTapLdifError = FlextExceptions.Error
@@ -22,76 +22,118 @@ FlextTapLdifAuthenticationError = FlextExceptions.AuthenticationError
 FlextTapLdifTimeoutError = FlextExceptions.TimeoutError
 
 
-class FlextTapLdifParseError(Exception):
+class FlextTapLdifParseError(FlextExceptions.BaseError):
     """LDIF tap parsing errors with LDIF-specific context."""
 
     @override
     def __init__(
         self,
         message: str = "LDIF tap parsing failed",
+        *,
         file_path: str | None = None,
         line_number: int | None = None,
         entry_dn: str | None = None,
         **kwargs: object,
     ) -> None:
         """Initialize LDIF tap parse error with LDIF-specific context."""
-        context = kwargs.copy()
-        if file_path is not None:
-            context["file_path"] = file_path
-        if line_number is not None:
-            context["line_number"] = line_number
-        if entry_dn is not None:
-            context["entry_dn"] = entry_dn
+        # Store LDIF-specific attributes before extracting common kwargs
+        self.file_path = file_path
+        self.line_number = line_number
+        self.entry_dn = entry_dn
 
-        super().__init__(f"LDIF tap parse: {message}")
-        # Store context information as instance attributes
-        for key, value in context.items():
-            setattr(self, key, value)
+        # Extract common parameters using helper
+        base_context, correlation_id, error_code = self._extract_common_kwargs(kwargs)
+
+        # Build context with LDIF parse-specific fields
+        context = self._build_context(
+            base_context,
+            file_path=file_path,
+            line_number=line_number,
+            entry_dn=entry_dn,
+        )
+
+        # Call parent with complete error information
+        super().__init__(
+            f"LDIF tap parse: {message}",
+            code=error_code or "TAP_LDIF_PARSE_ERROR",
+            context=context,
+            correlation_id=correlation_id,
+        )
 
 
-class FlextTapLdifFileError(Exception):
+class FlextTapLdifFileError(FlextExceptions.BaseError):
     """LDIF tap file operation errors with file-specific context."""
 
     @override
     def __init__(
         self,
         message: str = "LDIF tap file error",
+        *,
         file_path: str | None = None,
         operation: str | None = None,
         **kwargs: object,
     ) -> None:
         """Initialize LDIF tap file error with file-specific context."""
-        context = kwargs.copy()
-        if file_path is not None:
-            context["file_path"] = file_path
-        if operation is not None:
-            context["operation"] = operation
+        # Store file-specific attributes before extracting common kwargs
+        self.file_path = file_path
+        self.operation = operation
 
-        super().__init__(f"LDIF tap file: {message}", context=context)
+        # Extract common parameters using helper
+        base_context, correlation_id, error_code = self._extract_common_kwargs(kwargs)
+
+        # Build context with file operation-specific fields
+        context = self._build_context(
+            base_context,
+            file_path=file_path,
+            operation=operation,
+        )
+
+        # Call parent with complete error information
+        super().__init__(
+            f"LDIF tap file: {message}",
+            code=error_code or "TAP_LDIF_FILE_ERROR",
+            context=context,
+            correlation_id=correlation_id,
+        )
 
 
-class FlextTapLdifStreamError(Exception):
+class FlextTapLdifStreamError(FlextExceptions.BaseError):
     """LDIF tap stream processing errors with stream-specific context."""
 
     @override
     def __init__(
         self,
         message: str = "LDIF tap stream error",
+        *,
         stream_name: str | None = None,
         file_path: str | None = None,
         **kwargs: object,
     ) -> None:
         """Initialize LDIF tap stream error with stream-specific context."""
-        context = kwargs.copy()
-        if stream_name is not None:
-            context["stream_name"] = stream_name
-        if file_path is not None:
-            context["file_path"] = file_path
+        # Store stream-specific attributes before extracting common kwargs
+        self.stream_name = stream_name
+        self.file_path = file_path
 
-        super().__init__(f"LDIF tap stream: {message}", context=context)
+        # Extract common parameters using helper
+        base_context, correlation_id, error_code = self._extract_common_kwargs(kwargs)
+
+        # Build context with stream-specific fields
+        context = self._build_context(
+            base_context,
+            stream_name=stream_name,
+            file_path=file_path,
+        )
+
+        # Call parent with complete error information
+        super().__init__(
+            f"LDIF tap stream: {message}",
+            code=error_code or "TAP_LDIF_STREAM_ERROR",
+            context=context,
+            correlation_id=correlation_id,
+        )
 
 
-__all__: list[str] = [
+__all__: FlextTypes.StringList = [
     "FlextTapLdifConfigurationError",
     "FlextTapLdifError",
     "FlextTapLdifFileError",
