@@ -1,13 +1,11 @@
-"""Module docstring."""
-
-from __future__ import annotations
-
-from datetime import UTC, datetime
-
 """Models for LDIF tap operations.
 
 This module provides data models for LDIF tap operations.
 """
+
+from __future__ import annotations
+
+from datetime import UTC, datetime
 from typing import Self
 
 from pydantic import (
