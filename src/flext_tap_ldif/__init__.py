@@ -11,7 +11,6 @@ from flext_core.metadata import build_metadata_exports
 globals().update(build_metadata_exports(__file__))
 import importlib.metadata
 
-from flext_core import FlextLogger, FlextModels, FlextResult
 from flext_meltano import (
     FlextMeltanoBridge,
     FlextMeltanoConfig,
@@ -19,6 +18,7 @@ from flext_meltano import (
     FlextMeltanoTypes,
 )
 
+from flext_core import FlextLogger, FlextModels, FlextResult, FlextTypes
 from flext_tap_ldif.config import FlextTapLdifConfig
 from flext_tap_ldif.exceptions import (
     FlextTapLdifConfigurationError,
@@ -53,7 +53,7 @@ except importlib.metadata.PackageNotFoundError:
     __version__ = "0.9.0-enterprise"
 
 
-__all__: list[str] = [
+__all__: FlextTypes.StringList = [
     "FlextLdifProcessor",
     "FlextLdifProcessorWrapper",
     "FlextLogger",

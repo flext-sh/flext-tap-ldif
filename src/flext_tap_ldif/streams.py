@@ -11,7 +11,6 @@ from collections.abc import Iterable, Mapping
 from pathlib import Path
 from typing import override
 
-from flext_core import FlextLogger
 from singer_sdk import Stream
 from singer_sdk.typing import (
     ArrayType,
@@ -22,6 +21,7 @@ from singer_sdk.typing import (
     StringType,
 )
 
+from flext_core import FlextLogger, FlextTypes
 from flext_tap_ldif.ldif_processor import FlextLdifProcessorWrapper
 
 if TYPE_CHECKING:
@@ -76,7 +76,7 @@ class LDIFEntriesStream(Stream):
                         exc,
                     )
 
-    def _get_schema(self: object) -> dict[str, object]:
+    def _get_schema(self: object) -> FlextTypes.Dict:
         """Get schema for LDIF entries."""
         return PropertiesList(
             Property("dn", StringType, description="Distinguished Name"),
@@ -103,7 +103,7 @@ class LDIFEntriesStream(Stream):
     def get_records(
         self,
         _context: Mapping[str, object] | None = None,
-    ) -> Iterable[dict[str, object]]:
+    ) -> Iterable[FlextTypes.Dict]:
         """Return a generator of record-type dictionary objects.
 
         Args:
@@ -113,7 +113,7 @@ class LDIFEntriesStream(Stream):
             Dictionary representations of LDIF entries.
 
         """
-        config: dict[str, object] = dict(self._tap.config)
+        config: FlextTypes.Dict = dict(self._tap.config)
         sample_path = getattr(self, "_sample_file_path", None)
         if sample_path:
             config["file_path"] = sample_path

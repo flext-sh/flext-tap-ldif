@@ -13,8 +13,9 @@ from collections.abc import Generator
 from pathlib import Path
 from typing import NoReturn, override
 
-from flext_core import FlextLogger, FlextResult
 from flext_ldif import FlextLdif
+
+from flext_core import FlextLogger, FlextResult, FlextTypes
 
 logger = FlextLogger(__name__)
 
@@ -28,7 +29,7 @@ class FlextLdifProcessorWrapper:
     """Wrapper for FlextLdifProcessor to maintain API compatibility."""
 
     @override
-    def __init__(self, config: dict[str, object]) -> None:
+    def __init__(self, config: FlextTypes.Dict) -> None:
         """Initialize the LDIF processor using flext-ldif infrastructure.
 
         Args:
@@ -38,7 +39,7 @@ class FlextLdifProcessorWrapper:
             object: Description of return value.
 
         """
-        self.config: dict[str, object] = config
+        self.config: FlextTypes.Dict = config
         self._api = FlextLdif()
 
     def _raise_parse_error(self, msg: str) -> NoReturn:
@@ -72,7 +73,7 @@ class FlextLdifProcessorWrapper:
             max_file_size_mb=max_file_size_mb,
         )
 
-    def process_file(self, file_path: Path) -> Generator[dict[str, object]]:
+    def process_file(self, file_path: Path) -> Generator[FlextTypes.Dict]:
         """Process a single LDIF file and yield records using flext-ldif.
 
         Args:
@@ -124,7 +125,7 @@ class FlextLdifProcessorWrapper:
 # Create the original class name for backward compatibility
 FlextLdifProcessor: type[FlextLdifProcessorWrapper] = FlextLdifProcessorWrapper
 
-__all__: list[str] = [
+__all__: FlextTypes.StringList = [
     "FlextLdifProcessor",
     "LDIFProcessor",
 ]

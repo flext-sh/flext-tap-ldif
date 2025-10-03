@@ -11,7 +11,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import ClassVar, override
 
-from flext_core import FlextResult, FlextUtilities
+from flext_core import FlextResult, FlextTypes, FlextUtilities
 
 
 class FlextTapLdifUtilities(FlextUtilities):
@@ -39,9 +39,9 @@ class FlextTapLdifUtilities(FlextUtilities):
         @staticmethod
         def create_schema_message(
             stream_name: str,
-            schema: dict[str, object],
-            key_properties: list[str] | None = None,
-        ) -> dict[str, object]:
+            schema: FlextTypes.Dict,
+            key_properties: FlextTypes.StringList | None = None,
+        ) -> FlextTypes.Dict:
             """Create Singer schema message.
 
             Args:
@@ -50,7 +50,7 @@ class FlextTapLdifUtilities(FlextUtilities):
                 key_properties: List of key property names
 
             Returns:
-                dict[str, object]: Singer schema message
+                FlextTypes.Dict: Singer schema message
 
             """
             return {
@@ -63,9 +63,9 @@ class FlextTapLdifUtilities(FlextUtilities):
         @staticmethod
         def create_record_message(
             stream_name: str,
-            record: dict[str, object],
+            record: FlextTypes.Dict,
             time_extracted: datetime | None = None,
-        ) -> dict[str, object]:
+        ) -> FlextTypes.Dict:
             """Create Singer record message.
 
             Args:
@@ -74,7 +74,7 @@ class FlextTapLdifUtilities(FlextUtilities):
                 time_extracted: Timestamp when record was extracted
 
             Returns:
-                dict[str, object]: Singer record message
+                FlextTypes.Dict: Singer record message
 
             """
             extracted_time = time_extracted or datetime.now(UTC)
@@ -86,14 +86,14 @@ class FlextTapLdifUtilities(FlextUtilities):
             }
 
         @staticmethod
-        def create_state_message(state: dict[str, object]) -> dict[str, object]:
+        def create_state_message(state: FlextTypes.Dict) -> FlextTypes.Dict:
             """Create Singer state message.
 
             Args:
                 state: State data
 
             Returns:
-                dict[str, object]: Singer state message
+                FlextTypes.Dict: Singer state message
 
             """
             return {
@@ -102,7 +102,7 @@ class FlextTapLdifUtilities(FlextUtilities):
             }
 
         @staticmethod
-        def write_message(message: dict[str, object]) -> None:
+        def write_message(message: FlextTypes.Dict) -> None:
             """Write Singer message to stdout.
 
             Args:
@@ -195,18 +195,18 @@ class FlextTapLdifUtilities(FlextUtilities):
                 return FlextResult[int].fail(f"Error counting LDIF entries: {e}")
 
         @staticmethod
-        def extract_ldif_metadata(file_path: Path) -> FlextResult[dict[str, object]]:
+        def extract_ldif_metadata(file_path: Path) -> FlextResult[FlextTypes.Dict]:
             """Extract metadata from LDIF file.
 
             Args:
                 file_path: Path to LDIF file
 
             Returns:
-                FlextResult[dict[str, object]]: Metadata dictionary or error
+                FlextResult[FlextTypes.Dict]: Metadata dictionary or error
 
             """
             try:
-                metadata: dict[str, object] = {
+                metadata: FlextTypes.Dict = {
                     "file_path": str(file_path),
                     "file_size": file_path.stat().st_size,
                     "version": None,
@@ -239,10 +239,10 @@ class FlextTapLdifUtilities(FlextUtilities):
                 metadata["base_dns"] = list(metadata["base_dns"])
                 metadata["object_classes"] = list(metadata["object_classes"])
 
-                return FlextResult[dict[str, object]].ok(metadata)
+                return FlextResult[FlextTypes.Dict].ok(metadata)
 
             except Exception as e:
-                return FlextResult[dict[str, object]].fail(
+                return FlextResult[FlextTypes.Dict].fail(
                     f"Error extracting LDIF metadata: {e}"
                 )
 
@@ -331,19 +331,19 @@ class FlextTapLdifUtilities(FlextUtilities):
 
         @staticmethod
         def convert_ldif_entry_to_record(
-            entry_lines: list[str],
-        ) -> FlextResult[dict[str, object]]:
+            entry_lines: FlextTypes.StringList,
+        ) -> FlextResult[FlextTypes.Dict]:
             """Convert LDIF entry lines to Singer record.
 
             Args:
                 entry_lines: List of LDIF lines for single entry
 
             Returns:
-                FlextResult[dict[str, object]]: Singer record or error
+                FlextResult[FlextTypes.Dict]: Singer record or error
 
             """
             try:
-                record: dict[str, object] = {}
+                record: FlextTypes.Dict = {}
                 current_attr = None
                 current_value = ""
 
@@ -389,10 +389,10 @@ class FlextTapLdifUtilities(FlextUtilities):
                     else:
                         record[normalized_attr] = current_value
 
-                return FlextResult[dict[str, object]].ok(record)
+                return FlextResult[FlextTypes.Dict].ok(record)
 
             except Exception as e:
-                return FlextResult[dict[str, object]].fail(
+                return FlextResult[FlextTypes.Dict].fail(
                     f"Error converting LDIF entry: {e}"
                 )
 
@@ -401,57 +401,55 @@ class FlextTapLdifUtilities(FlextUtilities):
 
         @staticmethod
         def validate_ldif_config(
-            config: dict[str, object],
-        ) -> FlextResult[dict[str, object]]:
+            config: FlextTypes.Dict,
+        ) -> FlextResult[FlextTypes.Dict]:
             """Validate LDIF tap configuration.
 
             Args:
                 config: Configuration dictionary
 
             Returns:
-                FlextResult[dict[str, object]]: Validated config or error
+                FlextResult[FlextTypes.Dict]: Validated config or error
 
             """
             required_fields = ["files"]
             missing_fields = [field for field in required_fields if field not in config]
 
             if missing_fields:
-                return FlextResult[dict[str, object]].fail(
+                return FlextResult[FlextTypes.Dict].fail(
                     f"Missing required fields: {', '.join(missing_fields)}"
                 )
 
             # Validate files configuration
             files = config["files"]
             if not isinstance(files, list):
-                return FlextResult[dict[str, object]].fail("Files must be a list")
+                return FlextResult[FlextTypes.Dict].fail("Files must be a list")
 
             if not files:
-                return FlextResult[dict[str, object]].fail(
+                return FlextResult[FlextTypes.Dict].fail(
                     "At least one file must be specified"
                 )
 
             # Validate each file path
             for file_path in files:
                 if not isinstance(file_path, str):
-                    return FlextResult[dict[str, object]].fail(
+                    return FlextResult[FlextTypes.Dict].fail(
                         "File paths must be strings"
                     )
 
                 path_obj = Path(file_path)
                 if not path_obj.exists():
-                    return FlextResult[dict[str, object]].fail(
+                    return FlextResult[FlextTypes.Dict].fail(
                         f"File does not exist: {file_path}"
                     )
 
-            return FlextResult[dict[str, object]].ok(config)
+            return FlextResult[FlextTypes.Dict].ok(config)
 
     class StateManagement:
         """State management utilities for incremental syncs."""
 
         @staticmethod
-        def get_file_state(
-            state: dict[str, object], file_path: str
-        ) -> dict[str, object]:
+        def get_file_state(state: FlextTypes.Dict, file_path: str) -> FlextTypes.Dict:
             """Get state for a specific file.
 
             Args:
@@ -459,17 +457,17 @@ class FlextTapLdifUtilities(FlextUtilities):
                 file_path: Path to the file
 
             Returns:
-                dict[str, object]: File state
+                FlextTypes.Dict: File state
 
             """
             return state.get("files", {}).get(file_path, {})
 
         @staticmethod
         def set_file_state(
-            state: dict[str, object],
+            state: FlextTypes.Dict,
             file_path: str,
-            file_state: dict[str, object],
-        ) -> dict[str, object]:
+            file_state: FlextTypes.Dict,
+        ) -> FlextTypes.Dict:
             """Set state for a specific file.
 
             Args:
@@ -478,7 +476,7 @@ class FlextTapLdifUtilities(FlextUtilities):
                 file_state: State data for the file
 
             Returns:
-                dict[str, object]: Updated state
+                FlextTypes.Dict: Updated state
 
             """
             if "files" not in state:
@@ -488,7 +486,7 @@ class FlextTapLdifUtilities(FlextUtilities):
             return state
 
         @staticmethod
-        def get_file_position(state: dict[str, object], file_path: str) -> int:
+        def get_file_position(state: FlextTypes.Dict, file_path: str) -> int:
             """Get current position in file.
 
             Args:
@@ -506,10 +504,10 @@ class FlextTapLdifUtilities(FlextUtilities):
 
         @staticmethod
         def set_file_position(
-            state: dict[str, object],
+            state: FlextTypes.Dict,
             file_path: str,
             position: int,
-        ) -> dict[str, object]:
+        ) -> FlextTypes.Dict:
             """Set current position in file.
 
             Args:
@@ -518,7 +516,7 @@ class FlextTapLdifUtilities(FlextUtilities):
                 position: Current position
 
             Returns:
-                dict[str, object]: Updated state
+                FlextTypes.Dict: Updated state
 
             """
             if "files" not in state:
@@ -535,9 +533,9 @@ class FlextTapLdifUtilities(FlextUtilities):
     def create_schema_message(
         cls,
         stream_name: str,
-        schema: dict[str, object],
-        key_properties: list[str] | None = None,
-    ) -> dict[str, object]:
+        schema: FlextTypes.Dict,
+        key_properties: FlextTypes.StringList | None = None,
+    ) -> FlextTypes.Dict:
         """Proxy method for SingerUtilities.create_schema_message()."""
         return cls.SingerUtilities.create_schema_message(
             stream_name, schema, key_properties
@@ -547,9 +545,9 @@ class FlextTapLdifUtilities(FlextUtilities):
     def create_record_message(
         cls,
         stream_name: str,
-        record: dict[str, object],
+        record: FlextTypes.Dict,
         time_extracted: datetime | None = None,
-    ) -> dict[str, object]:
+    ) -> FlextTypes.Dict:
         """Proxy method for SingerUtilities.create_record_message()."""
         return cls.SingerUtilities.create_record_message(
             stream_name, record, time_extracted
@@ -572,32 +570,30 @@ class FlextTapLdifUtilities(FlextUtilities):
 
     @classmethod
     def convert_ldif_entry_to_record(
-        cls, entry_lines: list[str]
-    ) -> FlextResult[dict[str, object]]:
+        cls, entry_lines: FlextTypes.StringList
+    ) -> FlextResult[FlextTypes.Dict]:
         """Proxy method for LdifDataProcessing.convert_ldif_entry_to_record()."""
         return cls.LdifDataProcessing.convert_ldif_entry_to_record(entry_lines)
 
     @classmethod
     def validate_ldif_config(
-        cls, config: dict[str, object]
-    ) -> FlextResult[dict[str, object]]:
+        cls, config: FlextTypes.Dict
+    ) -> FlextResult[FlextTypes.Dict]:
         """Proxy method for ConfigValidation.validate_ldif_config()."""
         return cls.ConfigValidation.validate_ldif_config(config)
 
     @classmethod
-    def get_file_state(
-        cls, state: dict[str, object], file_path: str
-    ) -> dict[str, object]:
+    def get_file_state(cls, state: FlextTypes.Dict, file_path: str) -> FlextTypes.Dict:
         """Proxy method for StateManagement.get_file_state()."""
         return cls.StateManagement.get_file_state(state, file_path)
 
     @classmethod
     def set_file_position(
         cls,
-        state: dict[str, object],
+        state: FlextTypes.Dict,
         file_path: str,
         position: int,
-    ) -> dict[str, object]:
+    ) -> FlextTypes.Dict:
         """Proxy method for StateManagement.set_file_position()."""
         return cls.StateManagement.set_file_position(state, file_path, position)
 

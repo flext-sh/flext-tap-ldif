@@ -8,14 +8,16 @@ from __future__ import annotations
 
 from typing import Self
 
+from pydantic import Field, field_validator
+from pydantic_settings import SettingsConfigDict
+
 from flext_core import (
     FlextConfig,
     FlextConstants,
     FlextResult,
+    FlextTypes,
     FlextUtilities,
 )
-from pydantic import Field, field_validator
-from pydantic_settings import SettingsConfigDict
 
 
 class FlextTapLdifConfig(FlextConfig):
@@ -57,17 +59,17 @@ class FlextTapLdifConfig(FlextConfig):
         description="Filter entries by base DN pattern",
     )
 
-    object_class_filter: list[str] = Field(
+    object_class_filter: FlextTypes.StringList = Field(
         default_factory=list,
         description="Filter entries by object class",
     )
 
-    attribute_filter: list[str] = Field(
+    attribute_filter: FlextTypes.StringList = Field(
         default_factory=list,
         description="Include only specified attributes",
     )
 
-    exclude_attributes: list[str] = Field(
+    exclude_attributes: FlextTypes.StringList = Field(
         default_factory=list,
         description="Exclude specified attributes",
     )
@@ -173,11 +175,6 @@ class FlextTapLdifConfig(FlextConfig):
                 )
         return FlextResult[None].ok(None)
 
-    @property
-    def ldif_config(self: object) -> dict[str, object]:
-        """Get LDIF-specific configuration as a dictionary."""
-        # Enhanced singleton pattern methods
-
     @classmethod
     def get_global_instance(cls) -> Self:
         """Get the global singleton instance using enhanced FlextConfig pattern."""
@@ -222,7 +219,7 @@ class FlextTapLdifConfig(FlextConfig):
         return cls(**test_defaults)
 
     @property
-    def ldif_config(self: object) -> dict[str, object]:
+    def ldif_config(self: object) -> FlextTypes.Dict:
         """Get LDIF-specific configuration as a dictionary."""
         return {
             "file_path": self.file_path,
