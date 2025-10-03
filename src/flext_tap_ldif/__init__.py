@@ -48,9 +48,12 @@ TapConfig = FlextTapLdifConfig
 
 try:
     __version__ = importlib.metadata.version("flext-tap-ldif")
-    __version_info__: tuple[int | str, ...] = VERSION.version_info
+    __version_info__: tuple[int | str, ...] = tuple(
+        map(int, __version__.split(".")[:3])
+    )
 except importlib.metadata.PackageNotFoundError:
     __version__ = "0.9.0-enterprise"
+    __version_info__ = (0, 9, 0)
 
 
 __all__: FlextTypes.StringList = [
