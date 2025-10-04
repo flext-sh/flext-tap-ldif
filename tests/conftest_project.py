@@ -7,9 +7,8 @@ from collections.abc import Generator
 from pathlib import Path
 
 import pytest
-from flext_tests import FlextTestDocker
-
 from flext_core import FlextTypes
+from flext_tests import FlextTestDocker
 
 # Import shared LDAP fixtures from docker directory
 

@@ -6,6 +6,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+import base64
 import re
 from datetime import UTC, datetime
 from pathlib import Path
@@ -182,8 +183,8 @@ class FlextTapLdifUtilities(FlextUtilities):
                 with file_path.open(
                     "r", encoding=FlextTapLdifUtilities.DEFAULT_ENCODING
                 ) as f:
-                    for line in f:
-                        line = line.strip()
+                    for line_str in f:
+                        line = line_str.strip()
                         if line.startswith("dn:"):
                             entry_count += 1
 
@@ -218,8 +219,8 @@ class FlextTapLdifUtilities(FlextUtilities):
                 with file_path.open(
                     "r", encoding=FlextTapLdifUtilities.DEFAULT_ENCODING
                 ) as f:
-                    for line in f:
-                        line = line.strip()
+                    for line_str in f:
+                        line = line_str.strip()
 
                         if line.startswith("version:"):
                             metadata["version"] = line.split(":", 1)[1].strip()
@@ -227,8 +228,9 @@ class FlextTapLdifUtilities(FlextUtilities):
                             metadata["entry_count"] += 1
                             dn = line.split(":", 1)[1].strip()
                             # Extract base DN (last two components)
+                            min_dn_components_for_base = 2
                             dn_parts = [part.strip() for part in dn.split(",")]
-                            if len(dn_parts) >= 2:
+                            if len(dn_parts) >= min_dn_components_for_base:
                                 base_dn = ",".join(dn_parts[-2:])
                                 metadata["base_dns"].add(base_dn)
                         elif line.startswith("objectClass:"):
@@ -271,7 +273,6 @@ class FlextTapLdifUtilities(FlextUtilities):
                 # Handle base64 encoded values (::)
                 if "::" in line:
                     attr_name, encoded_value = line.split("::", 1)
-                    import base64
 
                     try:
                         decoded_value = base64.b64decode(encoded_value.strip()).decode(

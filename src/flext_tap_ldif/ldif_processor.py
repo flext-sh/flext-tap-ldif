@@ -13,9 +13,8 @@ from collections.abc import Generator
 from pathlib import Path
 from typing import NoReturn, override
 
-from flext_ldif import FlextLdif
-
 from flext_core import FlextLogger, FlextResult, FlextTypes
+from flext_ldif import FlextLdif
 
 logger = FlextLogger(__name__)
 

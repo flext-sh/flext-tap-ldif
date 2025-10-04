@@ -6,19 +6,10 @@ SPDX-License-Identifier: MIT.
 
 from __future__ import annotations
 
-from flext_core.metadata import build_metadata_exports
-
-globals().update(build_metadata_exports(__file__))
 import importlib.metadata
 
-from flext_meltano import (
-    FlextMeltanoBridge,
-    FlextMeltanoConfig,
-    FlextMeltanoService,
-    FlextMeltanoTypes,
-)
-
 from flext_core import FlextLogger, FlextModels, FlextResult, FlextTypes
+
 from flext_tap_ldif.config import FlextTapLdifConfig
 from flext_tap_ldif.exceptions import (
     FlextTapLdifConfigurationError,
@@ -40,6 +31,7 @@ from flext_tap_ldif.streams import LDIFEntriesStream
 from flext_tap_ldif.tap import TapLDIF, TapLDIF as LegacyTapLDIF
 from flext_tap_ldif.utilities import FlextTapLdifUtilities
 
+# Backward compatibility aliases
 FlextTapLDIF = TapLDIF
 TapLDIFConfig = FlextTapLdifConfig
 FlextTapLDIFConfig = FlextTapLdifConfig
@@ -48,25 +40,17 @@ TapConfig = FlextTapLdifConfig
 
 try:
     __version__ = importlib.metadata.version("flext-tap-ldif")
-    __version_info__: tuple[int | str, ...] = tuple(
-        map(int, __version__.split(".")[:3])
-    )
 except importlib.metadata.PackageNotFoundError:
-    __version__ = "0.9.0-enterprise"
-    __version_info__ = (0, 9, 0)
+    __version__ = "0.0.0"
 
-
-__all__: FlextTypes.StringList = [
+__all__ = [
     "FlextLdifProcessor",
     "FlextLdifProcessorWrapper",
     "FlextLogger",
-    "FlextMeltanoBridge",
-    "FlextMeltanoConfig",
-    "FlextMeltanoService",
-    "FlextMeltanoTypes",
     "FlextModels",
     "FlextResult",
     "FlextTapLDIF",
+    "FlextTapLDIFConfig",
     "FlextTapLdifConfig",
     "FlextTapLdifConfigurationError",
     "FlextTapLdifError",
@@ -78,10 +62,12 @@ __all__: FlextTypes.StringList = [
     "FlextTapLdifStreamError",
     "FlextTapLdifUtilities",
     "FlextTapLdifValidationError",
+    "FlextTypes",
     "LDIFEntriesStream",
     "LDIFProcessor",
+    "LDIFTap",
     "LegacyTapLDIF",
+    "TapConfig",
+    "TapLDIF",
     "TapLDIFConfig",
-    "__version__",
-    "__version_info__",
 ]

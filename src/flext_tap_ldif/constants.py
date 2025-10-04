@@ -8,9 +8,8 @@ from __future__ import annotations
 
 from typing import ClassVar
 
-from flext_ldif.constants import FlextLdifConstants
-
 from flext_core import FlextConstants, FlextTypes
+from flext_ldif.constants import FlextLdifConstants
 
 
 class FlextTapLdifConstants(FlextConstants):
@@ -20,7 +19,7 @@ class FlextTapLdifConstants(FlextConstants):
     """
 
     # Import LDIF-specific constants from flext-ldif (composition pattern)
-    from flext_ldif.constants import FlextTapLdifConstants
+    from flext_ldif.constants import FlextTapLdifConstants  # noqa: PLC0415
 
     # LDIF File Configuration using composition
     DEFAULT_LDIF_ENCODING = FlextLdifConstants.Encoding.DEFAULT_ENCODING
