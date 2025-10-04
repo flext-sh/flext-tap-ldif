@@ -8,9 +8,6 @@ from __future__ import annotations
 
 from typing import Self
 
-from pydantic import Field, field_validator
-from pydantic_settings import SettingsConfigDict
-
 from flext_core import (
     FlextConfig,
     FlextConstants,
@@ -18,6 +15,8 @@ from flext_core import (
     FlextTypes,
     FlextUtilities,
 )
+from pydantic import Field, field_validator
+from pydantic_settings import SettingsConfigDict
 
 
 class FlextTapLdifConfig(FlextConfig):
@@ -181,7 +180,7 @@ class FlextTapLdifConfig(FlextConfig):
         return cls.get_or_create_shared_instance(project_name="flext-tap-ldif")
 
     @classmethod
-    def create_for_development(cls, **overrides) -> Self:
+    def create_for_development(cls, **overrides: object) -> Self:
         """Create development configuration instance."""
         dev_defaults = {
             "file_path": "./test.ldif",
@@ -194,7 +193,7 @@ class FlextTapLdifConfig(FlextConfig):
         return cls(**dev_defaults)
 
     @classmethod
-    def create_for_production(cls, **overrides) -> Self:
+    def create_for_production(cls, **overrides: object) -> Self:
         """Create production configuration instance."""
         prod_defaults = {
             "batch_size": FlextConstants.Performance.BatchProcessing.MAX_ITEMS // 2,
@@ -206,7 +205,7 @@ class FlextTapLdifConfig(FlextConfig):
         return cls(**prod_defaults)
 
     @classmethod
-    def create_for_testing(cls, **overrides) -> Self:
+    def create_for_testing(cls, **overrides: object) -> Self:
         """Create testing configuration instance."""
         test_defaults = {
             "file_path": "./tests/test_data/sample.ldif",

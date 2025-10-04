@@ -11,17 +11,11 @@ from collections.abc import Iterable, Mapping
 from pathlib import Path
 from typing import TYPE_CHECKING, override
 
-from singer_sdk import Stream
-from singer_sdk.typing import (
-    ArrayType,
-    IntegerType,
-    ObjectType,
-    PropertiesList,
-    Property,
-    StringType,
-)
-
 from flext_core import FlextLogger, FlextTypes
+
+# Use FLEXT Meltano wrappers instead of direct singer_sdk imports (domain separation)
+from flext_meltano import FlextMeltanoTypes, FlextStream as Stream
+
 from flext_tap_ldif.ldif_processor import FlextLdifProcessorWrapper
 
 if TYPE_CHECKING:
@@ -78,24 +72,42 @@ class LDIFEntriesStream(Stream):
 
     def _get_schema(self: object) -> FlextTypes.Dict:
         """Get schema for LDIF entries."""
-        return PropertiesList(
-            Property("dn", StringType, description="Distinguished Name"),
-            Property("attributes", ObjectType(), description="Entry attributes"),
-            Property(
+        return FlextMeltanoTypes.Singer.Typing.PropertiesList(
+            FlextMeltanoTypes.Singer.Typing.Property(
+                "dn",
+                FlextMeltanoTypes.Singer.Typing.StringType,
+                description="Distinguished Name",
+            ),
+            FlextMeltanoTypes.Singer.Typing.Property(
+                "attributes",
+                FlextMeltanoTypes.Singer.Typing.ObjectType(),
+                description="Entry attributes",
+            ),
+            FlextMeltanoTypes.Singer.Typing.Property(
                 "object_class",
-                ArrayType(StringType),
+                FlextMeltanoTypes.Singer.Typing.ArrayType(
+                    FlextMeltanoTypes.Singer.Typing.StringType
+                ),
                 description="Object classes",
             ),
-            Property("change_type", StringType, description="Change type"),
-            Property("source_file", StringType, description="Source file path"),
-            Property(
+            FlextMeltanoTypes.Singer.Typing.Property(
+                "change_type",
+                FlextMeltanoTypes.Singer.Typing.StringType,
+                description="Change type",
+            ),
+            FlextMeltanoTypes.Singer.Typing.Property(
+                "source_file",
+                FlextMeltanoTypes.Singer.Typing.StringType,
+                description="Source file path",
+            ),
+            FlextMeltanoTypes.Singer.Typing.Property(
                 "line_number",
-                IntegerType,
+                FlextMeltanoTypes.Singer.Typing.IntegerType,
                 description="Line number in file",
             ),
-            Property(
+            FlextMeltanoTypes.Singer.Typing.Property(
                 "entry_size",
-                IntegerType,
+                FlextMeltanoTypes.Singer.Typing.IntegerType,
                 description="Entry size in bytes",
             ),
         ).to_dict()

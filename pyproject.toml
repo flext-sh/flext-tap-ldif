@@ -215,6 +215,10 @@
 [tool.pyrefly]
     python-version = "3.13"
     search-path = [
+        "../flext-core/src",
+        "../flext-ldif/src",
+        "../flext-meltano/src",
+        "../flext-observability/src",
         "src",
         "tests",
     ]

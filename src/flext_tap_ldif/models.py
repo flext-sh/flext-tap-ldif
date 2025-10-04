@@ -8,6 +8,7 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from typing import Self
 
+from flext_core import FlextConstants, FlextModels, FlextTypes
 from pydantic import (
     ConfigDict,
     Field,
@@ -17,7 +18,7 @@ from pydantic import (
     model_validator,
 )
 
-from flext_core import FlextConstants, FlextModels, FlextTypes
+from flext_tap_ldif.utilities import FlextTapLdifUtilities
 
 
 class FlextTapLdifModels(FlextModels):
@@ -126,16 +127,14 @@ class FlextTapLdifModels(FlextModels):
     def validate_ldif_tap_system_consistency(self) -> Self:
         """Validate Singer LDIF tap system consistency and configuration."""
         # Singer LDIF tap file validation
-        if hasattr(self, "_ldif_files") and self._ldif_files:
-            if not hasattr(self, "LdifFile"):
-                msg = "LdifFile model required when LDIF files configured"
-                raise ValueError(msg)
+        if hasattr(self, "_ldif_files") and self._ldif_files and not hasattr(self, "LdifFile"):
+            msg = "LdifFile model required when LDIF files configured"
+            raise ValueError(msg)
 
         # LDIF processing validation
-        if hasattr(self, "_batch_processing") and self._batch_processing:
-            if not hasattr(self, "LdifBatch"):
-                msg = "LdifBatch model required for batch processing"
-                raise ValueError(msg)
+        if hasattr(self, "_batch_processing") and self._batch_processing and not hasattr(self, "LdifBatch"):
+            msg = "LdifBatch model required for batch processing"
+            raise ValueError(msg)
 
         # Singer protocol compliance validation
         if hasattr(self, "_singer_mode") and self._singer_mode:
@@ -1115,11 +1114,7 @@ class FlextTapLdifModels(FlextModels):
 # CRITICAL: FlextTapLdifUtilities was DUPLICATED between models.py and utilities.py.
 # This was a ZERO TOLERANCE violation of the user's explicit requirements.
 #
-# RESOLUTION: Import from utilities.py to eliminate duplication completely.
-
-from flext_tap_ldif.utilities import FlextTapLdifUtilities
-
-# Note: This import ensures backward compatibility while eliminating duplication
+# Note: FlextTapLdifUtilities imported at top for proper organization
 
 
 # Public API exports following FLEXT standardized patterns
