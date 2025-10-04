@@ -127,12 +127,20 @@ class FlextTapLdifModels(FlextModels):
     def validate_ldif_tap_system_consistency(self) -> Self:
         """Validate Singer LDIF tap system consistency and configuration."""
         # Singer LDIF tap file validation
-        if hasattr(self, "_ldif_files") and self._ldif_files and not hasattr(self, "LdifFile"):
+        if (
+            hasattr(self, "_ldif_files")
+            and self._ldif_files
+            and not hasattr(self, "LdifFile")
+        ):
             msg = "LdifFile model required when LDIF files configured"
             raise ValueError(msg)
 
         # LDIF processing validation
-        if hasattr(self, "_batch_processing") and self._batch_processing and not hasattr(self, "LdifBatch"):
+        if (
+            hasattr(self, "_batch_processing")
+            and self._batch_processing
+            and not hasattr(self, "LdifBatch")
+        ):
             msg = "LdifBatch model required for batch processing"
             raise ValueError(msg)
 

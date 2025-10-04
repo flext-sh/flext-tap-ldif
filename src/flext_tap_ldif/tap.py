@@ -58,17 +58,23 @@ class TapLDIF(Tap):
             ),
             FlextMeltanoTypes.Singer.Typing.Property(
                 "object_class_filter",
-                FlextMeltanoTypes.Singer.Typing.ArrayType(FlextMeltanoTypes.Singer.Typing.StringType),
+                FlextMeltanoTypes.Singer.Typing.ArrayType(
+                    FlextMeltanoTypes.Singer.Typing.StringType
+                ),
                 description="Filter entries by object class",
             ),
             FlextMeltanoTypes.Singer.Typing.Property(
                 "attribute_filter",
-                FlextMeltanoTypes.Singer.Typing.ArrayType(FlextMeltanoTypes.Singer.Typing.StringType),
+                FlextMeltanoTypes.Singer.Typing.ArrayType(
+                    FlextMeltanoTypes.Singer.Typing.StringType
+                ),
                 description="Include only specified attributes",
             ),
             FlextMeltanoTypes.Singer.Typing.Property(
                 "exclude_attributes",
-                FlextMeltanoTypes.Singer.Typing.ArrayType(FlextMeltanoTypes.Singer.Typing.StringType),
+                FlextMeltanoTypes.Singer.Typing.ArrayType(
+                    FlextMeltanoTypes.Singer.Typing.StringType
+                ),
                 description="Exclude specified attributes",
             ),
             FlextMeltanoTypes.Singer.Typing.Property(
@@ -119,12 +125,26 @@ class TapLDIF(Tap):
             ),
             FlextMeltanoTypes.Singer.Typing.Property(
                 "object_class",
-                FlextMeltanoTypes.Singer.Typing.ArrayType(FlextMeltanoTypes.Singer.Typing.StringType),
+                FlextMeltanoTypes.Singer.Typing.ArrayType(
+                    FlextMeltanoTypes.Singer.Typing.StringType
+                ),
                 description="Object classes",
             ),
-            FlextMeltanoTypes.Singer.Typing.Property("attributes", FlextMeltanoTypes.Singer.Typing.ObjectType(), description="LDAP attributes"),
-            FlextMeltanoTypes.Singer.Typing.Property("change_type", FlextMeltanoTypes.Singer.Typing.StringType, description="LDIF change type"),
-            FlextMeltanoTypes.Singer.Typing.Property("source_file", FlextMeltanoTypes.Singer.Typing.StringType, description="Source LDIF file"),
+            FlextMeltanoTypes.Singer.Typing.Property(
+                "attributes",
+                FlextMeltanoTypes.Singer.Typing.ObjectType(),
+                description="LDAP attributes",
+            ),
+            FlextMeltanoTypes.Singer.Typing.Property(
+                "change_type",
+                FlextMeltanoTypes.Singer.Typing.StringType,
+                description="LDIF change type",
+            ),
+            FlextMeltanoTypes.Singer.Typing.Property(
+                "source_file",
+                FlextMeltanoTypes.Singer.Typing.StringType,
+                description="Source LDIF file",
+            ),
             FlextMeltanoTypes.Singer.Typing.Property(
                 "line_number",
                 FlextMeltanoTypes.Singer.Typing.IntegerType,
