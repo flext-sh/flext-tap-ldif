@@ -1,6 +1,6 @@
 """Singer LDIF tap protocols for FLEXT ecosystem."""
 
-from typing import Any, Protocol, runtime_checkable
+from typing import Protocol, runtime_checkable
 
 from flext_core import FlextProtocols, FlextResult, FlextTypes
 
@@ -132,12 +132,12 @@ class FlextTapLdifProtocols:
 
             def process_file_stream(
                 self, file_path: str, batch_size: int
-            ) -> FlextResult[Any]:
+            ) -> FlextResult[object]:
                 """Process LDIF file as stream."""
 
             def handle_large_files(
                 self, file_path: str, chunk_size: int
-            ) -> FlextResult[Any]:
+            ) -> FlextResult[object]:
                 """Handle large LDIF files."""
 
             def process_directory(
