@@ -5,7 +5,7 @@ from typing import Protocol, runtime_checkable
 from flext_core import FlextProtocols, FlextResult, FlextTypes
 
 
-class FlextTapLdifProtocols:
+class FlextMeltanoTapLdifProtocols:
     """Singer Tap LDIF protocols with explicit re-exports from FlextProtocols foundation.
 
     Domain Extension Pattern (Phase 3):
@@ -212,5 +212,5 @@ class FlextTapLdifProtocols:
 
 
 __all__ = [
-    "FlextTapLdifProtocols",
+    "FlextMeltanoTapLdifProtocols",
 ]

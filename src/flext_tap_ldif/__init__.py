@@ -10,33 +10,33 @@ import importlib.metadata
 
 from flext_core import FlextLogger, FlextModels, FlextResult, FlextTypes
 
-from flext_tap_ldif.config import FlextTapLdifConfig
+from flext_tap_ldif.config import FlextMeltanoTapLdifConfig
 from flext_tap_ldif.exceptions import (
-    FlextTapLdifConfigurationError,
-    FlextTapLdifError,
-    FlextTapLdifFileError,
-    FlextTapLdifParseError,
-    FlextTapLdifProcessingError,
-    FlextTapLdifStreamError,
-    FlextTapLdifValidationError,
+    FlextMeltanoTapLdifConfigurationError,
+    FlextMeltanoTapLdifError,
+    FlextMeltanoTapLdifFileError,
+    FlextMeltanoTapLdifParseError,
+    FlextMeltanoTapLdifProcessingError,
+    FlextMeltanoTapLdifStreamError,
+    FlextMeltanoTapLdifValidationError,
 )
 from flext_tap_ldif.ldif_processor import (
     FlextLdifProcessor,
     FlextLdifProcessorWrapper,
     LDIFProcessor,
 )
-from flext_tap_ldif.models import FlextTapLdifModels
-from flext_tap_ldif.protocols import FlextTapLdifProtocols
+from flext_tap_ldif.models import FlextMeltanoTapLdifModels
+from flext_tap_ldif.protocols import FlextMeltanoTapLdifProtocols
 from flext_tap_ldif.streams import LDIFEntriesStream
 from flext_tap_ldif.tap import TapLDIF, TapLDIF as LegacyTapLDIF
-from flext_tap_ldif.utilities import FlextTapLdifUtilities
+from flext_tap_ldif.utilities import FlextMeltanoTapLdifUtilities
 
 # Backward compatibility aliases
-FlextTapLDIF = TapLDIF
-TapLDIFConfig = FlextTapLdifConfig
-FlextTapLDIFConfig = FlextTapLdifConfig
+FlextMeltanoTapLDIF = TapLDIF
+TapLDIFConfig = FlextMeltanoTapLdifConfig
+FlextMeltanoTapLDIFConfig = FlextMeltanoTapLdifConfig
 LDIFTap = TapLDIF
-TapConfig = FlextTapLdifConfig
+TapConfig = FlextMeltanoTapLdifConfig
 
 try:
     __version__ = importlib.metadata.version("flext-tap-ldif")
@@ -47,21 +47,21 @@ __all__ = [
     "FlextLdifProcessor",
     "FlextLdifProcessorWrapper",
     "FlextLogger",
+    "FlextMeltanoTapLDIF",
+    "FlextMeltanoTapLDIFConfig",
+    "FlextMeltanoTapLdifConfig",
+    "FlextMeltanoTapLdifConfigurationError",
+    "FlextMeltanoTapLdifError",
+    "FlextMeltanoTapLdifFileError",
+    "FlextMeltanoTapLdifModels",
+    "FlextMeltanoTapLdifParseError",
+    "FlextMeltanoTapLdifProcessingError",
+    "FlextMeltanoTapLdifProtocols",
+    "FlextMeltanoTapLdifStreamError",
+    "FlextMeltanoTapLdifUtilities",
+    "FlextMeltanoTapLdifValidationError",
     "FlextModels",
     "FlextResult",
-    "FlextTapLDIF",
-    "FlextTapLDIFConfig",
-    "FlextTapLdifConfig",
-    "FlextTapLdifConfigurationError",
-    "FlextTapLdifError",
-    "FlextTapLdifFileError",
-    "FlextTapLdifModels",
-    "FlextTapLdifParseError",
-    "FlextTapLdifProcessingError",
-    "FlextTapLdifProtocols",
-    "FlextTapLdifStreamError",
-    "FlextTapLdifUtilities",
-    "FlextTapLdifValidationError",
     "FlextTypes",
     "LDIFEntriesStream",
     "LDIFProcessor",

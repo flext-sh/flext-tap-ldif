@@ -19,7 +19,7 @@ from pydantic import Field, field_validator
 from pydantic_settings import SettingsConfigDict
 
 
-class FlextTapLdifConfig(FlextConfig):
+class FlextMeltanoTapLdifConfig(FlextConfig):
     """Configuration for the LDIF tap with optimized Python 3.13+ patterns."""
 
     model_config = SettingsConfigDict(
@@ -238,5 +238,5 @@ class FlextTapLdifConfig(FlextConfig):
 
 # Export main configuration class
 __all__ = [
-    "FlextTapLdifConfig",
+    "FlextMeltanoTapLdifConfig",
 ]

@@ -15,7 +15,7 @@ from typing import ClassVar, override
 from flext_core import FlextResult, FlextTypes, FlextUtilities
 
 
-class FlextTapLdifUtilities(FlextUtilities):
+class FlextMeltanoTapLdifUtilities(FlextUtilities):
     """Single unified utilities class for Singer tap LDIF operations.
 
     Follows FLEXT unified class pattern with nested helper classes for
@@ -142,7 +142,7 @@ class FlextTapLdifUtilities(FlextUtilities):
 
                 # Basic content validation
                 with file_path.open(
-                    "r", encoding=FlextTapLdifUtilities.DEFAULT_ENCODING
+                    "r", encoding=FlextMeltanoTapLdifUtilities.DEFAULT_ENCODING
                 ) as f:
                     first_lines = [f.readline().strip() for _ in range(10)]
 
@@ -181,7 +181,7 @@ class FlextTapLdifUtilities(FlextUtilities):
 
                 entry_count = 0
                 with file_path.open(
-                    "r", encoding=FlextTapLdifUtilities.DEFAULT_ENCODING
+                    "r", encoding=FlextMeltanoTapLdifUtilities.DEFAULT_ENCODING
                 ) as f:
                     for line_str in f:
                         line = line_str.strip()
@@ -217,7 +217,7 @@ class FlextTapLdifUtilities(FlextUtilities):
                 }
 
                 with file_path.open(
-                    "r", encoding=FlextTapLdifUtilities.DEFAULT_ENCODING
+                    "r", encoding=FlextMeltanoTapLdifUtilities.DEFAULT_ENCODING
                 ) as f:
                     for line_str in f:
                         line = line_str.strip()
@@ -350,14 +350,16 @@ class FlextTapLdifUtilities(FlextUtilities):
 
                 for line in entry_lines:
                     # Handle line continuation
-                    if line.startswith(FlextTapLdifUtilities.LDIF_LINE_CONTINUATION):
+                    if line.startswith(
+                        FlextMeltanoTapLdifUtilities.LDIF_LINE_CONTINUATION
+                    ):
                         if current_attr:
                             current_value += line[1:]  # Remove continuation character
                         continue
 
                     # Process previous attribute if exists
                     if current_attr and current_value:
-                        normalized_attr = FlextTapLdifUtilities.LdifDataProcessing.normalize_ldif_attribute_name(
+                        normalized_attr = FlextMeltanoTapLdifUtilities.LdifDataProcessing.normalize_ldif_attribute_name(
                             current_attr
                         )
                         if normalized_attr in record:
@@ -370,7 +372,9 @@ class FlextTapLdifUtilities(FlextUtilities):
 
                     # Parse new attribute line
                     parse_result = (
-                        FlextTapLdifUtilities.LdifDataProcessing.parse_ldif_line(line)
+                        FlextMeltanoTapLdifUtilities.LdifDataProcessing.parse_ldif_line(
+                            line
+                        )
                     )
                     if parse_result.is_success:
                         current_attr, current_value = parse_result.value
@@ -380,7 +384,7 @@ class FlextTapLdifUtilities(FlextUtilities):
 
                 # Process final attribute
                 if current_attr and current_value:
-                    normalized_attr = FlextTapLdifUtilities.LdifDataProcessing.normalize_ldif_attribute_name(
+                    normalized_attr = FlextMeltanoTapLdifUtilities.LdifDataProcessing.normalize_ldif_attribute_name(
                         current_attr
                     )
                     if normalized_attr in record:
@@ -498,7 +502,7 @@ class FlextTapLdifUtilities(FlextUtilities):
                 int: Current position or 0
 
             """
-            file_state = FlextTapLdifUtilities.StateManagement.get_file_state(
+            file_state = FlextMeltanoTapLdifUtilities.StateManagement.get_file_state(
                 state, file_path
             )
             return file_state.get("position", 0)
@@ -600,5 +604,5 @@ class FlextTapLdifUtilities(FlextUtilities):
 
 
 __all__ = [
-    "FlextTapLdifUtilities",
+    "FlextMeltanoTapLdifUtilities",
 ]
