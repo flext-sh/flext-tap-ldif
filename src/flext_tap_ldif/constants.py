@@ -50,7 +50,7 @@ class FlextMeltanoTapLdifConstants(FlextConstants):
         PERFORMANCE_MIN_CHUNK_SIZE = (
             FlextLdifConstants.Processing.PERFORMANCE_MIN_CHUNK_SIZE
         )
-        MIN_PRODUCTION_ENTRIES = FlextLdifConstants.Processing.MIN_PRODUCTION_ENTRIES
+        MIN_ENTRIES = FlextLdifConstants.Processing.MIN_ENTRIES
 
     class Format:
         """LDIF format specifications."""
