@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING, override
 from flext_core import FlextLogger, FlextTypes
 
 # Use FLEXT Meltano wrappers instead of direct singer_sdk imports (domain separation)
-from flext_meltano import FlextMeltanoTypes, FlextStream as Stream
+from flext_meltano import FlextMeltanoStream as Stream, FlextMeltanoTypes
 
 from flext_tap_ldif.ldif_processor import FlextLdifProcessorWrapper
 

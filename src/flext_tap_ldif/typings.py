@@ -23,7 +23,7 @@ from flext_core import FlextTypes
 
 
 # Singer LDIF tap domain TypeVars
-class FlextTapLdifTypes(FlextTypes):
+class FlextMeltanoTapLdifTypes(FlextTypes):
     """Singer LDIF tap-specific type definitions extending FlextTypes.
 
     Domain-specific type system for Singer LDIF tap operations.
@@ -186,5 +186,5 @@ class FlextTapLdifTypes(FlextTypes):
 # =============================================================================
 
 __all__: FlextTypes.StringList = [
-    "FlextTapLdifTypes",
+    "FlextMeltanoTapLdifTypes",
 ]

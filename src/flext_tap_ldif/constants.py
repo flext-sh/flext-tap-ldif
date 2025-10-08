@@ -12,14 +12,14 @@ from flext_core import FlextConstants, FlextTypes
 from flext_ldif.constants import FlextLdifConstants
 
 
-class FlextTapLdifConstants(FlextConstants):
+class FlextMeltanoTapLdifConstants(FlextConstants):
     """LDIF tap extraction-specific constants following flext-core patterns.
 
-    Composes with FlextTapLdifConstants to avoid duplication and ensure consistency.
+    Composes with FlextMeltanoTapLdifConstants to avoid duplication and ensure consistency.
     """
 
     # Import LDIF-specific constants from flext-ldif (composition pattern)
-    from flext_ldif.constants import FlextTapLdifConstants
+    from flext_ldif.constants import FlextMeltanoTapLdifConstants
 
     # LDIF File Configuration using composition
     DEFAULT_LDIF_ENCODING = FlextLdifConstants.Encoding.DEFAULT_ENCODING
@@ -32,7 +32,7 @@ class FlextTapLdifConstants(FlextConstants):
     MAX_BATCH_SIZE = FlextConstants.Performance.BatchProcessing.MAX_ITEMS
     MAX_FILE_SIZE_MB = 100
 
-    # LDIF Change Types from FlextTapLdifConstants
+    # LDIF Change Types from FlextMeltanoTapLdifConstants
     LDIF_CHANGE_TYPES: ClassVar[FlextTypes.StringList] = [
         FlextLdifConstants.EntryModification.ADD,
         FlextLdifConstants.EntryModification.MODIFY,
@@ -71,4 +71,4 @@ class FlextTapLdifConstants(FlextConstants):
         )
 
 
-__all__ = ["FlextTapLdifConstants"]
+__all__ = ["FlextMeltanoTapLdifConstants"]

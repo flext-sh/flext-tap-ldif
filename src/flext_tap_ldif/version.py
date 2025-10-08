@@ -15,16 +15,16 @@ globals().update(_metadata)
 _metadata_obj = cast("FlextProjectMetadata", _metadata["__flext_metadata__"])
 
 
-class FlextTapLdifVersion(FlextProjectVersion):
+class FlextMeltanoTapLdifVersion(FlextProjectVersion):
     """Structured metadata for the flext tap ldif distribution."""
 
     @classmethod
-    def current(cls) -> FlextTapLdifVersion:
+    def current(cls) -> FlextMeltanoTapLdifVersion:
         """Return canonical metadata loaded from pyproject.toml."""
         return cls.from_metadata(_metadata_obj)
 
 
-VERSION: Final[FlextTapLdifVersion] = FlextTapLdifVersion.current()
+VERSION: Final[FlextMeltanoTapLdifVersion] = FlextMeltanoTapLdifVersion.current()
 __version__: Final[str] = VERSION.version
 __version_info__: Final[tuple[int | str, ...]] = VERSION.version_info
 
@@ -32,4 +32,4 @@ for _name in tuple(_metadata):
     if _name not in {"__version__", "__version_info__"}:
         globals().pop(_name, None)
 
-__all__ = ["VERSION", "FlextTapLdifVersion", "__version__", "__version_info__"]
+__all__ = ["VERSION", "FlextMeltanoTapLdifVersion", "__version__", "__version_info__"]

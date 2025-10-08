@@ -18,10 +18,10 @@ from pydantic import (
     model_validator,
 )
 
-from flext_tap_ldif.utilities import FlextTapLdifUtilities
+from flext_tap_ldif.utilities import FlextMeltanoTapLdifUtilities
 
 
-class FlextTapLdifModels(FlextModels):
+class FlextMeltanoTapLdifModels(FlextModels):
     """Comprehensive models for LDIF tap operations extending FlextModels.
 
     Provides standardized models for all LDIF tap domain entities including:
@@ -1117,16 +1117,16 @@ class FlextTapLdifModels(FlextModels):
             return self
 
 
-# ZERO TOLERANCE CONSOLIDATION - FlextTapLdifUtilities moved to utilities.py
+# ZERO TOLERANCE CONSOLIDATION - FlextMeltanoTapLdifUtilities moved to utilities.py
 #
-# CRITICAL: FlextTapLdifUtilities was DUPLICATED between models.py and utilities.py.
+# CRITICAL: FlextMeltanoTapLdifUtilities was DUPLICATED between models.py and utilities.py.
 # This was a ZERO TOLERANCE violation of the user's explicit requirements.
 #
-# Note: FlextTapLdifUtilities imported at top for proper organization
+# Note: FlextMeltanoTapLdifUtilities imported at top for proper organization
 
 
 # Public API exports following FLEXT standardized patterns
 __all__ = [
-    "FlextTapLdifModels",  # Unified models class
-    "FlextTapLdifUtilities",  # Standardized [Project]Utilities pattern
+    "FlextMeltanoTapLdifModels",  # Unified models class
+    "FlextMeltanoTapLdifUtilities",  # Standardized [Project]Utilities pattern
 ]

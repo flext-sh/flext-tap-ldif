@@ -13,16 +13,16 @@ from typing import override
 from flext_core import FlextExceptions, FlextTypes
 
 # Use flext-core exception classes directly for proper type safety
-FlextTapLdifError = FlextExceptions.Error
-FlextTapLdifValidationError = FlextExceptions.ValidationError
-FlextTapLdifConfigurationError = FlextExceptions.ConfigurationError
-FlextTapLdifConnectionError = FlextExceptions.ConnectionError
-FlextTapLdifProcessingError = FlextExceptions.ProcessingError
-FlextTapLdifAuthenticationError = FlextExceptions.AuthenticationError
-FlextTapLdifTimeoutError = FlextExceptions.TimeoutError
+FlextMeltanoTapLdifError = FlextExceptions.Error
+FlextMeltanoTapLdifValidationError = FlextExceptions.ValidationError
+FlextMeltanoTapLdifConfigurationError = FlextExceptions.ConfigurationError
+FlextMeltanoTapLdifConnectionError = FlextExceptions.ConnectionError
+FlextMeltanoTapLdifProcessingError = FlextExceptions.ProcessingError
+FlextMeltanoTapLdifAuthenticationError = FlextExceptions.AuthenticationError
+FlextMeltanoTapLdifTimeoutError = FlextExceptions.TimeoutError
 
 
-class FlextTapLdifParseError(FlextExceptions.BaseError):
+class FlextMeltanoTapLdifParseError(FlextExceptions.BaseError):
     """LDIF tap parsing errors with LDIF-specific context."""
 
     @override
@@ -61,7 +61,7 @@ class FlextTapLdifParseError(FlextExceptions.BaseError):
         )
 
 
-class FlextTapLdifFileError(FlextExceptions.BaseError):
+class FlextMeltanoTapLdifFileError(FlextExceptions.BaseError):
     """LDIF tap file operation errors with file-specific context."""
 
     @override
@@ -97,7 +97,7 @@ class FlextTapLdifFileError(FlextExceptions.BaseError):
         )
 
 
-class FlextTapLdifStreamError(FlextExceptions.BaseError):
+class FlextMeltanoTapLdifStreamError(FlextExceptions.BaseError):
     """LDIF tap stream processing errors with stream-specific context."""
 
     @override
@@ -134,11 +134,11 @@ class FlextTapLdifStreamError(FlextExceptions.BaseError):
 
 
 __all__: FlextTypes.StringList = [
-    "FlextTapLdifConfigurationError",
-    "FlextTapLdifError",
-    "FlextTapLdifFileError",
-    "FlextTapLdifParseError",
-    "FlextTapLdifProcessingError",
-    "FlextTapLdifStreamError",
-    "FlextTapLdifValidationError",
+    "FlextMeltanoTapLdifConfigurationError",
+    "FlextMeltanoTapLdifError",
+    "FlextMeltanoTapLdifFileError",
+    "FlextMeltanoTapLdifParseError",
+    "FlextMeltanoTapLdifProcessingError",
+    "FlextMeltanoTapLdifStreamError",
+    "FlextMeltanoTapLdifValidationError",
 ]
