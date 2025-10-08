@@ -18,9 +18,6 @@ class FlextMeltanoTapLdifConstants(FlextConstants):
     Composes with FlextMeltanoTapLdifConstants to avoid duplication and ensure consistency.
     """
 
-    # Import LDIF-specific constants from flext-ldif (composition pattern)
-    from flext_ldif.constants import FlextMeltanoTapLdifConstants
-
     # LDIF File Configuration using composition
     DEFAULT_LDIF_ENCODING = FlextLdifConstants.Encoding.DEFAULT_ENCODING
     SUPPORTED_ENCODINGS: ClassVar[FlextTypes.StringList] = list(
