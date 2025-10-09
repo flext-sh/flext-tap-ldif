@@ -40,11 +40,6 @@ FlextMeltanoTapLDIFConfig = FlextMeltanoTapLdifConfig
 LDIFTap = TapLDIF
 TapConfig = FlextMeltanoTapLdifConfig
 
-try:
-    __version__ = importlib.metadata.version("flext-tap-ldif")
-except importlib.metadata.PackageNotFoundError:
-    __version__ = "0.0.0"
-
 __all__ = [
     "FlextLdifProcessor",
     "FlextLdifProcessorWrapper",
