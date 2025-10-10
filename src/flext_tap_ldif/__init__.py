@@ -6,12 +6,9 @@ SPDX-License-Identifier: MIT.
 
 from __future__ import annotations
 
-from flext_tap_ldif.__version__ import __version__, __version_info__
-
-import importlib.metadata
-
 from flext_core import FlextLogger, FlextModels, FlextResult, FlextTypes
 
+from flext_tap_ldif.__version__ import __version__, __version_info__
 from flext_tap_ldif.config import FlextMeltanoTapLdifConfig
 from flext_tap_ldif.exceptions import (
     FlextMeltanoTapLdifConfigurationError,
@@ -67,4 +64,6 @@ __all__ = [
     "TapConfig",
     "TapLDIF",
     "TapLDIFConfig",
+    "__version__",
+    "__version_info__",
 ]
