@@ -10,19 +10,19 @@ from __future__ import annotations
 
 from typing import override
 
-from flext_core import FlextExceptions, FlextTypes
+from flext_core import FlextCore
 
 # Use flext-core exception classes directly for proper type safety
-FlextMeltanoTapLdifError = FlextExceptions.Error
-FlextMeltanoTapLdifValidationError = FlextExceptions.ValidationError
-FlextMeltanoTapLdifConfigurationError = FlextExceptions.ConfigurationError
-FlextMeltanoTapLdifConnectionError = FlextExceptions.ConnectionError
-FlextMeltanoTapLdifProcessingError = FlextExceptions.ProcessingError
-FlextMeltanoTapLdifAuthenticationError = FlextExceptions.AuthenticationError
-FlextMeltanoTapLdifTimeoutError = FlextExceptions.TimeoutError
+FlextMeltanoTapLdifError = FlextCore.Exceptions.Error
+FlextMeltanoTapLdifValidationError = FlextCore.Exceptions.ValidationError
+FlextMeltanoTapLdifConfigurationError = FlextCore.Exceptions.ConfigurationError
+FlextMeltanoTapLdifConnectionError = FlextCore.Exceptions.ConnectionError
+FlextMeltanoTapLdifProcessingError = FlextCore.Exceptions.ProcessingError
+FlextMeltanoTapLdifAuthenticationError = FlextCore.Exceptions.AuthenticationError
+FlextMeltanoTapLdifTimeoutError = FlextCore.Exceptions.TimeoutError
 
 
-class FlextMeltanoTapLdifParseError(FlextExceptions.BaseError):
+class FlextMeltanoTapLdifParseError(FlextCore.Exceptions.BaseError):
     """LDIF tap parsing errors with LDIF-specific context."""
 
     @override
@@ -61,7 +61,7 @@ class FlextMeltanoTapLdifParseError(FlextExceptions.BaseError):
         )
 
 
-class FlextMeltanoTapLdifFileError(FlextExceptions.BaseError):
+class FlextMeltanoTapLdifFileError(FlextCore.Exceptions.BaseError):
     """LDIF tap file operation errors with file-specific context."""
 
     @override
@@ -97,7 +97,7 @@ class FlextMeltanoTapLdifFileError(FlextExceptions.BaseError):
         )
 
 
-class FlextMeltanoTapLdifStreamError(FlextExceptions.BaseError):
+class FlextMeltanoTapLdifStreamError(FlextCore.Exceptions.BaseError):
     """LDIF tap stream processing errors with stream-specific context."""
 
     @override
@@ -133,7 +133,7 @@ class FlextMeltanoTapLdifStreamError(FlextExceptions.BaseError):
         )
 
 
-__all__: FlextTypes.StringList = [
+__all__: FlextCore.Types.StringList = [
     "FlextMeltanoTapLdifConfigurationError",
     "FlextMeltanoTapLdifError",
     "FlextMeltanoTapLdifFileError",

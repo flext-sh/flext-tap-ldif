@@ -13,10 +13,10 @@ from collections.abc import Generator
 from pathlib import Path
 from typing import NoReturn, override
 
-from flext_core import FlextLogger, FlextResult, FlextTypes
+from flext_core import FlextCore
 from flext_ldif import FlextLdif
 
-logger = FlextLogger(__name__)
+logger = FlextCore.Logger(__name__)
 
 # Use flext-ldif processor instead of reimplementing LDIF functionality
 LDIFProcessor = FlextLdif
@@ -28,7 +28,7 @@ class FlextLdifProcessorWrapper:
     """Wrapper for FlextLdifProcessor to maintain API compatibility."""
 
     @override
-    def __init__(self, config: FlextTypes.Dict) -> None:
+    def __init__(self, config: FlextCore.Types.Dict) -> None:
         """Initialize the LDIF processor using flext-ldif infrastructure.
 
         Args:
@@ -38,7 +38,7 @@ class FlextLdifProcessorWrapper:
             object: Description of return value.
 
         """
-        self.config: FlextTypes.Dict = config
+        self.config: FlextCore.Types.Dict = config
         self._api = FlextLdif()
 
     def _raise_parse_error(self, msg: str) -> NoReturn:
@@ -51,7 +51,7 @@ class FlextLdifProcessorWrapper:
         file_pattern: str = "*.ldif",
         file_path: str | Path | None = None,
         max_file_size_mb: int = 100,
-    ) -> FlextResult[list[Path]]:
+    ) -> FlextCore.Result[list[Path]]:
         """Discover LDIF files using generic flext-ldif functionality.
 
         Args:
@@ -61,7 +61,7 @@ class FlextLdifProcessorWrapper:
             max_file_size_mb: Maximum file size in MB
 
         Returns:
-            FlextResult[list[Path]]: Success with discovered files or failure with error
+            FlextCore.Result[list[Path]]: Success with discovered files or failure with error
 
         """
         # Delegate to flext-ldif generic file discovery - NO local duplication
@@ -72,7 +72,7 @@ class FlextLdifProcessorWrapper:
             max_file_size_mb=max_file_size_mb,
         )
 
-    def process_file(self, file_path: Path) -> Generator[FlextTypes.Dict]:
+    def process_file(self, file_path: Path) -> Generator[FlextCore.Types.Dict]:
         """Process a single LDIF file and yield records using flext-ldif.
 
         Args:
@@ -94,7 +94,7 @@ class FlextLdifProcessorWrapper:
 
             with file_path.open("r", encoding=encoding) as file:
                 content = file.read()
-                parse_result: FlextResult[object] = self._api.parse(content)
+                parse_result: FlextCore.Result[object] = self._api.parse(content)
                 if parse_result.is_failure:
                     msg: str = f"Failed to parse LDIF: {parse_result.error}"
                     self._raise_parse_error(msg)
@@ -124,7 +124,7 @@ class FlextLdifProcessorWrapper:
 # Create the original class name for backward compatibility
 FlextLdifProcessor: type[FlextLdifProcessorWrapper] = FlextLdifProcessorWrapper
 
-__all__: FlextTypes.StringList = [
+__all__: FlextCore.Types.StringList = [
     "FlextLdifProcessor",
     "LDIFProcessor",
 ]

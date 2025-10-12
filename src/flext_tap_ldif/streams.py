@@ -11,7 +11,7 @@ from collections.abc import Iterable, Mapping
 from pathlib import Path
 from typing import TYPE_CHECKING, override
 
-from flext_core import FlextLogger, FlextTypes
+from flext_core import FlextCore
 
 # Use FLEXT Meltano wrappers instead of direct singer_sdk imports (domain separation)
 from flext_meltano import FlextMeltanoStream as Stream, FlextMeltanoTypes
@@ -21,7 +21,7 @@ from flext_tap_ldif.ldif_processor import FlextLdifProcessorWrapper
 if TYPE_CHECKING:
     from flext_tap_ldif.tap import TapLDIF
 
-logger = FlextLogger(__name__)
+logger = FlextCore.Logger(__name__)
 
 
 class LDIFEntriesStream(Stream):
@@ -70,7 +70,7 @@ class LDIFEntriesStream(Stream):
                         exc,
                     )
 
-    def _get_schema(self: object) -> FlextTypes.Dict:
+    def _get_schema(self: object) -> FlextCore.Types.Dict:
         """Get schema for LDIF entries."""
         return FlextMeltanoTypes.Singer.Typing.PropertiesList(
             FlextMeltanoTypes.Singer.Typing.Property(
@@ -115,7 +115,7 @@ class LDIFEntriesStream(Stream):
     def get_records(
         self,
         _context: Mapping[str, object] | None = None,
-    ) -> Iterable[FlextTypes.Dict]:
+    ) -> Iterable[FlextCore.Types.Dict]:
         """Return a generator of record-type dictionary objects.
 
         Args:
@@ -125,7 +125,7 @@ class LDIFEntriesStream(Stream):
             Dictionary representations of LDIF entries.
 
         """
-        config: FlextTypes.Dict = dict(self._tap.config)
+        config: FlextCore.Types.Dict = dict(self._tap.config)
         sample_path = getattr(self, "_sample_file_path", None)
         if sample_path:
             config["file_path"] = sample_path
