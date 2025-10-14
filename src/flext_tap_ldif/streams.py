@@ -43,7 +43,7 @@ class LDIFEntriesStream(Stream):
         self._tap = tap
 
         # Ensure a sample LDIF file exists in temp for default tests if none provided
-        cfg = dict(tap.config)
+        cfg = dict[str, object](tap.config)
         if not cfg.get("file_path") and not cfg.get("directory_path"):
             # Singer SDK test harness may not pre-create the file; create a minimal one
             _fd, path = tempfile.mkstemp(suffix=".ldif")
@@ -125,7 +125,7 @@ class LDIFEntriesStream(Stream):
             Dictionary representations of LDIF entries.
 
         """
-        config: FlextCore.Types.Dict = dict(self._tap.config)
+        config: FlextCore.Types.Dict = dict[str, object](self._tap.config)
         sample_path = getattr(self, "_sample_file_path", None)
         if sample_path:
             config["file_path"] = sample_path
