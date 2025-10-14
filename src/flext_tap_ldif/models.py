@@ -863,25 +863,8 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
                 raise ValueError(msg)
             return self
 
-    class LdifRecord(FlextCore.Models.BaseModel):
+    class LdifRecord(FlextCore.Models.StrictArbitraryTypesModel):
         """Individual LDIF record for Singer output."""
-
-        # Pydantic 2.11 Configuration - Record Features
-        model_config = ConfigDict(
-            validate_assignment=True,
-            extra="forbid",
-            frozen=False,
-            json_schema_extra={
-                "description": "Singer LDIF record with extraction metadata",
-                "examples": [
-                    {
-                        "stream": "ldif_entries",
-                        "record": {"dn": "cn=John,dc=example,dc=com"},
-                        "time_extracted": "2023-01-01T00:00:00Z",
-                    }
-                ],
-            },
-        )
 
         stream: str = Field(..., description="Source stream name")
         record: FlextCore.Types.Dict = Field(..., description="LDIF record data")
@@ -926,25 +909,8 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
                 raise ValueError(msg)
             return self
 
-    class LdifValidationResult(FlextCore.Models.BaseModel):
+    class LdifValidationResult(FlextCore.Models.StrictArbitraryTypesModel):
         """LDIF validation result with detailed error reporting."""
-
-        # Pydantic 2.11 Configuration - Validation Features
-        model_config = ConfigDict(
-            validate_assignment=True,
-            extra="forbid",
-            frozen=False,
-            json_schema_extra={
-                "description": "LDIF validation result with comprehensive error analysis",
-                "examples": [
-                    {
-                        "file_path": "/data/users.ldif",
-                        "is_valid": True,
-                        "validation_errors": [],
-                    }
-                ],
-            },
-        )
 
         file_path: str = Field(..., description="Validated LDIF file path")
         is_valid: bool = Field(..., description="Overall validation result")
@@ -1012,25 +978,8 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
                 raise ValueError(msg)
             return self
 
-    class LdifPerformanceMetrics(FlextCore.Models.BaseModel):
+    class LdifPerformanceMetrics(FlextCore.Models.StrictArbitraryTypesModel):
         """Performance metrics for LDIF tap operations."""
-
-        # Pydantic 2.11 Configuration - Metrics Features
-        model_config = ConfigDict(
-            validate_assignment=True,
-            extra="forbid",
-            frozen=False,
-            json_schema_extra={
-                "description": "LDIF tap performance metrics with comprehensive monitoring",
-                "examples": [
-                    {
-                        "files_processed": 10,
-                        "total_entries": 50000,
-                        "processing_rate": 1000.0,
-                    }
-                ],
-            },
-        )
 
         # File processing metrics
         files_processed: int = Field(default=0, description="Number of files processed")
