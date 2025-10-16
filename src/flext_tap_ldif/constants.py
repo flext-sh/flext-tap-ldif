@@ -9,11 +9,11 @@ from __future__ import annotations
 
 from typing import ClassVar
 
-from flext_core import FlextCore
+from flext_core import FlextConstants, FlextTypes
 from flext_ldif.constants import FlextLdifConstants
 
 
-class FlextMeltanoTapLdifConstants(FlextCore.Constants):
+class FlextMeltanoTapLdifConstants(FlextConstants):
     """LDIF tap extraction-specific constants following flext-core patterns.
 
     Composes with FlextMeltanoTapLdifConstants to avoid duplication and ensure consistency.
@@ -21,17 +21,17 @@ class FlextMeltanoTapLdifConstants(FlextCore.Constants):
 
     # LDIF File Configuration using composition
     DEFAULT_LDIF_ENCODING = FlextLdifConstants.Encoding.DEFAULT_ENCODING
-    SUPPORTED_ENCODINGS: ClassVar[FlextCore.Types.StringList] = list(
+    SUPPORTED_ENCODINGS: ClassVar[FlextTypes.StringList] = list(
         FlextLdifConstants.Encoding.SUPPORTED_ENCODINGS
     )
 
-    # Singer Tap Configuration - using FlextCore.Constants composition
-    DEFAULT_BATCH_SIZE = FlextCore.Constants.Performance.BatchProcessing.DEFAULT_SIZE
-    MAX_BATCH_SIZE = FlextCore.Constants.Performance.BatchProcessing.MAX_ITEMS
+    # Singer Tap Configuration - using FlextConstants composition
+    DEFAULT_BATCH_SIZE = FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE
+    MAX_BATCH_SIZE = FlextConstants.Performance.BatchProcessing.MAX_ITEMS
     MAX_FILE_SIZE_MB = 100
 
     # LDIF Change Types from FlextMeltanoTapLdifConstants
-    LDIF_CHANGE_TYPES: ClassVar[FlextCore.Types.StringList] = [
+    LDIF_CHANGE_TYPES: ClassVar[FlextTypes.StringList] = [
         FlextLdifConstants.EntryModification.ADD,
         FlextLdifConstants.EntryModification.MODIFY,
         FlextLdifConstants.EntryModification.DELETE,

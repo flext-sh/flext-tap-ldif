@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import ClassVar
 
-from flext_core import FlextCore
+from flext_core import FlextConstants, FlextLogger, FlextTypes
 
 # Use FLEXT Meltano wrappers instead of direct singer_sdk imports (domain separation)
 from flext_meltano import (
@@ -21,7 +21,7 @@ from flext_meltano import (
 from flext_tap_ldif.config import FlextMeltanoTapLdifConfig
 from flext_tap_ldif.streams import LDIFEntriesStream
 
-logger = FlextCore.Logger(__name__)
+logger = FlextLogger(__name__)
 
 
 class TapLDIF(Tap):
@@ -30,7 +30,7 @@ class TapLDIF(Tap):
     name: str = "tap-ldif"
     config_class = FlextMeltanoTapLdifConfig
     # Schema combining file-based configuration with LDIF-specific properties
-    config_jsonschema: ClassVar[FlextCore.Types.Dict] = (
+    config_jsonschema: ClassVar[FlextTypes.Dict] = (
         FlextMeltanoTypes.Singer.Typing.PropertiesList(
             # File-based properties
             FlextMeltanoTypes.Singer.Typing.Property(
@@ -97,7 +97,7 @@ class TapLDIF(Tap):
             FlextMeltanoTypes.Singer.Typing.Property(
                 "max_file_size_mb",
                 FlextMeltanoTypes.Singer.Typing.IntegerType,
-                default=FlextCore.Constants.Logging.MAX_FILE_SIZE // (1024 * 1024),
+                default=FlextConstants.Logging.MAX_FILE_SIZE // (1024 * 1024),
                 description="Maximum file size in MB to process",
             ),
         ).to_dict()
@@ -114,7 +114,7 @@ class TapLDIF(Tap):
             LDIFEntriesStream(tap=self),
         ]
 
-    def _get_ldif_entries_schema(self: object) -> FlextCore.Types.Dict:
+    def _get_ldif_entries_schema(self: object) -> FlextTypes.Dict:
         """Get the schema for LDIF entries stream.
 
         Returns:
