@@ -6,18 +6,10 @@ SPDX-License-Identifier: MIT.
 
 from __future__ import annotations
 
-from flext_core import FlextLogger, FlextModels, FlextResult, FlextTypes
+from flext_core import FlextLogger, FlextModels, FlextResult
 
 from flext_tap_ldif.__version__ import __version__, __version_info__
 from flext_tap_ldif.config import FlextMeltanoTapLdifConfig
-    FlextMeltanoTapLdifConfigurationError,
-    FlextMeltanoTapLdifError,
-    FlextMeltanoTapLdifFileError,
-    FlextMeltanoTapLdifParseError,
-    FlextMeltanoTapLdifProcessingError,
-    FlextMeltanoTapLdifStreamError,
-    FlextMeltanoTapLdifValidationError,
-)
 from flext_tap_ldif.ldif_processor import (
     FlextLdifProcessor,
     FlextLdifProcessorWrapper,
@@ -55,7 +47,7 @@ __all__ = [
     "FlextMeltanoTapLdifValidationError",
     "FlextModels",
     "FlextResult",
-    "FlextTypes",
+    "FlextTypes.Dict",
     "LDIFEntriesStream",
     "LDIFProcessor",
     "LDIFTap",

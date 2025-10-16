@@ -18,7 +18,6 @@ class FlextMeltanoTapLdifProtocols:
     # RE-EXPORT FOUNDATION PROTOCOLS (EXPLICIT PATTERN)
     # ============================================================================
 
-
     # ============================================================================
     # SINGER TAP LDIF-SPECIFIC PROTOCOLS (DOMAIN NAMESPACE)
     # ============================================================================
