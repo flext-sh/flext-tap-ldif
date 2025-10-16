@@ -13,15 +13,15 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import ClassVar, override
 
-from flext_core import FlextCore
+from flext_core import FlextResult, FlextTypes, FlextUtilities
 
 
-class FlextMeltanoTapLdifUtilities(FlextCore.Utilities):
+class FlextMeltanoTapLdifUtilities(FlextUtilities):
     """Single unified utilities class for Singer tap LDIF operations.
 
     Follows FLEXT unified class pattern with nested helper classes for
     domain-specific Singer tap functionality with LDIF data sources.
-    Extends FlextCore.Utilities with LDIF tap-specific operations.
+    Extends FlextUtilities with LDIF tap-specific operations.
     """
 
     # Configuration constants
@@ -41,9 +41,9 @@ class FlextMeltanoTapLdifUtilities(FlextCore.Utilities):
         @staticmethod
         def create_schema_message(
             stream_name: str,
-            schema: FlextCore.Types.Dict,
-            key_properties: FlextCore.Types.StringList | None = None,
-        ) -> FlextCore.Types.Dict:
+            schema: FlextTypes.Dict,
+            key_properties: FlextTypes.StringList | None = None,
+        ) -> FlextTypes.Dict:
             """Create Singer schema message.
 
             Args:
@@ -52,7 +52,7 @@ class FlextMeltanoTapLdifUtilities(FlextCore.Utilities):
                 key_properties: List of key property names
 
             Returns:
-                FlextCore.Types.Dict: Singer schema message
+                FlextTypes.Dict: Singer schema message
 
             """
             return {
@@ -65,9 +65,9 @@ class FlextMeltanoTapLdifUtilities(FlextCore.Utilities):
         @staticmethod
         def create_record_message(
             stream_name: str,
-            record: FlextCore.Types.Dict,
+            record: FlextTypes.Dict,
             time_extracted: datetime | None = None,
-        ) -> FlextCore.Types.Dict:
+        ) -> FlextTypes.Dict:
             """Create Singer record message.
 
             Args:
@@ -76,7 +76,7 @@ class FlextMeltanoTapLdifUtilities(FlextCore.Utilities):
                 time_extracted: Timestamp when record was extracted
 
             Returns:
-                FlextCore.Types.Dict: Singer record message
+                FlextTypes.Dict: Singer record message
 
             """
             extracted_time = time_extracted or datetime.now(UTC)
@@ -88,14 +88,14 @@ class FlextMeltanoTapLdifUtilities(FlextCore.Utilities):
             }
 
         @staticmethod
-        def create_state_message(state: FlextCore.Types.Dict) -> FlextCore.Types.Dict:
+        def create_state_message(state: FlextTypes.Dict) -> FlextTypes.Dict:
             """Create Singer state message.
 
             Args:
                 state: State data
 
             Returns:
-                FlextCore.Types.Dict: Singer state message
+                FlextTypes.Dict: Singer state message
 
             """
             return {
@@ -104,7 +104,7 @@ class FlextMeltanoTapLdifUtilities(FlextCore.Utilities):
             }
 
         @staticmethod
-        def write_message(message: FlextCore.Types.Dict) -> None:
+        def write_message(message: FlextTypes.Dict) -> None:
             """Write Singer message to stdout.
 
             Args:
@@ -116,30 +116,28 @@ class FlextMeltanoTapLdifUtilities(FlextCore.Utilities):
         """LDIF file processing utilities."""
 
         @staticmethod
-        def validate_ldif_file(file_path: Path) -> FlextCore.Result[bool]:
+        def validate_ldif_file(file_path: Path) -> FlextResult[bool]:
             """Validate LDIF file format and accessibility.
 
             Args:
                 file_path: Path to LDIF file
 
             Returns:
-                FlextCore.Result[bool]: True if valid, error if invalid
+                FlextResult[bool]: True if valid, error if invalid
 
             """
             try:
                 if not file_path.exists():
-                    return FlextCore.Result[bool].fail(
+                    return FlextResult[bool].fail(
                         f"LDIF file does not exist: {file_path}"
                     )
 
                 if not file_path.is_file():
-                    return FlextCore.Result[bool].fail(
-                        f"Path is not a file: {file_path}"
-                    )
+                    return FlextResult[bool].fail(f"Path is not a file: {file_path}")
 
                 # Check file extension
                 if file_path.suffix.lower() not in {".ldif", ".ldif3", ".ldi"}:
-                    return FlextCore.Result[bool].fail(
+                    return FlextResult[bool].fail(
                         f"File does not have LDIF extension: {file_path}"
                     )
 
@@ -154,31 +152,31 @@ class FlextMeltanoTapLdifUtilities(FlextCore.Utilities):
                 has_dn = any(line.startswith("dn:") for line in first_lines)
 
                 if not (has_version or has_dn):
-                    return FlextCore.Result[bool].fail(
+                    return FlextResult[bool].fail(
                         f"File does not appear to be valid LDIF format: {file_path}"
                     )
 
-                return FlextCore.Result[bool].ok(True)
+                return FlextResult[bool].ok(True)
 
             except UnicodeDecodeError as e:
-                return FlextCore.Result[bool].fail(f"LDIF file encoding error: {e}")
+                return FlextResult[bool].fail(f"LDIF file encoding error: {e}")
             except Exception as e:
-                return FlextCore.Result[bool].fail(f"Error validating LDIF file: {e}")
+                return FlextResult[bool].fail(f"Error validating LDIF file: {e}")
 
         @staticmethod
-        def count_ldif_entries(file_path: Path) -> FlextCore.Result[int]:
+        def count_ldif_entries(file_path: Path) -> FlextResult[int]:
             """Count number of entries in LDIF file.
 
             Args:
                 file_path: Path to LDIF file
 
             Returns:
-                FlextCore.Result[int]: Number of entries or error
+                FlextResult[int]: Number of entries or error
 
             """
             try:
                 if not file_path.exists():
-                    return FlextCore.Result[int].fail(
+                    return FlextResult[int].fail(
                         f"LDIF file does not exist: {file_path}"
                     )
 
@@ -191,28 +189,28 @@ class FlextMeltanoTapLdifUtilities(FlextCore.Utilities):
                         if line.startswith("dn:"):
                             entry_count += 1
 
-                return FlextCore.Result[int].ok(entry_count)
+                return FlextResult[int].ok(entry_count)
 
             except UnicodeDecodeError as e:
-                return FlextCore.Result[int].fail(f"LDIF file encoding error: {e}")
+                return FlextResult[int].fail(f"LDIF file encoding error: {e}")
             except Exception as e:
-                return FlextCore.Result[int].fail(f"Error counting LDIF entries: {e}")
+                return FlextResult[int].fail(f"Error counting LDIF entries: {e}")
 
         @staticmethod
         def extract_ldif_metadata(
             file_path: Path,
-        ) -> FlextCore.Result[FlextCore.Types.Dict]:
+        ) -> FlextResult[FlextTypes.Dict]:
             """Extract metadata from LDIF file.
 
             Args:
                 file_path: Path to LDIF file
 
             Returns:
-                FlextCore.Result[FlextCore.Types.Dict]: Metadata dictionary or error
+                FlextResult[FlextTypes.Dict]: Metadata dictionary or error
 
             """
             try:
-                metadata: FlextCore.Types.Dict = {
+                metadata: FlextTypes.Dict = {
                     "file_path": str(file_path),
                     "file_size": file_path.stat().st_size,
                     "version": None,
@@ -246,10 +244,10 @@ class FlextMeltanoTapLdifUtilities(FlextCore.Utilities):
                 metadata["base_dns"] = list(metadata["base_dns"])
                 metadata["object_classes"] = list(metadata["object_classes"])
 
-                return FlextCore.Result[FlextCore.Types.Dict].ok(metadata)
+                return FlextResult[FlextTypes.Dict].ok(metadata)
 
             except Exception as e:
-                return FlextCore.Result[FlextCore.Types.Dict].fail(
+                return FlextResult[FlextTypes.Dict].fail(
                     f"Error extracting LDIF metadata: {e}"
                 )
 
@@ -257,27 +255,23 @@ class FlextMeltanoTapLdifUtilities(FlextCore.Utilities):
         """LDIF data processing utilities."""
 
         @staticmethod
-        def parse_ldif_line(line: str) -> FlextCore.Result[tuple[str, str]]:
+        def parse_ldif_line(line: str) -> FlextResult[tuple[str, str]]:
             """Parse LDIF attribute line.
 
             Args:
                 line: LDIF line to parse
 
             Returns:
-                FlextCore.Result[tuple[str, str]]: (attribute_name, value) or error
+                FlextResult[tuple[str, str]]: (attribute_name, value) or error
 
             """
             try:
                 line = line.strip()
                 if not line or line.startswith("#"):
-                    return FlextCore.Result[tuple[str, str]].fail(
-                        "Empty or comment line"
-                    )
+                    return FlextResult[tuple[str, str]].fail("Empty or comment line")
 
                 if ":" not in line:
-                    return FlextCore.Result[tuple[str, str]].fail(
-                        "Invalid LDIF line format"
-                    )
+                    return FlextResult[tuple[str, str]].fail("Invalid LDIF line format")
 
                 # Handle base64 encoded values (::)
                 if "::" in line:
@@ -287,32 +281,38 @@ class FlextMeltanoTapLdifUtilities(FlextCore.Utilities):
                         decoded_value = base64.b64decode(encoded_value.strip()).decode(
                             "utf-8"
                         )
-                        return FlextCore.Result[tuple[str, str]].ok((
-                            attr_name.strip(),
-                            decoded_value,
-                        ))
+                        return FlextResult[tuple[str, str]].ok(
+                            (
+                                attr_name.strip(),
+                                decoded_value,
+                            )
+                        )
                     except Exception as e:
-                        return FlextCore.Result[tuple[str, str]].fail(
+                        return FlextResult[tuple[str, str]].fail(
                             f"Base64 decode error: {e}"
                         )
 
                 # Handle URL values (:<)
                 if ":<" in line:
                     attr_name, url_value = line.split(":<", 1)
-                    return FlextCore.Result[tuple[str, str]].ok((
-                        attr_name.strip(),
-                        f"URL:{url_value.strip()}",
-                    ))
+                    return FlextResult[tuple[str, str]].ok(
+                        (
+                            attr_name.strip(),
+                            f"URL:{url_value.strip()}",
+                        )
+                    )
 
                 # Handle regular values (:)
                 attr_name, value = line.split(":", 1)
-                return FlextCore.Result[tuple[str, str]].ok((
-                    attr_name.strip(),
-                    value.strip(),
-                ))
+                return FlextResult[tuple[str, str]].ok(
+                    (
+                        attr_name.strip(),
+                        value.strip(),
+                    )
+                )
 
             except Exception as e:
-                return FlextCore.Result[tuple[str, str]].fail(
+                return FlextResult[tuple[str, str]].fail(
                     f"Error parsing LDIF line: {e}"
                 )
 
@@ -341,19 +341,19 @@ class FlextMeltanoTapLdifUtilities(FlextCore.Utilities):
 
         @staticmethod
         def convert_ldif_entry_to_record(
-            entry_lines: FlextCore.Types.StringList,
-        ) -> FlextCore.Result[FlextCore.Types.Dict]:
+            entry_lines: FlextTypes.StringList,
+        ) -> FlextResult[FlextTypes.Dict]:
             """Convert LDIF entry lines to Singer record.
 
             Args:
                 entry_lines: List of LDIF lines for single entry
 
             Returns:
-                FlextCore.Result[FlextCore.Types.Dict]: Singer record or error
+                FlextResult[FlextTypes.Dict]: Singer record or error
 
             """
             try:
-                record: FlextCore.Types.Dict = {}
+                record: FlextTypes.Dict = {}
                 current_attr = None
                 current_value = ""
 
@@ -403,10 +403,10 @@ class FlextMeltanoTapLdifUtilities(FlextCore.Utilities):
                     else:
                         record[normalized_attr] = current_value
 
-                return FlextCore.Result[FlextCore.Types.Dict].ok(record)
+                return FlextResult[FlextTypes.Dict].ok(record)
 
             except Exception as e:
-                return FlextCore.Result[FlextCore.Types.Dict].fail(
+                return FlextResult[FlextTypes.Dict].fail(
                     f"Error converting LDIF entry: {e}"
                 )
 
@@ -415,59 +415,55 @@ class FlextMeltanoTapLdifUtilities(FlextCore.Utilities):
 
         @staticmethod
         def validate_ldif_config(
-            config: FlextCore.Types.Dict,
-        ) -> FlextCore.Result[FlextCore.Types.Dict]:
+            config: FlextTypes.Dict,
+        ) -> FlextResult[FlextTypes.Dict]:
             """Validate LDIF tap configuration.
 
             Args:
                 config: Configuration dictionary
 
             Returns:
-                FlextCore.Result[FlextCore.Types.Dict]: Validated config or error
+                FlextResult[FlextTypes.Dict]: Validated config or error
 
             """
             required_fields = ["files"]
             missing_fields = [field for field in required_fields if field not in config]
 
             if missing_fields:
-                return FlextCore.Result[FlextCore.Types.Dict].fail(
+                return FlextResult[FlextTypes.Dict].fail(
                     f"Missing required fields: {', '.join(missing_fields)}"
                 )
 
             # Validate files configuration
             files = config["files"]
             if not isinstance(files, list):
-                return FlextCore.Result[FlextCore.Types.Dict].fail(
-                    "Files must be a list"
-                )
+                return FlextResult[FlextTypes.Dict].fail("Files must be a list")
 
             if not files:
-                return FlextCore.Result[FlextCore.Types.Dict].fail(
+                return FlextResult[FlextTypes.Dict].fail(
                     "At least one file must be specified"
                 )
 
             # Validate each file path
             for file_path in files:
                 if not isinstance(file_path, str):
-                    return FlextCore.Result[FlextCore.Types.Dict].fail(
+                    return FlextResult[FlextTypes.Dict].fail(
                         "File paths must be strings"
                     )
 
                 path_obj = Path(file_path)
                 if not path_obj.exists():
-                    return FlextCore.Result[FlextCore.Types.Dict].fail(
+                    return FlextResult[FlextTypes.Dict].fail(
                         f"File does not exist: {file_path}"
                     )
 
-            return FlextCore.Result[FlextCore.Types.Dict].ok(config)
+            return FlextResult[FlextTypes.Dict].ok(config)
 
     class StateManagement:
         """State management utilities for incremental syncs."""
 
         @staticmethod
-        def get_file_state(
-            state: FlextCore.Types.Dict, file_path: str
-        ) -> FlextCore.Types.Dict:
+        def get_file_state(state: FlextTypes.Dict, file_path: str) -> FlextTypes.Dict:
             """Get state for a specific file.
 
             Args:
@@ -475,17 +471,17 @@ class FlextMeltanoTapLdifUtilities(FlextCore.Utilities):
                 file_path: Path to the file
 
             Returns:
-                FlextCore.Types.Dict: File state
+                FlextTypes.Dict: File state
 
             """
             return state.get("files", {}).get(file_path, {})
 
         @staticmethod
         def set_file_state(
-            state: FlextCore.Types.Dict,
+            state: FlextTypes.Dict,
             file_path: str,
-            file_state: FlextCore.Types.Dict,
-        ) -> FlextCore.Types.Dict:
+            file_state: FlextTypes.Dict,
+        ) -> FlextTypes.Dict:
             """Set state for a specific file.
 
             Args:
@@ -494,7 +490,7 @@ class FlextMeltanoTapLdifUtilities(FlextCore.Utilities):
                 file_state: State data for the file
 
             Returns:
-                FlextCore.Types.Dict: Updated state
+                FlextTypes.Dict: Updated state
 
             """
             if "files" not in state:
@@ -504,7 +500,7 @@ class FlextMeltanoTapLdifUtilities(FlextCore.Utilities):
             return state
 
         @staticmethod
-        def get_file_position(state: FlextCore.Types.Dict, file_path: str) -> int:
+        def get_file_position(state: FlextTypes.Dict, file_path: str) -> int:
             """Get current position in file.
 
             Args:
@@ -522,10 +518,10 @@ class FlextMeltanoTapLdifUtilities(FlextCore.Utilities):
 
         @staticmethod
         def set_file_position(
-            state: FlextCore.Types.Dict,
+            state: FlextTypes.Dict,
             file_path: str,
             position: int,
-        ) -> FlextCore.Types.Dict:
+        ) -> FlextTypes.Dict:
             """Set current position in file.
 
             Args:
@@ -534,7 +530,7 @@ class FlextMeltanoTapLdifUtilities(FlextCore.Utilities):
                 position: Current position
 
             Returns:
-                FlextCore.Types.Dict: Updated state
+                FlextTypes.Dict: Updated state
 
             """
             if "files" not in state:
@@ -551,9 +547,9 @@ class FlextMeltanoTapLdifUtilities(FlextCore.Utilities):
     def create_schema_message(
         cls,
         stream_name: str,
-        schema: FlextCore.Types.Dict,
-        key_properties: FlextCore.Types.StringList | None = None,
-    ) -> FlextCore.Types.Dict:
+        schema: FlextTypes.Dict,
+        key_properties: FlextTypes.StringList | None = None,
+    ) -> FlextTypes.Dict:
         """Proxy method for SingerUtilities.create_schema_message()."""
         return cls.SingerUtilities.create_schema_message(
             stream_name, schema, key_properties
@@ -563,57 +559,55 @@ class FlextMeltanoTapLdifUtilities(FlextCore.Utilities):
     def create_record_message(
         cls,
         stream_name: str,
-        record: FlextCore.Types.Dict,
+        record: FlextTypes.Dict,
         time_extracted: datetime | None = None,
-    ) -> FlextCore.Types.Dict:
+    ) -> FlextTypes.Dict:
         """Proxy method for SingerUtilities.create_record_message()."""
         return cls.SingerUtilities.create_record_message(
             stream_name, record, time_extracted
         )
 
     @classmethod
-    def validate_ldif_file(cls, file_path: Path) -> FlextCore.Result[bool]:
+    def validate_ldif_file(cls, file_path: Path) -> FlextResult[bool]:
         """Proxy method for LdifFileProcessing.validate_ldif_file()."""
         return cls.LdifFileProcessing.validate_ldif_file(file_path)
 
     @classmethod
-    def count_ldif_entries(cls, file_path: Path) -> FlextCore.Result[int]:
+    def count_ldif_entries(cls, file_path: Path) -> FlextResult[int]:
         """Proxy method for LdifFileProcessing.count_ldif_entries()."""
         return cls.LdifFileProcessing.count_ldif_entries(file_path)
 
     @classmethod
-    def parse_ldif_line(cls, line: str) -> FlextCore.Result[tuple[str, str]]:
+    def parse_ldif_line(cls, line: str) -> FlextResult[tuple[str, str]]:
         """Proxy method for LdifDataProcessing.parse_ldif_line()."""
         return cls.LdifDataProcessing.parse_ldif_line(line)
 
     @classmethod
     def convert_ldif_entry_to_record(
-        cls, entry_lines: FlextCore.Types.StringList
-    ) -> FlextCore.Result[FlextCore.Types.Dict]:
+        cls, entry_lines: FlextTypes.StringList
+    ) -> FlextResult[FlextTypes.Dict]:
         """Proxy method for LdifDataProcessing.convert_ldif_entry_to_record()."""
         return cls.LdifDataProcessing.convert_ldif_entry_to_record(entry_lines)
 
     @classmethod
     def validate_ldif_config(
-        cls, config: FlextCore.Types.Dict
-    ) -> FlextCore.Result[FlextCore.Types.Dict]:
+        cls, config: FlextTypes.Dict
+    ) -> FlextResult[FlextTypes.Dict]:
         """Proxy method for ConfigValidation.validate_ldif_config()."""
         return cls.ConfigValidation.validate_ldif_config(config)
 
     @classmethod
-    def get_file_state(
-        cls, state: FlextCore.Types.Dict, file_path: str
-    ) -> FlextCore.Types.Dict:
+    def get_file_state(cls, state: FlextTypes.Dict, file_path: str) -> FlextTypes.Dict:
         """Proxy method for StateManagement.get_file_state()."""
         return cls.StateManagement.get_file_state(state, file_path)
 
     @classmethod
     def set_file_position(
         cls,
-        state: FlextCore.Types.Dict,
+        state: FlextTypes.Dict,
         file_path: str,
         position: int,
-    ) -> FlextCore.Types.Dict:
+    ) -> FlextTypes.Dict:
         """Proxy method for StateManagement.set_file_position()."""
         return cls.StateManagement.set_file_position(state, file_path, position)
 

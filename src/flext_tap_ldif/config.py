@@ -9,12 +9,18 @@ from __future__ import annotations
 
 from typing import Self
 
-from flext_core import FlextCore
+from flext_core import (
+    FlextConfig,
+    FlextConstants,
+    FlextResult,
+    FlextTypes,
+    FlextUtilities,
+)
 from pydantic import Field, field_validator
 from pydantic_settings import SettingsConfigDict
 
 
-class FlextMeltanoTapLdifConfig(FlextCore.Config):
+class FlextMeltanoTapLdifConfig(FlextConfig):
     """Configuration for the LDIF tap with optimized Python 3.13+ patterns."""
 
     model_config = SettingsConfigDict(
@@ -53,17 +59,17 @@ class FlextMeltanoTapLdifConfig(FlextCore.Config):
         description="Filter entries by base DN pattern",
     )
 
-    object_class_filter: FlextCore.Types.StringList = Field(
+    object_class_filter: FlextTypes.StringList = Field(
         default_factory=list,
         description="Filter entries by object class",
     )
 
-    attribute_filter: FlextCore.Types.StringList = Field(
+    attribute_filter: FlextTypes.StringList = Field(
         default_factory=list,
         description="Include only specified attributes",
     )
 
-    exclude_attributes: FlextCore.Types.StringList = Field(
+    exclude_attributes: FlextTypes.StringList = Field(
         default_factory=list,
         description="Exclude specified attributes",
     )
@@ -72,9 +78,9 @@ class FlextMeltanoTapLdifConfig(FlextCore.Config):
     encoding: str = Field(default="utf-8", description="File encoding (default: utf-8)")
 
     batch_size: int = Field(
-        default=FlextCore.Constants.Performance.BatchProcessing.DEFAULT_SIZE,
+        default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE,
         ge=1,
-        le=FlextCore.Constants.Performance.MAX_BATCH_SIZE_VALIDATION,
+        le=FlextConstants.Performance.MAX_BATCH_SIZE_VALIDATION,
         description="Number of entries to process in each batch",
     )
 
@@ -89,10 +95,9 @@ class FlextMeltanoTapLdifConfig(FlextCore.Config):
     )
 
     max_file_size_mb: int = Field(
-        default=FlextCore.Constants.Logging.MAX_FILE_SIZE // (1024 * 1024),
+        default=FlextConstants.Logging.MAX_FILE_SIZE // (1024 * 1024),
         ge=1,
-        le=FlextCore.Constants.Logging.MAX_FILE_SIZE
-        // (1024 * 1024),  # Convert bytes to MB
+        le=FlextConstants.Logging.MAX_FILE_SIZE // (1024 * 1024),  # Convert bytes to MB
         description="Maximum file size in MB to process",
     )
 
@@ -100,79 +105,79 @@ class FlextMeltanoTapLdifConfig(FlextCore.Config):
     @classmethod
     def validate_file_path_field(cls, v: str | None) -> str | None:
         """Use consolidated file path validation."""
-        result = FlextCore.Utilities.Validation.validate_file_path(v)
+        result = FlextUtilities.Validation.validate_file_path(v)
         return result.data if result.success else None
 
     @field_validator("directory_path")
     @classmethod
     def validate_directory_path_field(cls, v: str | None) -> str | None:
         """Use consolidated directory path validation."""
-        result = FlextCore.Utilities.Validation.validate_directory_path(v)
+        result = FlextUtilities.Validation.validate_directory_path(v)
         return result.data if result.success else None
 
     def model_post_init(self, __context: object, /) -> None:
-        """Validate configuration after initialization using FlextCore.Config.BaseModel pattern."""
+        """Validate configuration after initialization using FlextConfig.BaseModel pattern."""
         super().model_post_init(__context)
 
         # Delegate to business rules validation
-        validation_result: FlextCore.Result[object] = self.validate_business_rules()
+        validation_result: FlextResult[object] = self.validate_business_rules()
         if validation_result.is_failure:
             raise ValueError(validation_result.error)
 
-    def validate_business_rules(self: object) -> FlextCore.Result[None]:
+    def validate_business_rules(self: object) -> FlextResult[None]:
         """Validate LDIF tap configuration business rules."""
-        # Validate input sources using FlextCore.Result chaining
+        # Validate input sources using FlextResult chaining
         return (
             self._validate_input_sources()
             .flat_map(lambda _: self._validate_constraints())
             .flat_map(lambda _: self._validate_filters())
         )
 
-    def _validate_input_sources(self: object) -> FlextCore.Result[None]:
+    def _validate_input_sources(self: object) -> FlextResult[None]:
         """Validate input source configuration."""
         if not any([self.file_path, self.file_pattern, self.directory_path]):
-            return FlextCore.Result[None].fail(
+            return FlextResult[None].fail(
                 'At least one input source must be specified: "file_path", "file_pattern", or "directory_path"',
             )
-        return FlextCore.Result[None].ok(None)
+        return FlextResult[None].ok(None)
 
-    def _validate_constraints(self: object) -> FlextCore.Result[None]:
+    def _validate_constraints(self: object) -> FlextResult[None]:
         """Validate configuration constraints."""
         # Validate batch size constraints
         if self.batch_size <= 0:
-            return FlextCore.Result[None].fail("Batch size must be positive")
-        max_batch = FlextCore.Constants.Performance.MAX_BATCH_SIZE_VALIDATION
+            return FlextResult[None].fail("Batch size must be positive")
+        max_batch = FlextConstants.Performance.MAX_BATCH_SIZE_VALIDATION
         if self.batch_size > max_batch:
-            return FlextCore.Result[None].fail(f"Batch size cannot exceed {max_batch}")
+            return FlextResult[None].fail(f"Batch size cannot exceed {max_batch}")
 
         # Validate file size constraints
         if self.max_file_size_mb <= 0:
-            return FlextCore.Result[None].fail("Max file size must be positive")
-        max_file_mb = FlextCore.Constants.Logging.MAX_FILE_SIZE // (1024 * 1024)
+            return FlextResult[None].fail("Max file size must be positive")
+        max_file_mb = FlextConstants.Logging.MAX_FILE_SIZE // (1024 * 1024)
         if self.max_file_size_mb > max_file_mb:
-            return FlextCore.Result[None].fail(
+            return FlextResult[None].fail(
                 f"Max file size cannot exceed {max_file_mb} MB",
             )
 
         # Validate encoding
         if not self.encoding:
-            return FlextCore.Result[None].fail("Encoding must be specified")
+            return FlextResult[None].fail("Encoding must be specified")
 
-        return FlextCore.Result[None].ok(None)
+        return FlextResult[None].ok(None)
 
-    def _validate_filters(self: object) -> FlextCore.Result[None]:
+    def _validate_filters(self: object) -> FlextResult[None]:
         """Validate filter configuration."""
         if self.attribute_filter and self.exclude_attributes:
             overlapping = set(self.attribute_filter) & set(self.exclude_attributes)
             if overlapping:
-                return FlextCore.Result[None].fail(
+                return FlextResult[None].fail(
                     f"Attributes cannot be both included and excluded: {overlapping}",
                 )
-        return FlextCore.Result[None].ok(None)
+        return FlextResult[None].ok(None)
 
     @classmethod
     def get_global_instance(cls) -> Self:
-        """Get the global singleton instance using enhanced FlextCore.Config pattern."""
+        """Get the global singleton instance using enhanced FlextConfig pattern."""
         return cls.get_or_create_shared_instance(project_name="flext-tap-ldif")
 
     @classmethod
@@ -180,8 +185,7 @@ class FlextMeltanoTapLdifConfig(FlextCore.Config):
         """Create development configuration instance."""
         dev_defaults = {
             "file_path": "./test.ldif",
-            "batch_size": FlextCore.Constants.Performance.BatchProcessing.DEFAULT_SIZE
-            // 10,
+            "batch_size": FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE // 10,
             "strict_parsing": False,
             "max_file_size_mb": 10,
             "encoding": "utf-8",
@@ -193,8 +197,7 @@ class FlextMeltanoTapLdifConfig(FlextCore.Config):
     def create_for_production(cls, **overrides: object) -> Self:
         """Create production configuration instance."""
         prod_defaults = {
-            "batch_size": FlextCore.Constants.Performance.BatchProcessing.MAX_ITEMS
-            // 2,
+            "batch_size": FlextConstants.Performance.BatchProcessing.MAX_ITEMS // 2,
             "strict_parsing": True,
             "max_file_size_mb": 500,
             "include_operational_attributes": False,
@@ -207,8 +210,7 @@ class FlextMeltanoTapLdifConfig(FlextCore.Config):
         """Create testing configuration instance."""
         test_defaults = {
             "file_path": "./tests/test_data/sample.ldif",
-            "batch_size": FlextCore.Constants.Performance.BatchProcessing.DEFAULT_SIZE
-            // 20,
+            "batch_size": FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE // 20,
             "strict_parsing": True,
             "max_file_size_mb": 1,
             "encoding": "utf-8",
@@ -217,7 +219,7 @@ class FlextMeltanoTapLdifConfig(FlextCore.Config):
         return cls(**test_defaults)
 
     @property
-    def ldif_config(self: object) -> FlextCore.Types.Dict:
+    def ldif_config(self: object) -> FlextTypes.Dict:
         """Get LDIF-specific configuration as a dictionary."""
         return {
             "file_path": self.file_path,

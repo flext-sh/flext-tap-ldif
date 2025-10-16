@@ -7,7 +7,7 @@ from collections.abc import Generator
 from pathlib import Path
 
 import pytest
-from flext_core import FlextCore
+from flext_core import FlextTypes
 from flext_tests import FlextTestDocker
 
 # Import shared LDAP fixtures from docker directory
@@ -163,7 +163,7 @@ mail: test.user@example.com
 
 # Tap configuration fixtures
 @pytest.fixture
-def basic_tap_config(sample_ldif_file: Path) -> FlextCore.Types.Dict:
+def basic_tap_config(sample_ldif_file: Path) -> FlextTypes.Dict:
     """Basic LDIF tap configuration."""
     return {
         "ldif_file_path": str(sample_ldif_file),
@@ -178,7 +178,7 @@ def basic_tap_config(sample_ldif_file: Path) -> FlextCore.Types.Dict:
 
 
 @pytest.fixture
-def changes_tap_config(sample_ldif_changes_file: Path) -> FlextCore.Types.Dict:
+def changes_tap_config(sample_ldif_changes_file: Path) -> FlextTypes.Dict:
     """LDIF tap configuration for changes processing."""
     return {
         "ldif_file_path": str(sample_ldif_changes_file),
@@ -193,7 +193,7 @@ def changes_tap_config(sample_ldif_changes_file: Path) -> FlextCore.Types.Dict:
 
 
 @pytest.fixture
-def directory_tap_config(ldif_directory: Path) -> FlextCore.Types.Dict:
+def directory_tap_config(ldif_directory: Path) -> FlextTypes.Dict:
     """LDIF tap configuration for directory processing."""
     return {
         "ldif_file_path": str(ldif_directory),
@@ -209,7 +209,7 @@ def directory_tap_config(ldif_directory: Path) -> FlextCore.Types.Dict:
 
 
 @pytest.fixture
-def filtered_tap_config(sample_ldif_file: Path) -> FlextCore.Types.Dict:
+def filtered_tap_config(sample_ldif_file: Path) -> FlextTypes.Dict:
     """LDIF tap configuration with filters."""
     return {
         "ldif_file_path": str(sample_ldif_file),
@@ -249,7 +249,7 @@ def large_ldif_file(tmp_path: Path) -> Path:
 
 
 @pytest.fixture
-def performance_tap_config(large_ldif_file: Path) -> FlextCore.Types.Dict:
+def performance_tap_config(large_ldif_file: Path) -> FlextTypes.Dict:
     """LDIF tap configuration for performance testing."""
     return {
         "ldif_file_path": str(large_ldif_file),
@@ -314,7 +314,7 @@ description: User with unicode characters: àáâãäåæç
 
 # Singer protocol fixtures
 @pytest.fixture
-def singer_catalog_config() -> FlextCore.Types.Dict:
+def singer_catalog_config() -> FlextTypes.Dict:
     """Singer catalog configuration."""
     return {
         "streams": [
@@ -347,7 +347,7 @@ def singer_catalog_config() -> FlextCore.Types.Dict:
 
 
 @pytest.fixture
-def singer_state() -> FlextCore.Types.Dict:
+def singer_state() -> FlextTypes.Dict:
     """Singer state for incremental sync."""
     return {
         "currently_syncing": None,
@@ -387,7 +387,7 @@ def invalid_ldif_file(tmp_path: Path, invalid_ldif_content: str) -> Path:
 
 # Performance benchmarking fixtures
 @pytest.fixture
-def benchmark_config() -> FlextCore.Types.Dict:
+def benchmark_config() -> FlextTypes.Dict:
     """Configuration for performance benchmarking."""
     return {
         "max_entries_to_process": 1000,
@@ -417,15 +417,15 @@ def mock_ldif_tap() -> object:
     """Mock LDIF tap for testing."""
 
     class MockLDIFTap:
-        def __init__(self, config: FlextCore.Types.Dict) -> None:
+        def __init__(self, config: FlextTypes.Dict) -> None:
             """Initialize the instance."""
             self.config = config
-            self.discovered_streams: list[FlextCore.Types.Dict] = []
+            self.discovered_streams: list[FlextTypes.Dict] = []
 
-        def discover_streams(self) -> list[FlextCore.Types.Dict]:
+        def discover_streams(self) -> list[FlextTypes.Dict]:
             return self.discovered_streams
 
-        def sync_records(self) -> list[FlextCore.Types.Dict]:
+        def sync_records(self) -> list[FlextTypes.Dict]:
             return [
                 {
                     "dn": "cn=test,ou=users,dc=example,dc=com",
@@ -445,19 +445,19 @@ def mock_ldif_parser() -> object:
     """Mock LDIF parser for testing."""
 
     class MockLDIFParser:
-        def __init__(self, config: FlextCore.Types.Dict) -> None:
+        def __init__(self, config: FlextTypes.Dict) -> None:
             """Initialize the instance."""
             self.config = config
-            self.parsed_entries: list[FlextCore.Types.Dict] = []
+            self.parsed_entries: list[FlextTypes.Dict] = []
 
-        def parse_file(self, _file_path: str) -> FlextCore.Types.Dict:
+        def parse_file(self, _file_path: str) -> FlextTypes.Dict:
             return {
                 "success": True,
                 "entries": self.parsed_entries,
                 "errors": [],
             }
 
-        def add_mock_entry(self, entry: FlextCore.Types.Dict) -> None:
+        def add_mock_entry(self, entry: FlextTypes.Dict) -> None:
             self.parsed_entries.append(entry)
 
     return MockLDIFParser

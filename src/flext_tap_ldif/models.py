@@ -8,7 +8,7 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from typing import Self
 
-from flext_core import FlextCore
+from flext_core import FlextConstants, FlextModels, FlextTypes
 from pydantic import (
     ConfigDict,
     Field,
@@ -21,8 +21,8 @@ from pydantic import (
 from flext_tap_ldif.utilities import FlextMeltanoTapLdifUtilities
 
 
-class FlextMeltanoTapLdifModels(FlextCore.Models):
-    """Comprehensive models for LDIF tap operations extending FlextCore.Models.
+class FlextMeltanoTapLdifModels(FlextModels):
+    """Comprehensive models for LDIF tap operations extending FlextModels.
 
     Provides standardized models for all LDIF tap domain entities including:
     - Singer stream metadata and LDIF file configuration
@@ -32,7 +32,7 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
     - LDIF format compliance and schema validation
     - All utility functions for LDIF data processing
 
-    All nested classes inherit FlextCore.Models validation and patterns.
+    All nested classes inherit FlextModels validation and patterns.
     Consolidates ALL models for LDIF file extraction and processing.
     """
 
@@ -65,7 +65,6 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
     # Advanced Pydantic 2.11 Features - Singer LDIF Tap Domain
 
     @computed_field
-    @property
     def active_ldif_tap_models_count(self) -> int:
         """Count of active LDIF tap models with file processing capabilities."""
         count = 0
@@ -93,8 +92,7 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
         return count
 
     @computed_field
-    @property
-    def ldif_tap_system_summary(self) -> FlextCore.Types.Dict:
+    def ldif_tap_system_summary(self) -> FlextTypes.Dict:
         """Comprehensive Singer LDIF tap system summary with file processing capabilities."""
         return {
             "total_models": self.active_ldif_tap_models_count,
@@ -182,14 +180,14 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
         return value
 
     # Legacy type aliases for backward compatibility
-    LdifRecord = FlextCore.Types.Dict
+    LdifRecord = FlextTypes.Dict
     LdifRecords = list[LdifRecord]
 
     class UtilityFunctions:
         """Utility functions for LDIF data processing."""
 
         @staticmethod
-        def parse_dn(dn: str) -> FlextCore.Types.StringDict:
+        def parse_dn(dn: str) -> FlextTypes.StringDict:
             """Parse Distinguished Name into components."""
             components = {}
             parts = dn.split(",")
@@ -221,7 +219,7 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
             """Normalize LDIF attribute name."""
             return name.lower().strip()
 
-    class LdifEntry(FlextCore.Models.Entity):
+    class LdifEntry(FlextModels.Entity):
         """Represents an LDIF entry with comprehensive parsing support."""
 
         # Pydantic 2.11 Configuration - LDIF Entry Features
@@ -241,10 +239,10 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
         )
 
         dn: str = Field(..., description="Distinguished Name")
-        attributes: dict[str, FlextCore.Types.StringList] = Field(
+        attributes: dict[str, FlextTypes.StringList] = Field(
             default_factory=dict, description="Entry attributes"
         )
-        object_classes: FlextCore.Types.StringList = Field(
+        object_classes: FlextTypes.StringList = Field(
             default_factory=list, description="Object classes"
         )
 
@@ -263,13 +261,12 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
             description="Extraction timestamp",
         )
         processed: bool = Field(default=False, description="Processing status")
-        validation_errors: FlextCore.Types.StringList = Field(
+        validation_errors: FlextTypes.StringList = Field(
             default_factory=list, description="Validation errors"
         )
 
         @computed_field
-        @property
-        def ldif_entry_summary(self) -> FlextCore.Types.Dict:
+        def ldif_entry_summary(self) -> FlextTypes.Dict:
             """LDIF entry analysis summary."""
             return {
                 "dn": self.dn,
@@ -296,7 +293,7 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
 
             return self
 
-        def get_attribute_values(self, name: str) -> FlextCore.Types.StringList:
+        def get_attribute_values(self, name: str) -> FlextTypes.StringList:
             """Get attribute values by name (case-insensitive)."""
             normalized_name = name.lower()
             for attr_name, values in self.attributes.items():
@@ -309,7 +306,7 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
             values = self.get_attribute_values(name)
             return values[0] if values else None
 
-    class LdifChangeRecord(FlextCore.Models.Entity):
+    class LdifChangeRecord(FlextModels.Entity):
         """Represents an LDIF change record for modify operations."""
 
         # Pydantic 2.11 Configuration - Change Record Features
@@ -333,7 +330,7 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
         change_type: str = Field(
             ..., description="Type of change (add, modify, delete, modrdn)"
         )
-        changes: list[FlextCore.Types.Dict] = Field(
+        changes: list[FlextTypes.Dict] = Field(
             default_factory=list, description="List of changes"
         )
 
@@ -350,13 +347,12 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
             description="Extraction timestamp",
         )
         applied: bool = Field(default=False, description="Change application status")
-        application_errors: FlextCore.Types.StringList = Field(
+        application_errors: FlextTypes.StringList = Field(
             default_factory=list, description="Application errors"
         )
 
         @computed_field
-        @property
-        def change_record_summary(self) -> FlextCore.Types.Dict:
+        def change_record_summary(self) -> FlextTypes.Dict:
             """LDIF change record summary."""
             return {
                 "dn": self.dn,
@@ -381,7 +377,7 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
 
             return self
 
-    class LdifFile(FlextCore.Models.Entity):
+    class LdifFile(FlextModels.Entity):
         """Represents an LDIF file with processing metadata."""
 
         # Pydantic 2.11 Configuration - File Features
@@ -428,19 +424,18 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
         last_processed_line: int = Field(
             default=0, description="Last processed line number"
         )
-        processing_errors: FlextCore.Types.StringList = Field(
+        processing_errors: FlextTypes.StringList = Field(
             default_factory=list, description="Processing errors"
         )
 
         # Validation results
         is_valid_ldif: bool = Field(default=True, description="LDIF format validity")
-        validation_errors: FlextCore.Types.StringList = Field(
+        validation_errors: FlextTypes.StringList = Field(
             default_factory=list, description="Format validation errors"
         )
 
         @computed_field
-        @property
-        def ldif_file_summary(self) -> FlextCore.Types.Dict:
+        def ldif_file_summary(self) -> FlextTypes.Dict:
             """LDIF file processing summary."""
             progress = 0.0
             if self.total_lines > 0:
@@ -476,7 +471,7 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
                 raise ValueError(msg)
             return self
 
-    class LdifStream(FlextCore.Models.Entity):
+    class LdifStream(FlextModels.Entity):
         """Singer stream configuration for LDIF file processing."""
 
         # Pydantic 2.11 Configuration - Stream Features
@@ -504,7 +499,7 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
         replication_method: str = Field(
             default="FULL_TABLE", description="Replication method"
         )
-        key_properties: FlextCore.Types.StringList = Field(
+        key_properties: FlextTypes.StringList = Field(
             default_factory=lambda: ["dn"], description="Key properties"
         )
 
@@ -512,25 +507,22 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
         include_change_records: bool = Field(
             default=True, description="Include LDIF change records"
         )
-        filter_object_classes: FlextCore.Types.StringList = Field(
+        filter_object_classes: FlextTypes.StringList = Field(
             default_factory=list, description="Filter by object classes"
         )
         batch_size: int = Field(
-            default=FlextCore.Constants.Performance.BatchProcessing.DEFAULT_SIZE,
+            default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE,
             description="Processing batch size",
         )
 
         # Stream schema
-        schema: FlextCore.Types.Dict = Field(
-            default_factory=dict, description="JSON schema"
-        )
-        metadata: list[FlextCore.Types.Dict] = Field(
+        schema: FlextTypes.Dict = Field(default_factory=dict, description="JSON schema")
+        metadata: list[FlextTypes.Dict] = Field(
             default_factory=list, description="Stream metadata"
         )
 
         @computed_field
-        @property
-        def ldif_stream_summary(self) -> FlextCore.Types.Dict:
+        def ldif_stream_summary(self) -> FlextTypes.Dict:
             """LDIF stream configuration summary."""
             return {
                 "stream_id": self.tap_stream_id,
@@ -558,7 +550,7 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
                 raise ValueError(msg)
             return self
 
-    class LdifBatch(FlextCore.Models.Entity):
+    class LdifBatch(FlextModels.Entity):
         """LDIF batch processing configuration and state."""
 
         # Pydantic 2.11 Configuration - Batch Features
@@ -579,11 +571,11 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
         )
 
         batch_id: str = Field(..., description="Unique batch identifier")
-        file_paths: FlextCore.Types.StringList = Field(
+        file_paths: FlextTypes.StringList = Field(
             ..., description="List of LDIF files to process"
         )
         batch_size: int = Field(
-            default=FlextCore.Constants.Performance.BatchProcessing.DEFAULT_SIZE,
+            default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE,
             description="Processing batch size",
         )
 
@@ -593,7 +585,7 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
         )
         max_workers: int = Field(default=4, description="Maximum worker threads")
         error_threshold: int = Field(
-            default=FlextCore.Constants.Performance.BatchProcessing.DEFAULT_SIZE // 10,
+            default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE // 10,
             description="Maximum errors before stopping",
         )
 
@@ -614,13 +606,12 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
         )
 
         # Error tracking
-        file_errors: dict[str, FlextCore.Types.StringList] = Field(
+        file_errors: dict[str, FlextTypes.StringList] = Field(
             default_factory=dict, description="Errors by file"
         )
 
         @computed_field
-        @property
-        def batch_processing_summary(self) -> FlextCore.Types.Dict:
+        def batch_processing_summary(self) -> FlextTypes.Dict:
             """LDIF batch processing summary."""
             duration = 0.0
             if self.started_at and self.completed_at:
@@ -663,7 +654,7 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
                 raise ValueError(msg)
             return self
 
-    class LdifProcessingState(FlextCore.Models.Entity):
+    class LdifProcessingState(FlextModels.Entity):
         """LDIF processing state and progress tracking."""
 
         # Pydantic 2.11 Configuration - State Features
@@ -707,7 +698,7 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
         )
 
         # Error tracking
-        processing_errors: list[FlextCore.Types.Dict] = Field(
+        processing_errors: list[FlextTypes.Dict] = Field(
             default_factory=list, description="Processing errors with context"
         )
         recoverable_errors: int = Field(
@@ -720,8 +711,7 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
         memory_usage: int = Field(default=0, description="Memory usage in bytes")
 
         @computed_field
-        @property
-        def processing_progress_summary(self) -> FlextCore.Types.Dict:
+        def processing_progress_summary(self) -> FlextTypes.Dict:
             """LDIF processing progress summary."""
             total_errors = self.recoverable_errors + self.fatal_errors
             duration = 0.0
@@ -765,7 +755,7 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
                 raise ValueError(msg)
             return self
 
-    class LdifTapConfig(FlextCore.Models.BaseConfig):
+    class LdifTapConfig(FlextModels.BaseConfig):
         """Configuration for LDIF tap operations."""
 
         # Pydantic 2.11 Configuration - Config Features
@@ -789,7 +779,7 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
         ldif_directory: str | None = Field(
             default=None, description="LDIF files directory"
         )
-        file_patterns: FlextCore.Types.StringList = Field(
+        file_patterns: FlextTypes.StringList = Field(
             default_factory=lambda: ["*.ldif"], description="LDIF file patterns"
         )
         recursive_search: bool = Field(
@@ -798,7 +788,7 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
 
         # Processing configuration
         batch_size: int = Field(
-            default=FlextCore.Constants.Performance.BatchProcessing.DEFAULT_SIZE,
+            default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE,
             description="Processing batch size",
         )
         parallel_processing: bool = Field(
@@ -811,7 +801,7 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
             default=True, description="Continue processing on errors"
         )
         max_errors: int = Field(
-            default=FlextCore.Constants.Performance.BatchProcessing.DEFAULT_SIZE,
+            default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE,
             description="Maximum errors before stopping",
         )
         error_file: str | None = Field(default=None, description="Error output file")
@@ -826,8 +816,7 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
         )
 
         @computed_field
-        @property
-        def tap_config_summary(self) -> FlextCore.Types.Dict:
+        def tap_config_summary(self) -> FlextTypes.Dict:
             """LDIF tap configuration summary."""
             return {
                 "source": {
@@ -863,11 +852,11 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
                 raise ValueError(msg)
             return self
 
-    class LdifRecord(FlextCore.Models.StrictArbitraryTypesModel):
+    class LdifRecord(FlextModels.StrictArbitraryTypesModel):
         """Individual LDIF record for Singer output."""
 
         stream: str = Field(..., description="Source stream name")
-        record: FlextCore.Types.Dict = Field(..., description="LDIF record data")
+        record: FlextTypes.Dict = Field(..., description="LDIF record data")
         record_type: str = Field(default="entry", description="Type of LDIF record")
 
         # Source metadata
@@ -884,8 +873,7 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
         )
 
         @computed_field
-        @property
-        def ldif_record_summary(self) -> FlextCore.Types.Dict:
+        def ldif_record_summary(self) -> FlextTypes.Dict:
             """LDIF record analysis summary."""
             return {
                 "stream": self.stream,
@@ -909,17 +897,17 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
                 raise ValueError(msg)
             return self
 
-    class LdifValidationResult(FlextCore.Models.StrictArbitraryTypesModel):
+    class LdifValidationResult(FlextModels.StrictArbitraryTypesModel):
         """LDIF validation result with detailed error reporting."""
 
         file_path: str = Field(..., description="Validated LDIF file path")
         is_valid: bool = Field(..., description="Overall validation result")
 
         # Validation results
-        validation_errors: list[FlextCore.Types.Dict] = Field(
+        validation_errors: list[FlextTypes.Dict] = Field(
             default_factory=list, description="Validation errors with details"
         )
-        warnings: list[FlextCore.Types.Dict] = Field(
+        warnings: list[FlextTypes.Dict] = Field(
             default_factory=list, description="Validation warnings"
         )
 
@@ -935,8 +923,7 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
         validator_version: str = Field(default="1.0", description="Validator version")
 
         @computed_field
-        @property
-        def validation_summary(self) -> FlextCore.Types.Dict:
+        def validation_summary(self) -> FlextTypes.Dict:
             """LDIF validation comprehensive summary."""
             success_rate = 0.0
             if self.total_entries > 0:
@@ -978,7 +965,7 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
                 raise ValueError(msg)
             return self
 
-    class LdifPerformanceMetrics(FlextCore.Models.StrictArbitraryTypesModel):
+    class LdifPerformanceMetrics(FlextModels.StrictArbitraryTypesModel):
         """Performance metrics for LDIF tap operations."""
 
         # File processing metrics
@@ -1017,8 +1004,7 @@ class FlextMeltanoTapLdifModels(FlextCore.Models):
         average_memory_usage: int = Field(default=0, description="Average memory usage")
 
         @computed_field
-        @property
-        def performance_analysis_summary(self) -> FlextCore.Types.Dict:
+        def performance_analysis_summary(self) -> FlextTypes.Dict:
             """LDIF tap performance analysis summary."""
             success_rate = 0.0
             if self.files_processed > 0:
