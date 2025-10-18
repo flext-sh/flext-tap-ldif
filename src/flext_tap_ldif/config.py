@@ -13,7 +13,6 @@ from flext_core import (
     FlextConfig,
     FlextConstants,
     FlextResult,
-    FlextTypes,
     FlextUtilities,
 )
 from pydantic import Field, field_validator
@@ -59,17 +58,17 @@ class FlextMeltanoTapLdifConfig(FlextConfig):
         description="Filter entries by base DN pattern",
     )
 
-    object_class_filter: FlextTypes.StringList = Field(
+    object_class_filter: list[str] = Field(
         default_factory=list,
         description="Filter entries by object class",
     )
 
-    attribute_filter: FlextTypes.StringList = Field(
+    attribute_filter: list[str] = Field(
         default_factory=list,
         description="Include only specified attributes",
     )
 
-    exclude_attributes: FlextTypes.StringList = Field(
+    exclude_attributes: list[str] = Field(
         default_factory=list,
         description="Exclude specified attributes",
     )
@@ -219,7 +218,7 @@ class FlextMeltanoTapLdifConfig(FlextConfig):
         return cls(**test_defaults)
 
     @property
-    def ldif_config(self: object) -> FlextTypes.Dict:
+    def ldif_config(self: object) -> dict[str, object]:
         """Get LDIF-specific configuration as a dictionary."""
         return {
             "file_path": self.file_path,
