@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import ClassVar
 
-from flext_core import FlextConstants, FlextLogger, FlextTypes
+from flext_core import FlextConstants, FlextLogger
 
 # Use FLEXT Meltano wrappers instead of direct singer_sdk imports (domain separation)
 from flext_meltano import (
@@ -30,7 +30,7 @@ class TapLDIF(Tap):
     name: str = "tap-ldif"
     config_class = FlextMeltanoTapLdifConfig
     # Schema combining file-based configuration with LDIF-specific properties
-    config_jsonschema: ClassVar[FlextTypes.Dict] = (
+    config_jsonschema: ClassVar[dict[str, object]] = (
         FlextMeltanoTypes.Singer.Typing.PropertiesList(
             # File-based properties
             FlextMeltanoTypes.Singer.Typing.Property(
@@ -114,7 +114,7 @@ class TapLDIF(Tap):
             LDIFEntriesStream(tap=self),
         ]
 
-    def _get_ldif_entries_schema(self: object) -> FlextTypes.Dict:
+    def _get_ldif_entries_schema(self: object) -> dict[str, object]:
         """Get the schema for LDIF entries stream.
 
         Returns:

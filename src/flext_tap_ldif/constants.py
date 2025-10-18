@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import ClassVar
 
-from flext_core import FlextConstants, FlextTypes
+from flext_core import FlextConstants
 from flext_ldif.constants import FlextLdifConstants
 
 
@@ -21,7 +21,7 @@ class FlextMeltanoTapLdifConstants(FlextConstants):
 
     # LDIF File Configuration using composition
     DEFAULT_LDIF_ENCODING = FlextLdifConstants.Encoding.DEFAULT_ENCODING
-    SUPPORTED_ENCODINGS: ClassVar[FlextTypes.StringList] = list(
+    SUPPORTED_ENCODINGS: ClassVar[list[str]] = list(
         FlextLdifConstants.Encoding.SUPPORTED_ENCODINGS
     )
 
@@ -31,7 +31,7 @@ class FlextMeltanoTapLdifConstants(FlextConstants):
     MAX_FILE_SIZE_MB = 100
 
     # LDIF Change Types from FlextMeltanoTapLdifConstants
-    LDIF_CHANGE_TYPES: ClassVar[FlextTypes.StringList] = [
+    LDIF_CHANGE_TYPES: ClassVar[list[str]] = [
         FlextLdifConstants.EntryModification.ADD,
         FlextLdifConstants.EntryModification.MODIFY,
         FlextLdifConstants.EntryModification.DELETE,

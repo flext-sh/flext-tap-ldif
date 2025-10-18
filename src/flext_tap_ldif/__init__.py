@@ -47,7 +47,6 @@ __all__ = [
     "FlextMeltanoTapLdifValidationError",
     "FlextModels",
     "FlextResult",
-    "FlextTypes.Dict",
     "LDIFEntriesStream",
     "LDIFProcessor",
     "LDIFTap",
@@ -57,4 +56,5 @@ __all__ = [
     "TapLDIFConfig",
     "__version__",
     "__version_info__",
+    "dict[str, object]",
 ]
