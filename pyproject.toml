@@ -62,16 +62,6 @@
 [tool.ruff]
     extend = "../ruff-shared.toml"
 
-[tool.bandit]
-    exclude_dirs = [
-        "build",
-        "dist",
-        "tests",
-    ]
-    skips = [
-        "B101",
-        "B601",
-    ]
 
 [tool.poetry]
     [[tool.poetry.packages]]
@@ -112,39 +102,6 @@
     testpaths = [
         "tests",
     ]
-
-[tool.coverage.run]
-    branch = true
-    omit = [
-        "*/.venv/*",
-        "*/__pycache__/*",
-        "*/test_*",
-        "*/tests/*",
-        "*/venv/*",
-    ]
-    source = [
-        "src",
-    ]
-
-[tool.coverage.report]
-    exclude_lines = [
-        "@(abc\\.)?abstractmethod",
-        "class .*\\bProtocol\\):",
-        "def __repr__",
-        "if 0:",
-        "if __name__ == .__main__.:",
-        "if self.debug:",
-        "if settings.DEBUG",
-        "pragma: no cover",
-        "raise AssertionError",
-        "raise NotImplementedError",
-    ]
-
-[tool.coverage.html]
-    directory = "reports/coverage"
-
-[tool.coverage.xml]
-    output = "reports/coverage.xml"
 
     [tool.ruff.lint.isort]
         known-first-party = [
@@ -210,22 +167,3 @@
     [tool.poetry.group.security.dependencies]
         bandit    = ">=1.8.0"
         pip-audit = ">=2.7.3"
-
-[tool.pyrefly]
-    python-version = "3.13"
-    search-path = [
-        "../flext-core/src",
-        "../flext-ldif/src",
-        "../flext-meltano/src",
-        "../flext-observability/src",
-        "src",
-        "tests",
-    ]
-
-
-        # SubConfig: Disable unknown-name error for models.py
-        # This handles forward references to classes defined later in the same file
-        [[tool.pyrefly.sub-config]]
-            matches = "**/models.py"
-            [tool.pyrefly.sub-config.errors]
-                unknown-name = false
