@@ -47,12 +47,12 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
             """Create Singer schema message.
 
             Args:
-                stream_name: Name of the stream
-                schema: JSON schema for the stream
-                key_properties: List of key property names
+            stream_name: Name of the stream
+            schema: JSON schema for the stream
+            key_properties: List of key property names
 
             Returns:
-                dict[str, object]: Singer schema message
+            dict[str, object]: Singer schema message
 
             """
             return {
@@ -71,12 +71,12 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
             """Create Singer record message.
 
             Args:
-                stream_name: Name of the stream
-                record: Record data
-                time_extracted: Timestamp when record was extracted
+            stream_name: Name of the stream
+            record: Record data
+            time_extracted: Timestamp when record was extracted
 
             Returns:
-                dict[str, object]: Singer record message
+            dict[str, object]: Singer record message
 
             """
             extracted_time = time_extracted or datetime.now(UTC)
@@ -92,10 +92,10 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
             """Create Singer state message.
 
             Args:
-                state: State data
+            state: State data
 
             Returns:
-                dict[str, object]: Singer state message
+            dict[str, object]: Singer state message
 
             """
             return {
@@ -108,7 +108,7 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
             """Write Singer message to stdout.
 
             Args:
-                message: Singer message to write
+            message: Singer message to write
 
             """
 
@@ -120,10 +120,10 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
             """Validate LDIF file format and accessibility.
 
             Args:
-                file_path: Path to LDIF file
+            file_path: Path to LDIF file
 
             Returns:
-                FlextResult[bool]: True if valid, error if invalid
+            FlextResult[bool]: True if valid, error if invalid
 
             """
             try:
@@ -168,10 +168,10 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
             """Count number of entries in LDIF file.
 
             Args:
-                file_path: Path to LDIF file
+            file_path: Path to LDIF file
 
             Returns:
-                FlextResult[int]: Number of entries or error
+            FlextResult[int]: Number of entries or error
 
             """
             try:
@@ -203,10 +203,10 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
             """Extract metadata from LDIF file.
 
             Args:
-                file_path: Path to LDIF file
+            file_path: Path to LDIF file
 
             Returns:
-                FlextResult[dict[str, object]]: Metadata dictionary or error
+            FlextResult[dict[str, object]]: Metadata dictionary or error
 
             """
             try:
@@ -259,10 +259,10 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
             """Parse LDIF attribute line.
 
             Args:
-                line: LDIF line to parse
+            line: LDIF line to parse
 
             Returns:
-                FlextResult[tuple[str, str]]: (attribute_name, value) or error
+            FlextResult[tuple[str, str]]: (attribute_name, value) or error
 
             """
             try:
@@ -315,10 +315,10 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
             """Normalize LDIF attribute name for JSON schema.
 
             Args:
-                attr_name: LDIF attribute name
+            attr_name: LDIF attribute name
 
             Returns:
-                str: Normalized attribute name
+            str: Normalized attribute name
 
             """
             if not attr_name:
@@ -340,10 +340,10 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
             """Convert LDIF entry lines to Singer record.
 
             Args:
-                entry_lines: List of LDIF lines for single entry
+            entry_lines: List of LDIF lines for single entry
 
             Returns:
-                FlextResult[dict[str, object]]: Singer record or error
+            FlextResult[dict[str, object]]: Singer record or error
 
             """
             try:
@@ -414,10 +414,10 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
             """Validate LDIF tap configuration.
 
             Args:
-                config: Configuration dictionary
+            config: Configuration dictionary
 
             Returns:
-                FlextResult[dict[str, object]]: Validated config or error
+            FlextResult[dict[str, object]]: Validated config or error
 
             """
             required_fields = ["files"]
@@ -463,11 +463,11 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
             """Get state for a specific file.
 
             Args:
-                state: Complete state dictionary
-                file_path: Path to the file
+            state: Complete state dictionary
+            file_path: Path to the file
 
             Returns:
-                dict[str, object]: File state
+            dict[str, object]: File state
 
             """
             return state.get("files", {}).get(file_path, {})
@@ -481,12 +481,12 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
             """Set state for a specific file.
 
             Args:
-                state: Complete state dictionary
-                file_path: Path to the file
-                file_state: State data for the file
+            state: Complete state dictionary
+            file_path: Path to the file
+            file_state: State data for the file
 
             Returns:
-                dict[str, object]: Updated state
+            dict[str, object]: Updated state
 
             """
             if "files" not in state:
@@ -500,11 +500,11 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
             """Get current position in file.
 
             Args:
-                state: Complete state dictionary
-                file_path: Path to the file
+            state: Complete state dictionary
+            file_path: Path to the file
 
             Returns:
-                int: Current position or 0
+            int: Current position or 0
 
             """
             file_state = FlextMeltanoTapLdifUtilities.StateManagement.get_file_state(
@@ -521,12 +521,12 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
             """Set current position in file.
 
             Args:
-                state: Complete state dictionary
-                file_path: Path to the file
-                position: Current position
+            state: Complete state dictionary
+            file_path: Path to the file
+            position: Current position
 
             Returns:
-                dict[str, object]: Updated state
+            dict[str, object]: Updated state
 
             """
             if "files" not in state:

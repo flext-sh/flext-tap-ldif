@@ -33,10 +33,10 @@ class LDIFEntriesStream(Stream):
         """Initialize LDIF entries stream.
 
         Args:
-            tap: The parent tap instance.
+        tap: The parent tap instance.
 
         Returns:
-            object: Description of return value.
+        object: Description of return value.
 
         """
         super().__init__(tap, name="ldif_entries", schema=self._get_schema())
@@ -120,10 +120,10 @@ class LDIFEntriesStream(Stream):
         """Return a generator of record-type dictionary objects.
 
         Args:
-            _context: Stream partition or context dictionary.
+        _context: Stream partition or context dictionary.
 
         Yields:
-            Dictionary representations of LDIF entries.
+        Dictionary representations of LDIF entries.
 
         """
         config: dict[str, object] = dict[str, object](self._tap.config)
