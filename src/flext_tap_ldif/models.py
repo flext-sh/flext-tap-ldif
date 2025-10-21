@@ -22,7 +22,7 @@ from flext_tap_ldif.utilities import FlextMeltanoTapLdifUtilities
 
 
 class FlextMeltanoTapLdifModels(FlextModels):
-    """Comprehensive models for LDIF tap operations extending FlextModels.
+    """Complete models for LDIF tap operations extending FlextModels.
 
     Provides standardized models for all LDIF tap domain entities including:
     - Singer stream metadata and LDIF file configuration
@@ -93,7 +93,7 @@ class FlextMeltanoTapLdifModels(FlextModels):
 
     @computed_field
     def ldif_tap_system_summary(self) -> dict[str, object]:
-        """Comprehensive Singer LDIF tap system summary with file processing capabilities."""
+        """Complete Singer LDIF tap system summary with file processing capabilities."""
         return {
             "total_models": self.active_ldif_tap_models_count,
             "tap_type": "singer_ldif_file_extractor",
@@ -220,7 +220,7 @@ class FlextMeltanoTapLdifModels(FlextModels):
             return name.lower().strip()
 
     class LdifEntry(FlextModels.Entity):
-        """Represents an LDIF entry with comprehensive parsing support."""
+        """Represents an LDIF entry with complete parsing support."""
 
         # Pydantic 2.11 Configuration - LDIF Entry Features
         model_config = ConfigDict(
@@ -386,7 +386,7 @@ class FlextMeltanoTapLdifModels(FlextModels):
             extra="forbid",
             frozen=False,
             json_schema_extra={
-                "description": "LDIF file with comprehensive processing support",
+                "description": "LDIF file with complete processing support",
                 "examples": [
                     {
                         "file_path": "/data/directory-export.ldif",
@@ -663,7 +663,7 @@ class FlextMeltanoTapLdifModels(FlextModels):
             extra="forbid",
             frozen=False,
             json_schema_extra={
-                "description": "LDIF processing state with comprehensive tracking",
+                "description": "LDIF processing state with complete tracking",
                 "examples": [
                     {
                         "file_path": "/data/users.ldif",
@@ -764,7 +764,7 @@ class FlextMeltanoTapLdifModels(FlextModels):
             extra="forbid",
             frozen=False,
             json_schema_extra={
-                "description": "LDIF tap configuration with comprehensive settings",
+                "description": "LDIF tap configuration with complete settings",
                 "examples": [
                     {
                         "ldif_directory": "/data/ldif",
@@ -924,7 +924,7 @@ class FlextMeltanoTapLdifModels(FlextModels):
 
         @computed_field
         def validation_summary(self) -> dict[str, object]:
-            """LDIF validation comprehensive summary."""
+            """LDIF validation complete summary."""
             success_rate = 0.0
             if self.total_entries > 0:
                 success_rate = self.valid_entries / self.total_entries
@@ -1054,10 +1054,10 @@ class FlextMeltanoTapLdifModels(FlextModels):
             return self
 
 
-# ZERO TOLERANCE CONSOLIDATION - FlextMeltanoTapLdifUtilities moved to utilities.py
+# Zero Tolerance CONSOLIDATION - FlextMeltanoTapLdifUtilities moved to utilities.py
 #
-# CRITICAL: FlextMeltanoTapLdifUtilities was DUPLICATED between models.py and utilities.py.
-# This was a ZERO TOLERANCE violation of the user's explicit requirements.
+# Critical: FlextMeltanoTapLdifUtilities was DUPLICATED between models.py and utilities.py.
+# This was a Zero Tolerance violation of the user's explicit requirements.
 #
 # Note: FlextMeltanoTapLdifUtilities imported at top for proper organization
 

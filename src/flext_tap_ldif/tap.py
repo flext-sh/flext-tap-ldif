@@ -107,7 +107,7 @@ class TapLDIF(Tap):
         """Return a list of discovered streams.
 
         Returns:
-            A list of discovered streams.
+        A list of discovered streams.
 
         """
         return [
@@ -118,7 +118,7 @@ class TapLDIF(Tap):
         """Get the schema for LDIF entries stream.
 
         Returns:
-            Schema definition for LDIF entries.
+        Schema definition for LDIF entries.
 
         """
         return FlextMeltanoTypes.Singer.Typing.PropertiesList(

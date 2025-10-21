@@ -32,10 +32,10 @@ class FlextLdifProcessorWrapper:
         """Initialize the LDIF processor using flext-ldif infrastructure.
 
         Args:
-            config: Configuration dictionary from the tap.
+        config: Configuration dictionary from the tap.
 
         Returns:
-            object: Description of return value.
+        object: Description of return value.
 
         """
         self.config: dict[str, object] = config
@@ -55,13 +55,13 @@ class FlextLdifProcessorWrapper:
         """Discover LDIF files using generic flext-ldif functionality.
 
         Args:
-            directory_path: Directory to search for LDIF files
-            file_pattern: Glob pattern for file matching
-            file_path: Single file path (alternative to directory_path)
-            max_file_size_mb: Maximum file size in MB
+        directory_path: Directory to search for LDIF files
+        file_pattern: Glob pattern for file matching
+        file_path: Single file path (alternative to directory_path)
+        max_file_size_mb: Maximum file size in MB
 
         Returns:
-            FlextResult[list[Path]]: Success with discovered files or failure with error
+        FlextResult[list[Path]]: Success with discovered files or failure with error
 
         """
         # Delegate to flext-ldif generic file discovery - NO local duplication
