@@ -7,13 +7,13 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Self
 
 from flext_core import (
     FlextConfig,
     FlextConstants,
     FlextResult,
-    FlextUtilities,
 )
 from pydantic import Field, field_validator
 from pydantic_settings import SettingsConfigDict
@@ -103,16 +103,32 @@ class FlextMeltanoTapLdifConfig(FlextConfig):
     @field_validator("file_path")
     @classmethod
     def validate_file_path_field(cls, v: str | None) -> str | None:
-        """Use consolidated file path validation."""
-        result = FlextUtilities.Validation.validate_file_path(v)
-        return result.data if result.success else None
+        """Validate file path exists using Pydantic v2 patterns."""
+        if v is None:
+            return None
+        path = Path(v)
+        if not path.exists():
+            msg = f"File path does not exist: {v}"
+            raise ValueError(msg)
+        if not path.is_file():
+            msg = f"Path is not a file: {v}"
+            raise ValueError(msg)
+        return v
 
     @field_validator("directory_path")
     @classmethod
     def validate_directory_path_field(cls, v: str | None) -> str | None:
-        """Use consolidated directory path validation."""
-        result = FlextUtilities.Validation.validate_directory_path(v)
-        return result.data if result.success else None
+        """Validate directory path exists using Pydantic v2 patterns."""
+        if v is None:
+            return None
+        path = Path(v)
+        if not path.exists():
+            msg = f"Directory path does not exist: {v}"
+            raise ValueError(msg)
+        if not path.is_dir():
+            msg = f"Path is not a directory: {v}"
+            raise ValueError(msg)
+        return v
 
     def model_post_init(self, __context: object, /) -> None:
         """Validate configuration after initialization using FlextConfig.BaseModel pattern."""

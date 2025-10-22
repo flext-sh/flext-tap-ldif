@@ -852,7 +852,7 @@ class FlextMeltanoTapLdifModels(FlextModels):
                 raise ValueError(msg)
             return self
 
-    class LdifRecord(FlextModels.StrictArbitraryTypesModel):
+    class LdifRecord(FlextModels.ArbitraryTypesModel):
         """Individual LDIF record for Singer output."""
 
         stream: str = Field(..., description="Source stream name")
@@ -897,7 +897,7 @@ class FlextMeltanoTapLdifModels(FlextModels):
                 raise ValueError(msg)
             return self
 
-    class LdifValidationResult(FlextModels.StrictArbitraryTypesModel):
+    class LdifValidationResult(FlextModels.ArbitraryTypesModel):
         """LDIF validation result with detailed error reporting."""
 
         file_path: str = Field(..., description="Validated LDIF file path")
@@ -965,7 +965,7 @@ class FlextMeltanoTapLdifModels(FlextModels):
                 raise ValueError(msg)
             return self
 
-    class LdifPerformanceMetrics(FlextModels.StrictArbitraryTypesModel):
+    class LdifPerformanceMetrics(FlextModels.ArbitraryTypesModel):
         """Performance metrics for LDIF tap operations."""
 
         # File processing metrics
