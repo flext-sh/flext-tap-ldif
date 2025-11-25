@@ -173,7 +173,7 @@ class FlextMeltanoTapLdifProtocols:
                 """Track file processing progress."""
 
             def log_parsing_errors(
-                self, error: str, context: dict[str, object]
+                self, error: str, _context: dict[str, object]
             ) -> FlextResult[None]:
                 """Log parsing errors."""
 
