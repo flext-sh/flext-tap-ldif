@@ -5,6 +5,7 @@ This module provides data models for LDIF tap operations.
 
 from __future__ import annotations
 
+import base64
 from datetime import UTC, datetime
 from typing import Self
 
@@ -67,29 +68,13 @@ class FlextMeltanoTapLdifModels(FlextModels):
     @computed_field
     def active_ldif_tap_models_count(self) -> int:
         """Count of active LDIF tap models with file processing capabilities."""
-        count = 0
         # Count core Singer LDIF tap models
-        if hasattr(self, "LdifEntry"):
-            count += 1
-        if hasattr(self, "LdifChangeRecord"):
-            count += 1
-        if hasattr(self, "LdifFile"):
-            count += 1
-        if hasattr(self, "LdifStream"):
-            count += 1
-        if hasattr(self, "LdifBatch"):
-            count += 1
-        if hasattr(self, "LdifProcessingState"):
-            count += 1
-        if hasattr(self, "LdifTapConfig"):
-            count += 1
-        if hasattr(self, "LdifRecord"):
-            count += 1
-        if hasattr(self, "LdifValidationResult"):
-            count += 1
-        if hasattr(self, "LdifPerformanceMetrics"):
-            count += 1
-        return count
+        model_attrs = [
+            "LdifEntry", "LdifChangeRecord", "LdifFile", "LdifStream",
+            "LdifBatch", "LdifProcessingState", "LdifTapConfig",
+            "LdifRecord", "LdifValidationResult"
+        ]
+        return sum(1 for attr in model_attrs if hasattr(self, attr))
 
     @computed_field
     def ldif_tap_system_summary(self) -> dict[str, object]:
@@ -208,8 +193,6 @@ class FlextMeltanoTapLdifModels(FlextModels):
         def decode_base64_value(value: str) -> str:
             """Decode base64 encoded LDIF value."""
             try:
-                import base64
-
                 return base64.b64decode(value).decode("utf-8")
             except Exception:
                 return value
