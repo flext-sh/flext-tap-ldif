@@ -70,9 +70,15 @@ class FlextMeltanoTapLdifModels(FlextModels):
         """Count of active LDIF tap models with file processing capabilities."""
         # Count core Singer LDIF tap models
         model_attrs = [
-            "LdifEntry", "LdifChangeRecord", "LdifFile", "LdifStream",
-            "LdifBatch", "LdifProcessingState", "LdifTapConfig",
-            "LdifRecord", "LdifValidationResult"
+            "LdifEntry",
+            "LdifChangeRecord",
+            "LdifFile",
+            "LdifStream",
+            "LdifBatch",
+            "LdifProcessingState",
+            "LdifTapConfig",
+            "LdifRecord",
+            "LdifValidationResult",
         ]
         return sum(1 for attr in model_attrs if hasattr(self, attr))
 
