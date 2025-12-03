@@ -13,15 +13,15 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import ClassVar, override
 
-from flext_core import FlextResult, FlextUtilities
+from flext_core import FlextResult, u
 
 
-class FlextMeltanoTapLdifUtilities(FlextUtilities):
+class FlextMeltanoTapLdifUtilities(u):
     """Single unified utilities class for Singer tap LDIF operations.
 
     Follows FLEXT unified class pattern with nested helper classes for
     domain-specific Singer tap functionality with LDIF data sources.
-    Extends FlextUtilities with LDIF tap-specific operations.
+    Extends up-specific operations.
     """
 
     # Configuration constants

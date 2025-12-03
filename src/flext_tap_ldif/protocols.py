@@ -2,11 +2,11 @@
 
 from typing import Protocol, runtime_checkable
 
-from flext_core import FlextProtocols, FlextResult
+from flext_core import FlextResult, p
 
 
 class FlextMeltanoTapLdifProtocols:
-    """Singer Tap LDIF protocols with explicit re-exports from FlextProtocols foundation.
+    """Singer Tap LDIF protocols with explicit re-exports from p foundation.
 
     Domain Extension Pattern (Phase 3):
     - Explicit re-export of foundation protocols (not inheritance)
@@ -26,7 +26,7 @@ class FlextMeltanoTapLdifProtocols:
         """Singer Tap LDIF domain protocols for LDIF file processing and extraction."""
 
         @runtime_checkable
-        class LdifParsingProtocol(FlextProtocols.Service, Protocol):
+        class LdifParsingProtocol(p.Service, Protocol):
             """Protocol for LDIF file parsing operations."""
 
             def parse_ldif_file(
@@ -50,7 +50,7 @@ class FlextMeltanoTapLdifProtocols:
                 """Decode base64-encoded LDIF attributes."""
 
         @runtime_checkable
-        class LdifTransformationProtocol(FlextProtocols.Service, Protocol):
+        class LdifTransformationProtocol(p.Service, Protocol):
             """Protocol for LDIF data transformation operations."""
 
             def transform_to_singer_record(
@@ -74,7 +74,7 @@ class FlextMeltanoTapLdifProtocols:
                 """Apply field name mappings."""
 
         @runtime_checkable
-        class StreamGenerationProtocol(FlextProtocols.Service, Protocol):
+        class StreamGenerationProtocol(p.Service, Protocol):
             """Protocol for Singer stream generation from LDIF."""
 
             def discover_streams(
@@ -98,7 +98,7 @@ class FlextMeltanoTapLdifProtocols:
                 """Emit Singer messages for records."""
 
         @runtime_checkable
-        class ValidationProtocol(FlextProtocols.Service, Protocol):
+        class ValidationProtocol(p.Service, Protocol):
             """Protocol for LDIF validation operations."""
 
             def validate_ldif_syntax(self, file_path: str) -> FlextResult[bool]:
@@ -120,7 +120,7 @@ class FlextMeltanoTapLdifProtocols:
                 """Validate attribute values."""
 
         @runtime_checkable
-        class FileProcessingProtocol(FlextProtocols.Service, Protocol):
+        class FileProcessingProtocol(p.Service, Protocol):
             """Protocol for LDIF file processing operations."""
 
             def process_file_stream(
@@ -144,7 +144,7 @@ class FlextMeltanoTapLdifProtocols:
                 """Merge multiple LDIF files."""
 
         @runtime_checkable
-        class PerformanceProtocol(FlextProtocols.Service, Protocol):
+        class PerformanceProtocol(p.Service, Protocol):
             """Protocol for LDIF processing performance operations."""
 
             def optimize_parsing(
@@ -164,7 +164,7 @@ class FlextMeltanoTapLdifProtocols:
                 """Monitor processing speed metrics."""
 
         @runtime_checkable
-        class MonitoringProtocol(FlextProtocols.Service, Protocol):
+        class MonitoringProtocol(p.Service, Protocol):
             """Protocol for LDIF processing monitoring."""
 
             def track_file_progress(
