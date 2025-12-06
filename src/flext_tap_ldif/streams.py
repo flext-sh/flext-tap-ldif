@@ -87,7 +87,7 @@ class LDIFEntriesStream(Stream):
             FlextMeltanoTypes.Singer.Typing.Property(
                 "object_class",
                 FlextMeltanoTypes.Singer.Typing.ArrayType(
-                    FlextMeltanoTypes.Singer.Typing.StringType
+                    FlextMeltanoTypes.Singer.Typing.StringType,
                 ),
                 description="Object classes",
             ),

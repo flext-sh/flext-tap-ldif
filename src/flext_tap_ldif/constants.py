@@ -22,7 +22,7 @@ class FlextMeltanoTapLdifConstants(FlextConstants):
     # LDIF File Configuration using composition
     DEFAULT_LDIF_ENCODING = FlextLdifConstants.Encoding.DEFAULT_ENCODING
     SUPPORTED_ENCODINGS: ClassVar[list[str]] = list(
-        FlextLdifConstants.Encoding.SUPPORTED_ENCODINGS
+        FlextLdifConstants.Encoding.SUPPORTED_ENCODINGS,
     )
 
     # Singer Tap Configuration - using FlextConstants composition
