@@ -56,7 +56,7 @@ class FlextMeltanoTapLdifModels(FlextModels):
                     "tap_name": "tap-ldif",
                     "extraction_mode": "batch_file_processing",
                     "ldif_source": "/data/directory-export.ldif",
-                }
+                },
             ],
             "tags": ["singer", "ldif", "tap", "extraction", "file-processing"],
             "version": "2.11.0",
@@ -145,7 +145,9 @@ class FlextMeltanoTapLdifModels(FlextModels):
 
     @field_serializer("*", when_used="json")
     def serialize_with_ldif_metadata(
-        self, value: object, _info: FieldSerializationInfo
+        self,
+        value: object,
+        _info: FieldSerializationInfo,
     ) -> object:
         """Add Singer LDIF tap metadata to all serialized fields."""
         if isinstance(value, dict):
@@ -159,7 +161,8 @@ class FlextMeltanoTapLdifModels(FlextModels):
                 },
             }
         if isinstance(value, (str, int, float, bool)) and hasattr(
-            self, "_include_ldif_metadata"
+            self,
+            "_include_ldif_metadata",
         ):
             return {
                 "value": value,
@@ -222,25 +225,29 @@ class FlextMeltanoTapLdifModels(FlextModels):
                     {
                         "dn": "cn=John Doe,ou=users,dc=example,dc=com",
                         "object_classes": ["inetOrgPerson", "organizationalPerson"],
-                    }
+                    },
                 ],
             },
         )
 
         dn: str = Field(..., description="Distinguished Name")
         attributes: dict[str, list[str]] = Field(
-            default_factory=dict, description="Entry attributes"
+            default_factory=dict,
+            description="Entry attributes",
         )
         object_classes: list[str] = Field(
-            default_factory=list, description="Object classes"
+            default_factory=list,
+            description="Object classes",
         )
 
         # LDIF metadata
         line_number: int = Field(
-            default=0, description="Source line number in LDIF file"
+            default=0,
+            description="Source line number in LDIF file",
         )
         source_file: str | None = Field(
-            default=None, description="Source LDIF file path"
+            default=None,
+            description="Source LDIF file path",
         )
         entry_type: str = Field(default="entry", description="Type of LDIF entry")
 
@@ -251,7 +258,8 @@ class FlextMeltanoTapLdifModels(FlextModels):
         )
         processed: bool = Field(default=False, description="Processing status")
         validation_errors: list[str] = Field(
-            default_factory=list, description="Validation errors"
+            default_factory=list,
+            description="Validation errors",
         )
 
         @computed_field
@@ -310,22 +318,25 @@ class FlextMeltanoTapLdifModels(FlextModels):
                         "dn": "cn=John Doe,ou=users,dc=example,dc=com",
                         "change_type": "modify",
                         "changes": [{"action": "replace", "attribute": "mail"}],
-                    }
+                    },
                 ],
             },
         )
 
         dn: str = Field(..., description="Distinguished Name")
         change_type: str = Field(
-            ..., description="Type of change (add, modify, delete, modrdn)"
+            ...,
+            description="Type of change (add, modify, delete, modrdn)",
         )
         changes: list[dict[str, object]] = Field(
-            default_factory=list, description="List of changes"
+            default_factory=list,
+            description="List of changes",
         )
 
         # Change metadata
         changetype: str | None = Field(
-            default=None, description="LDIF changetype directive"
+            default=None,
+            description="LDIF changetype directive",
         )
         line_number: int = Field(default=0, description="Source line number")
         source_file: str | None = Field(default=None, description="Source LDIF file")
@@ -337,7 +348,8 @@ class FlextMeltanoTapLdifModels(FlextModels):
         )
         applied: bool = Field(default=False, description="Change application status")
         application_errors: list[str] = Field(
-            default_factory=list, description="Application errors"
+            default_factory=list,
+            description="Application errors",
         )
 
         @computed_field
@@ -381,7 +393,7 @@ class FlextMeltanoTapLdifModels(FlextModels):
                         "file_path": "/data/directory-export.ldif",
                         "file_size": 1048576,
                         "encoding": "utf-8",
-                    }
+                    },
                 ],
             },
         )
@@ -392,35 +404,42 @@ class FlextMeltanoTapLdifModels(FlextModels):
 
         # File metadata
         created_at: datetime | None = Field(
-            default=None, description="File creation time"
+            default=None,
+            description="File creation time",
         )
         modified_at: datetime | None = Field(
-            default=None, description="File modification time"
+            default=None,
+            description="File modification time",
         )
 
         # Processing statistics
         total_lines: int = Field(default=0, description="Total lines in file")
         entry_count: int = Field(default=0, description="Number of entries")
         change_record_count: int = Field(
-            default=0, description="Number of change records"
+            default=0,
+            description="Number of change records",
         )
         comment_lines: int = Field(default=0, description="Number of comment lines")
 
         # Processing state
         processing_status: str = Field(
-            default="pending", description="Processing status"
+            default="pending",
+            description="Processing status",
         )
         last_processed_line: int = Field(
-            default=0, description="Last processed line number"
+            default=0,
+            description="Last processed line number",
         )
         processing_errors: list[str] = Field(
-            default_factory=list, description="Processing errors"
+            default_factory=list,
+            description="Processing errors",
         )
 
         # Validation results
         is_valid_ldif: bool = Field(default=True, description="LDIF format validity")
         validation_errors: list[str] = Field(
-            default_factory=list, description="Format validation errors"
+            default_factory=list,
+            description="Format validation errors",
         )
 
         @computed_field
@@ -475,7 +494,7 @@ class FlextMeltanoTapLdifModels(FlextModels):
                         "stream_name": "ldif_entries",
                         "file_path": "/data/users.ldif",
                         "replication_method": "FULL_TABLE",
-                    }
+                    },
                 ],
             },
         )
@@ -486,18 +505,22 @@ class FlextMeltanoTapLdifModels(FlextModels):
         # Singer stream configuration
         tap_stream_id: str = Field(..., description="Singer tap stream ID")
         replication_method: str = Field(
-            default="FULL_TABLE", description="Replication method"
+            default="FULL_TABLE",
+            description="Replication method",
         )
         key_properties: list[str] = Field(
-            default_factory=lambda: ["dn"], description="Key properties"
+            default_factory=lambda: ["dn"],
+            description="Key properties",
         )
 
         # LDIF-specific settings
         include_change_records: bool = Field(
-            default=True, description="Include LDIF change records"
+            default=True,
+            description="Include LDIF change records",
         )
         filter_object_classes: list[str] = Field(
-            default_factory=list, description="Filter by object classes"
+            default_factory=list,
+            description="Filter by object classes",
         )
         batch_size: int = Field(
             default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE,
@@ -506,10 +529,12 @@ class FlextMeltanoTapLdifModels(FlextModels):
 
         # Stream schema
         schema: dict[str, object] = Field(
-            default_factory=dict, description="JSON schema"
+            default_factory=dict,
+            description="JSON schema",
         )
         metadata: list[dict[str, object]] = Field(
-            default_factory=list, description="Stream metadata"
+            default_factory=list,
+            description="Stream metadata",
         )
 
         @computed_field
@@ -556,7 +581,7 @@ class FlextMeltanoTapLdifModels(FlextModels):
                         "batch_id": "batch_001",
                         "file_paths": ["/data/users.ldif", "/data/groups.ldif"],
                         "batch_size": 1000,
-                    }
+                    },
                 ],
             },
         )
@@ -570,7 +595,8 @@ class FlextMeltanoTapLdifModels(FlextModels):
 
         # Processing configuration
         parallel_processing: bool = Field(
-            default=False, description="Enable parallel processing"
+            default=False,
+            description="Enable parallel processing",
         )
         max_workers: int = Field(default=4, description="Maximum worker threads")
         error_threshold: int = Field(
@@ -581,22 +607,26 @@ class FlextMeltanoTapLdifModels(FlextModels):
         # Batch state
         status: str = Field(default="pending", description="Batch processing status")
         started_at: datetime | None = Field(
-            default=None, description="Batch start time"
+            default=None,
+            description="Batch start time",
         )
         completed_at: datetime | None = Field(
-            default=None, description="Batch completion time"
+            default=None,
+            description="Batch completion time",
         )
 
         # Processing metrics
         files_processed: int = Field(default=0, description="Number of files processed")
         entries_processed: int = Field(default=0, description="Total entries processed")
         errors_encountered: int = Field(
-            default=0, description="Total errors encountered"
+            default=0,
+            description="Total errors encountered",
         )
 
         # Error tracking
         file_errors: dict[str, list[str]] = Field(
-            default_factory=dict, description="Errors by file"
+            default_factory=dict,
+            description="Errors by file",
         )
 
         @computed_field
@@ -658,40 +688,47 @@ class FlextMeltanoTapLdifModels(FlextModels):
                         "file_path": "/data/users.ldif",
                         "entries_processed": 5000,
                         "processing_status": "in_progress",
-                    }
+                    },
                 ],
             },
         )
 
         file_path: str = Field(..., description="LDIF file being processed")
         processing_status: str = Field(
-            default="pending", description="Processing status"
+            default="pending",
+            description="Processing status",
         )
 
         # Progress tracking
         current_line: int = Field(default=0, description="Current line being processed")
         entries_processed: int = Field(default=0, description="Entries processed")
         change_records_processed: int = Field(
-            default=0, description="Change records processed"
+            default=0,
+            description="Change records processed",
         )
 
         # Timing information
         started_at: datetime | None = Field(
-            default=None, description="Processing start time"
+            default=None,
+            description="Processing start time",
         )
         last_update: datetime = Field(
-            default_factory=lambda: datetime.now(UTC), description="Last state update"
+            default_factory=lambda: datetime.now(UTC),
+            description="Last state update",
         )
         estimated_completion: datetime | None = Field(
-            default=None, description="Estimated completion time"
+            default=None,
+            description="Estimated completion time",
         )
 
         # Error tracking
         processing_errors: list[dict[str, object]] = Field(
-            default_factory=list, description="Processing errors with context"
+            default_factory=list,
+            description="Processing errors with context",
         )
         recoverable_errors: int = Field(
-            default=0, description="Recoverable error count"
+            default=0,
+            description="Recoverable error count",
         )
         fatal_errors: int = Field(default=0, description="Fatal error count")
 
@@ -759,20 +796,23 @@ class FlextMeltanoTapLdifModels(FlextModels):
                         "ldif_directory": "/data/ldif",
                         "file_patterns": ["*.ldif"],
                         "batch_size": 1000,
-                    }
+                    },
                 ],
             },
         )
 
         # File configuration
         ldif_directory: str | None = Field(
-            default=None, description="LDIF files directory"
+            default=None,
+            description="LDIF files directory",
         )
         file_patterns: list[str] = Field(
-            default_factory=lambda: ["*.ldif"], description="LDIF file patterns"
+            default_factory=lambda: ["*.ldif"],
+            description="LDIF file patterns",
         )
         recursive_search: bool = Field(
-            default=False, description="Recursive directory search"
+            default=False,
+            description="Recursive directory search",
         )
 
         # Processing configuration
@@ -781,13 +821,15 @@ class FlextMeltanoTapLdifModels(FlextModels):
             description="Processing batch size",
         )
         parallel_processing: bool = Field(
-            default=False, description="Enable parallel processing"
+            default=False,
+            description="Enable parallel processing",
         )
         max_workers: int = Field(default=4, description="Maximum worker threads")
 
         # Error handling
         continue_on_error: bool = Field(
-            default=True, description="Continue processing on errors"
+            default=True,
+            description="Continue processing on errors",
         )
         max_errors: int = Field(
             default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE,
@@ -798,10 +840,12 @@ class FlextMeltanoTapLdifModels(FlextModels):
         # Output configuration
         output_format: str = Field(default="jsonl", description="Output format")
         include_metadata: bool = Field(
-            default=True, description="Include processing metadata"
+            default=True,
+            description="Include processing metadata",
         )
         compress_output: bool = Field(
-            default=False, description="Compress output files"
+            default=False,
+            description="Compress output files",
         )
 
         @computed_field
@@ -858,7 +902,8 @@ class FlextMeltanoTapLdifModels(FlextModels):
             description="Extraction timestamp",
         )
         processing_time: float = Field(
-            default=0.0, description="Processing time in seconds"
+            default=0.0,
+            description="Processing time in seconds",
         )
 
         @computed_field
@@ -894,10 +939,12 @@ class FlextMeltanoTapLdifModels(FlextModels):
 
         # Validation results
         validation_errors: list[dict[str, object]] = Field(
-            default_factory=list, description="Validation errors with details"
+            default_factory=list,
+            description="Validation errors with details",
         )
         warnings: list[dict[str, object]] = Field(
-            default_factory=list, description="Validation warnings"
+            default_factory=list,
+            description="Validation warnings",
         )
 
         # Statistics
@@ -907,7 +954,8 @@ class FlextMeltanoTapLdifModels(FlextModels):
 
         # Validation metadata
         validation_time: float = Field(
-            default=0.0, description="Validation time in seconds"
+            default=0.0,
+            description="Validation time in seconds",
         )
         validator_version: str = Field(default="1.0", description="Validator version")
 
@@ -965,30 +1013,35 @@ class FlextMeltanoTapLdifModels(FlextModels):
         # Entry processing metrics
         total_entries: int = Field(default=0, description="Total entries processed")
         entries_per_file: float = Field(
-            default=0.0, description="Average entries per file"
+            default=0.0,
+            description="Average entries per file",
         )
         processing_rate: float = Field(default=0.0, description="Entries per second")
 
         # Time metrics
         total_processing_time: float = Field(
-            default=0.0, description="Total processing time"
+            default=0.0,
+            description="Total processing time",
         )
         average_processing_time: float = Field(
-            default=0.0, description="Average time per file"
+            default=0.0,
+            description="Average time per file",
         )
         parsing_time: float = Field(default=0.0, description="Time spent parsing")
         validation_time: float = Field(default=0.0, description="Time spent validating")
 
         # Quality metrics
         successful_files: int = Field(
-            default=0, description="Successfully processed files"
+            default=0,
+            description="Successfully processed files",
         )
         failed_files: int = Field(default=0, description="Failed file processing")
         total_errors: int = Field(default=0, description="Total processing errors")
 
         # Resource metrics
         peak_memory_usage: int = Field(
-            default=0, description="Peak memory usage in bytes"
+            default=0,
+            description="Peak memory usage in bytes",
         )
         average_memory_usage: int = Field(default=0, description="Average memory usage")
 

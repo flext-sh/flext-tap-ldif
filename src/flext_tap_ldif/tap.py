@@ -64,21 +64,21 @@ class TapLDIF(Tap):
             FlextMeltanoTypes.Singer.Typing.Property(
                 "object_class_filter",
                 FlextMeltanoTypes.Singer.Typing.ArrayType(
-                    FlextMeltanoTypes.Singer.Typing.StringType
+                    FlextMeltanoTypes.Singer.Typing.StringType,
                 ),
                 description="Filter entries by object class",
             ),
             FlextMeltanoTypes.Singer.Typing.Property(
                 "attribute_filter",
                 FlextMeltanoTypes.Singer.Typing.ArrayType(
-                    FlextMeltanoTypes.Singer.Typing.StringType
+                    FlextMeltanoTypes.Singer.Typing.StringType,
                 ),
                 description="Include only specified attributes",
             ),
             FlextMeltanoTypes.Singer.Typing.Property(
                 "exclude_attributes",
                 FlextMeltanoTypes.Singer.Typing.ArrayType(
-                    FlextMeltanoTypes.Singer.Typing.StringType
+                    FlextMeltanoTypes.Singer.Typing.StringType,
                 ),
                 description="Exclude specified attributes",
             ),
@@ -131,7 +131,7 @@ class TapLDIF(Tap):
             FlextMeltanoTypes.Singer.Typing.Property(
                 "object_class",
                 FlextMeltanoTypes.Singer.Typing.ArrayType(
-                    FlextMeltanoTypes.Singer.Typing.StringType
+                    FlextMeltanoTypes.Singer.Typing.StringType,
                 ),
                 description="Object classes",
             ),

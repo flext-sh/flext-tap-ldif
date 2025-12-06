@@ -7,21 +7,21 @@ from collections.abc import Generator
 from pathlib import Path
 
 import pytest
-from flext_tests import FlextTestDocker
+from flext_tests import FlextTestsDocker
 
 # Import shared LDAP fixtures from docker directory
 
 
-# Docker container management with FlextTestDocker
+# Docker container management with FlextTestsDocker
 @pytest.fixture(scope="session")
-def docker_control() -> FlextTestDocker:
+def docker_control() -> FlextTestsDocker:
     """Provide Docker control instance for tests."""
-    return FlextTestDocker()
+    return FlextTestsDocker()
 
 
 @pytest.fixture(scope="session")
-def shared_ldap_container(docker_control: FlextTestDocker) -> FlextTestDocker:
-    """Managed LDAP container using FlextTestDocker with auto-start."""
+def shared_ldap_container(docker_control: FlextTestsDocker) -> FlextTestsDocker:
+    """Managed LDAP container using FlextTestsDocker with auto-start."""
     result = docker_control.start_container("flext-openldap-test")
     if result.is_failure:
         pytest.skip(f"Failed to start LDAP container: {result.error}")
