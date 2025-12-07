@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import ClassVar
+from typing import ClassVar, Final
 
 from flext_core import FlextConstants
 from flext_ldif.constants import FlextLdifConstants
@@ -20,53 +20,83 @@ class FlextMeltanoTapLdifConstants(FlextConstants):
     """
 
     # LDIF File Configuration using composition
-    DEFAULT_LDIF_ENCODING = FlextLdifConstants.Encoding.DEFAULT_ENCODING
-    SUPPORTED_ENCODINGS: ClassVar[list[str]] = list(
-        FlextLdifConstants.Encoding.SUPPORTED_ENCODINGS,
+    DEFAULT_LDIF_ENCODING: Final[str] = (
+        FlextLdifConstants.Ldif.DEFAULT_ENCODING
+    )
+    SUPPORTED_ENCODINGS: ClassVar[frozenset[str]] = (
+        FlextLdifConstants.Ldif.SUPPORTED_ENCODINGS
     )
 
     # Singer Tap Configuration - using FlextConstants composition
-    DEFAULT_BATCH_SIZE = FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE
-    MAX_BATCH_SIZE = FlextConstants.Performance.BatchProcessing.MAX_ITEMS
-    MAX_FILE_SIZE_MB = 100
+    # Note: DEFAULT_BATCH_SIZE inherited from FlextConstants (Final, cannot override)
+    MAX_BATCH_SIZE: Final[int] = (
+        FlextConstants.Performance.BatchProcessing.MAX_ITEMS
+    )
+    MAX_FILE_SIZE_MB: Final[int] = 100
 
-    # LDIF Change Types from FlextMeltanoTapLdifConstants
+    # LDIF Change Types from FlextLdifConstants
     LDIF_CHANGE_TYPES: ClassVar[list[str]] = [
-        FlextLdifConstants.EntryModification.ADD,
-        FlextLdifConstants.EntryModification.MODIFY,
-        FlextLdifConstants.EntryModification.DELETE,
-        FlextLdifConstants.EntryModification.MODRDN,
+        FlextLdifConstants.Ldif.EntryModification.ADD,
+        FlextLdifConstants.Ldif.EntryModification.MODIFY,
+        FlextLdifConstants.Ldif.EntryModification.DELETE,
+        FlextLdifConstants.Ldif.EntryModification.MODRDN,
     ]
 
-    class Processing:
-        """LDIF processing configuration."""
+    class TapLdifProcessing:
+        """LDIF tap processing configuration.
 
-        MIN_WORKERS_FOR_PARALLEL = (
-            FlextLdifConstants.Processing.MIN_WORKERS_FOR_PARALLEL
+        Note: Does not override parent Processing class to avoid inheritance conflicts.
+        """
+
+        MIN_WORKERS_FOR_PARALLEL: Final[int] = (
+            FlextLdifConstants.Ldif.LdifProcessing.MIN_WORKERS_FOR_PARALLEL
         )
-        MAX_WORKERS_LIMIT = FlextLdifConstants.Processing.MAX_WORKERS_LIMIT
-        PERFORMANCE_MIN_CHUNK_SIZE = (
-            FlextLdifConstants.Processing.PERFORMANCE_MIN_CHUNK_SIZE
+        MAX_WORKERS_LIMIT: Final[int] = (
+            FlextLdifConstants.Ldif.LdifProcessing.MAX_WORKERS_LIMIT
         )
-        MIN_ENTRIES = FlextLdifConstants.Processing.MIN_ENTRIES
+        PERFORMANCE_MIN_CHUNK_SIZE: Final[int] = (
+            FlextLdifConstants.Ldif.LdifProcessing.PERFORMANCE_MIN_CHUNK_SIZE
+        )
+        MIN_ENTRIES: Final[int] = (
+            FlextLdifConstants.Ldif.LdifProcessing.MIN_ENTRIES
+        )
 
     class Format:
         """LDIF format specifications."""
 
-        DN_ATTRIBUTE = FlextLdifConstants.Format.DN_ATTRIBUTE
-        ATTRIBUTE_SEPARATOR = FlextLdifConstants.Format.ATTRIBUTE_SEPARATOR
-        MAX_LINE_LENGTH = FlextLdifConstants.Format.MAX_LINE_LENGTH
-        BASE64_PREFIX = FlextLdifConstants.Format.BASE64_PREFIX
-        COMMENT_PREFIX = FlextLdifConstants.Format.COMMENT_PREFIX
+        DN_ATTRIBUTE: Final[str] = (
+            FlextLdifConstants.Ldif.Format.DN_ATTRIBUTE
+        )
+        ATTRIBUTE_SEPARATOR: Final[str] = (
+            FlextLdifConstants.Ldif.Format.ATTRIBUTE_SEPARATOR
+        )
+        MAX_LINE_LENGTH: Final[int] = (
+            FlextLdifConstants.Ldif.Format.MAX_LINE_LENGTH
+        )
+        BASE64_PREFIX: Final[str] = (
+            FlextLdifConstants.Ldif.Format.BASE64_PREFIX
+        )
+        COMMENT_PREFIX: Final[str] = (
+            FlextLdifConstants.Ldif.Format.COMMENT_PREFIX
+        )
 
-    class Validation:
-        """LDIF validation constants."""
+    class TapLdifValidation:
+        """LDIF tap validation constants.
 
-        MIN_DN_COMPONENTS = FlextLdifConstants.LdifValidation.MIN_DN_COMPONENTS
-        MAX_DN_LENGTH = FlextLdifConstants.LdifValidation.MAX_DN_LENGTH
-        MAX_ATTRIBUTES_PER_ENTRY = (
-            FlextLdifConstants.LdifValidation.MAX_ATTRIBUTES_PER_ENTRY
+        Note: Does not override parent Validation class to avoid inheritance conflicts.
+        """
+
+        MIN_DN_COMPONENTS: Final[int] = (
+            FlextLdifConstants.Ldif.LdifValidation.MIN_DN_COMPONENTS
+        )
+        MAX_DN_LENGTH: Final[int] = (
+            FlextLdifConstants.Ldif.LdifValidation.MAX_DN_LENGTH
+        )
+        MAX_ATTRIBUTES_PER_ENTRY: Final[int] = (
+            FlextLdifConstants.Ldif.LdifValidation.MAX_ATTRIBUTES_PER_ENTRY
         )
 
 
-__all__ = ["FlextMeltanoTapLdifConstants"]
+c = FlextMeltanoTapLdifConstants
+
+__all__ = ["FlextMeltanoTapLdifConstants", "c"]
