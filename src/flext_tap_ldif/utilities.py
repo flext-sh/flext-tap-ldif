@@ -285,12 +285,10 @@ class FlextMeltanoTapLdifUtilities(u_core):
                         decoded_value = base64.b64decode(encoded_value.strip()).decode(
                             "utf-8",
                         )
-                        return FlextResult[tuple[str, str]].ok(
-                            (
-                                attr_name.strip(),
-                                decoded_value,
-                            )
-                        )
+                        return FlextResult[tuple[str, str]].ok((
+                            attr_name.strip(),
+                            decoded_value,
+                        ))
                     except Exception as e:
                         return FlextResult[tuple[str, str]].fail(
                             f"Base64 decode error: {e}",
@@ -299,21 +297,17 @@ class FlextMeltanoTapLdifUtilities(u_core):
                 # Handle URL values (:<)
                 if ":<" in line:
                     attr_name, url_value = line.split(":<", 1)
-                    return FlextResult[tuple[str, str]].ok(
-                        (
-                            attr_name.strip(),
-                            f"URL:{url_value.strip()}",
-                        )
-                    )
+                    return FlextResult[tuple[str, str]].ok((
+                        attr_name.strip(),
+                        f"URL:{url_value.strip()}",
+                    ))
 
                 # Handle regular values (:)
                 attr_name, value = line.split(":", 1)
-                return FlextResult[tuple[str, str]].ok(
-                    (
-                        attr_name.strip(),
-                        value.strip(),
-                    )
-                )
+                return FlextResult[tuple[str, str]].ok((
+                    attr_name.strip(),
+                    value.strip(),
+                ))
 
             except Exception as e:
                 return FlextResult[tuple[str, str]].fail(
