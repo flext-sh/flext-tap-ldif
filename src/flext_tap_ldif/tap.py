@@ -15,8 +15,8 @@ from flext_core import FlextConstants, FlextLogger
 from flext_meltano import (
     FlextMeltanoStream as Stream,
     FlextMeltanoTap as Tap,
-    FlextMeltanoTypes,
 )
+from flext_meltano.typings import t as t_meltano
 
 from flext_tap_ldif.config import FlextMeltanoTapLdifConfig
 from flext_tap_ldif.streams import LDIFEntriesStream
@@ -31,72 +31,72 @@ class TapLDIF(Tap):
     config_class = FlextMeltanoTapLdifConfig
     # Schema combining file-based configuration with LDIF-specific properties
     config_jsonschema: ClassVar[dict[str, object]] = (
-        FlextMeltanoTypes.Singer.Typing.PropertiesList(
+        t_meltano.Singer.Typing.PropertiesList(
             # File-based properties
-            FlextMeltanoTypes.Singer.Typing.Property(
+            t_meltano.Singer.Typing.Property(
                 "file_path",
-                FlextMeltanoTypes.Singer.Typing.StringType,
+                t_meltano.Singer.Typing.StringType,
                 description="Path to single LDIF file",
             ),
-            FlextMeltanoTypes.Singer.Typing.Property(
+            t_meltano.Singer.Typing.Property(
                 "directory_path",
-                FlextMeltanoTypes.Singer.Typing.StringType,
+                t_meltano.Singer.Typing.StringType,
                 description="Directory containing LDIF files",
             ),
-            FlextMeltanoTypes.Singer.Typing.Property(
+            t_meltano.Singer.Typing.Property(
                 "file_pattern",
-                FlextMeltanoTypes.Singer.Typing.StringType,
+                t_meltano.Singer.Typing.StringType,
                 default="*.ldif",
                 description="File pattern for matching LDIF files in directory",
             ),
-            FlextMeltanoTypes.Singer.Typing.Property(
+            t_meltano.Singer.Typing.Property(
                 "encoding",
-                FlextMeltanoTypes.Singer.Typing.StringType,
+                t_meltano.Singer.Typing.StringType,
                 default="utf-8",
                 description="Text encoding for LDIF files",
             ),
             # LDIF-specific additional properties
-            FlextMeltanoTypes.Singer.Typing.Property(
+            t_meltano.Singer.Typing.Property(
                 "base_dn_filter",
-                FlextMeltanoTypes.Singer.Typing.StringType,
+                t_meltano.Singer.Typing.StringType,
                 description="Filter entries by base DN pattern",
             ),
-            FlextMeltanoTypes.Singer.Typing.Property(
+            t_meltano.Singer.Typing.Property(
                 "object_class_filter",
-                FlextMeltanoTypes.Singer.Typing.ArrayType(
-                    FlextMeltanoTypes.Singer.Typing.StringType,
+                t_meltano.Singer.Typing.ArrayType(
+                    t_meltano.Singer.Typing.StringType,
                 ),
                 description="Filter entries by object class",
             ),
-            FlextMeltanoTypes.Singer.Typing.Property(
+            t_meltano.Singer.Typing.Property(
                 "attribute_filter",
-                FlextMeltanoTypes.Singer.Typing.ArrayType(
-                    FlextMeltanoTypes.Singer.Typing.StringType,
+                t_meltano.Singer.Typing.ArrayType(
+                    t_meltano.Singer.Typing.StringType,
                 ),
                 description="Include only specified attributes",
             ),
-            FlextMeltanoTypes.Singer.Typing.Property(
+            t_meltano.Singer.Typing.Property(
                 "exclude_attributes",
-                FlextMeltanoTypes.Singer.Typing.ArrayType(
-                    FlextMeltanoTypes.Singer.Typing.StringType,
+                t_meltano.Singer.Typing.ArrayType(
+                    t_meltano.Singer.Typing.StringType,
                 ),
                 description="Exclude specified attributes",
             ),
-            FlextMeltanoTypes.Singer.Typing.Property(
+            t_meltano.Singer.Typing.Property(
                 "include_operational_attributes",
-                FlextMeltanoTypes.Singer.Typing.BooleanType,
+                t_meltano.Singer.Typing.BooleanType,
                 default=False,
                 description="Include operational attributes in output",
             ),
-            FlextMeltanoTypes.Singer.Typing.Property(
+            t_meltano.Singer.Typing.Property(
                 "strict_parsing",
-                FlextMeltanoTypes.Singer.Typing.BooleanType,
+                t_meltano.Singer.Typing.BooleanType,
                 default=True,
                 description="Enable strict LDIF parsing (fail on errors)",
             ),
-            FlextMeltanoTypes.Singer.Typing.Property(
+            t_meltano.Singer.Typing.Property(
                 "max_file_size_mb",
-                FlextMeltanoTypes.Singer.Typing.IntegerType,
+                t_meltano.Singer.Typing.IntegerType,
                 default=FlextConstants.Logging.MAX_FILE_SIZE // (1024 * 1024),
                 description="Maximum file size in MB to process",
             ),
@@ -121,43 +121,43 @@ class TapLDIF(Tap):
         Schema definition for LDIF entries.
 
         """
-        return FlextMeltanoTypes.Singer.Typing.PropertiesList(
-            FlextMeltanoTypes.Singer.Typing.Property(
+        return t_meltano.Singer.Typing.PropertiesList(
+            t_meltano.Singer.Typing.Property(
                 "dn",
-                FlextMeltanoTypes.Singer.Typing.StringType,
+                t_meltano.Singer.Typing.StringType,
                 required=True,
                 description="Distinguished Name",
             ),
-            FlextMeltanoTypes.Singer.Typing.Property(
+            t_meltano.Singer.Typing.Property(
                 "object_class",
-                FlextMeltanoTypes.Singer.Typing.ArrayType(
-                    FlextMeltanoTypes.Singer.Typing.StringType,
+                t_meltano.Singer.Typing.ArrayType(
+                    t_meltano.Singer.Typing.StringType,
                 ),
                 description="Object classes",
             ),
-            FlextMeltanoTypes.Singer.Typing.Property(
+            t_meltano.Singer.Typing.Property(
                 "attributes",
-                FlextMeltanoTypes.Singer.Typing.ObjectType(),
+                t_meltano.Singer.Typing.ObjectType(),
                 description="LDAP attributes",
             ),
-            FlextMeltanoTypes.Singer.Typing.Property(
+            t_meltano.Singer.Typing.Property(
                 "change_type",
-                FlextMeltanoTypes.Singer.Typing.StringType,
+                t_meltano.Singer.Typing.StringType,
                 description="LDIF change type",
             ),
-            FlextMeltanoTypes.Singer.Typing.Property(
+            t_meltano.Singer.Typing.Property(
                 "source_file",
-                FlextMeltanoTypes.Singer.Typing.StringType,
+                t_meltano.Singer.Typing.StringType,
                 description="Source LDIF file",
             ),
-            FlextMeltanoTypes.Singer.Typing.Property(
+            t_meltano.Singer.Typing.Property(
                 "line_number",
-                FlextMeltanoTypes.Singer.Typing.IntegerType,
+                t_meltano.Singer.Typing.IntegerType,
                 description="Line number in source file",
             ),
-            FlextMeltanoTypes.Singer.Typing.Property(
+            t_meltano.Singer.Typing.Property(
                 "entry_size",
-                FlextMeltanoTypes.Singer.Typing.IntegerType,
+                t_meltano.Singer.Typing.IntegerType,
                 description="Size of entry in bytes",
             ),
         ).to_dict()

@@ -10,6 +10,7 @@ from datetime import UTC, datetime
 from typing import Self
 
 from flext_core import FlextConstants, FlextModels
+from flext_core.utilities import u
 from pydantic import (
     ConfigDict,
     Field,
@@ -36,6 +37,14 @@ class FlextMeltanoTapLdifModels(FlextModels):
     All nested classes inherit FlextModels validation and patterns.
     Consolidates ALL models for LDIF file extraction and processing.
     """
+
+    def __init_subclass__(cls, **kwargs: object) -> None:
+        """Warn when FlextMeltanoTapLdifModels is subclassed directly."""
+        super().__init_subclass__(**kwargs)
+        u.Deprecation.warn_once(
+            f"subclass:{cls.__name__}",
+            "Subclassing FlextMeltanoTapLdifModels is deprecated. Use FlextModels.TapLdif instead.",
+        )
 
     # Pydantic 2.11 Configuration - Enterprise Singer LDIF Tap Features
     model_config = ConfigDict(
@@ -1104,8 +1113,14 @@ class FlextMeltanoTapLdifModels(FlextModels):
 # Note: FlextMeltanoTapLdifUtilities imported at top for proper organization
 
 
+# Short aliases
+m = FlextMeltanoTapLdifModels
+m_tap_ldif = FlextMeltanoTapLdifModels
+
 # Public API exports following FLEXT standardized patterns
 __all__ = [
     "FlextMeltanoTapLdifModels",  # Unified models class
     "FlextMeltanoTapLdifUtilities",  # Standardized [Project]Utilities pattern
+    "m",  # Short alias
+    "m_tap_ldif",  # Domain-specific alias
 ]
