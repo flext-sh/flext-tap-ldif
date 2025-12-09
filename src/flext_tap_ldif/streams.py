@@ -10,17 +10,16 @@ from __future__ import annotations
 import tempfile
 from collections.abc import Iterable, Mapping
 from pathlib import Path
-from typing import TYPE_CHECKING, override
+from typing import override
 
 from flext_core import FlextLogger
 
 # Use FLEXT Meltano wrappers instead of direct singer_sdk imports (domain separation)
-from flext_meltano import FlextMeltanoStream as Stream, FlextMeltanoTypes
+from flext_meltano import FlextMeltanoStream as Stream
+from flext_meltano.typings import t as t_meltano
 
 from flext_tap_ldif.ldif_processor import FlextLdifProcessorWrapper
-
-if TYPE_CHECKING:
-    from flext_tap_ldif.tap import TapLDIF
+from flext_tap_ldif.protocols import TapProtocol
 
 logger = FlextLogger(__name__)
 
@@ -29,7 +28,7 @@ class LDIFEntriesStream(Stream):
     """LDIF entries stream using flext-ldif for ALL processing."""
 
     @override
-    def __init__(self, tap: TapLDIF) -> None:
+    def __init__(self, tap: TapProtocol) -> None:
         """Initialize LDIF entries stream.
 
         Args:
@@ -73,42 +72,42 @@ class LDIFEntriesStream(Stream):
 
     def _get_schema(self: object) -> dict[str, object]:
         """Get schema for LDIF entries."""
-        return FlextMeltanoTypes.Singer.Typing.PropertiesList(
-            FlextMeltanoTypes.Singer.Typing.Property(
+        return t_meltano.Singer.Typing.PropertiesList(
+            t_meltano.Singer.Typing.Property(
                 "dn",
-                FlextMeltanoTypes.Singer.Typing.StringType,
+                t_meltano.Singer.Typing.StringType,
                 description="Distinguished Name",
             ),
-            FlextMeltanoTypes.Singer.Typing.Property(
+            t_meltano.Singer.Typing.Property(
                 "attributes",
-                FlextMeltanoTypes.Singer.Typing.ObjectType(),
+                t_meltano.Singer.Typing.ObjectType(),
                 description="Entry attributes",
             ),
-            FlextMeltanoTypes.Singer.Typing.Property(
+            t_meltano.Singer.Typing.Property(
                 "object_class",
-                FlextMeltanoTypes.Singer.Typing.ArrayType(
-                    FlextMeltanoTypes.Singer.Typing.StringType,
+                t_meltano.Singer.Typing.ArrayType(
+                    t_meltano.Singer.Typing.StringType,
                 ),
                 description="Object classes",
             ),
-            FlextMeltanoTypes.Singer.Typing.Property(
+            t_meltano.Singer.Typing.Property(
                 "change_type",
-                FlextMeltanoTypes.Singer.Typing.StringType,
+                t_meltano.Singer.Typing.StringType,
                 description="Change type",
             ),
-            FlextMeltanoTypes.Singer.Typing.Property(
+            t_meltano.Singer.Typing.Property(
                 "source_file",
-                FlextMeltanoTypes.Singer.Typing.StringType,
+                t_meltano.Singer.Typing.StringType,
                 description="Source file path",
             ),
-            FlextMeltanoTypes.Singer.Typing.Property(
+            t_meltano.Singer.Typing.Property(
                 "line_number",
-                FlextMeltanoTypes.Singer.Typing.IntegerType,
+                t_meltano.Singer.Typing.IntegerType,
                 description="Line number in file",
             ),
-            FlextMeltanoTypes.Singer.Typing.Property(
+            t_meltano.Singer.Typing.Property(
                 "entry_size",
-                FlextMeltanoTypes.Singer.Typing.IntegerType,
+                t_meltano.Singer.Typing.IntegerType,
                 description="Entry size in bytes",
             ),
         ).to_dict()

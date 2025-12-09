@@ -15,11 +15,14 @@ from flext_tap_ldif.ldif_processor import (
     FlextLdifProcessorWrapper,
     LDIFProcessor,
 )
-from flext_tap_ldif.models import FlextMeltanoTapLdifModels
+from flext_tap_ldif.models import FlextMeltanoTapLdifModels, m, m_tap_ldif
 from flext_tap_ldif.protocols import FlextMeltanoTapLdifProtocols
 from flext_tap_ldif.streams import LDIFEntriesStream
 from flext_tap_ldif.tap import TapLDIF, TapLDIF as LegacyTapLDIF
 from flext_tap_ldif.utilities import FlextMeltanoTapLdifUtilities
+
+# Domain-specific aliases
+u = FlextMeltanoTapLdifUtilities  # Utilities (FlextMeltanoTapLdifUtilities extends FlextLdifUtilities)
 
 # Backward compatibility aliases
 FlextMeltanoTapLDIF = TapLDIF
@@ -57,4 +60,8 @@ __all__ = [
     "__version__",
     "__version_info__",
     "dict[str, object]",
+    "m",
+    "m_tap_ldif",
+    # Domain-specific aliases
+    "u",
 ]

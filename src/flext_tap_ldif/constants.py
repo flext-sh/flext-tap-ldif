@@ -20,18 +20,14 @@ class FlextMeltanoTapLdifConstants(FlextConstants):
     """
 
     # LDIF File Configuration using composition
-    DEFAULT_LDIF_ENCODING: Final[str] = (
-        FlextLdifConstants.Ldif.DEFAULT_ENCODING
-    )
+    DEFAULT_LDIF_ENCODING: Final[str] = FlextLdifConstants.Ldif.DEFAULT_ENCODING
     SUPPORTED_ENCODINGS: ClassVar[frozenset[str]] = (
         FlextLdifConstants.Ldif.SUPPORTED_ENCODINGS
     )
 
     # Singer Tap Configuration - using FlextConstants composition
     # Note: DEFAULT_BATCH_SIZE inherited from FlextConstants (Final, cannot override)
-    MAX_BATCH_SIZE: Final[int] = (
-        FlextConstants.Performance.BatchProcessing.MAX_ITEMS
-    )
+    MAX_BATCH_SIZE: Final[int] = FlextConstants.Performance.BatchProcessing.MAX_ITEMS
     MAX_FILE_SIZE_MB: Final[int] = 100
 
     # LDIF Change Types from FlextLdifConstants
@@ -57,28 +53,18 @@ class FlextMeltanoTapLdifConstants(FlextConstants):
         PERFORMANCE_MIN_CHUNK_SIZE: Final[int] = (
             FlextLdifConstants.Ldif.LdifProcessing.PERFORMANCE_MIN_CHUNK_SIZE
         )
-        MIN_ENTRIES: Final[int] = (
-            FlextLdifConstants.Ldif.LdifProcessing.MIN_ENTRIES
-        )
+        MIN_ENTRIES: Final[int] = FlextLdifConstants.Ldif.LdifProcessing.MIN_ENTRIES
 
     class Format:
         """LDIF format specifications."""
 
-        DN_ATTRIBUTE: Final[str] = (
-            FlextLdifConstants.Ldif.Format.DN_ATTRIBUTE
-        )
+        DN_ATTRIBUTE: Final[str] = FlextLdifConstants.Ldif.Format.DN_ATTRIBUTE
         ATTRIBUTE_SEPARATOR: Final[str] = (
             FlextLdifConstants.Ldif.Format.ATTRIBUTE_SEPARATOR
         )
-        MAX_LINE_LENGTH: Final[int] = (
-            FlextLdifConstants.Ldif.Format.MAX_LINE_LENGTH
-        )
-        BASE64_PREFIX: Final[str] = (
-            FlextLdifConstants.Ldif.Format.BASE64_PREFIX
-        )
-        COMMENT_PREFIX: Final[str] = (
-            FlextLdifConstants.Ldif.Format.COMMENT_PREFIX
-        )
+        MAX_LINE_LENGTH: Final[int] = FlextLdifConstants.Ldif.Format.MAX_LINE_LENGTH
+        BASE64_PREFIX: Final[str] = FlextLdifConstants.Ldif.Format.BASE64_PREFIX
+        COMMENT_PREFIX: Final[str] = FlextLdifConstants.Ldif.Format.COMMENT_PREFIX
 
     class TapLdifValidation:
         """LDIF tap validation constants.
@@ -89,9 +75,7 @@ class FlextMeltanoTapLdifConstants(FlextConstants):
         MIN_DN_COMPONENTS: Final[int] = (
             FlextLdifConstants.Ldif.LdifValidation.MIN_DN_COMPONENTS
         )
-        MAX_DN_LENGTH: Final[int] = (
-            FlextLdifConstants.Ldif.LdifValidation.MAX_DN_LENGTH
-        )
+        MAX_DN_LENGTH: Final[int] = FlextLdifConstants.Ldif.LdifValidation.MAX_DN_LENGTH
         MAX_ATTRIBUTES_PER_ENTRY: Final[int] = (
             FlextLdifConstants.Ldif.LdifValidation.MAX_ATTRIBUTES_PER_ENTRY
         )
