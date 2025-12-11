@@ -9,7 +9,7 @@ from __future__ import annotations
 from flext_core import FlextLogger, FlextModels, FlextResult
 
 from flext_tap_ldif.__version__ import __version__, __version_info__
-from flext_tap_ldif.config import FlextMeltanoTapLdifConfig
+from flext_tap_ldif.config import FlextMeltanoTapLdifSettings
 from flext_tap_ldif.ldif_processor import (
     FlextLdifProcessor,
     FlextLdifProcessorWrapper,
@@ -26,25 +26,25 @@ u = FlextMeltanoTapLdifUtilities  # Utilities (FlextMeltanoTapLdifUtilities exte
 
 # Backward compatibility aliases
 FlextMeltanoTapLDIF = TapLDIF
-TapLDIFConfig = FlextMeltanoTapLdifConfig
-FlextMeltanoTapLDIFConfig = FlextMeltanoTapLdifConfig
+TapLDIFConfig = FlextMeltanoTapLdifSettings
+FlextMeltanoTapLDIFSettings = FlextMeltanoTapLdifSettings
 LDIFTap = TapLDIF
-TapConfig = FlextMeltanoTapLdifConfig
+TapConfig = FlextMeltanoTapLdifSettings
 
 __all__ = [
     "FlextLdifProcessor",
     "FlextLdifProcessorWrapper",
     "FlextLogger",
     "FlextMeltanoTapLDIF",
-    "FlextMeltanoTapLDIFConfig",
-    "FlextMeltanoTapLdifConfig",
-    "FlextMeltanoTapLdifConfigurationError",
+    "FlextMeltanoTapLDIFSettings",
     "FlextMeltanoTapLdifError",
     "FlextMeltanoTapLdifFileError",
     "FlextMeltanoTapLdifModels",
     "FlextMeltanoTapLdifParseError",
     "FlextMeltanoTapLdifProcessingError",
     "FlextMeltanoTapLdifProtocols",
+    "FlextMeltanoTapLdifSettings",
+    "FlextMeltanoTapLdifSettingsurationError",
     "FlextMeltanoTapLdifStreamError",
     "FlextMeltanoTapLdifUtilities",
     "FlextMeltanoTapLdifValidationError",

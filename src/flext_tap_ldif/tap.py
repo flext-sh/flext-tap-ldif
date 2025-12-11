@@ -18,7 +18,7 @@ from flext_meltano import (
 )
 from flext_meltano.typings import t as t_meltano
 
-from flext_tap_ldif.config import FlextMeltanoTapLdifConfig
+from flext_tap_ldif.config import FlextMeltanoTapLdifSettings
 from flext_tap_ldif.streams import LDIFEntriesStream
 
 logger = FlextLogger(__name__)
@@ -28,7 +28,7 @@ class TapLDIF(Tap):
     """Singer tap for LDIF file format data extraction."""
 
     name: str = "tap-ldif"
-    config_class = FlextMeltanoTapLdifConfig
+    config_class = FlextMeltanoTapLdifSettings
     # Schema combining file-based configuration with LDIF-specific properties
     config_jsonschema: ClassVar[dict[str, object]] = (
         t_meltano.Singer.Typing.PropertiesList(

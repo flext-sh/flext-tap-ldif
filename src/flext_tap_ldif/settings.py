@@ -11,15 +11,15 @@ from pathlib import Path
 from typing import Self
 
 from flext_core import (
-    FlextConfig,
     FlextConstants,
     FlextResult,
+    FlextSettings,
 )
 from pydantic import Field, field_validator
 from pydantic_settings import SettingsConfigDict
 
 
-class FlextMeltanoTapLdifConfig(FlextConfig):
+class FlextMeltanoTapLdifSettings(FlextSettings):
     """Configuration for the LDIF tap with optimized Python 3.13+ patterns."""
 
     model_config = SettingsConfigDict(
@@ -131,7 +131,7 @@ class FlextMeltanoTapLdifConfig(FlextConfig):
         return v
 
     def model_post_init(self, __context: object, /) -> None:
-        """Validate configuration after initialization using FlextConfig.BaseModel pattern."""
+        """Validate configuration after initialization using FlextSettings.BaseModel pattern."""
         super().model_post_init(__context)
 
         # Delegate to business rules validation
@@ -192,7 +192,7 @@ class FlextMeltanoTapLdifConfig(FlextConfig):
 
     @classmethod
     def get_global_instance(cls) -> Self:
-        """Get the global singleton instance using enhanced FlextConfig pattern."""
+        """Get the global singleton instance using enhanced FlextSettings pattern."""
         return cls.get_or_create_shared_instance(project_name="flext-tap-ldif")
 
     @classmethod
@@ -254,5 +254,5 @@ class FlextMeltanoTapLdifConfig(FlextConfig):
 
 # Export main configuration class
 __all__ = [
-    "FlextMeltanoTapLdifConfig",
+    "FlextMeltanoTapLdifSettings",
 ]
