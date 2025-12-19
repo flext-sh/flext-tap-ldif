@@ -18,7 +18,7 @@ from flext_meltano import (
 )
 from flext_meltano.typings import t as t_meltano
 
-from flext_tap_ldif.config import FlextMeltanoTapLdifSettings
+from flext_tap_ldif.settings import FlextMeltanoTapLdifSettings
 from flext_tap_ldif.streams import LDIFEntriesStream
 
 logger = FlextLogger(__name__)

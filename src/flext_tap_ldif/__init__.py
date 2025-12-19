@@ -9,7 +9,6 @@ from __future__ import annotations
 from flext_core import FlextLogger, FlextModels, FlextResult
 
 from flext_tap_ldif.__version__ import __version__, __version_info__
-from flext_tap_ldif.config import FlextMeltanoTapLdifSettings
 from flext_tap_ldif.ldif_processor import (
     FlextLdifProcessor,
     FlextLdifProcessorWrapper,
@@ -17,6 +16,7 @@ from flext_tap_ldif.ldif_processor import (
 )
 from flext_tap_ldif.models import FlextMeltanoTapLdifModels, m, m_tap_ldif
 from flext_tap_ldif.protocols import FlextMeltanoTapLdifProtocols
+from flext_tap_ldif.settings import FlextMeltanoTapLdifSettings
 from flext_tap_ldif.streams import LDIFEntriesStream
 from flext_tap_ldif.tap import TapLDIF, TapLDIF as LegacyTapLDIF
 from flext_tap_ldif.utilities import FlextMeltanoTapLdifUtilities
