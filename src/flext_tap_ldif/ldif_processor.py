@@ -2,7 +2,6 @@
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
-
 This module eliminates code duplication by using the FLEXT LDIF infrastructure
 implementation from flext-ldif project.
 """
@@ -17,10 +16,8 @@ from flext_core import FlextLogger, FlextResult
 from flext_ldif import FlextLdif
 
 logger = FlextLogger(__name__)
-
 # Use flext-ldif processor instead of reimplementing LDIF functionality
 LDIFProcessor = FlextLdif
-
 # Backward compatibility alias removed (causes self-assignment warning)
 
 
@@ -55,13 +52,13 @@ class FlextLdifProcessorWrapper:
         """Discover LDIF files using generic flext-ldif functionality.
 
         Args:
-        directory_path: Directory to search for LDIF files
-        file_pattern: Glob pattern for file matching
-        file_path: Single file path (alternative to directory_path)
-        max_file_size_mb: Maximum file size in MB
+            directory_path: Directory to search for LDIF files
+            file_pattern: Glob pattern for file matching
+            file_path: Single file path (alternative to directory_path)
+            max_file_size_mb: Maximum file size in MB
 
         Returns:
-        FlextResult[list[Path]]: Success with discovered files or failure with error
+            FlextResult[list[Path]]: Success with discovered files or failure with error
 
         """
         # Delegate to flext-ldif generic file discovery - NO local duplication
@@ -81,9 +78,6 @@ class FlextLdifProcessorWrapper:
         Yields:
             Dictionary records representing LDIF entries.
 
-        Returns:
-            Generator[dict["str", "object"]]: Dictionary records representing LDIF entries.
-
         """
         logger.info("Processing LDIF file: %s", file_path)
         try:
@@ -91,7 +85,6 @@ class FlextLdifProcessorWrapper:
             encoding = self.config.get("encoding", "utf-8")
             if not isinstance(encoding, str):
                 encoding = "utf-8"
-
             with file_path.open("r", encoding=encoding) as file:
                 content = file.read()
                 parse_result: FlextResult[object] = self._api.parse(content)
@@ -100,7 +93,6 @@ class FlextLdifProcessorWrapper:
                     self._raise_parse_error(msg)
                     return
                 entries = parse_result.value
-
                 for entry in entries:
                     # Convert FlextLdifEntry to expected dictionary format
                     yield {
@@ -123,7 +115,6 @@ class FlextLdifProcessorWrapper:
 
 # Create the original class name for backward compatibility
 FlextLdifProcessor: type[FlextLdifProcessorWrapper] = FlextLdifProcessorWrapper
-
 __all__: list[str] = [
     "FlextLdifProcessor",
     "LDIFProcessor",
