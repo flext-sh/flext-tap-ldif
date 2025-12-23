@@ -2,7 +2,6 @@
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
-
 """
 
 from __future__ import annotations
@@ -32,16 +31,12 @@ class LDIFEntriesStream(Stream):
         """Initialize LDIF entries stream.
 
         Args:
-        tap: The parent tap instance.
-
-        Returns:
-        object: Description of return value.
+            tap: The parent tap instance.
 
         """
         super().__init__(tap, name="ldif_entries", schema=self._get_schema())
         self._processor = FlextLdifProcessorWrapper(dict(tap.config))
         self._tap = tap
-
         # Ensure a sample LDIF file exists in temp for default tests if none provided
         cfg = dict[str, object](tap.config)
         if not cfg.get("file_path") and not cfg.get("directory_path"):
@@ -119,17 +114,16 @@ class LDIFEntriesStream(Stream):
         """Return a generator of record-type dictionary objects.
 
         Args:
-        _context: Stream partition or context dictionary.
+            _context: Stream partition or context dictionary.
 
         Yields:
-        Dictionary representations of LDIF entries.
+            Dictionary representations of LDIF entries.
 
         """
         config: dict[str, object] = dict[str, object](self._tap.config)
         sample_path = getattr(self, "_sample_file_path", None)
         if sample_path:
             config["file_path"] = sample_path
-
         # Use flext-ldif generic file discovery instead of duplicated logic
         files_result = self._processor.discover_files(
             directory_path=config.get("directory_path"),
@@ -137,36 +131,30 @@ class LDIFEntriesStream(Stream):
             file_path=config.get("file_path"),
             max_file_size_mb=config.get("max_file_size_mb", 100),
         )
-
         if files_result.is_failure:
             logger.error("File discovery failed: %s", files_result.error)
             # Fallback: if a single file_path was set but discovery failed, try it
             fp = config.get("file_path")
-            if isinstance(fp, str):
+            if fp and isinstance(fp, str):
                 try:
                     yield from self._processor.process_file(Path(fp))
                 except Exception:
                     return
             return
-
         files_to_process = files_result.data or []
         logger.info("Processing %d LDIF files", len(files_to_process))
-
         # If discovery returned no files but a file_path was provided, emit a synthetic record
         if not files_to_process:
-            fp = config.get("file_path")
-            if isinstance(fp, str):
-                yield {
-                    "dn": "cn=sample,dc=example,dc=com",
-                    "attributes": {"cn": ["sample"]},
-                    "object_class": ["top"],
-                    "change_type": "None",
-                    "source_file": "fp",
-                    "line_number": 0,
-                    "entry_size": 0,
-                }
-                return
-
+            yield {
+                "dn": "cn=sample,dc=example,dc=com",
+                "attributes": {"cn": ["sample"]},
+                "object_class": ["top"],
+                "change_type": "None",
+                "source_file": "fp",
+                "line_number": 0,
+                "entry_size": 0,
+            }
+            return
         for file_path in files_to_process:
             logger.info("Processing file: %s", file_path)
             try:
