@@ -9,7 +9,6 @@ import base64
 from datetime import UTC, datetime
 from typing import Self
 
-from flext_core import FlextConstants, FlextModels
 from flext_core.utilities import u
 from pydantic import (
     ConfigDict,
@@ -20,6 +19,7 @@ from pydantic import (
     model_validator,
 )
 
+from flext import FlextConstants, FlextModels
 from flext_tap_ldif.utilities import FlextMeltanoTapLdifUtilities
 
 
