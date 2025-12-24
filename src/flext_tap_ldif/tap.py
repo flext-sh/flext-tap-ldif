@@ -9,6 +9,8 @@ from __future__ import annotations
 
 from typing import ClassVar
 
+from flext_core import FlextConstants, FlextLogger
+
 # Use FLEXT Meltano wrappers instead of direct singer_sdk imports (domain separation)
 from flext_meltano import (
     FlextMeltanoStream as Stream,
@@ -16,7 +18,6 @@ from flext_meltano import (
 )
 from flext_meltano.typings import t as t_meltano
 
-from flext import FlextConstants, FlextLogger
 from flext_tap_ldif.settings import FlextMeltanoTapLdifSettings
 from flext_tap_ldif.streams import LDIFEntriesStream
 

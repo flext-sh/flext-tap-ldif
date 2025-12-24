@@ -10,7 +10,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Self
 
-from flext import FlextConstants,
+from flext_core import  FlextConstants,
     FlextResult,
     FlextSettings
 from pydantic import Field, field_validator
