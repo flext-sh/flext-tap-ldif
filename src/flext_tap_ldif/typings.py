@@ -16,7 +16,7 @@ from __future__ import annotations
 
 from typing import Literal
 
-from flext import FlextTypes
+from flext_core import FlextTypes
 
 # =============================================================================
 # TAP LDIF-SPECIFIC TYPE VARIABLES - Domain-specific TypeVars for Singer LDIF operations
@@ -41,7 +41,8 @@ class FlextMeltanoTapLdifTypes(FlextTypes):
 
         type TapConfiguration = dict[str, str | int | bool | dict[str, object]]
         type StreamConfiguration = dict[
-            str, str | bool | dict[str, FlextTypes.JsonValue],
+            str,
+            str | bool | dict[str, FlextTypes.JsonValue],
         ]
         type CatalogDefinition = dict[str, str | list[dict[str, FlextTypes.JsonValue]]]
         type SchemaDefinition = dict[str, str | dict[str, FlextTypes.JsonValue] | bool]
@@ -57,7 +58,8 @@ class FlextMeltanoTapLdifTypes(FlextTypes):
 
         type ProcessingConfiguration = dict[str, str | int | bool | dict[str, object]]
         type EntryExtraction = dict[
-            str, str | list[str] | dict[str, FlextTypes.JsonValue],
+            str,
+            str | list[str] | dict[str, FlextTypes.JsonValue],
         ]
         type EntryTransformation = list[dict[str, str | object]]
         type EntryValidation = dict[str, bool | str | list[str] | dict[str, object]]
@@ -76,7 +78,8 @@ class FlextMeltanoTapLdifTypes(FlextTypes):
         type ExtractionMapping = dict[str, str | dict[str, FlextTypes.JsonValue]]
         type ExtractionResult = dict[str, bool | list[dict[str, object]]]
         type ExtractionMetrics = dict[
-            str, int | float | dict[str, FlextTypes.JsonValue],
+            str,
+            int | float | dict[str, FlextTypes.JsonValue],
         ]
         type ExtractionState = dict[str, str | int | dict[str, FlextTypes.JsonValue]]
 
