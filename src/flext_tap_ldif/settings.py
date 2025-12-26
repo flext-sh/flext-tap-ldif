@@ -143,7 +143,8 @@ class FlextMeltanoTapLdifSettings(FlextSettings):
         """Validate LDIF tap configuration business rules."""
         # Validate input sources using FlextResult chaining
         return (
-            self._validate_input_sources()
+            self
+            ._validate_input_sources()
             .flat_map(lambda _: self._validate_constraints())
             .flat_map(lambda _: self._validate_filters())
         )
