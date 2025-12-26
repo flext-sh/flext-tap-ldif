@@ -1,65 +1,142 @@
-"""Protocols for flext-tap-ldif to avoid circular dependencies.
+"""FLEXT Tap LDIF Protocols - Domain-specific LDIF tap protocol definitions.
+
+This module provides LDIF tap-specific protocol definitions extending p.
+Follows FLEXT standards:
+- Domain-specific protocols extending parent protocols
+- Protocol composition with multiple inheritance
+- Runtime-checkable protocols where applicable
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
+
 """
 
 from __future__ import annotations
 
-from typing import Protocol
+from typing import Protocol, runtime_checkable
+
+from flext_ldif import FlextLdifProtocols
+from flext_meltano import FlextMeltanoProtocols
 
 
-class TapConfigProtocol(Protocol):
-    """Protocol for tap configuration interface."""
+class FlextMeltanoTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
+    """LDIF tap-specific protocol definitions extending p.
 
-    def get(self, key: str, default: object = None) -> object:
-        """Get configuration value by key.
-
-        Args:
-            key: Configuration key.
-            default: Default value if key not found.
-
-        Returns:
-            Configuration value or default.
-
-        """
-        ...
-
-    def __getitem__(self, key: str) -> object:
-        """Get configuration value by key using dict-like access.
-
-        Args:
-            key: Configuration key.
-
-        Returns:
-            Configuration value.
-
-        """
-        ...
-
-    def __iter__(self) -> object:
-        """Iterate over configuration keys.
-
-        Returns:
-            Iterator over configuration keys.
-
-        """
-        ...
-
-
-class TapProtocol(Protocol):
-    """Protocol for tap interface used by streams.
-
-    Defines the minimal interface that streams need from tap instances,
-    avoiding circular dependencies without using TYPE_CHECKING.
+    Domain-specific protocol system for LDIF data extraction operations.
+    Contains ONLY complex LDIF tap-specific protocols extending parent protocols.
     """
 
-    @property
-    def config(self) -> TapConfigProtocol:
-        """Get tap configuration.
+    class TapLdif:
+        """Tap LDIF namespace for protocol definitions.
 
-        Returns:
-            Tap configuration object.
-
+        Contains all LDIF tap-specific protocol definitions
+        organized by functional domains.
         """
-        ...
+
+        @runtime_checkable
+        class LdifConnectionProtocol(FlextLdifProtocols.Service[object], Protocol):
+            """Protocol for LDIF file connection management."""
+
+            def open_ldif_file(
+                self, file_path: str
+            ) -> FlextMeltanoProtocols.Result[object]:
+                """Open LDIF file for reading."""
+                ...
+
+            def close_ldif_file(self) -> FlextMeltanoProtocols.Result[bool]:
+                """Close LDIF file."""
+                ...
+
+            def validate_ldif_format(
+                self, content: str
+            ) -> FlextMeltanoProtocols.Result[bool]:
+                """Validate LDIF file format."""
+                ...
+
+        @runtime_checkable
+        class LdifParsingProtocol(FlextLdifProtocols.Service[object], Protocol):
+            """Protocol for LDIF parsing operations."""
+
+            def parse_ldif_entry(
+                self, entry_text: str
+            ) -> FlextMeltanoProtocols.Result[dict[str, object]]:
+                """Parse single LDIF entry."""
+                ...
+
+            def parse_ldif_file(
+                self, file_path: str
+            ) -> FlextMeltanoProtocols.Result[list[dict[str, object]]]:
+                """Parse entire LDIF file."""
+                ...
+
+            def extract_entry_dn(
+                self, entry_lines: list[str]
+            ) -> FlextMeltanoProtocols.Result[str]:
+                """Extract DN from LDIF entry lines."""
+                ...
+
+        @runtime_checkable
+        class LdifExtractionProtocol(FlextLdifProtocols.Service[object], Protocol):
+            """Protocol for LDIF data extraction."""
+
+            def extract_entries_by_filter(
+                self,
+                entries: list[dict[str, object]],
+                filter_criteria: dict[str, object],
+            ) -> FlextMeltanoProtocols.Result[list[dict[str, object]]]:
+                """Extract LDIF entries matching filter criteria."""
+                ...
+
+            def extract_entry_attributes(
+                self,
+                entry: dict[str, object],
+                attributes: list[str] | None = None,
+            ) -> FlextMeltanoProtocols.Result[dict[str, object]]:
+                """Extract specific attributes from LDIF entry."""
+                ...
+
+        @runtime_checkable
+        class LdifTransformationProtocol(FlextLdifProtocols.Service[object], Protocol):
+            """Protocol for LDIF data transformation."""
+
+            def transform_ldif_to_singer(
+                self, ldif_entry: dict[str, object]
+            ) -> FlextMeltanoProtocols.Result[dict[str, object]]:
+                """Transform LDIF entry to Singer record format."""
+                ...
+
+            def normalize_ldif_attributes(
+                self, attributes: dict[str, list[object]]
+            ) -> FlextMeltanoProtocols.Result[dict[str, object]]:
+                """Normalize LDIF attribute values."""
+                ...
+
+        @runtime_checkable
+        class StreamGenerationProtocol(FlextLdifProtocols.Service[object], Protocol):
+            """Protocol for Singer stream generation from LDIF."""
+
+            def generate_streams_from_ldif(
+                self,
+                ldif_entries: list[dict[str, object]],
+                config: dict[str, object],
+            ) -> FlextMeltanoProtocols.Result[list[dict[str, object]]]:
+                """Generate Singer streams from LDIF entries."""
+                ...
+
+            def sync_ldif_stream(
+                self,
+                stream_name: str,
+                ldif_entries: list[dict[str, object]],
+                state: dict[str, object],
+            ) -> FlextMeltanoProtocols.Result[dict[str, object]]:
+                """Sync Singer stream from LDIF entries."""
+                ...
+
+
+# Runtime alias for simplified usage
+p = FlextMeltanoTapLdifProtocols
+
+__all__ = [
+    "FlextMeltanoTapLdifProtocols",
+    "p",
+]

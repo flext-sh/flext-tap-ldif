@@ -7,11 +7,12 @@ from __future__ import annotations
 
 import base64
 from datetime import UTC, datetime
-from typing import Self
+from typing import ClassVar, Self
 
-from flext_core import FlextConstants, FlextModels
+from flext_core import FlextConstants
 from flext_core.utilities import u
 from pydantic import (
+    BaseModel,
     ConfigDict,
     Field,
     FieldSerializationInfo,
@@ -23,8 +24,8 @@ from pydantic import (
 from flext_tap_ldif.utilities import FlextMeltanoTapLdifUtilities
 
 
-class FlextMeltanoTapLdifModels(FlextModels):
-    """Complete models for LDIF tap operations extending FlextModels.
+class FlextMeltanoTapLdifModels(BaseModel):
+    """Complete models for LDIF tap operations using Pydantic BaseModel.
 
     Provides standardized models for all LDIF tap domain entities including:
     - Singer stream metadata and LDIF file configuration
@@ -34,7 +35,7 @@ class FlextMeltanoTapLdifModels(FlextModels):
     - LDIF format compliance and schema validation
     - All utility functions for LDIF data processing
 
-    All nested classes inherit FlextModels validation and patterns.
+    All nested classes use Pydantic BaseModel validation and patterns.
     Consolidates ALL models for LDIF file extraction and processing.
     """
 
@@ -43,7 +44,7 @@ class FlextMeltanoTapLdifModels(FlextModels):
         super().__init_subclass__(**kwargs)
         u.Deprecation.warn_once(
             f"subclass:{cls.__name__}",
-            "Subclassing FlextMeltanoTapLdifModels is deprecated. Use FlextModels.TapLdif instead.",
+            "Subclassing FlextMeltanoTapLdifModels is deprecated. Use composition with BaseModel instead.",
         )
 
     # Pydantic 2.11 Configuration - Enterprise Singer LDIF Tap Features
@@ -183,8 +184,8 @@ class FlextMeltanoTapLdifModels(FlextModels):
         return value
 
     # Legacy type aliases for backward compatibility
-    LdifRecord = dict[str, object]
-    LdifRecords = list[LdifRecord]
+    LdifRecord: ClassVar[type] = dict[str, object]
+    LdifRecords: ClassVar[type] = list[LdifRecord]
 
     class UtilityFunctions:
         """Utility functions for LDIF data processing."""
@@ -220,7 +221,7 @@ class FlextMeltanoTapLdifModels(FlextModels):
             """Normalize LDIF attribute name."""
             return name.lower().strip()
 
-    class LdifEntry(FlextModels.Entity):
+    class LdifEntry(BaseModel):
         """Represents an LDIF entry with complete parsing support."""
 
         # Pydantic 2.11 Configuration - LDIF Entry Features
@@ -312,7 +313,7 @@ class FlextMeltanoTapLdifModels(FlextModels):
             values = self.get_attribute_values(name)
             return values[0] if values else None
 
-    class LdifChangeRecord(FlextModels.Entity):
+    class LdifChangeRecord(BaseModel):
         """Represents an LDIF change record for modify operations."""
 
         # Pydantic 2.11 Configuration - Change Record Features
@@ -387,7 +388,7 @@ class FlextMeltanoTapLdifModels(FlextModels):
 
             return self
 
-    class LdifFile(FlextModels.Entity):
+    class LdifFile(BaseModel):
         """Represents an LDIF file with processing metadata."""
 
         # Pydantic 2.11 Configuration - File Features
@@ -488,7 +489,7 @@ class FlextMeltanoTapLdifModels(FlextModels):
                 raise ValueError(msg)
             return self
 
-    class LdifStream(FlextModels.Entity):
+    class LdifStream(BaseModel):
         """Singer stream configuration for LDIF file processing."""
 
         # Pydantic 2.11 Configuration - Stream Features
@@ -575,7 +576,7 @@ class FlextMeltanoTapLdifModels(FlextModels):
                 raise ValueError(msg)
             return self
 
-    class LdifBatch(FlextModels.Entity):
+    class LdifBatch(BaseModel):
         """LDIF batch processing configuration and state."""
 
         # Pydantic 2.11 Configuration - Batch Features
@@ -682,7 +683,7 @@ class FlextMeltanoTapLdifModels(FlextModels):
                 raise ValueError(msg)
             return self
 
-    class LdifProcessingState(FlextModels.Entity):
+    class LdifProcessingState(BaseModel):
         """LDIF processing state and progress tracking."""
 
         # Pydantic 2.11 Configuration - State Features
@@ -790,7 +791,7 @@ class FlextMeltanoTapLdifModels(FlextModels):
                 raise ValueError(msg)
             return self
 
-    class LdifTapConfig(FlextModels.BaseConfig):
+    class LdifTapConfig(BaseModel):
         """Configuration for LDIF tap operations."""
 
         # Pydantic 2.11 Configuration - Config Features
@@ -894,7 +895,7 @@ class FlextMeltanoTapLdifModels(FlextModels):
                 raise ValueError(msg)
             return self
 
-    class LdifRecord(FlextModels.ArbitraryTypesModel):
+    class LdifRecord(BaseModel):
         """Individual LDIF record for Singer output."""
 
         stream: str = Field(..., description="Source stream name")
@@ -940,7 +941,7 @@ class FlextMeltanoTapLdifModels(FlextModels):
                 raise ValueError(msg)
             return self
 
-    class LdifValidationResult(FlextModels.ArbitraryTypesModel):
+    class LdifValidationResult(BaseModel):
         """LDIF validation result with detailed error reporting."""
 
         file_path: str = Field(..., description="Validated LDIF file path")
@@ -1011,7 +1012,7 @@ class FlextMeltanoTapLdifModels(FlextModels):
                 raise ValueError(msg)
             return self
 
-    class LdifPerformanceMetrics(FlextModels.ArbitraryTypesModel):
+    class LdifPerformanceMetrics(BaseModel):
         """Performance metrics for LDIF tap operations."""
 
         # File processing metrics

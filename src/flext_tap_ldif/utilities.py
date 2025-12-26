@@ -624,6 +624,10 @@ class FlextMeltanoTapLdifUtilities(u_core):
         return cls.StateManagement.set_file_position(state, file_path, position)
 
 
+# Runtime alias for simplified usage
+u = FlextMeltanoTapLdifUtilities
+
 __all__ = [
     "FlextMeltanoTapLdifUtilities",
+    "u",
 ]
