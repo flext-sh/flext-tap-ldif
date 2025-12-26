@@ -79,7 +79,7 @@ class FlextMeltanoTapLdifSettings(FlextSettings):
     batch_size: int = Field(
         default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE,
         ge=1,
-        le=FlextConstants.Performance.MAX_BATCH_SIZE_VALIDATION,
+        le=FlextConstants.MAX_BATCH_SIZE_LIMIT,
         description="Number of entries to process in each batch",
     )
 
@@ -143,8 +143,7 @@ class FlextMeltanoTapLdifSettings(FlextSettings):
         """Validate LDIF tap configuration business rules."""
         # Validate input sources using FlextResult chaining
         return (
-            self
-            ._validate_input_sources()
+            self._validate_input_sources()
             .flat_map(lambda _: self._validate_constraints())
             .flat_map(lambda _: self._validate_filters())
         )
