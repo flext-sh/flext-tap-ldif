@@ -19,7 +19,11 @@ from flext_tap_ldif import u as FlextMeltanoTapLdifUtilities
 class TestsFlextMeltanoTapLdifUtilities(
     FlextTestsUtilities, FlextMeltanoTapLdifUtilities
 ):
-    class TapLdif(FlextMeltanoTapLdifUtilities.TapLdif):
+    """Test utilities combining FlextTestsUtilities with flext-tap-ldif utilities."""
+
+    class TapLdif:
+        """TapLdif test utilities namespace."""
+
         class Tests:
             """Internal tests declarations."""
 

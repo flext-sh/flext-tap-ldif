@@ -9,7 +9,7 @@ import base64
 from datetime import UTC, datetime
 from typing import ClassVar, Self
 
-from flext_core import FlextConstants
+from flext_core import FlextConstants, FlextTypes as t
 from flext_core.utilities import u
 from pydantic import (
     BaseModel,
@@ -93,7 +93,7 @@ class FlextMeltanoTapLdifModels(BaseModel):
         return sum(1 for attr in model_attrs if hasattr(self, attr))
 
     @computed_field
-    def ldif_tap_system_summary(self) -> dict[str, object]:
+    def ldif_tap_system_summary(self) -> dict[str, t.GeneralValueType]:
         """Complete Singer LDIF tap system summary with file processing capabilities."""
         return {
             "total_models": self.active_ldif_tap_models_count,
@@ -184,7 +184,7 @@ class FlextMeltanoTapLdifModels(BaseModel):
         return value
 
     # Legacy type aliases for backward compatibility
-    LdifRecord: ClassVar[type] = dict[str, object]
+    LdifRecord: ClassVar[type] = dict[str, t.GeneralValueType]
     LdifRecords: ClassVar[type] = list[LdifRecord]
 
     class UtilityFunctions:
@@ -273,7 +273,7 @@ class FlextMeltanoTapLdifModels(BaseModel):
         )
 
         @computed_field
-        def ldif_entry_summary(self) -> dict[str, object]:
+        def ldif_entry_summary(self) -> dict[str, t.GeneralValueType]:
             """LDIF entry analysis summary."""
             return {
                 "dn": self.dn,
@@ -338,7 +338,7 @@ class FlextMeltanoTapLdifModels(BaseModel):
             ...,
             description="Type of change (add, modify, delete, modrdn)",
         )
-        changes: list[dict[str, object]] = Field(
+        changes: list[dict[str, t.GeneralValueType]] = Field(
             default_factory=list,
             description="List of changes",
         )
@@ -363,7 +363,7 @@ class FlextMeltanoTapLdifModels(BaseModel):
         )
 
         @computed_field
-        def change_record_summary(self) -> dict[str, object]:
+        def change_record_summary(self) -> dict[str, t.GeneralValueType]:
             """LDIF change record summary."""
             return {
                 "dn": self.dn,
@@ -453,7 +453,7 @@ class FlextMeltanoTapLdifModels(BaseModel):
         )
 
         @computed_field
-        def ldif_file_summary(self) -> dict[str, object]:
+        def ldif_file_summary(self) -> dict[str, t.GeneralValueType]:
             """LDIF file processing summary."""
             progress = 0.0
             if self.total_lines > 0:
@@ -538,17 +538,17 @@ class FlextMeltanoTapLdifModels(BaseModel):
         )
 
         # Stream schema
-        schema: dict[str, object] = Field(
+        schema: dict[str, t.GeneralValueType] = Field(
             default_factory=dict,
             description="JSON schema",
         )
-        metadata: list[dict[str, object]] = Field(
+        metadata: list[dict[str, t.GeneralValueType]] = Field(
             default_factory=list,
             description="Stream metadata",
         )
 
         @computed_field
-        def ldif_stream_summary(self) -> dict[str, object]:
+        def ldif_stream_summary(self) -> dict[str, t.GeneralValueType]:
             """LDIF stream configuration summary."""
             return {
                 "stream_id": self.tap_stream_id,
@@ -640,7 +640,7 @@ class FlextMeltanoTapLdifModels(BaseModel):
         )
 
         @computed_field
-        def batch_processing_summary(self) -> dict[str, object]:
+        def batch_processing_summary(self) -> dict[str, t.GeneralValueType]:
             """LDIF batch processing summary."""
             duration = 0.0
             if self.started_at and self.completed_at:
@@ -732,7 +732,7 @@ class FlextMeltanoTapLdifModels(BaseModel):
         )
 
         # Error tracking
-        processing_errors: list[dict[str, object]] = Field(
+        processing_errors: list[dict[str, t.GeneralValueType]] = Field(
             default_factory=list,
             description="Processing errors with context",
         )
@@ -747,7 +747,7 @@ class FlextMeltanoTapLdifModels(BaseModel):
         memory_usage: int = Field(default=0, description="Memory usage in bytes")
 
         @computed_field
-        def processing_progress_summary(self) -> dict[str, object]:
+        def processing_progress_summary(self) -> dict[str, t.GeneralValueType]:
             """LDIF processing progress summary."""
             total_errors = self.recoverable_errors + self.fatal_errors
             duration = 0.0
@@ -859,7 +859,7 @@ class FlextMeltanoTapLdifModels(BaseModel):
         )
 
         @computed_field
-        def tap_config_summary(self) -> dict[str, object]:
+        def tap_config_summary(self) -> dict[str, t.GeneralValueType]:
             """LDIF tap configuration summary."""
             return {
                 "source": {
@@ -899,7 +899,9 @@ class FlextMeltanoTapLdifModels(BaseModel):
         """Individual LDIF record for Singer output."""
 
         stream: str = Field(..., description="Source stream name")
-        record: dict[str, object] = Field(..., description="LDIF record data")
+        record: dict[str, t.GeneralValueType] = Field(
+            ..., description="LDIF record data"
+        )
         record_type: str = Field(default="entry", description="Type of LDIF record")
 
         # Source metadata
@@ -917,7 +919,7 @@ class FlextMeltanoTapLdifModels(BaseModel):
         )
 
         @computed_field
-        def ldif_record_summary(self) -> dict[str, object]:
+        def ldif_record_summary(self) -> dict[str, t.GeneralValueType]:
             """LDIF record analysis summary."""
             return {
                 "stream": self.stream,
@@ -948,11 +950,11 @@ class FlextMeltanoTapLdifModels(BaseModel):
         is_valid: bool = Field(..., description="Overall validation result")
 
         # Validation results
-        validation_errors: list[dict[str, object]] = Field(
+        validation_errors: list[dict[str, t.GeneralValueType]] = Field(
             default_factory=list,
             description="Validation errors with details",
         )
-        warnings: list[dict[str, object]] = Field(
+        warnings: list[dict[str, t.GeneralValueType]] = Field(
             default_factory=list,
             description="Validation warnings",
         )
@@ -970,7 +972,7 @@ class FlextMeltanoTapLdifModels(BaseModel):
         validator_version: str = Field(default="1.0", description="Validator version")
 
         @computed_field
-        def validation_summary(self) -> dict[str, object]:
+        def validation_summary(self) -> dict[str, t.GeneralValueType]:
             """LDIF validation complete summary."""
             success_rate = 0.0
             if self.total_entries > 0:
@@ -1056,7 +1058,7 @@ class FlextMeltanoTapLdifModels(BaseModel):
         average_memory_usage: int = Field(default=0, description="Average memory usage")
 
         @computed_field
-        def performance_analysis_summary(self) -> dict[str, object]:
+        def performance_analysis_summary(self) -> dict[str, t.GeneralValueType]:
             """LDIF tap performance analysis summary."""
             success_rate = 0.0
             if self.files_processed > 0:

@@ -14,6 +14,7 @@ from flext_core import (
     FlextConstants,
     FlextResult,
     FlextSettings,
+    FlextTypes as t,
 )
 from pydantic import Field, field_validator
 from pydantic_settings import SettingsConfigDict
@@ -143,7 +144,8 @@ class FlextMeltanoTapLdifSettings(FlextSettings):
         """Validate LDIF tap configuration business rules."""
         # Validate input sources using FlextResult chaining
         return (
-            self._validate_input_sources()
+            self
+            ._validate_input_sources()
             .flat_map(lambda _: self._validate_constraints())
             .flat_map(lambda _: self._validate_filters())
         )
@@ -234,7 +236,7 @@ class FlextMeltanoTapLdifSettings(FlextSettings):
         return cls(**test_defaults)
 
     @property
-    def ldif_config(self: object) -> dict[str, object]:
+    def ldif_config(self: object) -> dict[str, t.GeneralValueType]:
         """Get LDIF-specific configuration as a dictionary."""
         return {
             "file_path": self.file_path,

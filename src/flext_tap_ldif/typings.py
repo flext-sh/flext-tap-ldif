@@ -39,7 +39,9 @@ class FlextMeltanoTapLdifTypes(FlextTypes):
     class SingerTap:
         """Singer tap protocol complex types."""
 
-        type TapConfiguration = dict[str, str | int | bool | dict[str, object]]
+        type TapConfiguration = dict[
+            str, str | int | bool | dict[str, FlextTypes.GeneralValueType]
+        ]
         type StreamConfiguration = dict[
             str,
             str | bool | dict[str, FlextTypes.JsonValue],
@@ -56,14 +58,20 @@ class FlextMeltanoTapLdifTypes(FlextTypes):
     class LdifProcessing:
         """LDIF processing complex types."""
 
-        type ProcessingConfiguration = dict[str, str | int | bool | dict[str, object]]
+        type ProcessingConfiguration = dict[
+            str, str | int | bool | dict[str, FlextTypes.GeneralValueType]
+        ]
         type EntryExtraction = dict[
             str,
             str | list[str] | dict[str, FlextTypes.JsonValue],
         ]
-        type EntryTransformation = list[dict[str, str | object]]
-        type EntryValidation = dict[str, bool | str | list[str] | dict[str, object]]
-        type BatchProcessing = dict[str, int | bool | dict[str, object]]
+        type EntryTransformation = list[dict[str, str | FlextTypes.GeneralValueType]]
+        type EntryValidation = dict[
+            str, bool | str | list[str] | dict[str, FlextTypes.GeneralValueType]
+        ]
+        type BatchProcessing = dict[
+            str, int | bool | dict[str, FlextTypes.GeneralValueType]
+        ]
         type FileProcessing = dict[str, str | int | dict[str, FlextTypes.JsonValue]]
 
     # =========================================================================
@@ -73,10 +81,16 @@ class FlextMeltanoTapLdifTypes(FlextTypes):
     class DataExtraction:
         """Data extraction complex types."""
 
-        type ExtractionConfiguration = dict[str, str | bool | dict[str, object]]
-        type ExtractionFilter = dict[str, str | list[str] | dict[str, object]]
+        type ExtractionConfiguration = dict[
+            str, str | bool | dict[str, FlextTypes.GeneralValueType]
+        ]
+        type ExtractionFilter = dict[
+            str, str | list[str] | dict[str, FlextTypes.GeneralValueType]
+        ]
         type ExtractionMapping = dict[str, str | dict[str, FlextTypes.JsonValue]]
-        type ExtractionResult = dict[str, bool | list[dict[str, object]]]
+        type ExtractionResult = dict[
+            str, bool | list[dict[str, FlextTypes.GeneralValueType]]
+        ]
         type ExtractionMetrics = dict[
             str,
             int | float | dict[str, FlextTypes.JsonValue],
@@ -90,11 +104,17 @@ class FlextMeltanoTapLdifTypes(FlextTypes):
     class StreamProcessing:
         """Stream processing complex types."""
 
-        type StreamConfiguration = dict[str, str | bool | int | dict[str, object]]
+        type StreamConfiguration = dict[
+            str, str | bool | int | dict[str, FlextTypes.GeneralValueType]
+        ]
         type StreamMetadata = dict[str, str | dict[str, FlextTypes.JsonValue]]
-        type StreamRecord = dict[str, FlextTypes.JsonValue | dict[str, object]]
+        type StreamRecord = dict[
+            str, FlextTypes.JsonValue | dict[str, FlextTypes.GeneralValueType]
+        ]
         type StreamState = dict[str, str | int | dict[str, FlextTypes.JsonValue]]
-        type StreamBookmark = dict[str, str | int | dict[str, object]]
+        type StreamBookmark = dict[
+            str, str | int | dict[str, FlextTypes.GeneralValueType]
+        ]
         type StreamSchema = dict[str, str | dict[str, FlextTypes.JsonValue] | bool]
 
     # =========================================================================
@@ -104,10 +124,14 @@ class FlextMeltanoTapLdifTypes(FlextTypes):
     class FileHandling:
         """File handling complex types."""
 
-        type FileConfiguration = dict[str, str | int | bool | dict[str, object]]
+        type FileConfiguration = dict[
+            str, str | int | bool | dict[str, FlextTypes.GeneralValueType]
+        ]
         type FileValidation = dict[str, bool | str | int | list[str]]
         type FileProcessing = dict[str, str | int | dict[str, FlextTypes.JsonValue]]
-        type FileBatching = dict[str, int | bool | dict[str, object]]
+        type FileBatching = dict[
+            str, int | bool | dict[str, FlextTypes.GeneralValueType]
+        ]
         type FileMonitoring = dict[str, bool | int | dict[str, FlextTypes.JsonValue]]
         type FileMetrics = dict[str, int | float | dict[str, FlextTypes.JsonValue]]
 
@@ -118,10 +142,16 @@ class FlextMeltanoTapLdifTypes(FlextTypes):
     class ErrorHandling:
         """Error handling complex types."""
 
-        type ErrorConfiguration = dict[str, bool | str | int | dict[str, object]]
-        type ErrorRecovery = dict[str, str | bool | dict[str, object]]
+        type ErrorConfiguration = dict[
+            str, bool | str | int | dict[str, FlextTypes.GeneralValueType]
+        ]
+        type ErrorRecovery = dict[
+            str, str | bool | dict[str, FlextTypes.GeneralValueType]
+        ]
         type ErrorReporting = dict[str, str | int | dict[str, FlextTypes.JsonValue]]
-        type ErrorClassification = dict[str, str | int | dict[str, object]]
+        type ErrorClassification = dict[
+            str, str | int | dict[str, FlextTypes.GeneralValueType]
+        ]
         type ErrorMetrics = dict[str, int | float | dict[str, FlextTypes.JsonValue]]
         type ErrorTracking = list[
             dict[str, str | int | dict[str, FlextTypes.JsonValue]]
@@ -165,10 +195,12 @@ class FlextMeltanoTapLdifTypes(FlextTypes):
         ]
 
         # Singer tap LDIF-specific project configurations
-        type SingerTapLdifProjectConfig = dict[str, object]
+        type SingerTapLdifProjectConfig = dict[str, FlextTypes.GeneralValueType]
         type LdifExtractorConfig = dict[str, str | int | bool | list[str]]
-        type SingerProtocolConfig = dict[str, bool | str | dict[str, object]]
-        type TapLdifPipelineConfig = dict[str, object]
+        type SingerProtocolConfig = dict[
+            str, bool | str | dict[str, FlextTypes.GeneralValueType]
+        ]
+        type TapLdifPipelineConfig = dict[str, FlextTypes.GeneralValueType]
 
     class TapLdif:
         """Tap LDIF types namespace for cross-project access.
