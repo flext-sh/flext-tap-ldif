@@ -15,6 +15,7 @@ from __future__ import annotations
 
 from typing import Protocol, runtime_checkable
 
+from flext_core import FlextTypes as t
 from flext_ldif import FlextLdifProtocols
 from flext_meltano import FlextMeltanoProtocols
 
@@ -59,13 +60,13 @@ class FlextMeltanoTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
 
             def parse_ldif_entry(
                 self, entry_text: str
-            ) -> FlextMeltanoProtocols.Result[dict[str, object]]:
+            ) -> FlextMeltanoProtocols.Result[dict[str, t.GeneralValueType]]:
                 """Parse single LDIF entry."""
                 ...
 
             def parse_ldif_file(
                 self, file_path: str
-            ) -> FlextMeltanoProtocols.Result[list[dict[str, object]]]:
+            ) -> FlextMeltanoProtocols.Result[list[dict[str, t.GeneralValueType]]]:
                 """Parse entire LDIF file."""
                 ...
 
@@ -81,17 +82,17 @@ class FlextMeltanoTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
 
             def extract_entries_by_filter(
                 self,
-                entries: list[dict[str, object]],
-                filter_criteria: dict[str, object],
-            ) -> FlextMeltanoProtocols.Result[list[dict[str, object]]]:
+                entries: list[dict[str, t.GeneralValueType]],
+                filter_criteria: dict[str, t.GeneralValueType],
+            ) -> FlextMeltanoProtocols.Result[list[dict[str, t.GeneralValueType]]]:
                 """Extract LDIF entries matching filter criteria."""
                 ...
 
             def extract_entry_attributes(
                 self,
-                entry: dict[str, object],
+                entry: dict[str, t.GeneralValueType],
                 attributes: list[str] | None = None,
-            ) -> FlextMeltanoProtocols.Result[dict[str, object]]:
+            ) -> FlextMeltanoProtocols.Result[dict[str, t.GeneralValueType]]:
                 """Extract specific attributes from LDIF entry."""
                 ...
 
@@ -100,14 +101,14 @@ class FlextMeltanoTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
             """Protocol for LDIF data transformation."""
 
             def transform_ldif_to_singer(
-                self, ldif_entry: dict[str, object]
-            ) -> FlextMeltanoProtocols.Result[dict[str, object]]:
+                self, ldif_entry: dict[str, t.GeneralValueType]
+            ) -> FlextMeltanoProtocols.Result[dict[str, t.GeneralValueType]]:
                 """Transform LDIF entry to Singer record format."""
                 ...
 
             def normalize_ldif_attributes(
-                self, attributes: dict[str, list[object]]
-            ) -> FlextMeltanoProtocols.Result[dict[str, object]]:
+                self, attributes: dict[str, list[t.GeneralValueType]]
+            ) -> FlextMeltanoProtocols.Result[dict[str, t.GeneralValueType]]:
                 """Normalize LDIF attribute values."""
                 ...
 
@@ -117,18 +118,18 @@ class FlextMeltanoTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
 
             def generate_streams_from_ldif(
                 self,
-                ldif_entries: list[dict[str, object]],
-                config: dict[str, object],
-            ) -> FlextMeltanoProtocols.Result[list[dict[str, object]]]:
+                ldif_entries: list[dict[str, t.GeneralValueType]],
+                config: dict[str, t.GeneralValueType],
+            ) -> FlextMeltanoProtocols.Result[list[dict[str, t.GeneralValueType]]]:
                 """Generate Singer streams from LDIF entries."""
                 ...
 
             def sync_ldif_stream(
                 self,
                 stream_name: str,
-                ldif_entries: list[dict[str, object]],
-                state: dict[str, object],
-            ) -> FlextMeltanoProtocols.Result[dict[str, object]]:
+                ldif_entries: list[dict[str, t.GeneralValueType]],
+                state: dict[str, t.GeneralValueType],
+            ) -> FlextMeltanoProtocols.Result[dict[str, t.GeneralValueType]]:
                 """Sync Singer stream from LDIF entries."""
                 ...
 

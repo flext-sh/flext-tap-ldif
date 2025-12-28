@@ -17,7 +17,11 @@ from flext_tap_ldif import m as FlextMeltanoTapLdifModels
 
 
 class TestsFlextMeltanoTapLdifModels(FlextTestsModels, FlextMeltanoTapLdifModels):
-    class TapLdif(FlextMeltanoTapLdifModels.TapLdif):
+    """Test models combining FlextTestsModels with flext-tap-ldif models."""
+
+    class TapLdif:
+        """TapLdif test models namespace."""
+
         class Tests:
             """Internal tests declarations."""
 

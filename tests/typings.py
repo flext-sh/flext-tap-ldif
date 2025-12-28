@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from typing import Literal
 
+from flext_core import FlextTypes as t
 from flext_tests import FlextTestsTypes
 
 
@@ -30,7 +31,7 @@ class TestsFlextMeltanoTapLdifTypes(FlextTestsTypes):
     """
 
     # Composition: expose FlextTestsTypes
-    Tests = FlextTestsTypes
+    # Tests = FlextTestsTypes  # Avoid override issues
 
     # TapLdif-specific test types namespace
     class TapLdif:
@@ -50,11 +51,11 @@ class TestsFlextMeltanoTapLdifTypes(FlextTestsTypes):
         # Test data types
         type MockLdifEntry = dict[str, str | dict[str, list[str]]]
         type MockLdifFile = list[MockLdifEntry]
-        type TestLdifScenario = dict[str, object]
+        type TestLdifScenario = dict[str, t.GeneralValueType]
 
         # Test result types
         type TestLdifValidationResult = dict[str, bool | str | list[str]]
-        type TestLdifParsingResult = dict[str, object]
+        type TestLdifParsingResult = dict[str, t.GeneralValueType]
 
 
 # Alias for simplified usage

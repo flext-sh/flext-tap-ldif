@@ -59,7 +59,6 @@ __all__ = [
     "TapLDIFConfig",
     "__version__",
     "__version_info__",
-    "dict[str, object]",
     "m",
     "m_tap_ldif",
     # Domain-specific aliases

@@ -11,7 +11,7 @@ from collections.abc import Iterable, Mapping
 from pathlib import Path
 from typing import override
 
-from flext_core import FlextLogger
+from flext_core import FlextLogger, FlextTypes as t
 
 # Use FLEXT Meltano wrappers instead of direct singer_sdk imports (domain separation)
 from flext_meltano import FlextMeltanoStream as Stream
@@ -40,7 +40,7 @@ class LDIFEntriesStream(Stream):
         self._processor = FlextLdifProcessorWrapper(dict(tap.config))
         self._tap = tap
         # Ensure a sample LDIF file exists in temp for default tests if none provided
-        cfg = dict[str, object](tap.config)
+        cfg = dict[str, t.GeneralValueType](tap.config)
         if not cfg.get("file_path") and not cfg.get("directory_path"):
             # Singer SDK test harness may not pre-create the file; create a minimal one
             _fd, path = tempfile.mkstemp(suffix=".ldif")
@@ -67,7 +67,7 @@ class LDIFEntriesStream(Stream):
                         exc,
                     )
 
-    def _get_schema(self: object) -> dict[str, object]:
+    def _get_schema(self: object) -> dict[str, t.GeneralValueType]:
         """Get schema for LDIF entries."""
         return t_meltano.Singer.Typing.PropertiesList(
             t_meltano.Singer.Typing.Property(
@@ -111,8 +111,8 @@ class LDIFEntriesStream(Stream):
 
     def get_records(
         self,
-        _context: Mapping[str, object] | None = None,
-    ) -> Iterable[dict[str, object]]:
+        _context: Mapping[str, t.GeneralValueType] | None = None,
+    ) -> Iterable[dict[str, t.GeneralValueType]]:
         """Return a generator of record-type dictionary objects.
 
         Args:
@@ -122,7 +122,9 @@ class LDIFEntriesStream(Stream):
             Dictionary representations of LDIF entries.
 
         """
-        config: dict[str, object] = dict[str, object](self._tap.config)
+        config: dict[str, t.GeneralValueType] = dict[str, t.GeneralValueType](
+            self._tap.config
+        )
         sample_path = getattr(self, "_sample_file_path", None)
         if sample_path:
             config["file_path"] = sample_path
