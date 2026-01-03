@@ -140,16 +140,17 @@ class FlextMeltanoTapLdifSettings(FlextSettings):
         if validation_result.is_failure:
             raise ValueError(validation_result.error)
 
-    def validate_business_rules(self: object) -> FlextResult[None]:
+    def validate_business_rules(self) -> FlextResult[None]:
         """Validate LDIF tap configuration business rules."""
         # Validate input sources using FlextResult chaining
         return (
-            self._validate_input_sources()
+            self
+            ._validate_input_sources()
             .flat_map(lambda _: self._validate_constraints())
             .flat_map(lambda _: self._validate_filters())
         )
 
-    def _validate_input_sources(self: object) -> FlextResult[None]:
+    def _validate_input_sources(self) -> FlextResult[None]:
         """Validate input source configuration."""
         if not any([self.file_path, self.file_pattern, self.directory_path]):
             return FlextResult[None].fail(
@@ -157,7 +158,7 @@ class FlextMeltanoTapLdifSettings(FlextSettings):
             )
         return FlextResult[None].ok(None)
 
-    def _validate_constraints(self: object) -> FlextResult[None]:
+    def _validate_constraints(self) -> FlextResult[None]:
         """Validate configuration constraints."""
         # Validate batch size constraints
         if self.batch_size <= 0:
@@ -181,7 +182,7 @@ class FlextMeltanoTapLdifSettings(FlextSettings):
 
         return FlextResult[None].ok(None)
 
-    def _validate_filters(self: object) -> FlextResult[None]:
+    def _validate_filters(self) -> FlextResult[None]:
         """Validate filter configuration."""
         if self.attribute_filter and self.exclude_attributes:
             overlapping = set(self.attribute_filter) & set(self.exclude_attributes)
@@ -235,7 +236,7 @@ class FlextMeltanoTapLdifSettings(FlextSettings):
         return cls(**test_defaults)
 
     @property
-    def ldif_config(self: object) -> dict[str, t.GeneralValueType]:
+    def ldif_config(self) -> dict[str, t.GeneralValueType]:
         """Get LDIF-specific configuration as a dictionary."""
         return {
             "file_path": self.file_path,
