@@ -103,7 +103,7 @@ class TapLDIF(Tap):
         ).to_dict()
     )
 
-    def discover_streams(self: object) -> list[Stream]:
+    def discover_streams(self) -> list[Stream]:
         """Return a list of discovered streams.
 
         Returns:
@@ -114,7 +114,7 @@ class TapLDIF(Tap):
             LDIFEntriesStream(tap=self),
         ]
 
-    def _get_ldif_entries_schema(self: object) -> dict[str, t.GeneralValueType]:
+    def _get_ldif_entries_schema(self) -> dict[str, t.GeneralValueType]:
         """Get the schema for LDIF entries stream.
 
         Returns:

@@ -67,7 +67,7 @@ class LDIFEntriesStream(Stream):
                         exc,
                     )
 
-    def _get_schema(self: object) -> dict[str, t.GeneralValueType]:
+    def _get_schema(self) -> dict[str, t.GeneralValueType]:
         """Get schema for LDIF entries."""
         return t_meltano.Singer.Typing.PropertiesList(
             t_meltano.Singer.Typing.Property(

@@ -13,10 +13,10 @@ from __future__ import annotations
 
 from flext_tests import FlextTestsModels
 
-from flext_tap_ldif import m as FlextMeltanoTapLdifModels
+from flext_tap_ldif import m
 
 
-class TestsFlextMeltanoTapLdifModels(FlextTestsModels, FlextMeltanoTapLdifModels):
+class TestsFlextMeltanoTapLdifModels(FlextTestsModels, m):
     """Test models combining FlextTestsModels with flext-tap-ldif models."""
 
     class TapLdif:
