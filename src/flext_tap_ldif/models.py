@@ -187,7 +187,7 @@ class FlextMeltanoTapLdifModels(BaseModel):
     LdifRecord: ClassVar[type] = dict[str, t.GeneralValueType]
     LdifRecords: ClassVar[type] = list[LdifRecord]
 
-    class UtilityFunctions:
+    class TapLdif:
         """Utility functions for LDIF data processing."""
 
         @staticmethod

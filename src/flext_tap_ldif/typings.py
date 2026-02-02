@@ -36,7 +36,7 @@ class FlextMeltanoTapLdifTypes(FlextTypes):
     # SINGER TAP TYPES - Complex Singer protocol types
     # =========================================================================
 
-    class SingerTap:
+    class TapLdif:
         """Singer tap protocol complex types."""
 
         type TapConfiguration = dict[
@@ -201,23 +201,6 @@ class FlextMeltanoTapLdifTypes(FlextTypes):
             str, bool | str | dict[str, FlextTypes.GeneralValueType]
         ]
         type TapLdifPipelineConfig = dict[str, FlextTypes.GeneralValueType]
-
-    class TapLdif:
-        """Tap LDIF types namespace for cross-project access.
-
-        Provides organized access to all Tap LDIF types for other FLEXT projects.
-        Usage: Other projects can reference `t.TapLdif.SingerTap.*`, `t.TapLdif.Project.*`, etc.
-        This enables consistent namespace patterns for cross-project type access.
-
-        Examples:
-            from flext_tap_ldif.typings import t
-            config: t.TapLdif.Project.SingerTapLdifProjectConfig = ...
-            stream: t.TapLdif.SingerTap.StreamConfiguration = ...
-
-        Note: Namespace composition via inheritance - no aliases needed.
-        Access parent namespaces directly through inheritance.
-
-        """
 
 
 # Alias for simplified usage

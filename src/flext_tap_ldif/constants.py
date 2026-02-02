@@ -43,7 +43,7 @@ class FlextMeltanoTapLdifConstants(FlextConstants):
         FlextLdifConstants.Ldif.EntryModification.MODRDN,
     ]
 
-    class TapLdifProcessing:
+    class TapLdif:
         """LDIF tap processing configuration.
 
         Note: Does not override parent Processing class to avoid inheritance conflicts.

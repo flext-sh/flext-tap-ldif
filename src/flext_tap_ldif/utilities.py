@@ -38,7 +38,7 @@ class FlextMeltanoTapLdifUtilities(u_core):
         """Initialize LDIF tap utilities."""
         super().__init__()
 
-    class SingerUtilities:
+    class TapLdif:
         """Singer protocol utilities for tap operations."""
 
         @staticmethod
