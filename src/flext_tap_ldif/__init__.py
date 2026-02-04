@@ -16,20 +16,22 @@ from flext_tap_ldif.ldif_processor import (
 )
 from flext_tap_ldif.models import FlextMeltanoTapLdifModels, m, m_tap_ldif
 from flext_tap_ldif.protocols import FlextMeltanoTapLdifProtocols
-from flext_tap_ldif.settings import FlextMeltanoTapLdifSettings
+from flext_tap_ldif.settings import (
+    FlextMeltanoTapLdifSettings,
+    FlextMeltanoTapLdifSettings as FlextMeltanoTapLDIFSettings,
+    FlextMeltanoTapLdifSettings as TapConfig,
+    FlextMeltanoTapLdifSettings as TapLDIFConfig,
+)
 from flext_tap_ldif.streams import LDIFEntriesStream
-from flext_tap_ldif.tap import TapLDIF, TapLDIF as LegacyTapLDIF
-from flext_tap_ldif.utilities import FlextMeltanoTapLdifUtilities
+from flext_tap_ldif.tap import (
+    TapLDIF,
+    TapLDIF as FlextMeltanoTapLDIF,
+    TapLDIF as LDIFTap,
+    TapLDIF as LegacyTapLDIF,
+)
+from flext_tap_ldif.utilities import FlextMeltanoTapLdifUtilities as u
 
-# Domain-specific aliases
-u = FlextMeltanoTapLdifUtilities  # Utilities (FlextMeltanoTapLdifUtilities extends FlextLdifUtilities)
-
-# Backward compatibility aliases
-FlextMeltanoTapLDIF = TapLDIF
-TapLDIFConfig = FlextMeltanoTapLdifSettings
-FlextMeltanoTapLDIFSettings = FlextMeltanoTapLdifSettings
-LDIFTap = TapLDIF
-TapConfig = FlextMeltanoTapLdifSettings
+FlextMeltanoTapLdifUtilities = u
 
 __all__ = [
     "FlextLdifProcessor",
@@ -37,17 +39,10 @@ __all__ = [
     "FlextLogger",
     "FlextMeltanoTapLDIF",
     "FlextMeltanoTapLDIFSettings",
-    "FlextMeltanoTapLdifError",
-    "FlextMeltanoTapLdifFileError",
     "FlextMeltanoTapLdifModels",
-    "FlextMeltanoTapLdifParseError",
-    "FlextMeltanoTapLdifProcessingError",
     "FlextMeltanoTapLdifProtocols",
     "FlextMeltanoTapLdifSettings",
-    "FlextMeltanoTapLdifSettingsurationError",
-    "FlextMeltanoTapLdifStreamError",
     "FlextMeltanoTapLdifUtilities",
-    "FlextMeltanoTapLdifValidationError",
     "FlextModels",
     "FlextResult",
     "LDIFEntriesStream",
