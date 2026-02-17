@@ -162,7 +162,7 @@ class FlextMeltanoTapLdifUtilities(u_core):
                         f"File does not appear to be valid LDIF format: {file_path}",
                     )
 
-                return FlextResult[bool].ok(True)
+                return FlextResult[bool].ok(value=True)
 
             except UnicodeDecodeError as e:
                 return FlextResult[bool].fail(f"LDIF file encoding error: {e}")

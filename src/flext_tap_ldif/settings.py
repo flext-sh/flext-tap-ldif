@@ -140,7 +140,7 @@ class FlextMeltanoTapLdifSettings(FlextSettings):
         if validation_result.is_failure:
             raise ValueError(validation_result.error)
 
-    def validate_business_rules(self) -> FlextResult[None]:
+    def validate_business_rules(self) -> FlextResult[bool]:
         """Validate LDIF tap configuration business rules."""
         # Validate input sources using FlextResult chaining
         return (
@@ -150,47 +150,47 @@ class FlextMeltanoTapLdifSettings(FlextSettings):
             .flat_map(lambda _: self._validate_filters())
         )
 
-    def _validate_input_sources(self) -> FlextResult[None]:
+    def _validate_input_sources(self) -> FlextResult[bool]:
         """Validate input source configuration."""
         if not any([self.file_path, self.file_pattern, self.directory_path]):
-            return FlextResult[None].fail(
+            return FlextResult[bool].fail(
                 'At least one input source must be specified: "file_path", "file_pattern", or "directory_path"',
             )
-        return FlextResult[None].ok(None)
+        return FlextResult[bool].ok(value=True)
 
-    def _validate_constraints(self) -> FlextResult[None]:
+    def _validate_constraints(self) -> FlextResult[bool]:
         """Validate configuration constraints."""
         # Validate batch size constraints
         if self.batch_size <= 0:
-            return FlextResult[None].fail("Batch size must be positive")
+            return FlextResult[bool].fail("Batch size must be positive")
         max_batch = FlextConstants.Performance.MAX_BATCH_SIZE_VALIDATION
         if self.batch_size > max_batch:
-            return FlextResult[None].fail(f"Batch size cannot exceed {max_batch}")
+            return FlextResult[bool].fail(f"Batch size cannot exceed {max_batch}")
 
         # Validate file size constraints
         if self.max_file_size_mb <= 0:
-            return FlextResult[None].fail("Max file size must be positive")
+            return FlextResult[bool].fail("Max file size must be positive")
         max_file_mb = FlextConstants.Logging.MAX_FILE_SIZE // (1024 * 1024)
         if self.max_file_size_mb > max_file_mb:
-            return FlextResult[None].fail(
+            return FlextResult[bool].fail(
                 f"Max file size cannot exceed {max_file_mb} MB",
             )
 
         # Validate encoding
         if not self.encoding:
-            return FlextResult[None].fail("Encoding must be specified")
+            return FlextResult[bool].fail("Encoding must be specified")
 
-        return FlextResult[None].ok(None)
+        return FlextResult[bool].ok(value=True)
 
-    def _validate_filters(self) -> FlextResult[None]:
+    def _validate_filters(self) -> FlextResult[bool]:
         """Validate filter configuration."""
         if self.attribute_filter and self.exclude_attributes:
             overlapping = set(self.attribute_filter) & set(self.exclude_attributes)
             if overlapping:
-                return FlextResult[None].fail(
+                return FlextResult[bool].fail(
                     f"Attributes cannot be both included and excluded: {overlapping}",
                 )
-        return FlextResult[None].ok(None)
+        return FlextResult[bool].ok(value=True)
 
     @classmethod
     def get_global_instance(cls) -> Self:
