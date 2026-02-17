@@ -6,7 +6,7 @@
 
 **FLEXT-Tap-LDIF** extracts directory data directly from LDIF files. It enables batch ingestion of directory exports into modern data pipelines, parsing both regular entries and operational attributes.
 
-Part of the [FLEXT](https://github.com/flext/flext) ecosystem.
+Part of the [FLEXT](https://github.com/flext-sh/flext) ecosystem.
 
 ## 🚀 Key Features
 
