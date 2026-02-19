@@ -29,9 +29,7 @@ from flext_tap_ldif.tap import (
     TapLDIF as LDIFTap,
     TapLDIF as LegacyTapLDIF,
 )
-from flext_tap_ldif.utilities import FlextMeltanoTapLdifUtilities as u
-
-FlextMeltanoTapLdifUtilities = u
+from flext_tap_ldif.utilities import FlextMeltanoTapLdifUtilities
 
 __all__ = [
     "FlextLdifProcessor",
@@ -56,6 +54,4 @@ __all__ = [
     "__version_info__",
     "m",
     "m_tap_ldif",
-    # Domain-specific aliases
-    "u",
 ]
