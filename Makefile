@@ -1,8 +1,5 @@
 # flext-tap-ldif - LDIF Singer Tap
 PROJECT_NAME := flext-tap-ldif
-COV_DIR := flext_tap_ldif
-MIN_COVERAGE := 90
-
 include ../base.mk
 
 # === PROJECT-SPECIFIC TARGETS ===
