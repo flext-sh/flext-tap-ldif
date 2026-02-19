@@ -95,8 +95,23 @@ class FlextMeltanoTapLdifModels(BaseModel):
     @computed_field
     def ldif_tap_system_summary(self) -> dict[str, t.GeneralValueType]:
         """Complete Singer LDIF tap system summary with file processing capabilities."""
+        total_models = sum(
+            1
+            for attr in [
+                "LdifEntry",
+                "LdifChangeRecord",
+                "LdifFile",
+                "LdifStream",
+                "LdifBatch",
+                "LdifProcessingState",
+                "LdifTapConfig",
+                "LdifRecord",
+                "LdifValidationResult",
+            ]
+            if hasattr(self, attr)
+        )
         return {
-            "total_models": self.active_ldif_tap_models_count,
+            "total_models": total_models,
             "tap_type": "singer_ldif_file_extractor",
             "extraction_features": [
                 "ldif_file_parsing",

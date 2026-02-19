@@ -217,14 +217,10 @@ class FlextMeltanoTapLdifUtilities(u_core):
 
             """
             try:
-                metadata: dict[str, t.GeneralValueType] = {
-                    "file_path": str(file_path),
-                    "file_size": file_path.stat().st_size,
-                    "version": None,
-                    "entry_count": 0,
-                    "base_dns": set(),
-                    "object_classes": set(),
-                }
+                version: str | None = None
+                entry_count = 0
+                base_dns: set[str] = set()
+                object_classes: set[str] = set()
 
                 with file_path.open(
                     "r",
@@ -234,23 +230,28 @@ class FlextMeltanoTapLdifUtilities(u_core):
                         line = line_str.strip()
 
                         if line.startswith("version:"):
-                            metadata["version"] = line.split(":", 1)[1].strip()
+                            version = line.split(":", 1)[1].strip()
                         elif line.startswith("dn:"):
-                            metadata["entry_count"] += 1
+                            entry_count += 1
                             dn = line.split(":", 1)[1].strip()
                             # Extract base DN (last two components)
                             min_dn_components_for_base = 2
                             dn_parts = [part.strip() for part in dn.split(",")]
                             if len(dn_parts) >= min_dn_components_for_base:
                                 base_dn = ",".join(dn_parts[-2:])
-                                metadata["base_dns"].add(base_dn)
+                                base_dns.add(base_dn)
                         elif line.startswith("objectClass:"):
                             obj_class = line.split(":", 1)[1].strip()
-                            metadata["object_classes"].add(obj_class)
+                            object_classes.add(obj_class)
 
-                # Convert sets to lists for JSON serialization
-                metadata["base_dns"] = list(metadata["base_dns"])
-                metadata["object_classes"] = list(metadata["object_classes"])
+                metadata: dict[str, t.GeneralValueType] = {
+                    "file_path": str(file_path),
+                    "file_size": file_path.stat().st_size,
+                    "version": version,
+                    "entry_count": entry_count,
+                    "base_dns": list(base_dns),
+                    "object_classes": list(object_classes),
+                }
 
                 return FlextResult[dict[str, t.GeneralValueType]].ok(metadata)
 
@@ -479,7 +480,17 @@ class FlextMeltanoTapLdifUtilities(u_core):
             dict[str, t.GeneralValueType]: File state
 
             """
-            return state.get("files", {}).get(file_path, {})
+            files_raw = state.get("files")
+            if not isinstance(files_raw, dict):
+                return {}
+            file_state_raw = files_raw.get(file_path)
+            if not isinstance(file_state_raw, dict):
+                return {}
+            return {
+                str(key): value
+                for key, value in file_state_raw.items()
+                if isinstance(key, str)
+            }
 
         @staticmethod
         def set_file_state(
@@ -498,10 +509,18 @@ class FlextMeltanoTapLdifUtilities(u_core):
             dict[str, t.GeneralValueType]: Updated state
 
             """
-            if "files" not in state:
-                state["files"] = {}
-
-            state["files"][file_path] = file_state
+            files_raw = state.get("files")
+            files_dict: dict[str, dict[str, t.GeneralValueType]] = {}
+            if isinstance(files_raw, dict):
+                for key, value in files_raw.items():
+                    if isinstance(key, str) and isinstance(value, dict):
+                        files_dict[key] = {
+                            str(inner_key): inner_value
+                            for inner_key, inner_value in value.items()
+                            if isinstance(inner_key, str)
+                        }
+            files_dict[file_path] = file_state
+            state["files"] = files_dict
             return state
 
         @staticmethod
@@ -522,7 +541,8 @@ class FlextMeltanoTapLdifUtilities(u_core):
                 state,
                 file_path,
             )
-            return file_state.get("position", 0)
+            position = file_state.get("position", 0)
+            return position if isinstance(position, int) else 0
 
         @staticmethod
         def set_file_position(
@@ -541,14 +561,17 @@ class FlextMeltanoTapLdifUtilities(u_core):
             dict[str, t.GeneralValueType]: Updated state
 
             """
-            if "files" not in state:
-                state["files"] = {}
-            if file_path not in state["files"]:
-                state["files"][file_path] = {}
-
-            state["files"][file_path]["position"] = position
-            state["files"][file_path]["last_updated"] = datetime.now(UTC).isoformat()
-            return state
+            file_state = FlextMeltanoTapLdifUtilities.StateManagement.get_file_state(
+                state,
+                file_path,
+            )
+            file_state["position"] = position
+            file_state["last_updated"] = datetime.now(UTC).isoformat()
+            return FlextMeltanoTapLdifUtilities.StateManagement.set_file_state(
+                state,
+                file_path,
+                file_state,
+            )
 
     # Proxy methods for backward compatibility
     @classmethod
