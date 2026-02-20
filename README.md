@@ -1,93 +1,27 @@
-# FLEXT-Tap-LDIF
+# FLEXT Tap LDIF
 
-<!-- TOC START -->
+Singer Tap para extracao de dados a partir de arquivos LDIF.
 
-- [🚀 Key Features](#-key-features)
-- [📦 Installation](#-installation)
-- [🛠️ Usage](#-usage)
-  - [Basic Extraction](#basic-extraction)
-  - [Advanced Filtering](#advanced-filtering)
-- [🏗️ Architecture](#-architecture)
-- [🤝 Contributing](#-contributing)
-- [📄 License](#-license)
+Descricao oficial atual: "FLEXT Tap LDIF - Singer Tap for LDIF file format data extraction".
 
-<!-- TOC END -->
+## O que este projeto entrega
 
-[![Singer SDK](https://img.shields.io/badge/singer--sdk-compliant-brightgreen.svg)](https://sdk.meltano.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+- Converte conteudo LDIF em stream Singer.
+- Padroniza estrutura de schema para pipeline.
+- Permite ingestao de cargas historicas de diretorio.
 
-**FLEXT-Tap-LDIF** extracts directory data directly from LDIF files. It enables batch ingestion of directory exports into modern data pipelines, parsing both regular entries and operational attributes.
+## Contexto operacional
 
-Part of the [FLEXT](https://github.com/flext-sh/flext) ecosystem.
+- Entrada: arquivos LDIF de origem.
+- Saida: eventos Singer para persistencia/transformacao.
+- Dependencias: flext-ldif e fluxo de orquestracao Singer.
 
-## 🚀 Key Features
+## Estado atual e risco de adocao
 
-- **File Handling**: Supports single files, directories, and glob patterns (`*.ldif`).
-- **Parsing Logic**: Built on `flext-ldif` for robust parsing of varied schemas (Active Directory, OpenLDAP, etc.).
-- **Filtering**: Selectively extract entries by `base_dn`, `objectClass`, or specific attributes.
-- **Batching**: Memory-efficient batch processing for large export files (>1GB).
-- **Error Tolerance**: Configurable strict/lenient modes for handling malformed entries.
+- Qualidade: **Alpha**
+- Uso recomendado: **Nao produtivo**
+- Nivel de estabilidade: em maturacao funcional e tecnica, sujeito a mudancas de contrato sem garantia de retrocompatibilidade.
 
-## 📦 Installation
+## Diretriz para uso nesta fase
 
-To usage in your Meltano project, add the extractor to your `meltano.yml`:
-
-```yaml
-plugins:
-  extractors:
-    - name: tap-ldif
-      pip_url: flext-tap-ldif
-      config:
-        file_path: /data/exports/*.ldif
-        batch_size: 2000
-```
-
-## 🛠️ Usage
-
-### Basic Extraction
-
-Extract data from a local LDIF file using a simple configuration:
-
-```json
-{
-  "file_path": "./users_export.ldif",
-  "encoding": "utf-8",
-  "strict_parsing": false
-}
-```
-
-Run discovery to generate a schema:
-
-```bash
-tap-ldif --config config.json --discover > catalog.json
-```
-
-### Advanced Filtering
-
-Limit extraction to specific sub-trees or object types:
-
-```json
-{
-  "directory_path": "/exports/daily/",
-  "file_pattern": "users_*.ldif",
-  "base_dn_filter": "ou=people,dc=example,dc=com",
-  "object_class_filter": ["inetOrgPerson"],
-  "attribute_filter": ["cn", "mail", "uid"]
-}
-```
-
-## 🏗️ Architecture
-
-The tap acts as a bridge between static files and streaming pipelines:
-
-- **Stream Logic**: Represents all entries as a unified stream with `dn` as primary key.
-- **Infrastructure**: Wraps `flext-ldif` capabilities for validation and parsing.
-
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guide](docs/development.md) for details on adding new parsing rules or enhancing test coverage.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Aplicar este projeto somente em desenvolvimento, prova de conceito e homologacao controlada, com expectativa de ajustes frequentes ate maturidade de release.
