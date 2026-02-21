@@ -15,6 +15,7 @@ from typing import override
 
 from flext_core import FlextResult, FlextTypes as t
 from flext_core.utilities import u_core
+from flext_meltano import FlextMeltanoModels as m
 
 from flext_tap_ldif.constants import c
 
@@ -44,9 +45,9 @@ class FlextMeltanoTapLdifUtilities(u_core):
         @staticmethod
         def create_schema_message(
             stream_name: str,
-            schema: dict[str, t.GeneralValueType],
+            schema: dict[str, t.JsonValue],
             key_properties: list[str] | None = None,
-        ) -> dict[str, t.GeneralValueType]:
+        ) -> m.Meltano.SingerSchemaMessage:
             """Create Singer schema message.
 
             Args:
@@ -58,19 +59,18 @@ class FlextMeltanoTapLdifUtilities(u_core):
             dict[str, t.GeneralValueType]: Singer schema message
 
             """
-            return {
-                "type": "SCHEMA",
-                "stream": stream_name,
-                "schema": schema,
-                "key_properties": key_properties or [],
-            }
+            return m.Meltano.SingerSchemaMessage(
+                stream=stream_name,
+                schema=schema,
+                key_properties=key_properties or [],
+            )
 
         @staticmethod
         def create_record_message(
             stream_name: str,
-            record: dict[str, t.GeneralValueType],
+            record: dict[str, t.JsonValue],
             time_extracted: datetime | None = None,
-        ) -> dict[str, t.GeneralValueType]:
+        ) -> m.Meltano.SingerRecordMessage:
             """Create Singer record message.
 
             Args:
@@ -83,17 +83,16 @@ class FlextMeltanoTapLdifUtilities(u_core):
 
             """
             extracted_time = time_extracted or datetime.now(UTC)
-            return {
-                "type": "RECORD",
-                "stream": stream_name,
-                "record": record,
-                "time_extracted": extracted_time.isoformat(),
-            }
+            return m.Meltano.SingerRecordMessage(
+                stream=stream_name,
+                record=record,
+                time_extracted=extracted_time.isoformat(),
+            )
 
         @staticmethod
         def create_state_message(
-            state: dict[str, t.GeneralValueType],
-        ) -> dict[str, t.GeneralValueType]:
+            state: dict[str, dict[str, str]],
+        ) -> m.Meltano.SingerStateMessage:
             """Create Singer state message.
 
             Args:
@@ -103,13 +102,16 @@ class FlextMeltanoTapLdifUtilities(u_core):
             dict[str, t.GeneralValueType]: Singer state message
 
             """
-            return {
-                "type": "STATE",
-                "value": state,
-            }
+            return m.Meltano.SingerStateMessage(value=state)
 
         @staticmethod
-        def write_message(message: dict[str, t.GeneralValueType]) -> None:
+        def write_message(
+            message: (
+                m.Meltano.SingerSchemaMessage
+                | m.Meltano.SingerRecordMessage
+                | m.Meltano.SingerStateMessage
+            ),
+        ) -> None:
             """Write Singer message to stdout.
 
             Args:
@@ -373,10 +375,14 @@ class FlextMeltanoTapLdifUtilities(u_core):
                             current_attr,
                         )
                         if normalized_attr in record:
-                            # Convert to list if multiple values
-                            if not isinstance(record[normalized_attr], list):
-                                record[normalized_attr] = [record[normalized_attr]]
-                            record[normalized_attr].append(current_value)
+                            existing_value = record[normalized_attr]
+                            if isinstance(existing_value, list):
+                                existing_value.append(current_value)
+                            else:
+                                record[normalized_attr] = [
+                                    str(existing_value),
+                                    current_value,
+                                ]
                         else:
                             record[normalized_attr] = current_value
 
@@ -398,9 +404,14 @@ class FlextMeltanoTapLdifUtilities(u_core):
                         current_attr,
                     )
                     if normalized_attr in record:
-                        if not isinstance(record[normalized_attr], list):
-                            record[normalized_attr] = [record[normalized_attr]]
-                        record[normalized_attr].append(current_value)
+                        existing_value = record[normalized_attr]
+                        if isinstance(existing_value, list):
+                            existing_value.append(current_value)
+                        else:
+                            record[normalized_attr] = [
+                                str(existing_value),
+                                current_value,
+                            ]
                     else:
                         record[normalized_attr] = current_value
 
@@ -578,11 +589,11 @@ class FlextMeltanoTapLdifUtilities(u_core):
     def create_schema_message(
         cls,
         stream_name: str,
-        schema: dict[str, t.GeneralValueType],
+        schema: dict[str, t.JsonValue],
         key_properties: list[str] | None = None,
-    ) -> dict[str, t.GeneralValueType]:
+    ) -> m.Meltano.SingerSchemaMessage:
         """Proxy method for SingerUtilities.create_schema_message()."""
-        return cls.SingerUtilities.create_schema_message(
+        return cls.TapLdif.create_schema_message(
             stream_name,
             schema,
             key_properties,
@@ -592,11 +603,11 @@ class FlextMeltanoTapLdifUtilities(u_core):
     def create_record_message(
         cls,
         stream_name: str,
-        record: dict[str, t.GeneralValueType],
+        record: dict[str, t.JsonValue],
         time_extracted: datetime | None = None,
-    ) -> dict[str, t.GeneralValueType]:
+    ) -> m.Meltano.SingerRecordMessage:
         """Proxy method for SingerUtilities.create_record_message()."""
-        return cls.SingerUtilities.create_record_message(
+        return cls.TapLdif.create_record_message(
             stream_name,
             record,
             time_extracted,
