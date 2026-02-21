@@ -13,14 +13,13 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import override
 
-from flext_core import FlextResult, t
-from flext_core.utilities import u
+from flext_core import FlextResult, FlextUtilities, t
 from flext_meltano import FlextMeltanoModels as m
 
 from flext_tap_ldif.constants import c
 
 
-class FlextMeltanoTapLdifUtilities(u):
+class FlextMeltanoTapLdifUtilities(FlextUtilities):
     """Single unified utilities class for Singer tap LDIF operations.
 
     Follows FLEXT unified class pattern with nested helper classes for
@@ -91,15 +90,15 @@ class FlextMeltanoTapLdifUtilities(u):
 
         @staticmethod
         def create_state_message(
-            state: dict[str, dict[str, str]],
+            state: dict[str, t.GeneralValueType],
         ) -> m.Meltano.SingerStateMessage:
-            """Create Singer state message.
+            """Create Singer state message from state data.
 
             Args:
-            state: State data
+            state: State bookmark payload
 
             Returns:
-            dict[str, t.GeneralValueType]: Singer state message
+            SingerStateMessage model
 
             """
             return m.Meltano.SingerStateMessage(value=state)

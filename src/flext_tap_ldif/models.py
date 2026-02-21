@@ -22,7 +22,6 @@ from pydantic import (
 )
 
 from flext_tap_ldif.typings import t
-from flext_tap_ldif.utilities import FlextMeltanoTapLdifUtilities
 
 
 class FlextMeltanoTapLdifModels(BaseModel):
@@ -1126,12 +1125,5 @@ class FlextMeltanoTapLdifModels(BaseModel):
 
 # Short aliases
 m = FlextMeltanoTapLdifModels
-m_tap_ldif = FlextMeltanoTapLdifModels
 
-# Public API exports following FLEXT standardized patterns
-__all__ = [
-    "FlextMeltanoTapLdifModels",  # Unified models class
-    "FlextMeltanoTapLdifUtilities",  # Standardized [Project]Utilities pattern
-    "m",  # Short alias
-    "m_tap_ldif",  # Domain-specific alias
-]
+__all__ = ["FlextMeltanoTapLdifModels", "m"]

@@ -14,7 +14,7 @@ from flext_tap_ldif.ldif_processor import (
     FlextLdifProcessorWrapper,
     LDIFProcessor,
 )
-from flext_tap_ldif.models import FlextMeltanoTapLdifModels, m, m_tap_ldif
+from flext_tap_ldif.models import FlextMeltanoTapLdifModels, m
 from flext_tap_ldif.protocols import FlextMeltanoTapLdifProtocols
 from flext_tap_ldif.settings import (
     FlextMeltanoTapLdifSettings,
@@ -54,6 +54,5 @@ __all__ = [
     "__version__",
     "__version_info__",
     "m",
-    "m_tap_ldif",
     "t",
 ]
