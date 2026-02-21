@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import base64
 from datetime import UTC, datetime
-from typing import ClassVar, Self
+from typing import Self
 
 from flext_core import FlextConstants
 from flext_core.utilities import u
@@ -1109,7 +1109,6 @@ class FlextMeltanoTapLdifModels(BaseModel):
                 msg = "Successful + failed files cannot exceed total files"
                 raise ValueError(msg)
             return self
-
 
 
 # Short aliases

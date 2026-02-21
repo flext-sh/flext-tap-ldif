@@ -8,7 +8,10 @@ SPDX-License-Identifier: MIT
 
 """
 
-from flext_tap_ldif.tests import tm, tp, tt, tu
+from .models import m as tm
+from .protocols import p as tp
+from .typings import t as tt
+from .utilities import u as tu
 
 __all__ = [
     "tm",
