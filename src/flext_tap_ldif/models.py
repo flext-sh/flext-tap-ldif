@@ -39,9 +39,9 @@ class FlextMeltanoTapLdifModels(BaseModel):
     Consolidates ALL models for LDIF file extraction and processing.
     """
 
-    def __init_subclass__(cls, **kwargs: object) -> None:
+    def __init_subclass__(cls) -> None:
         """Warn when FlextMeltanoTapLdifModels is subclassed directly."""
-        super().__init_subclass__(**kwargs)
+        super().__init_subclass__()
         u.Deprecation.warn_once(
             f"subclass:{cls.__name__}",
             "Subclassing FlextMeltanoTapLdifModels is deprecated. Use composition with BaseModel instead.",
@@ -141,25 +141,17 @@ class FlextMeltanoTapLdifModels(BaseModel):
     def validate_ldif_tap_system_consistency(self) -> Self:
         """Validate Singer LDIF tap system consistency and configuration."""
         # Singer LDIF tap file validation
-        if (
-            hasattr(self, "_ldif_files")
-            and self._ldif_files
-            and not hasattr(self, "LdifFile")
-        ):
+        if getattr(self, "_ldif_files", None) and not hasattr(self, "LdifFile"):
             msg = "LdifFile model required when LDIF files configured"
             raise ValueError(msg)
 
         # LDIF processing validation
-        if (
-            hasattr(self, "_batch_processing")
-            and self._batch_processing
-            and not hasattr(self, "LdifBatch")
-        ):
+        if getattr(self, "_batch_processing", None) and not hasattr(self, "LdifBatch"):
             msg = "LdifBatch model required for batch processing"
             raise ValueError(msg)
 
         # Singer protocol compliance validation
-        if hasattr(self, "_singer_mode") and self._singer_mode:
+        if getattr(self, "_singer_mode", None):
             required_models = ["LdifStream", "LdifRecord", "LdifProcessingState"]
             for model in required_models:
                 if not hasattr(self, model):
@@ -199,8 +191,8 @@ class FlextMeltanoTapLdifModels(BaseModel):
         return value
 
     # Legacy type aliases for backward compatibility
-    LdifRecord: ClassVar[type] = dict[str, t.GeneralValueType]
-    LdifRecords: ClassVar[type] = list[LdifRecord]
+    LdifRecordType: ClassVar[type] = dict[str, t.GeneralValueType]
+    LdifRecordsType: ClassVar[type] = list[dict[str, t.GeneralValueType]]
 
     class TapLdif:
         """Utility functions for LDIF data processing."""
@@ -553,11 +545,11 @@ class FlextMeltanoTapLdifModels(BaseModel):
         )
 
         # Stream schema
-        schema: dict[str, t.GeneralValueType] = Field(
+        stream_schema: dict[str, t.GeneralValueType] = Field(
             default_factory=dict,
             description="JSON schema",
         )
-        metadata: list[dict[str, t.GeneralValueType]] = Field(
+        stream_metadata: list[dict[str, t.GeneralValueType]] = Field(
             default_factory=list,
             description="Stream metadata",
         )
@@ -577,7 +569,7 @@ class FlextMeltanoTapLdifModels(BaseModel):
                     "object_class_filters": len(self.filter_object_classes),
                     "has_filters": bool(self.filter_object_classes),
                 },
-                "has_schema": bool(self.schema),
+                "has_schema": bool(self.stream_schema),
             }
 
         @model_validator(mode="after")

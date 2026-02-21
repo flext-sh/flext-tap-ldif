@@ -49,7 +49,7 @@ class FlextLdifProcessorWrapper:
         file_path: str | Path | None = None,
         max_file_size_mb: int = 100,
     ) -> FlextResult[list[Path]]:
-        """Discover LDIF files using generic flext-ldif functionality.
+        """Discover LDIF files using local file discovery.
 
         Args:
             directory_path: Directory to search for LDIF files
@@ -61,13 +61,36 @@ class FlextLdifProcessorWrapper:
             FlextResult[list[Path]]: Success with discovered files or failure with error
 
         """
-        # Delegate to flext-ldif generic file discovery - NO local duplication
-        return self._api.discover_ldif_files(
-            directory_path=directory_path,
-            file_pattern=file_pattern,
-            file_path=file_path,
-            max_file_size_mb=max_file_size_mb,
-        )
+        max_size_bytes = max_file_size_mb * 1024 * 1024
+        discovered: list[Path] = []
+
+        # Single file mode
+        if file_path is not None:
+            p = Path(file_path) if isinstance(file_path, str) else file_path
+            if not p.exists():
+                return FlextResult[list[Path]].fail(f"File not found: {p}")
+            if p.stat().st_size > max_size_bytes:
+                return FlextResult[list[Path]].fail(f"File exceeds max size: {p}")
+            discovered.append(p)
+            return FlextResult[list[Path]].ok(discovered)
+
+        # Directory mode
+        if directory_path is not None:
+            d = (
+                Path(directory_path)
+                if isinstance(directory_path, str)
+                else directory_path
+            )
+            if not d.exists() or not d.is_dir():
+                return FlextResult[list[Path]].fail(f"Directory not found: {d}")
+            discovered.extend(
+                f
+                for f in sorted(d.glob(file_pattern))
+                if f.is_file() and f.stat().st_size <= max_size_bytes
+            )
+            return FlextResult[list[Path]].ok(discovered)
+
+        return FlextResult[list[Path]].fail("No file_path or directory_path specified")
 
     def process_file(self, file_path: Path) -> Generator[dict[str, t.GeneralValueType]]:
         """Process a single LDIF file and yield records using flext-ldif.
@@ -87,24 +110,30 @@ class FlextLdifProcessorWrapper:
                 encoding = "utf-8"
             with file_path.open("r", encoding=encoding) as file:
                 content = file.read()
-                parse_result: FlextResult[object] = self._api.parse(content)
+                parse_result: FlextResult[list[t.GeneralValueType]] = self._api.parse(
+                    content
+                )
                 if parse_result.is_failure:
                     msg: str = f"Failed to parse LDIF: {parse_result.error}"
                     self._raise_parse_error(msg)
                     return
                 entries = parse_result.value
+                if entries is None:
+                    return
                 for entry in entries:
-                    # Convert FlextLdifEntry to expected dictionary format
+                    # Convert entry to expected dictionary format
+                    dn_val = getattr(entry, "dn", "")
+                    attrs_obj = getattr(entry, "attributes", None)
+                    attrs_dict: dict[str, list[str]] = (
+                        getattr(attrs_obj, "attributes", {}) if attrs_obj else {}
+                    )
                     yield {
-                        "dn": str(entry.dn),
-                        "attributes": entry.attributes.attributes,
-                        "object_class": entry.attributes.attributes.get(
-                            "objectClass",
-                            [],
-                        ),
-                        "change_type": "None",  # Change records not supported in simple parse
+                        "dn": str(dn_val),
+                        "attributes": attrs_dict,
+                        "object_class": attrs_dict.get("objectClass", []),
+                        "change_type": "None",
                         "source_file": str(file_path),
-                        "line_number": 0,  # Line numbers not available in simplified parse
+                        "line_number": 0,
                         "entry_size": len(str(entry).encode("utf-8")),
                     }
         except (RuntimeError, ValueError, TypeError):

@@ -14,13 +14,13 @@ from typing import override
 from flext_core import FlextLogger, FlextTypes as t
 
 # Use FLEXT Meltano wrappers instead of direct singer_sdk imports (domain separation)
-from flext_meltano import FlextMeltanoStream as Stream
-from flext_meltano.protocols import FlextMeltanoProtocols
+from flext_meltano import (
+    FlextMeltanoStream as Stream,
+    FlextMeltanoTap as Tap,
+)
 from flext_meltano.typings import t as t_meltano
 
 from flext_tap_ldif.ldif_processor import FlextLdifProcessorWrapper
-
-TapProtocol = FlextMeltanoProtocols.Meltano.TapProtocol
 
 logger = FlextLogger(__name__)
 
@@ -29,7 +29,7 @@ class LDIFEntriesStream(Stream):
     """LDIF entries stream using flext-ldif for ALL processing."""
 
     @override
-    def __init__(self, tap: TapProtocol) -> None:
+    def __init__(self, tap: Tap) -> None:
         """Initialize LDIF entries stream.
 
         Args:
@@ -38,9 +38,9 @@ class LDIFEntriesStream(Stream):
         """
         super().__init__(tap, name="ldif_entries", schema=self._get_schema())
         self._processor = FlextLdifProcessorWrapper(dict(tap.config))
-        self._tap = tap
+        self._tap: Tap = tap
         # Ensure a sample LDIF file exists in temp for default tests if none provided
-        cfg = dict[str, t.GeneralValueType](tap.config)
+        cfg: dict[str, t.GeneralValueType] = dict(tap.config)
         if not cfg.get("file_path") and not cfg.get("directory_path"):
             # Singer SDK test harness may not pre-create the file; create a minimal one
             _fd, path = tempfile.mkstemp(suffix=".ldif")
@@ -62,9 +62,10 @@ class LDIFEntriesStream(Stream):
                             encoding="utf-8",
                         )
                 except Exception as exc:  # Non-critical seeding failure
+                    exc_msg = str(exc)
                     logger.warning(
                         "Failed to seed LDIF file with sample content: %s",
-                        exc,
+                        exc_msg,
                     )
 
     def _get_schema(self) -> dict[str, t.GeneralValueType]:
@@ -111,29 +112,36 @@ class LDIFEntriesStream(Stream):
 
     def get_records(
         self,
-        _context: Mapping[str, t.GeneralValueType] | None = None,
+        context: Mapping[str, t.GeneralValueType] | None = None,  # noqa: ARG002
     ) -> Iterable[dict[str, t.GeneralValueType]]:
         """Return a generator of record-type dictionary objects.
 
         Args:
-            _context: Stream partition or context dictionary.
+            context: Stream partition or context dictionary.
 
         Yields:
             Dictionary representations of LDIF entries.
 
         """
-        config: dict[str, t.GeneralValueType] = dict[str, t.GeneralValueType](
-            self._tap.config
-        )
+        config: dict[str, t.GeneralValueType] = dict(self._tap.config)
         sample_path = getattr(self, "_sample_file_path", None)
         if sample_path:
             config["file_path"] = sample_path
+        # Narrow config values to expected types for discover_files
+        dir_path_raw = config.get("directory_path")
+        dir_path = str(dir_path_raw) if isinstance(dir_path_raw, str) else None
+        pattern_raw = config.get("file_pattern", "*.ldif")
+        pattern = str(pattern_raw) if isinstance(pattern_raw, str) else "*.ldif"
+        fp_raw = config.get("file_path")
+        fp_val = str(fp_raw) if isinstance(fp_raw, str) else None
+        max_size_raw = config.get("max_file_size_mb", 100)
+        max_size = int(max_size_raw) if isinstance(max_size_raw, int) else 100
         # Use flext-ldif generic file discovery instead of duplicated logic
         files_result = self._processor.discover_files(
-            directory_path=config.get("directory_path"),
-            file_pattern=config.get("file_pattern", "*.ldif"),
-            file_path=config.get("file_path"),
-            max_file_size_mb=config.get("max_file_size_mb", 100),
+            directory_path=dir_path,
+            file_pattern=pattern,
+            file_path=fp_val,
+            max_file_size_mb=max_size,
         )
         if files_result.is_failure:
             logger.error("File discovery failed: %s", files_result.error)
@@ -169,5 +177,10 @@ class LDIFEntriesStream(Stream):
                     logger.exception("Error processing file %s", file_path)
                     raise
                 else:
-                    logger.warning("Skipping file %s due to error: %s", file_path, e)
+                    err_msg = str(e)
+                    logger.warning(
+                        "Skipping file %s due to error: %s",
+                        file_path,
+                        err_msg,
+                    )
                     continue
