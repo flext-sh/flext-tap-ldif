@@ -190,10 +190,6 @@ class FlextMeltanoTapLdifModels(BaseModel):
             }
         return value
 
-    # Legacy type aliases for backward compatibility
-    LdifRecordType: ClassVar[type] = dict[str, t.GeneralValueType]
-    LdifRecordsType: ClassVar[type] = list[dict[str, t.GeneralValueType]]
-
     class TapLdif:
         """Utility functions for LDIF data processing."""
 
@@ -1114,13 +1110,6 @@ class FlextMeltanoTapLdifModels(BaseModel):
                 raise ValueError(msg)
             return self
 
-
-# Zero Tolerance CONSOLIDATION - FlextMeltanoTapLdifUtilities moved to utilities.py
-#
-# Critical: FlextMeltanoTapLdifUtilities was DUPLICATED between models.py and utilities.py.
-# This was a Zero Tolerance violation of the user's explicit requirements.
-#
-# Note: FlextMeltanoTapLdifUtilities imported at top for proper organization
 
 
 # Short aliases
