@@ -14,7 +14,7 @@ from flext_core import (
     FlextConstants,
     FlextResult,
     FlextSettings,
-    FlextTypes as t,
+    t,
 )
 from pydantic import Field, field_validator
 from pydantic_settings import SettingsConfigDict

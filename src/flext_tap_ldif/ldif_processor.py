@@ -12,7 +12,7 @@ from collections.abc import Generator
 from pathlib import Path
 from typing import NoReturn, override
 
-from flext_core import FlextLogger, FlextResult, FlextTypes as t
+from flext_core import FlextLogger, FlextResult, t
 from flext_ldif import FlextLdif
 
 logger = FlextLogger(__name__)

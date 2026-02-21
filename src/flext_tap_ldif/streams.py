@@ -11,7 +11,7 @@ from collections.abc import Iterable, Mapping
 from pathlib import Path
 from typing import override
 
-from flext_core import FlextLogger, FlextTypes as t
+from flext_core import FlextLogger
 
 # Use FLEXT Meltano wrappers instead of direct singer_sdk imports (domain separation)
 from flext_meltano import (
@@ -21,6 +21,7 @@ from flext_meltano import (
 from flext_meltano.typings import t as t_meltano
 
 from flext_tap_ldif.ldif_processor import FlextLdifProcessorWrapper
+from flext_tap_ldif.typings import t
 
 logger = FlextLogger(__name__)
 

@@ -7,7 +7,7 @@ from collections.abc import Generator
 from pathlib import Path
 
 import pytest
-from flext_core import FlextTypes as t
+from flext_tap_ldif import t
 from flext_tests import FlextTestsDocker
 
 # Import shared LDAP fixtures from docker directory
@@ -21,15 +21,20 @@ def docker_control() -> FlextTestsDocker:
 
 
 @pytest.fixture(scope="session")
-def shared_ldap_container(docker_control: FlextTestsDocker) -> FlextTestsDocker:
+def shared_ldap_container(
+    docker_control: FlextTestsDocker,
+) -> Generator[str]:
     """Managed LDAP container using FlextTestsDocker with auto-start."""
-    result = docker_control.start_container("flext-openldap-test")
+    result = docker_control.start_existing_container("flext-openldap-test")
     if result.is_failure:
         pytest.skip(f"Failed to start LDAP container: {result.error}")
 
     yield "flext-openldap-test"
 
-    docker_control.stop_container("flext-openldap-test", remove=False)
+    try:
+        docker_control.get_client().containers.get("flext-openldap-test").stop()
+    except Exception:
+        pass
 
 
 # Test environment setup
@@ -412,52 +417,56 @@ def pytest_configure(config: pytest.Config) -> None:
 
 
 # Mock services
+class MockLDIFTap:
+    """Mock implementation of the LDIF Tap."""
+
+    def __init__(self, config: dict[str, t.GeneralValueType]) -> None:
+        """Initialize the instance."""
+        self.config = config
+        self.discovered_streams: list[dict[str, t.GeneralValueType]] = []
+
+    def discover_streams(self) -> list[dict[str, t.GeneralValueType]]:
+        return self.discovered_streams
+
+    def sync_records(self) -> list[dict[str, t.GeneralValueType]]:
+        return [
+            {
+                "dn": "cn=test,ou=users,dc=example,dc=com",
+                "objectClass": ["inetOrgPerson", "person"],
+                "cn": ["test"],
+                "mail": ["test@example.com"],
+                "source_file": "test.ldif",
+                "source_file_mtime": 1640995200.0,
+            },
+        ]
+
+
 @pytest.fixture
-def mock_ldif_tap() -> object:
+def mock_ldif_tap() -> type[MockLDIFTap]:
     """Mock LDIF tap for testing."""
-
-    class MockLDIFTap:
-        def __init__(self, config: dict[str, t.GeneralValueType]) -> None:
-            """Initialize the instance."""
-            self.config = config
-            self.discovered_streams: list[dict[str, t.GeneralValueType]] = []
-
-        def discover_streams(self) -> list[dict[str, t.GeneralValueType]]:
-            return self.discovered_streams
-
-        def sync_records(self) -> list[dict[str, t.GeneralValueType]]:
-            return [
-                {
-                    "dn": "cn=test,ou=users,dc=example,dc=com",
-                    "objectClass": ["inetOrgPerson", "person"],
-                    "cn": ["test"],
-                    "mail": ["test@example.com"],
-                    "source_file": "test.ldif",
-                    "source_file_mtime": 1640995200.0,
-                },
-            ]
-
     return MockLDIFTap
 
 
+class MockLDIFParser:
+    """Mock implementation of the LDIF Parser."""
+
+    def __init__(self, config: dict[str, t.GeneralValueType]) -> None:
+        """Initialize the instance."""
+        self.config = config
+        self.parsed_entries: list[dict[str, t.GeneralValueType]] = []
+
+    def parse_file(self, _file_path: str) -> dict[str, t.GeneralValueType]:
+        return {
+            "success": True,
+            "entries": self.parsed_entries,
+            "errors": [],
+        }
+
+    def add_mock_entry(self, entry: dict[str, t.GeneralValueType]) -> None:
+        self.parsed_entries.append(entry)
+
+
 @pytest.fixture
-def mock_ldif_parser() -> object:
+def mock_ldif_parser() -> type[MockLDIFParser]:
     """Mock LDIF parser for testing."""
-
-    class MockLDIFParser:
-        def __init__(self, config: dict[str, t.GeneralValueType]) -> None:
-            """Initialize the instance."""
-            self.config = config
-            self.parsed_entries: list[dict[str, t.GeneralValueType]] = []
-
-        def parse_file(self, _file_path: str) -> dict[str, t.GeneralValueType]:
-            return {
-                "success": True,
-                "entries": self.parsed_entries,
-                "errors": [],
-            }
-
-        def add_mock_entry(self, entry: dict[str, t.GeneralValueType]) -> None:
-            self.parsed_entries.append(entry)
-
     return MockLDIFParser
