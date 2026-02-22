@@ -198,17 +198,17 @@ class FlextMeltanoTapLdifSettings(FlextSettings):
         return cls.model_validate({})
 
     @classmethod
-    def create_for_development(cls, **overrides: t.GeneralValueType) -> Self:
+    def create_for_development(cls, **overrides: object) -> Self:
         """Create development configuration instance."""
-        dev_defaults: dict[str, t.GeneralValueType] = {
+        defaults: dict[str, object] = {
             "file_path": "./test.ldif",
             "batch_size": FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE // 10,
             "strict_parsing": False,
             "max_file_size_mb": 10,
             "encoding": "utf-8",
         }
-        dev_defaults.update(overrides)
-        return cls(**dev_defaults)
+        defaults.update(overrides)
+        return cls.model_validate(defaults)
 
     @classmethod
     def create_for_production(cls, **overrides: t.GeneralValueType) -> Self:
@@ -220,20 +220,20 @@ class FlextMeltanoTapLdifSettings(FlextSettings):
             "include_operational_attributes": False,
         }
         prod_defaults.update(overrides)
-        return cls(**prod_defaults)
+        return cls.model_validate(prod_defaults)
 
     @classmethod
-    def create_for_testing(cls, **overrides: t.GeneralValueType) -> Self:
+    def create_for_testing(cls, **overrides: object) -> Self:
         """Create testing configuration instance."""
-        test_defaults: dict[str, t.GeneralValueType] = {
+        defaults: dict[str, object] = {
             "file_path": "./tests/test_data/sample.ldif",
             "batch_size": FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE // 20,
             "strict_parsing": True,
             "max_file_size_mb": 1,
             "encoding": "utf-8",
         }
-        test_defaults.update(overrides)
-        return cls(**test_defaults)
+        defaults.update(overrides)
+        return cls.model_validate(defaults)
 
     @property
     def ldif_config(self) -> dict[str, t.GeneralValueType]:

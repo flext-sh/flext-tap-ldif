@@ -31,8 +31,8 @@ class TestsFlextMeltanoTapLdifProtocols(FlextTestsProtocols):
     - Generic protocols accessed via Tests namespace
     """
 
-    # Composition: expose FlextTestsProtocols
-    Tests = FlextTestsProtocols
+    class Tests(FlextTestsProtocols.Tests):
+        """Project-specific test protocols."""
 
     # TapLdif-specific test protocols namespace
     class TapLdif:
@@ -99,10 +99,12 @@ class TestsFlextMeltanoTapLdifProtocols(FlextTestsProtocols):
                 ...
 
 
-# Alias for simplified usage
+# Aliases for simplified usage
+p = TestsFlextMeltanoTapLdifProtocols
 tp = TestsFlextMeltanoTapLdifProtocols
 
 __all__ = [
     "TestsFlextMeltanoTapLdifProtocols",
+    "p",
     "tp",
 ]

@@ -357,7 +357,8 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
 
             """
             try:
-                record: dict[str, t.GeneralValueType] = {}
+                # Build as str | list[str] to avoid recursive GeneralValueType inference
+                record: dict[str, str | list[str]] = {}
                 current_attr = None
                 current_value = ""
 
@@ -378,10 +379,8 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
                             if isinstance(existing_value, list):
                                 existing_value.append(current_value)
                             else:
-                                record[normalized_attr] = [
-                                    str(existing_value),
-                                    current_value,
-                                ]
+                                merged = [str(existing_value), current_value]
+                                record[normalized_attr] = merged
                         else:
                             record[normalized_attr] = current_value
 
@@ -414,7 +413,8 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
                     else:
                         record[normalized_attr] = current_value
 
-                return FlextResult[dict[str, t.GeneralValueType]].ok(record)
+                out: dict[str, t.GeneralValueType] = dict(record)
+                return FlextResult[dict[str, t.GeneralValueType]].ok(out)
 
             except Exception as e:
                 return FlextResult[dict[str, t.GeneralValueType]].fail(
@@ -499,7 +499,7 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
             return {
                 str(key): value
                 for key, value in file_state_raw.items()
-                if isinstance(key, str)
+                if isinstance(key, str)  # pyright: ignore[reportUnnecessaryIsInstance]
             }
 
         @staticmethod
@@ -523,11 +523,11 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
             files_dict: dict[str, dict[str, t.GeneralValueType]] = {}
             if isinstance(files_raw, dict):
                 for key, value in files_raw.items():
-                    if isinstance(key, str) and isinstance(value, dict):
+                    if isinstance(key, str) and isinstance(value, dict):  # pyright: ignore[reportUnnecessaryIsInstance]
                         files_dict[key] = {
                             str(inner_key): inner_value
                             for inner_key, inner_value in value.items()
-                            if isinstance(inner_key, str)
+                            if isinstance(inner_key, str)  # pyright: ignore[reportUnnecessaryIsInstance]
                         }
             files_dict[file_path] = file_state
             state["files"] = files_dict

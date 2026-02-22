@@ -6,6 +6,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+import os
 import tempfile
 from collections.abc import Iterable, Mapping
 from pathlib import Path
@@ -26,7 +27,7 @@ from flext_tap_ldif.typings import t
 logger = FlextLogger(__name__)
 
 
-class LDIFEntriesStream(Stream):
+class LDIFEntriesStream(Stream):  # pyright: ignore[reportUntypedBaseClass]
     """LDIF entries stream using flext-ldif for ALL processing."""
 
     @override
@@ -44,8 +45,9 @@ class LDIFEntriesStream(Stream):
         cfg: dict[str, t.GeneralValueType] = dict(tap.config)
         if not cfg.get("file_path") and not cfg.get("directory_path"):
             # Singer SDK test harness may not pre-create the file; create a minimal one
-            _fd, path = tempfile.mkstemp(suffix=".ldif")
-            Path(path).write_text(
+            fd, path = tempfile.mkstemp(suffix=".ldif")
+            os.close(fd)
+            _ = Path(path).write_text(
                 "dn: cn=test,dc=example,dc=com\ncn: test\nobjectClass: top\n",
                 encoding="utf-8",
             )
@@ -58,7 +60,7 @@ class LDIFEntriesStream(Stream):
                 file_path = Path(fp)
                 try:
                     if file_path.exists() and file_path.stat().st_size == 0:
-                        file_path.write_text(
+                        _ = file_path.write_text(
                             "dn: cn=test,dc=example,dc=com\ncn: test\nobjectClass: top\n",
                             encoding="utf-8",
                         )

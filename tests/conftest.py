@@ -47,9 +47,9 @@ def set_test_environment() -> Generator[None]:
     os.environ["SINGER_SDK_LOG_LEVEL"] = "debug"
     yield
     # Cleanup
-    os.environ.pop("FLEXT_ENV", None)
-    os.environ.pop("FLEXT_LOG_LEVEL", None)
-    os.environ.pop("SINGER_SDK_LOG_LEVEL", None)
+    _ = os.environ.pop("FLEXT_ENV", None)
+    _ = os.environ.pop("FLEXT_LOG_LEVEL", None)
+    _ = os.environ.pop("SINGER_SDK_LOG_LEVEL", None)
 
 
 # LDIF test data fixtures
@@ -124,7 +124,8 @@ changetype: delete
 def sample_ldif_file(tmp_path: Path, sample_ldif_content: str) -> Path:
     """Create sample LDIF file for testing."""
     ldif_file = tmp_path / "test.ldif"
-    ldif_file.write_text(sample_ldif_content, encoding="utf-8")
+    n = ldif_file.write_text(sample_ldif_content, encoding="utf-8")
+    assert n >= 0
     return ldif_file
 
 
@@ -132,7 +133,8 @@ def sample_ldif_file(tmp_path: Path, sample_ldif_content: str) -> Path:
 def sample_ldif_changes_file(tmp_path: Path, sample_ldif_changes: str) -> Path:
     """Create sample LDIF changes file for testing."""
     ldif_file = tmp_path / "changes.ldif"
-    ldif_file.write_text(sample_ldif_changes, encoding="utf-8")
+    n = ldif_file.write_text(sample_ldif_changes, encoding="utf-8")
+    assert n >= 0
     return ldif_file
 
 
@@ -147,8 +149,12 @@ def ldif_directory(
     ldif_dir.mkdir()
 
     # Create multiple LDIF files
-    (ldif_dir / "users.ldif").write_text(sample_ldif_content, encoding="utf-8")
-    (ldif_dir / "changes.ldif").write_text(sample_ldif_changes, encoding="utf-8")
+    written = (ldif_dir / "users.ldif").write_text(
+        sample_ldif_content, encoding="utf-8"
+    ) + (ldif_dir / "changes.ldif").write_text(
+        sample_ldif_changes, encoding="utf-8"
+    )
+    assert written >= 0
 
     # Create additional test file
     additional_content = """version: 1
@@ -162,7 +168,7 @@ givenName: Test
 mail: test.user@example.com
 """
 
-    (ldif_dir / "additional.ldif").write_text(additional_content, encoding="utf-8")
+    _ = (ldif_dir / "additional.ldif").write_text(additional_content, encoding="utf-8")
 
     return ldif_dir
 
@@ -237,19 +243,19 @@ def large_ldif_file(tmp_path: Path) -> Path:
     ldif_file = tmp_path / "large.ldif"
 
     with ldif_file.open("w", encoding="utf-8") as f:
-        f.write("version: 1\n\n")
+        _ = f.write("version: 1\n\n")
 
         # Generate 1000 entries for performance testing
         for i in range(1000):
-            f.write(f"dn: cn=user{i:04d},ou=users,dc=example,dc=com\n")
-            f.write("objectClass: inetOrgPerson\n")
-            f.write("objectClass: person\n")
-            f.write(f"cn: user{i:04d}\n")
-            f.write(f"sn: User{i:04d}\n")
-            f.write("givenName: User\n")
-            f.write(f"mail: user{i:04d}@example.com\n")
-            f.write(f"employeeNumber: {i:04d}\n")
-            f.write("\n")
+            _ = f.write(f"dn: cn=user{i:04d},ou=users,dc=example,dc=com\n")
+            _ = f.write("objectClass: inetOrgPerson\n")
+            _ = f.write("objectClass: person\n")
+            _ = f.write(f"cn: user{i:04d}\n")
+            _ = f.write(f"sn: User{i:04d}\n")
+            _ = f.write("givenName: User\n")
+            _ = f.write(f"mail: user{i:04d}@example.com\n")
+            _ = f.write(f"employeeNumber: {i:04d}\n")
+            _ = f.write("\n")
 
     return ldif_file
 
@@ -293,7 +299,7 @@ jpegPhoto:: /9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEY
 def binary_ldif_file(tmp_path: Path, binary_ldif_content: str) -> Path:
     """Create LDIF file with binary attributes."""
     ldif_file = tmp_path / "binary.ldif"
-    ldif_file.write_text(binary_ldif_content, encoding="utf-8")
+    _ = ldif_file.write_text(binary_ldif_content, encoding="utf-8")
     return ldif_file
 
 
@@ -314,7 +320,7 @@ description: User with unicode characters: àáâãäåæç
 """
 
     ldif_file = tmp_path / "utf16.ldif"
-    ldif_file.write_text(content, encoding="utf-16")
+    _ = ldif_file.write_text(content, encoding="utf-16")
     return ldif_file
 
 
@@ -387,7 +393,7 @@ mail: invalid.user@example.com
 def invalid_ldif_file(tmp_path: Path, invalid_ldif_content: str) -> Path:
     """Create invalid LDIF file for error testing."""
     ldif_file = tmp_path / "invalid.ldif"
-    ldif_file.write_text(invalid_ldif_content, encoding="utf-8")
+    _ = ldif_file.write_text(invalid_ldif_content, encoding="utf-8")
     return ldif_file
 
 
@@ -423,6 +429,7 @@ class MockLDIFTap:
 
     def __init__(self, config: dict[str, t.GeneralValueType]) -> None:
         """Initialize the instance."""
+        super().__init__()
         self.config = config
         self.discovered_streams: list[dict[str, t.GeneralValueType]] = []
 
@@ -453,6 +460,7 @@ class MockLDIFParser:
 
     def __init__(self, config: dict[str, t.GeneralValueType]) -> None:
         """Initialize the instance."""
+        super().__init__()
         self.config = config
         self.parsed_entries: list[dict[str, t.GeneralValueType]] = []
 

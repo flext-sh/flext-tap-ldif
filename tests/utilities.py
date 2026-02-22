@@ -21,11 +21,8 @@ class TestsFlextMeltanoTapLdifUtilities(
 ):
     """Test utilities combining FlextTestsUtilities with flext-tap-ldif utilities."""
 
-    class TapLdif:
-        """TapLdif test utilities namespace."""
-
-        class Tests:
-            """Internal tests declarations."""
+    class Tests(FlextTestsUtilities.Tests):
+        """Project-specific test utilities."""
 
 
 u = TestsFlextMeltanoTapLdifUtilities

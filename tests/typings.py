@@ -51,7 +51,7 @@ class TestsFlextMeltanoTapLdifTypes(FlextTestsTypes):
 
         # Test data types
         type MockLdifEntry = dict[str, str | dict[str, list[str]]]
-        type MockLdifFile = list[MockLdifEntry]
+        type MockLdifFile = list[dict[str, str | dict[str, list[str]]]]
         type TestLdifScenario = dict[str, t.GeneralValueType]
 
         # Test result types

@@ -25,7 +25,7 @@ from flext_tap_ldif.typings import t
 logger = FlextLogger(__name__)
 
 
-class TapLDIF(Tap):
+class TapLDIF(Tap):  # pyright: ignore[reportUntypedBaseClass]
     """Singer tap for LDIF file format data extraction."""
 
     name: str = "tap-ldif"

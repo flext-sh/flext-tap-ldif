@@ -35,6 +35,7 @@ class FlextLdifProcessorWrapper:
         object: Description of return value.
 
         """
+        super().__init__()
         self.config: dict[str, t.GeneralValueType] = config
         self._api = FlextLdif()
 
@@ -118,8 +119,6 @@ class FlextLdifProcessorWrapper:
                     self._raise_parse_error(msg)
                     return
                 entries = parse_result.value
-                if entries is None:
-                    return
                 for entry in entries:
                     # Convert entry to expected dictionary format
                     dn_val = getattr(entry, "dn", "")
