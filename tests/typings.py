@@ -64,5 +64,6 @@ tt = TestsFlextMeltanoTapLdifTypes
 
 __all__ = [
     "TestsFlextMeltanoTapLdifTypes",
+    "t",
     "tt",
 ]
