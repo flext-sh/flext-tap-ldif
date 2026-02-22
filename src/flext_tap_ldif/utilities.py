@@ -344,7 +344,7 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
             return normalized
 
         @staticmethod
-        def _build_record_from_lines(
+        def build_record_from_lines(
             entry_lines: list[str],
         ) -> dict[str, str | list[str]]:
             """Build record dict from LDIF lines. Returns concrete type for type checker."""
@@ -419,7 +419,7 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
 
             """
             try:
-                record = FlextMeltanoTapLdifUtilities.LdifDataProcessing._build_record_from_lines(
+                record = FlextMeltanoTapLdifUtilities.LdifDataProcessing.build_record_from_lines(
                     entry_lines,
                 )
                 out: dict[str, t.GeneralValueType] = dict(record)
