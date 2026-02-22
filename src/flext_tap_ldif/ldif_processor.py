@@ -117,7 +117,6 @@ class FlextLdifProcessorWrapper:
                 if parse_result.is_failure:
                     msg: str = f"Failed to parse LDIF: {parse_result.error}"
                     self._raise_parse_error(msg)
-                    return
                 entries = parse_result.value
                 for entry in entries:
                     # Convert entry to expected dictionary format
