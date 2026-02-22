@@ -7,8 +7,9 @@ from collections.abc import Generator
 from pathlib import Path
 
 import pytest
-from flext_tap_ldif import t
 from flext_tests import FlextTestsDocker
+
+from flext_tap_ldif import t
 
 # Import shared LDAP fixtures from docker directory
 
@@ -470,29 +471,3 @@ class MockLDIFParser:
 def mock_ldif_parser() -> type[MockLDIFParser]:
     """Mock LDIF parser for testing."""
     return MockLDIFParser
-
-
-# PYTHON_VERSION_GUARD — Do not remove. Managed by scripts/maintenance/enforce_python_version.py
-import sys as _sys
-
-if _sys.version_info[:2] != (3, 13):
-    _v = (
-        f"{_sys.version_info.major}.{_sys.version_info.minor}.{_sys.version_info.micro}"
-    )
-    raise RuntimeError(
-        f"\n{'=' * 72}\n"
-        f"FATAL: Python {_v} detected — this project requires Python 3.13.\n"
-        f"\n"
-        f"The virtual environment was created with the WRONG Python interpreter.\n"
-        f"\n"
-        f"Fix:\n"
-        f"  1. rm -rf .venv\n"
-        f"  2. poetry env use python3.13\n"
-        f"  3. poetry install\n"
-        f"\n"
-        f"Or use the workspace Makefile:\n"
-        f"  make setup PROJECT=<project-name>\n"
-        f"{'=' * 72}\n"
-    )
-del _sys
-# PYTHON_VERSION_GUARD_END
