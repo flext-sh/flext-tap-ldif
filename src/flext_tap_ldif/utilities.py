@@ -344,60 +344,21 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
             return normalized
 
         @staticmethod
-        def convert_ldif_entry_to_record(
+        def _build_record_from_lines(
             entry_lines: list[str],
-        ) -> FlextResult[dict[str, t.GeneralValueType]]:
-            """Convert LDIF entry lines to Singer record.
+        ) -> dict[str, str | list[str]]:
+            """Build record dict from LDIF lines. Returns concrete type for type checker."""
+            record: dict[str, str | list[str]] = {}
+            current_attr: str | None = None
+            current_value: str = ""
 
-            Args:
-            entry_lines: List of LDIF lines for single entry
+            for line in entry_lines:
+                if line.startswith(c.Format.LINE_CONTINUATION):
+                    if current_attr is not None:
+                        current_value += line[1:]
+                    continue
 
-            Returns:
-            FlextResult[dict[str, t.GeneralValueType]]: Singer record or error
-
-            """
-            try:
-                # Build as str | list[str] to avoid recursive GeneralValueType inference
-                record: dict[str, str | list[str]] = {}
-                current_attr = None
-                current_value = ""
-
-                for line in entry_lines:
-                    # Handle line continuation
-                    if line.startswith(c.Format.LINE_CONTINUATION):
-                        if current_attr:
-                            current_value += line[1:]  # Remove continuation character
-                        continue
-
-                    # Process previous attribute if exists
-                    if current_attr and current_value:
-                        normalized_attr = FlextMeltanoTapLdifUtilities.LdifDataProcessing.normalize_ldif_attribute_name(
-                            current_attr,
-                        )
-                        if normalized_attr in record:
-                            existing_value = record[normalized_attr]
-                            if isinstance(existing_value, list):
-                                existing_value.append(current_value)
-                            else:
-                                merged = [str(existing_value), current_value]
-                                record[normalized_attr] = merged
-                        else:
-                            record[normalized_attr] = current_value
-
-                    # Parse new attribute line
-                    parse_result = (
-                        FlextMeltanoTapLdifUtilities.LdifDataProcessing.parse_ldif_line(
-                            line,
-                        )
-                    )
-                    if parse_result.is_success:
-                        current_attr, current_value = parse_result.value
-                    else:
-                        current_attr = None
-                        current_value = ""
-
-                # Process final attribute
-                if current_attr and current_value:
+                if current_attr is not None and current_value:
                     normalized_attr = FlextMeltanoTapLdifUtilities.LdifDataProcessing.normalize_ldif_attribute_name(
                         current_attr,
                     )
@@ -413,9 +374,56 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
                     else:
                         record[normalized_attr] = current_value
 
+                parse_result = (
+                    FlextMeltanoTapLdifUtilities.LdifDataProcessing.parse_ldif_line(
+                        line,
+                    )
+                )
+                if parse_result.is_success:
+                    a, v = parse_result.value
+                    current_attr = a
+                    current_value = v
+                else:
+                    current_attr = None
+                    current_value = ""
+
+            if current_attr is not None and current_value:
+                normalized_attr = FlextMeltanoTapLdifUtilities.LdifDataProcessing.normalize_ldif_attribute_name(
+                    current_attr,
+                )
+                if normalized_attr in record:
+                    existing_value = record[normalized_attr]
+                    if isinstance(existing_value, list):
+                        existing_value.append(current_value)
+                    else:
+                        record[normalized_attr] = [
+                            str(existing_value),
+                            current_value,
+                        ]
+                else:
+                    record[normalized_attr] = current_value
+
+            return record
+
+        @staticmethod
+        def convert_ldif_entry_to_record(
+            entry_lines: list[str],
+        ) -> FlextResult[dict[str, t.GeneralValueType]]:
+            """Convert LDIF entry lines to Singer record.
+
+            Args:
+            entry_lines: List of LDIF lines for single entry
+
+            Returns:
+            FlextResult[dict[str, t.GeneralValueType]]: Singer record or error
+
+            """
+            try:
+                record = FlextMeltanoTapLdifUtilities.LdifDataProcessing._build_record_from_lines(
+                    entry_lines,
+                )
                 out: dict[str, t.GeneralValueType] = dict(record)
                 return FlextResult[dict[str, t.GeneralValueType]].ok(out)
-
             except Exception as e:
                 return FlextResult[dict[str, t.GeneralValueType]].fail(
                     f"Error converting LDIF entry: {e}",
