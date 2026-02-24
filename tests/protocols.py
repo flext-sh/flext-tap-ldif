@@ -9,9 +9,8 @@ from __future__ import annotations
 
 from typing import Protocol, runtime_checkable
 
-from flext_tests import FlextTestsProtocols
-
 from flext_tap_ldif import t
+from flext_tests import FlextTestsProtocols
 
 
 class TestsFlextMeltanoTapLdifProtocols(FlextTestsProtocols):

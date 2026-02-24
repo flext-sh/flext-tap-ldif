@@ -7,9 +7,8 @@ from collections.abc import Generator
 from pathlib import Path
 
 import pytest
-from flext_tests import FlextTestsDocker
-
 from flext_tap_ldif import t
+from flext_tests import FlextTestsDocker
 
 # Import shared LDAP fixtures from docker directory
 
@@ -151,9 +150,7 @@ def ldif_directory(
     # Create multiple LDIF files
     written = (ldif_dir / "users.ldif").write_text(
         sample_ldif_content, encoding="utf-8"
-    ) + (ldif_dir / "changes.ldif").write_text(
-        sample_ldif_changes, encoding="utf-8"
-    )
+    ) + (ldif_dir / "changes.ldif").write_text(sample_ldif_changes, encoding="utf-8")
     assert written >= 0
 
     # Create additional test file

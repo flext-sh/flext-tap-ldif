@@ -131,7 +131,7 @@ class FlextMeltanoTapLdifSettings(FlextSettings):
             raise ValueError(msg)
         return v
 
-    def model_post_init(self, __context: object, /) -> None:
+    def model_post_init(self, __context: t.JsonValue | None, /) -> None:
         """Validate configuration after initialization using FlextSettings.BaseModel pattern."""
         super().model_post_init(__context)
 
@@ -198,9 +198,9 @@ class FlextMeltanoTapLdifSettings(FlextSettings):
         return cls.model_validate({})
 
     @classmethod
-    def create_for_development(cls, **overrides: object) -> Self:
+    def create_for_development(cls, **overrides: t.JsonValue) -> Self:
         """Create development configuration instance."""
-        defaults: dict[str, object] = {
+        defaults: dict[str, t.JsonValue] = {
             "file_path": "./test.ldif",
             "batch_size": FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE // 10,
             "strict_parsing": False,
@@ -211,9 +211,9 @@ class FlextMeltanoTapLdifSettings(FlextSettings):
         return cls.model_validate(defaults)
 
     @classmethod
-    def create_for_production(cls, **overrides: t.GeneralValueType) -> Self:
+    def create_for_production(cls, **overrides: t.JsonValue) -> Self:
         """Create production configuration instance."""
-        prod_defaults: dict[str, t.GeneralValueType] = {
+        prod_defaults: dict[str, t.JsonValue] = {
             "batch_size": FlextConstants.Performance.BatchProcessing.MAX_ITEMS // 2,
             "strict_parsing": True,
             "max_file_size_mb": 500,
@@ -223,9 +223,9 @@ class FlextMeltanoTapLdifSettings(FlextSettings):
         return cls.model_validate(prod_defaults)
 
     @classmethod
-    def create_for_testing(cls, **overrides: object) -> Self:
+    def create_for_testing(cls, **overrides: t.JsonValue) -> Self:
         """Create testing configuration instance."""
-        defaults: dict[str, object] = {
+        defaults: dict[str, t.JsonValue] = {
             "file_path": "./tests/test_data/sample.ldif",
             "batch_size": FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE // 20,
             "strict_parsing": True,
@@ -236,7 +236,7 @@ class FlextMeltanoTapLdifSettings(FlextSettings):
         return cls.model_validate(defaults)
 
     @property
-    def ldif_config(self) -> dict[str, t.GeneralValueType]:
+    def ldif_config(self) -> dict[str, t.JsonValue]:
         """Get LDIF-specific configuration as a dictionary."""
         return {
             "file_path": self.file_path,

@@ -12,8 +12,9 @@ from collections.abc import Generator
 from pathlib import Path
 from typing import NoReturn, override
 
-from flext_core import FlextLogger, FlextResult, t
+from flext_core import FlextLogger, FlextResult
 from flext_ldif import FlextLdif
+from flext_ldif.models import m
 
 logger = FlextLogger(__name__)
 # Use flext-ldif processor instead of reimplementing LDIF functionality
@@ -25,18 +26,15 @@ class FlextLdifProcessorWrapper:
     """Wrapper for FlextLdifProcessor to maintain API compatibility."""
 
     @override
-    def __init__(self, config: dict[str, t.GeneralValueType]) -> None:
+    def __init__(self, config: dict[str, str | int | bool]) -> None:
         """Initialize the LDIF processor using flext-ldif infrastructure.
 
         Args:
         config: Configuration dictionary from the tap.
 
-        Returns:
-        object: Description of return value.
-
         """
         super().__init__()
-        self.config: dict[str, t.GeneralValueType] = config
+        self.config = config
         self._api = FlextLdif()
 
     def _raise_parse_error(self, msg: str) -> NoReturn:
@@ -67,7 +65,11 @@ class FlextLdifProcessorWrapper:
 
         # Single file mode
         if file_path is not None:
-            p = Path(file_path) if isinstance(file_path, str) else file_path
+            match file_path:
+                case str() as file_path_text:
+                    p = Path(file_path_text)
+                case _:
+                    p = file_path
             if not p.exists():
                 return FlextResult[list[Path]].fail(f"File not found: {p}")
             if p.stat().st_size > max_size_bytes:
@@ -77,11 +79,11 @@ class FlextLdifProcessorWrapper:
 
         # Directory mode
         if directory_path is not None:
-            d = (
-                Path(directory_path)
-                if isinstance(directory_path, str)
-                else directory_path
-            )
+            match directory_path:
+                case str() as directory_path_text:
+                    d = Path(directory_path_text)
+                case _:
+                    d = directory_path
             if not d.exists() or not d.is_dir():
                 return FlextResult[list[Path]].fail(f"Directory not found: {d}")
             discovered.extend(
@@ -93,7 +95,10 @@ class FlextLdifProcessorWrapper:
 
         return FlextResult[list[Path]].fail("No file_path or directory_path specified")
 
-    def process_file(self, file_path: Path) -> Generator[dict[str, t.GeneralValueType]]:
+    def process_file(
+        self,
+        file_path: Path,
+    ) -> Generator[dict[str, str | int | dict[str, list[str]] | list[str]]]:
         """Process a single LDIF file and yield records using flext-ldif.
 
         Args:
@@ -107,23 +112,25 @@ class FlextLdifProcessorWrapper:
         try:
             # Ensure encoding is properly typed
             encoding = self.config.get("encoding", "utf-8")
-            if not isinstance(encoding, str):
-                encoding = "utf-8"
-            with file_path.open("r", encoding=encoding) as file:
+            match encoding:
+                case str() as text_encoding:
+                    file_encoding = text_encoding
+                case _:
+                    file_encoding = "utf-8"
+            with file_path.open("r", encoding=file_encoding) as file:
                 content = file.read()
-                parse_result: FlextResult[list[t.GeneralValueType]] = self._api.parse(
-                    content
-                )
+                parse_result = self._api.parse(content)
                 if parse_result.is_failure:
                     msg: str = f"Failed to parse LDIF: {parse_result.error}"
                     self._raise_parse_error(msg)
-                entries = parse_result.value
-                for entry in entries:
+                for raw_entry in parse_result.value:
+                    entry = m.Ldif.Entry.model_validate(raw_entry)
                     # Convert entry to expected dictionary format
-                    dn_val = getattr(entry, "dn", "")
-                    attrs_obj = getattr(entry, "attributes", None)
-                    attrs_dict: dict[str, list[str]] = (
-                        getattr(attrs_obj, "attributes", {}) if attrs_obj else {}
+                    dn_val = entry.dn.value if entry.dn is not None else ""
+                    attrs_dict = (
+                        dict(entry.attributes.attributes)
+                        if entry.attributes is not None
+                        else {}
                     )
                     yield {
                         "dn": str(dn_val),
