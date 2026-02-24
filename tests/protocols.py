@@ -105,5 +105,4 @@ p = TestsFlextMeltanoTapLdifProtocols
 __all__ = [
     "TestsFlextMeltanoTapLdifProtocols",
     "p",
-    "p",
 ]

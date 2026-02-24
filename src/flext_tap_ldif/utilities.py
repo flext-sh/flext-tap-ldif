@@ -468,7 +468,7 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
 
             # Validate each file path
             for file_path in files:
-                if not u.Guards._is_str(file_path):
+                if not u.Guards.is_type(file_path, str):
                     return FlextResult[Mapping[str, t.GeneralValueType]].fail(
                         "File paths must be strings",
                     )
@@ -500,15 +500,15 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
 
             """
             files_raw = state.get("files")
-            if not u.Guards._is_dict(files_raw):
+            if not u.is_dict_like(files_raw):
                 return {}
             file_state_raw = files_raw.get(file_path)
-            if not u.Guards._is_dict(file_state_raw):
+            if not u.is_dict_like(file_state_raw):
                 return {}
             return {
                 str(key): value
                 for key, value in file_state_raw.items()
-                if u.Guards._is_str(key)
+                if u.Guards.is_type(key, str)
             }
 
         @staticmethod
@@ -530,13 +530,13 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
             """
             files_raw = state.get("files")
             files_dict: dict[str, dict[str, t.GeneralValueType]] = {}
-            if u.Guards._is_dict(files_raw):
+            if u.is_dict_like(files_raw):
                 for key, value in files_raw.items():
-                    if u.Guards._is_str(key) and u.Guards._is_dict(value):
+                    if u.Guards.is_type(key, str) and u.is_dict_like(value):
                         files_dict[key] = {
                             str(inner_key): inner_value
                             for inner_key, inner_value in value.items()
-                            if u.Guards._is_str(inner_key)
+                            if u.Guards.is_type(inner_key, str)
                         }
             files_dict[file_path] = dict(file_state)
             updated_state: dict[str, t.GeneralValueType] = dict(state)
@@ -562,7 +562,7 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
                 file_path,
             )
             position = file_state.get("position", 0)
-            return position if u.Guards._is_int(position) else 0
+            return position if u.Guards.is_type(position, int) else 0
 
         @staticmethod
         def set_file_position(

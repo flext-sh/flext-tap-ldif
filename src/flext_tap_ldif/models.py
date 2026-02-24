@@ -10,7 +10,7 @@ from collections.abc import Mapping
 from datetime import UTC, datetime
 from typing import Self
 
-from flext_core import FlextConstants, FlextRuntime
+from flext_core import FlextConstants
 from flext_core.utilities import u
 from pydantic import (
     BaseModel,
@@ -185,7 +185,7 @@ class FlextMeltanoTapLdifModels(BaseModel):
                 },
             }
         if (
-            value.__class__ in (str, int, float, bool)
+            value.__class__ in {str, int, float, bool}
             and getattr(
                 self,
                 "_include_ldif_metadata",

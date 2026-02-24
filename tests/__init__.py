@@ -14,8 +14,8 @@ from .typings import t as tt
 from .utilities import u as u
 
 __all__ = [
-    "tm",
     "p",
+    "tm",
     "tt",
     "u",
 ]
