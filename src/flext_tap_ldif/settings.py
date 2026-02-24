@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from pathlib import Path
 from typing import Self
 
@@ -236,7 +237,7 @@ class FlextMeltanoTapLdifSettings(FlextSettings):
         return cls.model_validate(defaults)
 
     @property
-    def ldif_config(self) -> dict[str, t.JsonValue]:
+    def ldif_config(self) -> Mapping[str, t.JsonValue]:
         """Get LDIF-specific configuration as a dictionary."""
         return {
             "file_path": self.file_path,
