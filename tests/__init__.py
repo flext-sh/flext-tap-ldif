@@ -9,13 +9,13 @@ SPDX-License-Identifier: MIT
 """
 
 from .models import m as tm
-from .protocols import p as tp
+from .protocols import p as p
 from .typings import t as tt
-from .utilities import u as tu
+from .utilities import u as u
 
 __all__ = [
     "tm",
-    "tp",
+    "p",
     "tt",
-    "tu",
+    "u",
 ]

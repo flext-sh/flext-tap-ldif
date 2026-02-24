@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from typing import ClassVar
 
 from flext_core import FlextConstants, FlextLogger
@@ -115,7 +116,7 @@ class TapLDIF(Tap):  # pyright: ignore[reportUntypedBaseClass]
             LDIFEntriesStream(tap=self),
         ]
 
-    def _get_ldif_entries_schema(self) -> dict[str, t.GeneralValueType]:
+    def _get_ldif_entries_schema(self) -> Mapping[str, t.GeneralValueType]:
         """Get the schema for LDIF entries stream.
 
         Returns:

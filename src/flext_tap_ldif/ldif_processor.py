@@ -8,7 +8,7 @@ implementation from flext-ldif project.
 
 from __future__ import annotations
 
-from collections.abc import Generator
+from collections.abc import Generator, Mapping
 from pathlib import Path
 from typing import NoReturn, override
 
@@ -26,7 +26,7 @@ class FlextLdifProcessorWrapper:
     """Wrapper for FlextLdifProcessor to maintain API compatibility."""
 
     @override
-    def __init__(self, config: dict[str, str | int | bool]) -> None:
+    def __init__(self, config: Mapping[str, str | int | bool]) -> None:
         """Initialize the LDIF processor using flext-ldif infrastructure.
 
         Args:
@@ -98,7 +98,7 @@ class FlextLdifProcessorWrapper:
     def process_file(
         self,
         file_path: Path,
-    ) -> Generator[dict[str, str | int | dict[str, list[str]] | list[str]]]:
+    ) -> Generator[Mapping[str, str | int | Mapping[str, list[str]] | list[str]]]:
         """Process a single LDIF file and yield records using flext-ldif.
 
         Args:

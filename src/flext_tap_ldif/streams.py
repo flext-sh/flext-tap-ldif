@@ -12,7 +12,7 @@ from collections.abc import Iterable, Mapping
 from pathlib import Path
 from typing import override
 
-from flext_core import FlextLogger
+from flext_core import FlextLogger, u
 
 # Use FLEXT Meltano wrappers instead of direct singer_sdk imports (domain separation)
 from flext_meltano import (
@@ -56,7 +56,7 @@ class LDIFEntriesStream(Stream):  # pyright: ignore[reportUntypedBaseClass]
         else:
             # If a file path exists but is empty, seed with minimal valid content
             fp = cfg.get("file_path")
-            if isinstance(fp, str):
+            if u.Guards._is_str(fp):
                 file_path = Path(fp)
                 try:
                     if file_path.exists() and file_path.stat().st_size == 0:
@@ -71,7 +71,7 @@ class LDIFEntriesStream(Stream):  # pyright: ignore[reportUntypedBaseClass]
                         exc_msg,
                     )
 
-    def _get_schema(self) -> dict[str, t.GeneralValueType]:
+    def _get_schema(self) -> Mapping[str, t.GeneralValueType]:
         """Get schema for LDIF entries."""
         return t_meltano.Singer.Typing.PropertiesList(
             t_meltano.Singer.Typing.Property(
@@ -116,7 +116,7 @@ class LDIFEntriesStream(Stream):  # pyright: ignore[reportUntypedBaseClass]
     def get_records(
         self,
         context: Mapping[str, t.GeneralValueType] | None = None,  # noqa: ARG002
-    ) -> Iterable[dict[str, t.GeneralValueType]]:
+    ) -> Iterable[Mapping[str, t.GeneralValueType]]:
         """Return a generator of record-type dictionary objects.
 
         Args:
@@ -132,13 +132,13 @@ class LDIFEntriesStream(Stream):  # pyright: ignore[reportUntypedBaseClass]
             config["file_path"] = sample_path
         # Narrow config values to expected types for discover_files
         dir_path_raw = config.get("directory_path")
-        dir_path = str(dir_path_raw) if isinstance(dir_path_raw, str) else None
+        dir_path = str(dir_path_raw) if u.Guards._is_str(dir_path_raw) else None
         pattern_raw = config.get("file_pattern", "*.ldif")
-        pattern = str(pattern_raw) if isinstance(pattern_raw, str) else "*.ldif"
+        pattern = str(pattern_raw) if u.Guards._is_str(pattern_raw) else "*.ldif"
         fp_raw = config.get("file_path")
-        fp_val = str(fp_raw) if isinstance(fp_raw, str) else None
+        fp_val = str(fp_raw) if u.Guards._is_str(fp_raw) else None
         max_size_raw = config.get("max_file_size_mb", 100)
-        max_size = int(max_size_raw) if isinstance(max_size_raw, int) else 100
+        max_size = int(max_size_raw) if u.Guards._is_int(max_size_raw) else 100
         # Use flext-ldif generic file discovery instead of duplicated logic
         files_result = self._processor.discover_files(
             directory_path=dir_path,
@@ -150,7 +150,7 @@ class LDIFEntriesStream(Stream):  # pyright: ignore[reportUntypedBaseClass]
             logger.error("File discovery failed: %s", files_result.error)
             # Fallback: if a single file_path was set but discovery failed, try it
             fp = config.get("file_path")
-            if fp and isinstance(fp, str):
+            if fp and u.Guards._is_str(fp):
                 try:
                     yield from self._processor.process_file(Path(fp))
                 except Exception:
