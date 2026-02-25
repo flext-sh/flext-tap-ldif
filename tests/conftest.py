@@ -33,7 +33,15 @@ def shared_ldap_container(
 
     try:
         docker_control.get_client().containers.get("flext-openldap-test").stop()
-    except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError):
+    except (
+        ValueError,
+        TypeError,
+        KeyError,
+        AttributeError,
+        OSError,
+        RuntimeError,
+        ImportError,
+    ):
         pass
 
 

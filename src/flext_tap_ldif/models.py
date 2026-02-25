@@ -220,7 +220,15 @@ class FlextMeltanoTapLdifModels(BaseModel):
             """Decode base64 encoded LDIF value."""
             try:
                 return base64.b64decode(value).decode("utf-8")
-            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError):
+            except (
+                ValueError,
+                TypeError,
+                KeyError,
+                AttributeError,
+                OSError,
+                RuntimeError,
+                ImportError,
+            ):
                 return value
 
         @staticmethod
