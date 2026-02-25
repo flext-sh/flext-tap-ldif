@@ -27,7 +27,7 @@ from flext_tap_ldif.typings import t
 logger = FlextLogger(__name__)
 
 
-class LDIFEntriesStream(Stream):  # pyright: ignore[reportUntypedBaseClass]
+class LDIFEntriesStream(Stream):
     """LDIF entries stream using flext-ldif for ALL processing."""
 
     @override
@@ -115,7 +115,7 @@ class LDIFEntriesStream(Stream):  # pyright: ignore[reportUntypedBaseClass]
 
     def get_records(
         self,
-        context: Mapping[str, t.GeneralValueType] | None = None,  # noqa: ARG002
+        context: Mapping[str, t.GeneralValueType] | None = None,
     ) -> Iterable[Mapping[str, t.GeneralValueType]]:
         """Return a generator of record-type dictionary objects.
 
