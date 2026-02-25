@@ -168,7 +168,7 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
 
             except UnicodeDecodeError as e:
                 return FlextResult[bool].fail(f"LDIF file encoding error: {e}")
-            except Exception as e:
+            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
                 return FlextResult[bool].fail(f"Error validating LDIF file: {e}")
 
         @staticmethod
@@ -202,7 +202,7 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
 
             except UnicodeDecodeError as e:
                 return FlextResult[int].fail(f"LDIF file encoding error: {e}")
-            except Exception as e:
+            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
                 return FlextResult[int].fail(f"Error counting LDIF entries: {e}")
 
         @staticmethod
@@ -257,7 +257,7 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
 
                 return FlextResult[Mapping[str, t.GeneralValueType]].ok(metadata)
 
-            except Exception as e:
+            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
                 return FlextResult[Mapping[str, t.GeneralValueType]].fail(
                     f"Error extracting LDIF metadata: {e}",
                 )
@@ -296,7 +296,7 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
                             attr_name.strip(),
                             decoded_value,
                         ))
-                    except Exception as e:
+                    except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
                         return FlextResult[tuple[str, str]].fail(
                             f"Base64 decode error: {e}",
                         )
@@ -316,7 +316,7 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
                     value.strip(),
                 ))
 
-            except Exception as e:
+            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
                 return FlextResult[tuple[str, str]].fail(
                     f"Error parsing LDIF line: {e}",
                 )
@@ -425,7 +425,7 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
                 )
                 out: dict[str, t.GeneralValueType] = dict(record)
                 return FlextResult[Mapping[str, t.GeneralValueType]].ok(out)
-            except Exception as e:
+            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as e:
                 return FlextResult[Mapping[str, t.GeneralValueType]].fail(
                     f"Error converting LDIF entry: {e}",
                 )

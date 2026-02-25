@@ -64,7 +64,7 @@ class LDIFEntriesStream(Stream):
                             "dn: cn=test,dc=example,dc=com\ncn: test\nobjectClass: top\n",
                             encoding="utf-8",
                         )
-                except Exception as exc:  # Non-critical seeding failure
+                except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError) as exc:  # Non-critical seeding failure
                     exc_msg = str(exc)
                     logger.warning(
                         "Failed to seed LDIF file with sample content: %s",
@@ -153,7 +153,7 @@ class LDIFEntriesStream(Stream):
             if fp and u.Guards.is_type(fp, str):
                 try:
                     yield from self._processor.process_file(Path(fp))
-                except Exception:
+                except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError):
                     return
             return
         files_to_process = files_result.data or []

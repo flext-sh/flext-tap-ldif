@@ -40,14 +40,6 @@ class FlextMeltanoTapLdifModels(BaseModel):
     Consolidates ALL models for LDIF file extraction and processing.
     """
 
-    def __init_subclass__(cls) -> None:
-        """Warn when FlextMeltanoTapLdifModels is subclassed directly."""
-        super().__init_subclass__()
-        u.Deprecation.warn_once(
-            f"subclass:{cls.__name__}",
-            "Subclassing FlextMeltanoTapLdifModels is deprecated. Use composition with BaseModel instead.",
-        )
-
     # Pydantic 2.11 Configuration - Enterprise Singer LDIF Tap Features
     model_config = ConfigDict(
         validate_assignment=True,
@@ -228,7 +220,7 @@ class FlextMeltanoTapLdifModels(BaseModel):
             """Decode base64 encoded LDIF value."""
             try:
                 return base64.b64decode(value).decode("utf-8")
-            except Exception:
+            except (ValueError, TypeError, KeyError, AttributeError, OSError, RuntimeError, ImportError):
                 return value
 
         @staticmethod
