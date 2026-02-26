@@ -167,7 +167,7 @@ class TapLDIF(Tap):
 
 def main() -> None:
     """Run the tap entry point."""
-    TapLDIF.cli()
+    TapLDIF().cli()
 
 
 if __name__ == "__main__":

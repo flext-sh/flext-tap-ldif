@@ -8,7 +8,7 @@ from __future__ import annotations
 import base64
 from collections.abc import Mapping
 from datetime import UTC, datetime
-from typing import Self
+from typing import Self, cast
 
 from flext_core import FlextConstants
 from flext_core.utilities import u
@@ -162,13 +162,19 @@ class FlextMeltanoTapLdifModels(BaseModel):
     @field_serializer("*", when_used="json")
     def serialize_with_ldif_metadata(
         self,
-        value: object,
+        value: t.GeneralValueType,
         _info: FieldSerializationInfo,
     ) -> object:
         """Add Singer LDIF tap metadata to all serialized fields."""
         if u.is_dict_like(value):
+            if isinstance(value, t.ConfigMap):
+                value_dict = dict(value.root)
+            elif isinstance(value, Mapping):
+                value_dict = dict(value)
+            else:
+                value_dict = value
             return {
-                **value,
+                **value_dict,
                 "_ldif_tap_metadata": {
                     "extraction_timestamp": datetime.now(UTC).isoformat(),
                     "tap_type": "ldif_file_extractor",
