@@ -521,7 +521,7 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
                         "File paths must be strings",
                     )
 
-                path_obj = Path(cast(str, file_path))
+                path_obj = Path(cast("str", file_path))
                 if not path_obj.exists():
                     return FlextResult[Mapping[str, t.GeneralValueType]].fail(
                         f"File does not exist: {file_path}",
@@ -610,7 +610,7 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
                 file_path,
             )
             position = file_state.get("position", 0)
-            return cast(int, position) if u.Guards.is_type(position, int) else 0
+            return cast("int", position) if u.Guards.is_type(position, int) else 0
 
         @staticmethod
         def set_file_position(
