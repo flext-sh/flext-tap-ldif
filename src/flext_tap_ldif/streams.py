@@ -136,6 +136,7 @@ class LDIFEntriesStream(Stream):
             Dictionary representations of LDIF entries.
 
         """
+        _ = context
         config: dict[str, t.GeneralValueType] = dict(self._tap.config)
         sample_path = getattr(self, "_sample_file_path", None)
         if sample_path:
