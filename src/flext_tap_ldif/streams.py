@@ -123,12 +123,12 @@ class LDIFEntriesStream(Stream):
 
     def get_records(
         self,
-        context: Mapping[str, t.GeneralValueType] | None = None,
+        _context: Mapping[str, t.GeneralValueType] | None = None,
     ) -> Iterable[Mapping[str, t.GeneralValueType]]:
         """Return a generator of record-type dictionary objects.
 
         Args:
-            context: Stream partition or context dictionary.
+            _context: Stream partition or context dictionary (unused).
 
         Yields:
             Dictionary representations of LDIF entries.
