@@ -9,11 +9,11 @@ from __future__ import annotations
 
 from typing import ClassVar, Final
 
-from flext_core import FlextConstants
 from flext_ldif.constants import FlextLdifConstants
+from flext_meltano.constants import FlextMeltanoConstants
 
 
-class FlextMeltanoTapLdifConstants(FlextConstants):
+class FlextMeltanoTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
     """LDIF tap extraction-specific constants following flext-core patterns.
 
     Composes with FlextMeltanoTapLdifConstants to avoid duplication and ensure consistency.
