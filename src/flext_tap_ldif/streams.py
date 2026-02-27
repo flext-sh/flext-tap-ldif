@@ -13,8 +13,6 @@ from pathlib import Path
 from typing import Any, cast, override
 
 from flext_core import FlextLogger, u
-
-# Use FLEXT Meltano wrappers instead of direct singer_sdk imports (domain separation)
 from flext_meltano import (
     FlextMeltanoStream as Stream,
     FlextMeltanoTap as Tap,

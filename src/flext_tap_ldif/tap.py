@@ -11,8 +11,6 @@ from collections.abc import Mapping
 from typing import ClassVar
 
 from flext_core import FlextConstants, FlextLogger
-
-# Use FLEXT Meltano wrappers instead of direct singer_sdk imports (domain separation)
 from flext_meltano import (
     FlextMeltanoStream as Stream,
     FlextMeltanoTap as Tap,
