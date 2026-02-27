@@ -405,7 +405,7 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
                     )
                     if normalized_attr in record:
                         existing_value = record[normalized_attr]
-                        if u.Guards.is_list(existing_value):
+                        if isinstance(existing_value, list):
                             existing_value.append(current_value)
                         else:
                             record[normalized_attr] = [
@@ -434,7 +434,7 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
                 )
                 if normalized_attr in record:
                     existing_value = record[normalized_attr]
-                    if u.Guards.is_list(existing_value):
+                    if isinstance(existing_value, list):
                         existing_value.append(current_value)
                     else:
                         record[normalized_attr] = [
@@ -548,15 +548,15 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
 
             """
             files_raw = state.get("files")
-            if not u.is_dict_like(files_raw):
+            if not isinstance(files_raw, dict):
                 return {}
             file_state_raw = files_raw.get(file_path)
-            if not u.is_dict_like(file_state_raw):
+            if not isinstance(file_state_raw, dict):
                 return {}
             return {
                 str(key): value
                 for key, value in file_state_raw.items()
-                if u.Guards.is_type(key, str)
+                if isinstance(key, str)
             }
 
         @staticmethod
@@ -578,13 +578,13 @@ class FlextMeltanoTapLdifUtilities(FlextUtilities):
             """
             files_raw = state.get("files")
             files_dict: dict[str, dict[str, t.GeneralValueType]] = {}
-            if u.is_dict_like(files_raw):
+            if isinstance(files_raw, dict):
                 for key, value in files_raw.items():
-                    if u.Guards.is_type(key, str) and u.is_dict_like(value):
+                    if isinstance(key, str) and isinstance(value, dict):
                         files_dict[key] = {
                             str(inner_key): inner_value
                             for inner_key, inner_value in value.items()
-                            if u.Guards.is_type(inner_key, str)
+                            if isinstance(inner_key, str)
                         }
             files_dict[file_path] = dict(file_state)
             updated_state: dict[str, t.GeneralValueType] = dict(state)
