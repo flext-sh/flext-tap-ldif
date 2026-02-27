@@ -7,11 +7,9 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import override
-
 from collections.abc import Mapping
 from pathlib import Path
-from typing import Self
+from typing import Self, override
 
 from flext_core import (
     FlextConstants,
@@ -135,7 +133,6 @@ class FlextMeltanoTapLdifSettings(FlextSettings):
         return v
 
     @override
-
     def model_post_init(self, __context: t.JsonValue | None, /) -> None:
         """Validate configuration after initialization using FlextSettings.BaseModel pattern."""
         super().model_post_init(__context)
@@ -199,7 +196,6 @@ class FlextMeltanoTapLdifSettings(FlextSettings):
 
     @classmethod
     @override
-
     def get_global_instance(cls) -> Self:
         """Get the global singleton instance using enhanced FlextSettings pattern."""
         return cls.model_validate({})

@@ -9,6 +9,8 @@ from __future__ import annotations
 from flext_core import FlextLogger, FlextModels, FlextResult
 
 from flext_tap_ldif.__version__ import __version__, __version_info__
+from flext_tap_ldif.constants import FlextMeltanoTapLdifConstants, c
+from flext_tap_ldif.ldif_processor import (
 from flext_tap_ldif.ldif_processor import (
     FlextLdifProcessor,
     FlextLdifProcessorWrapper,
@@ -38,6 +40,7 @@ __all__ = [
     "FlextLogger",
     "FlextMeltanoTapLDIF",
     "FlextMeltanoTapLDIFSettings",
+    "FlextMeltanoTapLdifConstants",
     "FlextMeltanoTapLdifModels",
     "FlextMeltanoTapLdifProtocols",
     "FlextMeltanoTapLdifSettings",
@@ -53,6 +56,7 @@ __all__ = [
     "TapLDIFConfig",
     "__version__",
     "__version_info__",
+    "c",
     "m",
     "t",
 ]

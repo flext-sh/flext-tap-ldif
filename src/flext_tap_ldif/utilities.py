@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import cast, override
 
 from flext_core import FlextResult, FlextUtilities, t
-from flext_meltano import FlextMeltanoModels as m
+from flext_meltano import m
 
 from flext_tap_ldif.constants import c
 

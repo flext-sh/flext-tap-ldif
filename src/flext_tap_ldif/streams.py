@@ -6,8 +6,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import override
-
 import os
 import tempfile
 from collections.abc import Iterable, Mapping
@@ -125,7 +123,6 @@ class LDIFEntriesStream(Stream):
 
     @override
     @override
-
     def get_records(
         self,
         context: Mapping[str, t.GeneralValueType] | None = None,
