@@ -20,7 +20,9 @@ from flext_meltano import (
 from flext_meltano.typings import t as t_meltano
 
 from flext_tap_ldif.constants import c
-from flext_tap_ldif.ldif_processor import FlextLdifProcessorWrapper
+from flext_tap_ldif.ldif_processor import (
+    FlextLdifProcessor as FlextLdifProcessorWrapper,
+)
 from flext_tap_ldif.typings import t
 
 logger = FlextLogger(__name__)

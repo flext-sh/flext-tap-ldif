@@ -2,7 +2,6 @@
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
-
 """
 
 from __future__ import annotations
@@ -416,8 +415,10 @@ class FlextMeltanoTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     else:
                         record[normalized_attr] = current_value
 
-                parse_result = FlextMeltanoTapLdifUtilities.LdifDataProcessing.parse_ldif_line(
-                    line,
+                parse_result = (
+                    FlextMeltanoTapLdifUtilities.LdifDataProcessing.parse_ldif_line(
+                        line,
+                    )
                 )
                 if parse_result.is_success:
                     a, v = parse_result.value
@@ -428,8 +429,8 @@ class FlextMeltanoTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     current_value = ""
 
             if current_attr is not None and current_value:
-                normalized_attr = FlextTapLdifUtilities.LdifDataProcessing.normalize_ldif_attribute_name(
                 normalized_attr = FlextMeltanoTapLdifUtilities.LdifDataProcessing.normalize_ldif_attribute_name(
+                    current_attr,
                 )
                 if normalized_attr in record:
                     existing_value = record[normalized_attr]
@@ -459,14 +460,8 @@ class FlextMeltanoTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
             """
             try:
-                record = (
-                    FlextMeltanoTapLdifUtilities.LdifDataProcessing.build_record_from_lines(
-                        entry_lines,
-                    )
-                )
-                    FlextTapLdifUtilities.LdifDataProcessing.build_record_from_lines(
-                        entry_lines,
-                    )
+                record = FlextMeltanoTapLdifUtilities.LdifDataProcessing.build_record_from_lines(
+                    entry_lines,
                 )
                 out: dict[str, t.GeneralValueType] = dict(record)
                 return FlextResult[Mapping[str, t.GeneralValueType]].ok(out)
@@ -526,7 +521,11 @@ class FlextMeltanoTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         "File paths must be strings",
                     )
 
-                path_obj = Path(file_path) if isinstance(file_path, str) else Path(str(file_path))
+                path_obj = (
+                    Path(file_path)
+                    if isinstance(file_path, str)
+                    else Path(str(file_path))
+                )
                 if not path_obj.exists():
                     return FlextResult[Mapping[str, t.GeneralValueType]].fail(
                         f"File does not exist: {file_path}",
@@ -728,12 +727,8 @@ class FlextMeltanoTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
 # Runtime alias for simplified usage
 u = FlextMeltanoTapLdifUtilities
-__all__ = [
-    "FlextMeltanoTapLdifUtilities",
-    "u",
-]
 
 __all__ = [
-    "FlextTapLdifUtilities",
+    "FlextMeltanoTapLdifUtilities",
     "u",
 ]

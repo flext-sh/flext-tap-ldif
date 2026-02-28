@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from collections.abc import Generator, Mapping
 from pathlib import Path
-from typing import NoReturn, override
+from typing import NoReturn
 
 from flext_core import FlextLogger, FlextResult
 from flext_ldif.api import FlextLdif
@@ -24,11 +24,6 @@ logger = FlextLogger(__name__)
 class FlextLdifProcessor:
     """Wrapper for FlextLdifProcessor to maintain API compatibility."""
 
-LDIFProcessor = FlextLdifProcessor
-
-    """Wrapper for FlextLdifProcessor to maintain API compatibility."""
-
-    @override
     def __init__(self, config: Mapping[str, str | int | bool]) -> None:
         """Initialize the LDIF processor using flext-ldif infrastructure.
 
@@ -36,7 +31,6 @@ LDIFProcessor = FlextLdifProcessor
         config: Configuration dictionary from the tap.
 
         """
-        super().__init__()
         self.config = config
         self._api = FlextLdif()
 
@@ -138,7 +132,9 @@ LDIFProcessor = FlextLdifProcessor
                     yield {
                         c.EntrySchema.DN_FIELD: str(dn_val),
                         c.EntrySchema.ATTRIBUTES_FIELD: attrs_dict,
-                        c.EntrySchema.OBJECT_CLASS_FIELD: attrs_dict.get("objectClass", []),
+                        c.EntrySchema.OBJECT_CLASS_FIELD: attrs_dict.get(
+                            "objectClass", []
+                        ),
                         c.EntrySchema.CHANGE_TYPE_FIELD: c.EntrySchema.DEFAULT_CHANGE_TYPE,
                         c.EntrySchema.SOURCE_FILE_FIELD: str(file_path),
                         c.EntrySchema.LINE_NUMBER_FIELD: c.EntrySchema.DEFAULT_LINE_NUMBER,
@@ -150,8 +146,9 @@ LDIFProcessor = FlextLdifProcessor
                 raise
 
 
+LDIFProcessor = FlextLdifProcessor
+
+__all__ = [
     "FlextLdifProcessor",
     "LDIFProcessor",
-]
-    "FlextLdifProcessorWrapper",
 ]
