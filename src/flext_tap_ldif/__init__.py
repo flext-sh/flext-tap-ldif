@@ -6,7 +6,7 @@ SPDX-License-Identifier: MIT.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
 
@@ -35,12 +35,7 @@ if TYPE_CHECKING:
         FlextMeltanoTapLdifSettings as TapLDIFConfig,
     )
     from flext_tap_ldif.streams import LDIFEntriesStream
-    from flext_tap_ldif.tap import (
-        TapLDIF,
-        TapLDIF as FlextMeltanoTapLDIF,
-        TapLDIF as LDIFTap,
-        TapLDIF as LegacyTapLDIF,
-    )
+    from flext_tap_ldif.tap import TapLDIF
     from flext_tap_ldif.typings import t
     from flext_tap_ldif.utilities import (
         FlextMeltanoTapLdifUtilities,
@@ -55,7 +50,6 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
         "FlextLdifProcessorWrapper",
     ),
     "FlextLogger": ("flext_core", "FlextLogger"),
-    "FlextMeltanoTapLDIF": ("flext_tap_ldif.tap", "TapLDIF"),
     "FlextMeltanoTapLDIFSettings": (
         "flext_tap_ldif.settings",
         "FlextMeltanoTapLdifSettings",
@@ -82,8 +76,6 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "FlextResult": ("flext_core", "FlextResult"),
     "LDIFEntriesStream": ("flext_tap_ldif.streams", "LDIFEntriesStream"),
     "LDIFProcessor": ("flext_tap_ldif.ldif_processor", "LDIFProcessor"),
-    "LDIFTap": ("flext_tap_ldif.tap", "TapLDIF"),
-    "LegacyTapLDIF": ("flext_tap_ldif.tap", "TapLDIF"),
     "TapConfig": ("flext_tap_ldif.settings", "FlextMeltanoTapLdifSettings"),
     "TapLDIF": ("flext_tap_ldif.tap", "TapLDIF"),
     "TapLDIFConfig": ("flext_tap_ldif.settings", "FlextMeltanoTapLdifSettings"),
@@ -99,7 +91,6 @@ __all__ = [
     "FlextLdifProcessor",
     "FlextLdifProcessorWrapper",
     "FlextLogger",
-    "FlextMeltanoTapLDIF",
     "FlextMeltanoTapLDIFSettings",
     "FlextMeltanoTapLdifConstants",
     "FlextMeltanoTapLdifModels",
@@ -111,8 +102,6 @@ __all__ = [
     "FlextTapLdifUtilities",
     "LDIFEntriesStream",
     "LDIFProcessor",
-    "LDIFTap",
-    "LegacyTapLDIF",
     "TapConfig",
     "TapLDIF",
     "TapLDIFConfig",
@@ -125,7 +114,7 @@ __all__ = [
 ]
 
 
-def __getattr__(name: str) -> Any:  # noqa: ANN401
+def __getattr__(name: str) -> object:
     """Lazy-load module attributes on first access (PEP 562)."""
     return lazy_getattr(name, _LAZY_IMPORTS, globals(), __name__)
 

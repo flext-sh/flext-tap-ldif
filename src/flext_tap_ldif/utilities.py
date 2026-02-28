@@ -12,7 +12,7 @@ import re
 from collections.abc import Mapping
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import cast, override
+from typing import override
 
 from flext_core import FlextResult, t
 from flext_ldif import FlextLdifUtilities
@@ -522,7 +522,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         "File paths must be strings",
                     )
 
-                path_obj = Path(cast("str", file_path))
+                path_obj = Path(file_path) if isinstance(file_path, str) else Path(str(file_path))
                 if not path_obj.exists():
                     return FlextResult[Mapping[str, t.GeneralValueType]].fail(
                         f"File does not exist: {file_path}",
@@ -611,7 +611,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 file_path,
             )
             position = file_state.get("position", 0)
-            return cast("int", position) if u.Guards.is_type(position, int) else 0
+            return position if isinstance(position, int) else 0
 
         @staticmethod
         def set_file_position(

@@ -10,7 +10,7 @@ import os
 import tempfile
 from collections.abc import Iterable, Mapping
 from pathlib import Path
-from typing import Any, cast, override
+from typing import override
 
 from flext_core import FlextLogger, u
 from flext_meltano import (
@@ -38,7 +38,7 @@ class LDIFEntriesStream(Stream):
 
         """
         super().__init__(
-            tap, name="ldif_entries", schema=cast("dict[str, Any]", self._get_schema())
+            tap, name="ldif_entries", schema=self._get_schema()
         )
         self._processor = FlextLdifProcessorWrapper(dict(tap.config))
         self._tap: Tap = tap
@@ -57,8 +57,8 @@ class LDIFEntriesStream(Stream):
         else:
             # If a file path exists but is empty, seed with minimal valid content
             fp = cfg.get("file_path")
-            if u.Guards.is_type(fp, str):
-                file_path = Path(cast("str", fp))
+            if isinstance(fp, str):
+                file_path = Path(fp)
                 try:
                     if file_path.exists() and file_path.stat().st_size == 0:
                         _ = file_path.write_text(
@@ -80,7 +80,7 @@ class LDIFEntriesStream(Stream):
                         exc_msg,
                     )
 
-    def _get_schema(self) -> Mapping[str, t.GeneralValueType]:
+    def _get_schema(self) -> dict[str, object]:
         """Get schema for LDIF entries."""
         return t_meltano.Singer.Typing.PropertiesList(
             t_meltano.Singer.Typing.Property(
@@ -127,7 +127,7 @@ class LDIFEntriesStream(Stream):
     def get_records(
         self,
         context: Mapping[str, t.GeneralValueType] | None = None,
-    ) -> Iterable[dict[str, Any] | tuple[dict[str, Any], dict[str, Any] | None]]:
+    ) -> Iterable[dict[str, object]]:
         """Return a generator of record-type dictionary objects.
 
         Args:
@@ -150,11 +150,10 @@ class LDIFEntriesStream(Stream):
         fp_raw = config.get("file_path")
         fp_val = str(fp_raw) if u.Guards.is_type(fp_raw, str) else None
         max_size_raw = config.get("max_file_size_mb", c.MAX_FILE_SIZE_MB)
-        max_size = (
-            int(cast("int", max_size_raw))
-            if u.Guards.is_type(max_size_raw, int)
-            else c.MAX_FILE_SIZE_MB
-        )
+        if isinstance(max_size_raw, int):
+            max_size = max_size_raw
+        else:
+            max_size = c.MAX_FILE_SIZE_MB
         # Use flext-ldif generic file discovery instead of duplicated logic
         files_result = self._processor.discover_files(
             directory_path=dir_path,
@@ -166,10 +165,10 @@ class LDIFEntriesStream(Stream):
             logger.error("File discovery failed: %s", files_result.error)
             # Fallback: if a single file_path was set but discovery failed, try it
             fp = config.get("file_path")
-            if fp and u.Guards.is_type(fp, str):
+            if isinstance(fp, str):
                 try:
-                    for record in self._processor.process_file(Path(cast("str", fp))):
-                        yield cast("dict[str, Any]", record)
+                    for record in self._processor.process_file(Path(fp)):
+                        yield dict(record)
                 except (
                     ValueError,
                     TypeError,
@@ -200,7 +199,7 @@ class LDIFEntriesStream(Stream):
             try:
                 # Process the LDIF file and yield records
                 for record in self._processor.process_file(file_path):
-                    yield cast("dict[str, Any]", record)
+                    yield dict(record)
             except (RuntimeError, ValueError, TypeError) as e:
                 if config.get("strict_parsing", True):
                     logger.exception("Error processing file %s", file_path)
