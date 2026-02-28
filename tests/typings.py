@@ -13,16 +13,16 @@ from flext_tap_ldif import t
 from flext_tests import FlextTestsTypes
 
 
-class TestsFlextMeltanoTapLdifTypes(FlextTestsTypes):
+class TestsFlextTapLdifTypes(FlextTestsTypes):
     """Types for flext-tap-ldif tests - uses composition with FlextTestsTypes.
 
-    Architecture: Uses composition (not inheritance) with FlextTestsTypes and FlextMeltanoTapLdifTypes
+    Architecture: Uses composition (not inheritance) with FlextTestsTypes and FlextTapLdifTypes
     for flext-tap-ldif-specific type definitions.
 
     Access patterns:
-    - TestsFlextMeltanoTapLdifTypes.Tests.* = flext_tests test types (via composition)
-    - TestsFlextMeltanoTapLdifTypes.TapLdif.* = flext-tap-ldif-specific test types
-    - TestsFlextMeltanoTapLdifTypes.* = FlextTestsTypes types (via composition)
+    - TestsFlextTapLdifTypes.Tests.* = flext_tests test types (via composition)
+    - TestsFlextTapLdifTypes.TapLdif.* = flext-tap-ldif-specific test types
+    - TestsFlextTapLdifTypes.* = FlextTestsTypes types (via composition)
 
     Rules:
     - Use composition, not inheritance (FlextTestsTypes deprecates subclassing)
@@ -59,10 +59,10 @@ class TestsFlextMeltanoTapLdifTypes(FlextTestsTypes):
 
 
 # Alias for simplified usage
-tt = TestsFlextMeltanoTapLdifTypes
+tt = TestsFlextTapLdifTypes
 
 __all__ = [
-    "TestsFlextMeltanoTapLdifTypes",
+    "TestsFlextTapLdifTypes",
     "t",
     "tt",
 ]

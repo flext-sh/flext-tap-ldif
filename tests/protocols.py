@@ -13,16 +13,16 @@ from flext_tap_ldif import t
 from flext_tests import FlextTestsProtocols
 
 
-class TestsFlextMeltanoTapLdifProtocols(FlextTestsProtocols):
+class TestsFlextTapLdifProtocols(FlextTestsProtocols):
     """Protocols for flext-tap-ldif tests - uses composition with FlextTestsProtocols.
 
-    Architecture: Uses composition (not inheritance) with FlextTestsProtocols and FlextMeltanoTapLdifProtocols
+    Architecture: Uses composition (not inheritance) with FlextTestsProtocols and FlextTapLdifProtocols
     for flext-tap-ldif-specific protocol definitions.
 
     Access patterns:
-    - TestsFlextMeltanoTapLdifProtocols.Tests.* = flext_tests test protocols (via composition)
-    - TestsFlextMeltanoTapLdifProtocols.TapLdif.* = flext-tap-ldif-specific test protocols
-    - TestsFlextMeltanoTapLdifProtocols.* = FlextTestsProtocols protocols (via composition)
+    - TestsFlextTapLdifProtocols.Tests.* = flext_tests test protocols (via composition)
+    - TestsFlextTapLdifProtocols.TapLdif.* = flext-tap-ldif-specific test protocols
+    - TestsFlextTapLdifProtocols.* = FlextTestsProtocols protocols (via composition)
 
     Rules:
     - Use composition, not inheritance (FlextTestsProtocols deprecates subclassing)
@@ -102,9 +102,9 @@ class TestsFlextMeltanoTapLdifProtocols(FlextTestsProtocols):
 
 
 # Aliases for simplified usage
-p = TestsFlextMeltanoTapLdifProtocols
+p = TestsFlextTapLdifProtocols
 
 __all__ = [
-    "TestsFlextMeltanoTapLdifProtocols",
+    "TestsFlextTapLdifProtocols",
     "p",
 ]

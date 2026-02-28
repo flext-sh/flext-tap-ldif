@@ -14,10 +14,10 @@ from flext_ldif import FlextLdifConstants
 from flext_meltano import FlextMeltanoConstants
 
 
-class FlextMeltanoTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
+class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
     """LDIF tap extraction-specific constants following flext-core patterns.
 
-    Composes with FlextMeltanoTapLdifConstants to avoid duplication and ensure consistency.
+    Composes with FlextTapLdifConstants to avoid duplication and ensure consistency.
     """
 
     # LDIF File Configuration using composition
@@ -115,6 +115,6 @@ class FlextMeltanoTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
         SOURCE_FILE: Final[str] = "fp"
 
 
-c = FlextMeltanoTapLdifConstants
+c = FlextTapLdifConstants
 
-__all__ = ["FlextMeltanoTapLdifConstants", "c"]
+__all__ = ["FlextTapLdifConstants", "c"]

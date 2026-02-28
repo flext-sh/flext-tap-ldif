@@ -17,6 +17,8 @@ from __future__ import annotations
 from typing import Literal
 
 from flext_core import FlextTypes
+from flext_ldif import FlextLdifTypes
+from flext_meltano import FlextMeltanoTypes
 
 # =============================================================================
 # TAP LDIF-SPECIFIC TYPE VARIABLES - Domain-specific TypeVars for Singer LDIF operations
@@ -24,7 +26,7 @@ from flext_core import FlextTypes
 
 
 # Singer LDIF tap domain TypeVars
-class FlextMeltanoTapLdifTypes(FlextTypes):
+class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
     """Singer LDIF tap-specific type definitions extending t.
 
     Domain-specific type system for Singer LDIF tap operations.
@@ -220,7 +222,7 @@ class FlextMeltanoTapLdifTypes(FlextTypes):
 
 
 # Alias for simplified usage
-t = FlextMeltanoTapLdifTypes
+t = FlextTapLdifTypes
 
 # Namespace composition via class inheritance
 # TapLdif namespace provides access to nested classes through inheritance
@@ -234,6 +236,6 @@ t = FlextMeltanoTapLdifTypes
 # =============================================================================
 
 __all__ = [
-    "FlextMeltanoTapLdifTypes",
+    "FlextTapLdifTypes",
     "t",
 ]

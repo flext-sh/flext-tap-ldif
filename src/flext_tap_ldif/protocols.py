@@ -22,7 +22,7 @@ from flext_meltano import FlextMeltanoModels as m, FlextMeltanoProtocols
 from flext_tap_ldif.typings import t
 
 
-class FlextMeltanoTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
+class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
     """LDIF tap-specific protocol definitions extending p.
 
     Domain-specific protocol system for LDIF data extraction operations.
@@ -144,9 +144,9 @@ class FlextMeltanoTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
 
 
 # Runtime alias for simplified usage
-p = FlextMeltanoTapLdifProtocols
+p = FlextTapLdifProtocols
 
 __all__ = [
-    "FlextMeltanoTapLdifProtocols",
+    "FlextTapLdifProtocols",
     "p",
 ]

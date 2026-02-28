@@ -20,7 +20,7 @@ from flext_meltano import FlextMeltanoUtilities, m
 from flext_tap_ldif.constants import c
 
 
-class FlextMeltanoTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
+class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
     """Single unified utilities class for Singer tap LDIF operations.
 
     Follows FLEXT unified class pattern with nested helper classes for
@@ -400,7 +400,7 @@ class FlextMeltanoTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     continue
 
                 if current_attr is not None and current_value:
-                    normalized_attr = FlextMeltanoTapLdifUtilities.LdifDataProcessing.normalize_ldif_attribute_name(
+                    normalized_attr = FlextTapLdifUtilities.LdifDataProcessing.normalize_ldif_attribute_name(
                         current_attr,
                     )
                     if normalized_attr in record:
@@ -416,7 +416,7 @@ class FlextMeltanoTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         record[normalized_attr] = current_value
 
                 parse_result = (
-                    FlextMeltanoTapLdifUtilities.LdifDataProcessing.parse_ldif_line(
+                    FlextTapLdifUtilities.LdifDataProcessing.parse_ldif_line(
                         line,
                     )
                 )
@@ -429,7 +429,7 @@ class FlextMeltanoTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     current_value = ""
 
             if current_attr is not None and current_value:
-                normalized_attr = FlextMeltanoTapLdifUtilities.LdifDataProcessing.normalize_ldif_attribute_name(
+                normalized_attr = FlextTapLdifUtilities.LdifDataProcessing.normalize_ldif_attribute_name(
                     current_attr,
                 )
                 if normalized_attr in record:
@@ -460,7 +460,7 @@ class FlextMeltanoTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
             """
             try:
-                record = FlextMeltanoTapLdifUtilities.LdifDataProcessing.build_record_from_lines(
+                record = FlextTapLdifUtilities.LdifDataProcessing.build_record_from_lines(
                     entry_lines,
                 )
                 out: dict[str, t.GeneralValueType] = dict(record)
@@ -610,7 +610,7 @@ class FlextMeltanoTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             int: Current position or 0
 
             """
-            file_state = FlextMeltanoTapLdifUtilities.StateManagement.get_file_state(
+            file_state = FlextTapLdifUtilities.StateManagement.get_file_state(
                 state,
                 file_path,
             )
@@ -634,14 +634,14 @@ class FlextMeltanoTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             dict[str, t.GeneralValueType]: Updated state
 
             """
-            file_state = FlextMeltanoTapLdifUtilities.StateManagement.get_file_state(
+            file_state = FlextTapLdifUtilities.StateManagement.get_file_state(
                 state,
                 file_path,
             )
             file_state_dict: dict[str, t.GeneralValueType] = dict(file_state)
             file_state_dict["position"] = position
             file_state_dict["last_updated"] = datetime.now(UTC).isoformat()
-            return FlextMeltanoTapLdifUtilities.StateManagement.set_file_state(
+            return FlextTapLdifUtilities.StateManagement.set_file_state(
                 state,
                 file_path,
                 file_state_dict,
@@ -727,9 +727,9 @@ class FlextMeltanoTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
 
 # Runtime alias for simplified usage
-u = FlextMeltanoTapLdifUtilities
+u = FlextTapLdifUtilities
 
 __all__ = [
-    "FlextMeltanoTapLdifUtilities",
+    "FlextTapLdifUtilities",
     "u",
 ]

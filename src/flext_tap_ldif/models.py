@@ -26,7 +26,7 @@ from pydantic import (
 from flext_tap_ldif.typings import t
 
 
-class FlextMeltanoTapLdifModels(FlextMeltanoModels, FlextLdifModels):
+class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
     """Complete models for LDIF tap operations using Pydantic BaseModel.
 
     Provides standardized models for all LDIF tap domain entities including:
@@ -1132,6 +1132,6 @@ class FlextMeltanoTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
 
 # Short aliases
-m = FlextMeltanoTapLdifModels
+m = FlextTapLdifModels
 
-__all__ = ["FlextMeltanoTapLdifModels", "m"]
+__all__ = ["FlextTapLdifModels", "m"]

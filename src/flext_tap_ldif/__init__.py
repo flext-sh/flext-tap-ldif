@@ -15,53 +15,55 @@ if TYPE_CHECKING:
 
     from flext_tap_ldif.__version__ import __version__, __version_info__
     from flext_tap_ldif.constants import (
-        FlextMeltanoTapLdifConstants,
-        FlextMeltanoTapLdifConstants as c,
+        FlextTapLdifConstants,
+        FlextTapLdifConstants as c,
     )
     from flext_tap_ldif.ldif_processor import FlextLdifProcessor, LDIFProcessor
-    from flext_tap_ldif.models import (
-        FlextMeltanoTapLdifModels,
-        FlextMeltanoTapLdifModels as m,
-    )
-    from flext_tap_ldif.protocols import FlextMeltanoTapLdifProtocols
-    from flext_tap_ldif.settings import FlextMeltanoTapLdifSettings
+    from flext_tap_ldif.models import FlextTapLdifModels, FlextTapLdifModels as m
+    from flext_tap_ldif.protocols import FlextTapLdifProtocols
+    from flext_tap_ldif.settings import FlextTapLdifSettings
     from flext_tap_ldif.streams import LDIFEntriesStream
     from flext_tap_ldif.tap import TapLDIF
-    from flext_tap_ldif.typings import t
-    from flext_tap_ldif.utilities import FlextMeltanoTapLdifUtilities, u
+    from flext_tap_ldif.typings import FlextTapLdifTypes, FlextTapLdifTypes as t
+    from flext_tap_ldif.utilities import (
+        FlextTapLdifUtilities,
+        FlextTapLdifUtilities as u,
+    )
 
 # Lazy import mapping: export_name -> (module_path, attr_name)
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "FlextLdifProcessor": ("flext_tap_ldif.ldif_processor", "FlextLdifProcessor"),
     "FlextLogger": ("flext_core", "FlextLogger"),
-    "FlextMeltanoTapLdifConstants": ("flext_tap_ldif.constants", "FlextMeltanoTapLdifConstants"),
-    "FlextMeltanoTapLdifModels": ("flext_tap_ldif.models", "FlextMeltanoTapLdifModels"),
-    "FlextMeltanoTapLdifProtocols": ("flext_tap_ldif.protocols", "FlextMeltanoTapLdifProtocols"),
-    "FlextMeltanoTapLdifSettings": ("flext_tap_ldif.settings", "FlextMeltanoTapLdifSettings"),
-    "FlextMeltanoTapLdifUtilities": ("flext_tap_ldif.utilities", "FlextMeltanoTapLdifUtilities"),
     "FlextModels": ("flext_core", "FlextModels"),
     "FlextResult": ("flext_core", "FlextResult"),
+    "FlextTapLdifConstants": ("flext_tap_ldif.constants", "FlextTapLdifConstants"),
+    "FlextTapLdifModels": ("flext_tap_ldif.models", "FlextTapLdifModels"),
+    "FlextTapLdifProtocols": ("flext_tap_ldif.protocols", "FlextTapLdifProtocols"),
+    "FlextTapLdifSettings": ("flext_tap_ldif.settings", "FlextTapLdifSettings"),
+    "FlextTapLdifTypes": ("flext_tap_ldif.typings", "FlextTapLdifTypes"),
+    "FlextTapLdifUtilities": ("flext_tap_ldif.utilities", "FlextTapLdifUtilities"),
     "LDIFEntriesStream": ("flext_tap_ldif.streams", "LDIFEntriesStream"),
     "LDIFProcessor": ("flext_tap_ldif.ldif_processor", "LDIFProcessor"),
     "TapLDIF": ("flext_tap_ldif.tap", "TapLDIF"),
     "__version__": ("flext_tap_ldif.__version__", "__version__"),
     "__version_info__": ("flext_tap_ldif.__version__", "__version_info__"),
-    "c": ("flext_tap_ldif.constants", "FlextMeltanoTapLdifConstants"),
-    "m": ("flext_tap_ldif.models", "FlextMeltanoTapLdifModels"),
-    "t": ("flext_tap_ldif.typings", "t"),
-    "u": ("flext_tap_ldif.utilities", "u"),
+    "c": ("flext_tap_ldif.constants", "FlextTapLdifConstants"),
+    "m": ("flext_tap_ldif.models", "FlextTapLdifModels"),
+    "t": ("flext_tap_ldif.typings", "FlextTapLdifTypes"),
+    "u": ("flext_tap_ldif.utilities", "FlextTapLdifUtilities"),
 }
 
 __all__ = [
     "FlextLdifProcessor",
     "FlextLogger",
-    "FlextMeltanoTapLdifConstants",
-    "FlextMeltanoTapLdifModels",
-    "FlextMeltanoTapLdifProtocols",
-    "FlextMeltanoTapLdifSettings",
-    "FlextMeltanoTapLdifUtilities",
     "FlextModels",
     "FlextResult",
+    "FlextTapLdifConstants",
+    "FlextTapLdifModels",
+    "FlextTapLdifProtocols",
+    "FlextTapLdifSettings",
+    "FlextTapLdifTypes",
+    "FlextTapLdifUtilities",
     "LDIFEntriesStream",
     "LDIFProcessor",
     "TapLDIF",

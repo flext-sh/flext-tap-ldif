@@ -15,13 +15,13 @@ from flext_tap_ldif import m as _tap_ldif_m
 from flext_tests import FlextTestsModels
 
 
-class TestsFlextMeltanoTapLdifModels(FlextTestsModels, _tap_ldif_m):
+class TestsFlextTapLdifModels(FlextTestsModels, _tap_ldif_m):
     """Test models combining FlextTestsModels with flext-tap-ldif models."""
 
     class Tests(FlextTestsModels.Tests):
         """Project-specific test models."""
 
 
-m = TestsFlextMeltanoTapLdifModels
+m = TestsFlextTapLdifModels
 
-__all__ = ["TestsFlextMeltanoTapLdifModels", "m"]
+__all__ = ["TestsFlextTapLdifModels", "m"]

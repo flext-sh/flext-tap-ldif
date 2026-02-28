@@ -15,13 +15,13 @@ from flext_tap_ldif import FlextTapLdifUtilities
 from flext_tests import FlextTestsUtilities
 
 
-class TestsFlextMeltanoTapLdifUtilities(FlextTestsUtilities, FlextTapLdifUtilities):
+class TestsFlextTapLdifUtilities(FlextTestsUtilities, FlextTapLdifUtilities):
     """Test utilities combining FlextTestsUtilities with flext-tap-ldif utilities."""
 
     class Tests(FlextTestsUtilities.Tests):
         """Project-specific test utilities."""
 
 
-u = TestsFlextMeltanoTapLdifUtilities
+u = TestsFlextTapLdifUtilities
 
-__all__ = ["TestsFlextMeltanoTapLdifUtilities", "u"]
+__all__ = ["TestsFlextTapLdifUtilities", "u"]
