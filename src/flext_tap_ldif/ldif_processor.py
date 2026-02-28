@@ -19,9 +19,6 @@ from flext_ldif.models import m
 from flext_tap_ldif.constants import c
 
 logger = FlextLogger(__name__)
-# Use flext-ldif processor instead of reimplementing LDIF functionality
-LDIFProcessor = FlextLdif
-# Backward compatibility alias removed (causes self-assignment warning)
 
 
 class FlextLdifProcessorWrapper:
@@ -149,9 +146,6 @@ class FlextLdifProcessorWrapper:
                 raise
 
 
-# Create the original class name for backward compatibility
-FlextLdifProcessor: type[FlextLdifProcessorWrapper] = FlextLdifProcessorWrapper
 __all__: list[str] = [
-    "FlextLdifProcessor",
-    "LDIFProcessor",
+    "FlextLdifProcessorWrapper",
 ]

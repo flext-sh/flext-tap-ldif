@@ -150,10 +150,7 @@ class LDIFEntriesStream(Stream):
         fp_raw = config.get("file_path")
         fp_val = str(fp_raw) if u.Guards.is_type(fp_raw, str) else None
         max_size_raw = config.get("max_file_size_mb", c.MAX_FILE_SIZE_MB)
-        if isinstance(max_size_raw, int):
-            max_size = max_size_raw
-        else:
-            max_size = c.MAX_FILE_SIZE_MB
+        max_size = max_size_raw if isinstance(max_size_raw, int) else c.MAX_FILE_SIZE_MB
         # Use flext-ldif generic file discovery instead of duplicated logic
         files_result = self._processor.discover_files(
             directory_path=dir_path,
