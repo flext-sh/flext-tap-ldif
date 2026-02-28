@@ -42,20 +42,42 @@ if TYPE_CHECKING:
         TapLDIF as LegacyTapLDIF,
     )
     from flext_tap_ldif.typings import t
-    from flext_tap_ldif.utilities import FlextMeltanoTapLdifUtilities
+    from flext_tap_ldif.utilities import (
+        FlextMeltanoTapLdifUtilities,
+        FlextTapLdifUtilities,
+    )
 
 # Lazy import mapping: export_name -> (module_path, attr_name)
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "FlextLdifProcessor": ("flext_tap_ldif.ldif_processor", "FlextLdifProcessor"),
-    "FlextLdifProcessorWrapper": ("flext_tap_ldif.ldif_processor", "FlextLdifProcessorWrapper"),
+    "FlextLdifProcessorWrapper": (
+        "flext_tap_ldif.ldif_processor",
+        "FlextLdifProcessorWrapper",
+    ),
     "FlextLogger": ("flext_core", "FlextLogger"),
     "FlextMeltanoTapLDIF": ("flext_tap_ldif.tap", "TapLDIF"),
-    "FlextMeltanoTapLDIFSettings": ("flext_tap_ldif.settings", "FlextMeltanoTapLdifSettings"),
-    "FlextMeltanoTapLdifConstants": ("flext_tap_ldif.constants", "FlextMeltanoTapLdifConstants"),
+    "FlextMeltanoTapLDIFSettings": (
+        "flext_tap_ldif.settings",
+        "FlextMeltanoTapLdifSettings",
+    ),
+    "FlextMeltanoTapLdifConstants": (
+        "flext_tap_ldif.constants",
+        "FlextMeltanoTapLdifConstants",
+    ),
     "FlextMeltanoTapLdifModels": ("flext_tap_ldif.models", "FlextMeltanoTapLdifModels"),
-    "FlextMeltanoTapLdifProtocols": ("flext_tap_ldif.protocols", "FlextMeltanoTapLdifProtocols"),
-    "FlextMeltanoTapLdifSettings": ("flext_tap_ldif.settings", "FlextMeltanoTapLdifSettings"),
-    "FlextMeltanoTapLdifUtilities": ("flext_tap_ldif.utilities", "FlextMeltanoTapLdifUtilities"),
+    "FlextMeltanoTapLdifProtocols": (
+        "flext_tap_ldif.protocols",
+        "FlextMeltanoTapLdifProtocols",
+    ),
+    "FlextMeltanoTapLdifSettings": (
+        "flext_tap_ldif.settings",
+        "FlextMeltanoTapLdifSettings",
+    ),
+    "FlextMeltanoTapLdifUtilities": (
+        "flext_tap_ldif.utilities",
+        "FlextMeltanoTapLdifUtilities",
+    ),
+    "FlextTapLdifUtilities": ("flext_tap_ldif.utilities", "FlextTapLdifUtilities"),
     "FlextModels": ("flext_core", "FlextModels"),
     "FlextResult": ("flext_core", "FlextResult"),
     "LDIFEntriesStream": ("flext_tap_ldif.streams", "LDIFEntriesStream"),
@@ -70,6 +92,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "c": ("flext_tap_ldif.constants", "FlextMeltanoTapLdifConstants"),
     "m": ("flext_tap_ldif.models", "FlextMeltanoTapLdifModels"),
     "t": ("flext_tap_ldif.typings", "t"),
+    "u": ("flext_tap_ldif.utilities", "FlextTapLdifUtilities"),
 }
 
 __all__ = [
@@ -85,6 +108,7 @@ __all__ = [
     "FlextMeltanoTapLdifUtilities",
     "FlextModels",
     "FlextResult",
+    "FlextTapLdifUtilities",
     "LDIFEntriesStream",
     "LDIFProcessor",
     "LDIFTap",
@@ -97,6 +121,7 @@ __all__ = [
     "c",
     "m",
     "t",
+    "u",
 ]
 
 

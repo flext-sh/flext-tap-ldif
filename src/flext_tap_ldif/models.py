@@ -11,6 +11,8 @@ from datetime import UTC, datetime
 from typing import Self
 
 from flext_core import FlextConstants, u
+from flext_ldif import FlextLdifModels
+from flext_meltano import FlextMeltanoModels
 from pydantic import (
     BaseModel,
     ConfigDict,
@@ -24,7 +26,7 @@ from pydantic import (
 from flext_tap_ldif.typings import t
 
 
-class FlextMeltanoTapLdifModels(BaseModel):
+class FlextMeltanoTapLdifModels(FlextMeltanoModels, FlextLdifModels):
     """Complete models for LDIF tap operations using Pydantic BaseModel.
 
     Provides standardized models for all LDIF tap domain entities including:
