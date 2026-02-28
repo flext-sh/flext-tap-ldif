@@ -80,19 +80,22 @@ class TestsFlextMeltanoTapLdifProtocols(FlextTestsProtocols):
             """Protocol for test LDIF assertions."""
 
             def assert_ldif_file_parsed(
-                self, entries: list[dict[str, t.GeneralValueType]]
+                self,
+                entries: list[dict[str, t.GeneralValueType]],
             ) -> None:
                 """Assert LDIF file was parsed correctly."""
                 ...
 
             def assert_ldif_entries_valid(
-                self, entries: list[dict[str, t.GeneralValueType]]
+                self,
+                entries: list[dict[str, t.GeneralValueType]],
             ) -> None:
                 """Assert LDIF entries are valid."""
                 ...
 
             def assert_ldif_stream_config_valid(
-                self, stream: dict[str, t.GeneralValueType]
+                self,
+                stream: dict[str, t.GeneralValueType],
             ) -> None:
                 """Assert LDIF stream configuration is valid."""
                 ...

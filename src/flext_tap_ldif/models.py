@@ -922,7 +922,8 @@ class FlextMeltanoTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         stream: str = Field(..., description="Source stream name")
         record: dict[str, t.GeneralValueType] = Field(
-            ..., description="LDIF record data"
+            ...,
+            description="LDIF record data",
         )
         record_type: str = Field(default="entry", description="Type of LDIF record")
 

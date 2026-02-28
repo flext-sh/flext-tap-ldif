@@ -157,7 +157,8 @@ def ldif_directory(
 
     # Create multiple LDIF files
     written = (ldif_dir / "users.ldif").write_text(
-        sample_ldif_content, encoding="utf-8"
+        sample_ldif_content,
+        encoding="utf-8",
     ) + (ldif_dir / "changes.ldif").write_text(sample_ldif_changes, encoding="utf-8")
     assert written >= 0
 

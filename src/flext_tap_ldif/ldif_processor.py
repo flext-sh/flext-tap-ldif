@@ -132,7 +132,8 @@ class FlextLdifProcessor:
                         c.EntrySchema.DN_FIELD: str(dn_val),
                         c.EntrySchema.ATTRIBUTES_FIELD: attrs_dict,
                         c.EntrySchema.OBJECT_CLASS_FIELD: attrs_dict.get(
-                            "objectClass", []
+                            "objectClass",
+                            [],
                         ),
                         c.EntrySchema.CHANGE_TYPE_FIELD: c.EntrySchema.DEFAULT_CHANGE_TYPE,
                         c.EntrySchema.SOURCE_FILE_FIELD: str(file_path),

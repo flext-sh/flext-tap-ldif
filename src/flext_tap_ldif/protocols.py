@@ -41,7 +41,8 @@ class FlextMeltanoTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
             """Protocol for LDIF file connection management."""
 
             def open_ldif_file(
-                self, file_path: str
+                self,
+                file_path: str,
             ) -> FlextMeltanoProtocols.Result[object]:
                 """Open LDIF file for reading."""
                 ...
@@ -51,7 +52,8 @@ class FlextMeltanoTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 ...
 
             def validate_ldif_format(
-                self, content: str
+                self,
+                content: str,
             ) -> FlextMeltanoProtocols.Result[bool]:
                 """Validate LDIF file format."""
                 ...
@@ -61,19 +63,22 @@ class FlextMeltanoTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
             """Protocol for LDIF parsing operations."""
 
             def parse_ldif_entry(
-                self, entry_text: str
+                self,
+                entry_text: str,
             ) -> FlextMeltanoProtocols.Result[Mapping[str, t.GeneralValueType]]:
                 """Parse single LDIF entry."""
                 ...
 
             def parse_ldif_file(
-                self, file_path: str
+                self,
+                file_path: str,
             ) -> FlextMeltanoProtocols.Result[list[Mapping[str, t.GeneralValueType]]]:
                 """Parse entire LDIF file."""
                 ...
 
             def extract_entry_dn(
-                self, entry_lines: list[str]
+                self,
+                entry_lines: list[str],
             ) -> FlextMeltanoProtocols.Result[str]:
                 """Extract DN from LDIF entry lines."""
                 ...
@@ -103,13 +108,15 @@ class FlextMeltanoTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
             """Protocol for LDIF data transformation."""
 
             def transform_ldif_to_singer(
-                self, ldif_entry: Mapping[str, t.GeneralValueType]
+                self,
+                ldif_entry: Mapping[str, t.GeneralValueType],
             ) -> FlextMeltanoProtocols.Result[m.Meltano.SingerRecordMessage]:
                 """Transform LDIF entry to Singer record format."""
                 ...
 
             def normalize_ldif_attributes(
-                self, attributes: Mapping[str, list[t.GeneralValueType]]
+                self,
+                attributes: Mapping[str, list[t.GeneralValueType]],
             ) -> FlextMeltanoProtocols.Result[Mapping[str, t.GeneralValueType]]:
                 """Normalize LDIF attribute values."""
                 ...

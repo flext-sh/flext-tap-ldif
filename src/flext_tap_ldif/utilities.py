@@ -506,7 +506,7 @@ class FlextMeltanoTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             files = config["files"]
             if not u.Guards.is_list(files):
                 return FlextResult[Mapping[str, t.GeneralValueType]].fail(
-                    "Files must be a list"
+                    "Files must be a list",
                 )
 
             if not files:
@@ -597,7 +597,8 @@ class FlextMeltanoTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @staticmethod
         def get_file_position(
-            state: Mapping[str, t.GeneralValueType], file_path: str
+            state: Mapping[str, t.GeneralValueType],
+            file_path: str,
         ) -> int:
             """Get current position in file.
 
