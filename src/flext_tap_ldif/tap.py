@@ -14,8 +14,8 @@ from flext_core import FlextConstants, FlextLogger
 from flext_meltano import (
     FlextMeltanoStream as Stream,
     FlextMeltanoTap as Tap,
+    t as t_meltano,
 )
-from flext_meltano.typings import t as t_meltano
 
 from flext_tap_ldif.settings import FlextMeltanoTapLdifSettings
 from flext_tap_ldif.streams import LDIFEntriesStream

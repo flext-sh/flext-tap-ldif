@@ -16,8 +16,8 @@ from flext_core import FlextLogger, u
 from flext_meltano import (
     FlextMeltanoStream as Stream,
     FlextMeltanoTap as Tap,
+    t as t_meltano,
 )
-from flext_meltano.typings import t as t_meltano
 
 from flext_tap_ldif.constants import c
 from flext_tap_ldif.ldif_processor import (
@@ -39,9 +39,7 @@ class LDIFEntriesStream(Stream):
             tap: The parent tap instance.
 
         """
-        super().__init__(
-            tap, name="ldif_entries", schema=self._get_schema()
-        )
+        super().__init__(tap, name="ldif_entries", schema=self._get_schema())
         self._processor = FlextLdifProcessorWrapper(dict(tap.config))
         self._tap: Tap = tap
         # Ensure a sample LDIF file exists in temp for default tests if none provided

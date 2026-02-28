@@ -13,8 +13,7 @@ from pathlib import Path
 from typing import NoReturn
 
 from flext_core import FlextLogger, FlextResult
-from flext_ldif.api import FlextLdif
-from flext_ldif.models import m
+from flext_ldif import FlextLdif, m
 
 from flext_tap_ldif.constants import c
 

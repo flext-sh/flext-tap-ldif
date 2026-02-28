@@ -11,7 +11,7 @@ from datetime import UTC, datetime
 from typing import Self
 
 from flext_core import FlextConstants, u
-from flext_ldif.models import FlextLdifModels
+from flext_ldif import FlextLdifModels
 from flext_meltano import FlextMeltanoModels
 from pydantic import (
     BaseModel,

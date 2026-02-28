@@ -16,9 +16,8 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Protocol, runtime_checkable
 
-from flext_ldif.protocols import FlextLdifProtocols
-from flext_meltano.models import FlextMeltanoModels as m
-from flext_meltano.protocols import FlextMeltanoProtocols
+from flext_ldif import FlextLdifProtocols
+from flext_meltano import FlextMeltanoModels as m, FlextMeltanoProtocols
 
 from flext_tap_ldif.typings import t
 
