@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from flext_core import cleanup_submodule_namespace, lazy_getattr
+from flext_core._utilities.lazy import cleanup_submodule_namespace, lazy_getattr
 
 if TYPE_CHECKING:
     from flext_core import FlextLogger, FlextModels, FlextResult
@@ -20,7 +20,10 @@ if TYPE_CHECKING:
     )
     from flext_tap_ldif.ldif_processor import FlextLdifProcessor, LDIFProcessor
     from flext_tap_ldif.models import FlextTapLdifModels, FlextTapLdifModels as m
-    from flext_tap_ldif.protocols import FlextTapLdifProtocols
+    from flext_tap_ldif.protocols import (
+        FlextTapLdifProtocols,
+        FlextTapLdifProtocols as p,
+    )
     from flext_tap_ldif.settings import FlextTapLdifSettings
     from flext_tap_ldif.streams import LDIFEntriesStream
     from flext_tap_ldif.tap import TapLDIF
@@ -49,6 +52,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "__version_info__": ("flext_tap_ldif.__version__", "__version_info__"),
     "c": ("flext_tap_ldif.constants", "FlextTapLdifConstants"),
     "m": ("flext_tap_ldif.models", "FlextTapLdifModels"),
+    "p": ("flext_tap_ldif.protocols", "FlextTapLdifProtocols"),
     "t": ("flext_tap_ldif.typings", "FlextTapLdifTypes"),
     "u": ("flext_tap_ldif.utilities", "FlextTapLdifUtilities"),
 }
@@ -71,6 +75,7 @@ __all__ = [
     "__version_info__",
     "c",
     "m",
+    "p",
     "t",
     "u",
 ]

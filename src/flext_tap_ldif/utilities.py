@@ -415,10 +415,8 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     else:
                         record[normalized_attr] = current_value
 
-                parse_result = (
-                    FlextTapLdifUtilities.LdifDataProcessing.parse_ldif_line(
-                        line,
-                    )
+                parse_result = FlextTapLdifUtilities.LdifDataProcessing.parse_ldif_line(
+                    line,
                 )
                 if parse_result.is_success:
                     a, v = parse_result.value
@@ -460,8 +458,10 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
             """
             try:
-                record = FlextTapLdifUtilities.LdifDataProcessing.build_record_from_lines(
-                    entry_lines,
+                record = (
+                    FlextTapLdifUtilities.LdifDataProcessing.build_record_from_lines(
+                        entry_lines,
+                    )
                 )
                 out: dict[str, t.GeneralValueType] = dict(record)
                 return FlextResult[Mapping[str, t.GeneralValueType]].ok(out)
