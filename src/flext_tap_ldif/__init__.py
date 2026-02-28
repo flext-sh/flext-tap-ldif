@@ -18,47 +18,27 @@ if TYPE_CHECKING:
         FlextMeltanoTapLdifConstants,
         FlextMeltanoTapLdifConstants as c,
     )
-    from flext_tap_ldif.ldif_processor import (
-        FlextLdifProcessor,
-        LDIFProcessor,
-    )
+    from flext_tap_ldif.ldif_processor import FlextLdifProcessor, LDIFProcessor
     from flext_tap_ldif.models import (
         FlextMeltanoTapLdifModels,
         FlextMeltanoTapLdifModels as m,
     )
     from flext_tap_ldif.protocols import FlextMeltanoTapLdifProtocols
-    from flext_tap_ldif.settings import (
-        FlextMeltanoTapLdifSettings,
-    )
+    from flext_tap_ldif.settings import FlextMeltanoTapLdifSettings
     from flext_tap_ldif.streams import LDIFEntriesStream
     from flext_tap_ldif.tap import TapLDIF
     from flext_tap_ldif.typings import t
-    from flext_tap_ldif.utilities import (
-        FlextMeltanoTapLdifUtilities,
-        FlextMeltanoTapLdifUtilities as u,
-    )
+    from flext_tap_ldif.utilities import FlextMeltanoTapLdifUtilities, u
 
 # Lazy import mapping: export_name -> (module_path, attr_name)
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "FlextLdifProcessor": ("flext_tap_ldif.ldif_processor", "FlextLdifProcessor"),
     "FlextLogger": ("flext_core", "FlextLogger"),
-    "FlextMeltanoTapLdifConstants": (
-        "flext_tap_ldif.constants",
-        "FlextMeltanoTapLdifConstants",
-    ),
+    "FlextMeltanoTapLdifConstants": ("flext_tap_ldif.constants", "FlextMeltanoTapLdifConstants"),
     "FlextMeltanoTapLdifModels": ("flext_tap_ldif.models", "FlextMeltanoTapLdifModels"),
-    "FlextMeltanoTapLdifProtocols": (
-        "flext_tap_ldif.protocols",
-        "FlextMeltanoTapLdifProtocols",
-    ),
-    "FlextMeltanoTapLdifSettings": (
-        "flext_tap_ldif.settings",
-        "FlextMeltanoTapLdifSettings",
-    ),
-    "FlextMeltanoTapLdifUtilities": (
-        "flext_tap_ldif.utilities",
-        "FlextMeltanoTapLdifUtilities",
-    ),
+    "FlextMeltanoTapLdifProtocols": ("flext_tap_ldif.protocols", "FlextMeltanoTapLdifProtocols"),
+    "FlextMeltanoTapLdifSettings": ("flext_tap_ldif.settings", "FlextMeltanoTapLdifSettings"),
+    "FlextMeltanoTapLdifUtilities": ("flext_tap_ldif.utilities", "FlextMeltanoTapLdifUtilities"),
     "FlextModels": ("flext_core", "FlextModels"),
     "FlextResult": ("flext_core", "FlextResult"),
     "LDIFEntriesStream": ("flext_tap_ldif.streams", "LDIFEntriesStream"),
