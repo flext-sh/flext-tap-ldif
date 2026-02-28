@@ -10,8 +10,7 @@ from collections.abc import Mapping
 from datetime import UTC, datetime
 from typing import Self
 
-from flext_core import FlextConstants
-from flext_core.utilities import u
+from flext_core import FlextConstants, u
 from pydantic import (
     BaseModel,
     ConfigDict,
