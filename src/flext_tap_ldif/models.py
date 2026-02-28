@@ -11,7 +11,7 @@ from datetime import UTC, datetime
 from typing import Self
 
 from flext_core import FlextConstants, u
-from flext_ldif import FlextLdifModels
+from flext_ldif.models import FlextLdifModels
 from flext_meltano import FlextMeltanoModels
 from pydantic import (
     BaseModel,
@@ -165,7 +165,7 @@ class FlextMeltanoTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         self,
         value: t.GeneralValueType,
         _info: FieldSerializationInfo,
-    ) -> object:
+    ) -> t.GeneralValueType:
         """Add Singer LDIF tap metadata to all serialized fields."""
         if u.is_dict_like(value):
             if isinstance(value, t.ConfigMap):

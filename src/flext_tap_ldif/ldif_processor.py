@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import NoReturn, override
 
 from flext_core import FlextLogger, FlextResult
-from flext_ldif import FlextLdif
+from flext_ldif.api import FlextLdif
 from flext_ldif.models import m
 
 from flext_tap_ldif.constants import c
@@ -21,7 +21,11 @@ from flext_tap_ldif.constants import c
 logger = FlextLogger(__name__)
 
 
-class FlextLdifProcessorWrapper:
+class FlextLdifProcessor:
+    """Wrapper for FlextLdifProcessor to maintain API compatibility."""
+
+LDIFProcessor = FlextLdifProcessor
+
     """Wrapper for FlextLdifProcessor to maintain API compatibility."""
 
     @override
@@ -146,6 +150,8 @@ class FlextLdifProcessorWrapper:
                 raise
 
 
-__all__: list[str] = [
+    "FlextLdifProcessor",
+    "LDIFProcessor",
+]
     "FlextLdifProcessorWrapper",
 ]

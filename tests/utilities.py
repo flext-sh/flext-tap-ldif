@@ -11,13 +11,11 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_tap_ldif import FlextMeltanoTapLdifUtilities
+from flext_tap_ldif import FlextTapLdifUtilities
 from flext_tests import FlextTestsUtilities
 
 
-class TestsFlextMeltanoTapLdifUtilities(
-    FlextTestsUtilities, FlextMeltanoTapLdifUtilities
-):
+class TestsFlextMeltanoTapLdifUtilities(FlextTestsUtilities, FlextTapLdifUtilities):
     """Test utilities combining FlextTestsUtilities with flext-tap-ldif utilities."""
 
     class Tests(FlextTestsUtilities.Tests):

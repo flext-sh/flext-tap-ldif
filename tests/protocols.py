@@ -100,7 +100,6 @@ class TestsFlextMeltanoTapLdifProtocols(FlextTestsProtocols):
 
 # Aliases for simplified usage
 p = TestsFlextMeltanoTapLdifProtocols
-p = TestsFlextMeltanoTapLdifProtocols
 
 __all__ = [
     "TestsFlextMeltanoTapLdifProtocols",

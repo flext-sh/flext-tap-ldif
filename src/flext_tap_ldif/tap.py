@@ -104,7 +104,6 @@ class TapLDIF(Tap):
     )
 
     @override
-    @override
     def discover_streams(self) -> list[Stream]:
         """Return a list of discovered streams.
 
