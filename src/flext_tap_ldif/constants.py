@@ -92,6 +92,28 @@ class FlextMeltanoTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
             FlextLdifConstants.Ldif.LdifValidation.MAX_ATTRIBUTES_PER_ENTRY
         )
 
+    class EntrySchema:
+        """LDIF entry schema field names."""
+
+        DN_FIELD: Final[str] = "dn"
+        ATTRIBUTES_FIELD: Final[str] = "attributes"
+        OBJECT_CLASS_FIELD: Final[str] = "object_class"
+        CHANGE_TYPE_FIELD: Final[str] = "change_type"
+        SOURCE_FILE_FIELD: Final[str] = "source_file"
+        LINE_NUMBER_FIELD: Final[str] = "line_number"
+        ENTRY_SIZE_FIELD: Final[str] = "entry_size"
+        DEFAULT_CHANGE_TYPE: Final[str] = "None"
+        DEFAULT_LINE_NUMBER: Final[int] = 0
+        DEFAULT_ENTRY_SIZE: Final[int] = 0
+
+    class SampleEntry:
+        """Sample LDIF entry for fallback/testing."""
+
+        DN: Final[str] = "cn=sample,dc=example,dc=com"
+        ATTRIBUTES: Final[dict[str, list[str]]] = {"cn": ["sample"]}
+        OBJECT_CLASS: Final[list[str]] = ["top"]
+        SOURCE_FILE: Final[str] = "fp"
+
 
 c = FlextMeltanoTapLdifConstants
 

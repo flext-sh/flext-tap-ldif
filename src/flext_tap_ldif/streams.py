@@ -19,6 +19,7 @@ from flext_meltano import (
 )
 from flext_meltano.typings import t as t_meltano
 
+from flext_tap_ldif.constants import c
 from flext_tap_ldif.ldif_processor import FlextLdifProcessorWrapper
 from flext_tap_ldif.typings import t
 
@@ -83,39 +84,39 @@ class LDIFEntriesStream(Stream):
         """Get schema for LDIF entries."""
         return t_meltano.Singer.Typing.PropertiesList(
             t_meltano.Singer.Typing.Property(
-                "dn",
+                c.EntrySchema.DN_FIELD,
                 t_meltano.Singer.Typing.StringType,
                 description="Distinguished Name",
             ),
             t_meltano.Singer.Typing.Property(
-                "attributes",
+                c.EntrySchema.ATTRIBUTES_FIELD,
                 t_meltano.Singer.Typing.ObjectType(),
                 description="Entry attributes",
             ),
             t_meltano.Singer.Typing.Property(
-                "object_class",
+                c.EntrySchema.OBJECT_CLASS_FIELD,
                 t_meltano.Singer.Typing.ArrayType(
                     t_meltano.Singer.Typing.StringType,
                 ),
                 description="Object classes",
             ),
             t_meltano.Singer.Typing.Property(
-                "change_type",
+                c.EntrySchema.CHANGE_TYPE_FIELD,
                 t_meltano.Singer.Typing.StringType,
                 description="Change type",
             ),
             t_meltano.Singer.Typing.Property(
-                "source_file",
+                c.EntrySchema.SOURCE_FILE_FIELD,
                 t_meltano.Singer.Typing.StringType,
                 description="Source file path",
             ),
             t_meltano.Singer.Typing.Property(
-                "line_number",
+                c.EntrySchema.LINE_NUMBER_FIELD,
                 t_meltano.Singer.Typing.IntegerType,
                 description="Line number in file",
             ),
             t_meltano.Singer.Typing.Property(
-                "entry_size",
+                c.EntrySchema.ENTRY_SIZE_FIELD,
                 t_meltano.Singer.Typing.IntegerType,
                 description="Entry size in bytes",
             ),
@@ -148,11 +149,11 @@ class LDIFEntriesStream(Stream):
         pattern = str(pattern_raw) if u.Guards.is_type(pattern_raw, str) else "*.ldif"
         fp_raw = config.get("file_path")
         fp_val = str(fp_raw) if u.Guards.is_type(fp_raw, str) else None
-        max_size_raw = config.get("max_file_size_mb", 100)
+        max_size_raw = config.get("max_file_size_mb", c.MAX_FILE_SIZE_MB)
         max_size = (
             int(cast("int", max_size_raw))
             if u.Guards.is_type(max_size_raw, int)
-            else 100
+            else c.MAX_FILE_SIZE_MB
         )
         # Use flext-ldif generic file discovery instead of duplicated logic
         files_result = self._processor.discover_files(
@@ -185,13 +186,13 @@ class LDIFEntriesStream(Stream):
         # If discovery returned no files but a file_path was provided, emit a synthetic record
         if not files_to_process:
             yield {
-                "dn": "cn=sample,dc=example,dc=com",
-                "attributes": {"cn": ["sample"]},
-                "object_class": ["top"],
-                "change_type": "None",
-                "source_file": "fp",
-                "line_number": 0,
-                "entry_size": 0,
+                c.EntrySchema.DN_FIELD: c.SampleEntry.DN,
+                c.EntrySchema.ATTRIBUTES_FIELD: c.SampleEntry.ATTRIBUTES,
+                c.EntrySchema.OBJECT_CLASS_FIELD: c.SampleEntry.OBJECT_CLASS,
+                c.EntrySchema.CHANGE_TYPE_FIELD: c.EntrySchema.DEFAULT_CHANGE_TYPE,
+                c.EntrySchema.SOURCE_FILE_FIELD: c.SampleEntry.SOURCE_FILE,
+                c.EntrySchema.LINE_NUMBER_FIELD: c.EntrySchema.DEFAULT_LINE_NUMBER,
+                c.EntrySchema.ENTRY_SIZE_FIELD: c.EntrySchema.DEFAULT_ENTRY_SIZE,
             }
             return
         for file_path in files_to_process:

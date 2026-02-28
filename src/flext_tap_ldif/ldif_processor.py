@@ -16,6 +16,8 @@ from flext_core import FlextLogger, FlextResult
 from flext_ldif import FlextLdif
 from flext_ldif.models import m
 
+from flext_tap_ldif.constants import c
+
 logger = FlextLogger(__name__)
 # Use flext-ldif processor instead of reimplementing LDIF functionality
 LDIFProcessor = FlextLdif
@@ -133,13 +135,13 @@ class FlextLdifProcessorWrapper:
                         else {}
                     )
                     yield {
-                        "dn": str(dn_val),
-                        "attributes": attrs_dict,
-                        "object_class": attrs_dict.get("objectClass", []),
-                        "change_type": "None",
-                        "source_file": str(file_path),
-                        "line_number": 0,
-                        "entry_size": len(str(entry).encode("utf-8")),
+                        c.EntrySchema.DN_FIELD: str(dn_val),
+                        c.EntrySchema.ATTRIBUTES_FIELD: attrs_dict,
+                        c.EntrySchema.OBJECT_CLASS_FIELD: attrs_dict.get("objectClass", []),
+                        c.EntrySchema.CHANGE_TYPE_FIELD: c.EntrySchema.DEFAULT_CHANGE_TYPE,
+                        c.EntrySchema.SOURCE_FILE_FIELD: str(file_path),
+                        c.EntrySchema.LINE_NUMBER_FIELD: c.EntrySchema.DEFAULT_LINE_NUMBER,
+                        c.EntrySchema.ENTRY_SIZE_FIELD: len(str(entry).encode("utf-8")),
                     }
         except (RuntimeError, ValueError, TypeError):
             logger.exception("Failed to process LDIF file: %s", file_path)
