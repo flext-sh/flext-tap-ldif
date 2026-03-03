@@ -11,8 +11,9 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_tap_ldif import m as _tap_ldif_m
 from flext_tests import FlextTestsModels
+
+from flext_tap_ldif import m as _tap_ldif_m
 
 
 class TestsFlextTapLdifModels(FlextTestsModels, _tap_ldif_m):
