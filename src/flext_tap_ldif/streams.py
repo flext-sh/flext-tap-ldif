@@ -43,7 +43,7 @@ class LDIFEntriesStream(Stream):
         self._processor = FlextLdifProcessorWrapper(dict(tap.config))
         self._tap: Tap = tap
         # Ensure a sample LDIF file exists in temp for default tests if none provided
-        cfg: dict[str, t.GeneralValueType] = dict(tap.config)
+        cfg: dict[str, t.ContainerValue] = dict(tap.config)
         if not cfg.get("file_path") and not cfg.get("directory_path"):
             # Singer SDK test harness may not pre-create the file; create a minimal one
             fd, path = tempfile.mkstemp(suffix=".ldif")
@@ -126,7 +126,7 @@ class LDIFEntriesStream(Stream):
     @override
     def get_records(
         self,
-        context: Mapping[str, t.GeneralValueType] | None = None,
+        context: Mapping[str, t.ContainerValue] | None = None,
     ) -> Iterable[dict[str, object]]:
         """Return a generator of record-type dictionary objects.
 
@@ -138,7 +138,7 @@ class LDIFEntriesStream(Stream):
 
         """
         _ = context
-        config: dict[str, t.GeneralValueType] = dict(self._tap.config)
+        config: dict[str, t.ContainerValue] = dict(self._tap.config)
         sample_path = getattr(self, "_sample_file_path", None)
         if sample_path:
             config["file_path"] = sample_path

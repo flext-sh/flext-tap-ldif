@@ -182,7 +182,7 @@ mail: test.user@example.com
 
 # Tap configuration fixtures
 @pytest.fixture
-def basic_tap_config(sample_ldif_file: Path) -> dict[str, t.GeneralValueType]:
+def basic_tap_config(sample_ldif_file: Path) -> dict[str, t.ContainerValue]:
     """Basic LDIF tap configuration."""
     return {
         "ldif_file_path": str(sample_ldif_file),
@@ -197,7 +197,7 @@ def basic_tap_config(sample_ldif_file: Path) -> dict[str, t.GeneralValueType]:
 
 
 @pytest.fixture
-def changes_tap_config(sample_ldif_changes_file: Path) -> dict[str, t.GeneralValueType]:
+def changes_tap_config(sample_ldif_changes_file: Path) -> dict[str, t.ContainerValue]:
     """LDIF tap configuration for changes processing."""
     return {
         "ldif_file_path": str(sample_ldif_changes_file),
@@ -212,7 +212,7 @@ def changes_tap_config(sample_ldif_changes_file: Path) -> dict[str, t.GeneralVal
 
 
 @pytest.fixture
-def directory_tap_config(ldif_directory: Path) -> dict[str, t.GeneralValueType]:
+def directory_tap_config(ldif_directory: Path) -> dict[str, t.ContainerValue]:
     """LDIF tap configuration for directory processing."""
     return {
         "ldif_file_path": str(ldif_directory),
@@ -228,7 +228,7 @@ def directory_tap_config(ldif_directory: Path) -> dict[str, t.GeneralValueType]:
 
 
 @pytest.fixture
-def filtered_tap_config(sample_ldif_file: Path) -> dict[str, t.GeneralValueType]:
+def filtered_tap_config(sample_ldif_file: Path) -> dict[str, t.ContainerValue]:
     """LDIF tap configuration with filters."""
     return {
         "ldif_file_path": str(sample_ldif_file),
@@ -268,7 +268,7 @@ def large_ldif_file(tmp_path: Path) -> Path:
 
 
 @pytest.fixture
-def performance_tap_config(large_ldif_file: Path) -> dict[str, t.GeneralValueType]:
+def performance_tap_config(large_ldif_file: Path) -> dict[str, t.ContainerValue]:
     """LDIF tap configuration for performance testing."""
     return {
         "ldif_file_path": str(large_ldif_file),
@@ -333,7 +333,7 @@ description: User with unicode characters: àáâãäåæç
 
 # Singer protocol fixtures
 @pytest.fixture
-def singer_catalog_config() -> dict[str, t.GeneralValueType]:
+def singer_catalog_config() -> dict[str, t.ContainerValue]:
     """Singer catalog configuration."""
     return {
         "streams": [
@@ -366,7 +366,7 @@ def singer_catalog_config() -> dict[str, t.GeneralValueType]:
 
 
 @pytest.fixture
-def singer_state() -> dict[str, t.GeneralValueType]:
+def singer_state() -> dict[str, t.ContainerValue]:
     """Singer state for incremental sync."""
     return {
         "currently_syncing": None,
@@ -406,7 +406,7 @@ def invalid_ldif_file(tmp_path: Path, invalid_ldif_content: str) -> Path:
 
 # Performance benchmarking fixtures
 @pytest.fixture
-def benchmark_config() -> dict[str, t.GeneralValueType]:
+def benchmark_config() -> dict[str, t.ContainerValue]:
     """Configuration for performance benchmarking."""
     return {
         "max_entries_to_process": 1000,
@@ -434,16 +434,16 @@ def pytest_configure(config: pytest.Config) -> None:
 class MockLDIFTap:
     """Mock implementation of the LDIF Tap."""
 
-    def __init__(self, config: dict[str, t.GeneralValueType]) -> None:
+    def __init__(self, config: dict[str, t.ContainerValue]) -> None:
         """Initialize the instance."""
         super().__init__()
         self.config = config
-        self.discovered_streams: list[dict[str, t.GeneralValueType]] = []
+        self.discovered_streams: list[dict[str, t.ContainerValue]] = []
 
-    def discover_streams(self) -> list[dict[str, t.GeneralValueType]]:
+    def discover_streams(self) -> list[dict[str, t.ContainerValue]]:
         return self.discovered_streams
 
-    def sync_records(self) -> list[dict[str, t.GeneralValueType]]:
+    def sync_records(self) -> list[dict[str, t.ContainerValue]]:
         return [
             {
                 "dn": "cn=test,ou=users,dc=example,dc=com",
@@ -465,20 +465,20 @@ def mock_ldif_tap() -> type[MockLDIFTap]:
 class MockLDIFParser:
     """Mock implementation of the LDIF Parser."""
 
-    def __init__(self, config: dict[str, t.GeneralValueType]) -> None:
+    def __init__(self, config: dict[str, t.ContainerValue]) -> None:
         """Initialize the instance."""
         super().__init__()
         self.config = config
-        self.parsed_entries: list[dict[str, t.GeneralValueType]] = []
+        self.parsed_entries: list[dict[str, t.ContainerValue]] = []
 
-    def parse_file(self, _file_path: str) -> dict[str, t.GeneralValueType]:
+    def parse_file(self, _file_path: str) -> dict[str, t.ContainerValue]:
         return {
             "success": True,
             "entries": self.parsed_entries,
             "errors": [],
         }
 
-    def add_mock_entry(self, entry: dict[str, t.GeneralValueType]) -> None:
+    def add_mock_entry(self, entry: dict[str, t.ContainerValue]) -> None:
         self.parsed_entries.append(entry)
 
 

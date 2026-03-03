@@ -56,7 +56,7 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols):
                 """Close mock LDIF file."""
                 ...
 
-            def read_entries(self) -> list[dict[str, t.GeneralValueType]]:
+            def read_entries(self) -> list[dict[str, t.ContainerValue]]:
                 """Read entries from mock LDIF file."""
                 ...
 
@@ -64,7 +64,7 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols):
         class TestLdifDataProviderProtocol(Protocol):
             """Protocol for test LDIF data providers."""
 
-            def get_test_entries(self) -> list[dict[str, t.GeneralValueType]]:
+            def get_test_entries(self) -> list[dict[str, t.ContainerValue]]:
                 """Get test LDIF entries."""
                 ...
 
@@ -72,7 +72,7 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols):
                 """Get test LDIF file content."""
                 ...
 
-            def get_test_config(self) -> dict[str, t.GeneralValueType]:
+            def get_test_config(self) -> dict[str, t.ContainerValue]:
                 """Get test LDIF configuration."""
                 ...
 
@@ -82,21 +82,21 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols):
 
             def assert_ldif_file_parsed(
                 self,
-                entries: list[dict[str, t.GeneralValueType]],
+                entries: list[dict[str, t.ContainerValue]],
             ) -> None:
                 """Assert LDIF file was parsed correctly."""
                 ...
 
             def assert_ldif_entries_valid(
                 self,
-                entries: list[dict[str, t.GeneralValueType]],
+                entries: list[dict[str, t.ContainerValue]],
             ) -> None:
                 """Assert LDIF entries are valid."""
                 ...
 
             def assert_ldif_stream_config_valid(
                 self,
-                stream: dict[str, t.GeneralValueType],
+                stream: dict[str, t.ContainerValue],
             ) -> None:
                 """Assert LDIF stream configuration is valid."""
                 ...

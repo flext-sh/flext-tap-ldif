@@ -30,7 +30,7 @@ class TapLDIF(Tap):
     name: str = "tap-ldif"
     config_class = FlextTapLdifSettings
     # Schema combining file-based configuration with LDIF-specific properties
-    config_jsonschema: ClassVar[dict[str, t.GeneralValueType]] = (
+    config_jsonschema: ClassVar[dict[str, t.ContainerValue]] = (
         t_meltano.Singer.Typing.PropertiesList(
             # File-based properties
             t_meltano.Singer.Typing.Property(
@@ -115,7 +115,7 @@ class TapLDIF(Tap):
             LDIFEntriesStream(tap=self),
         ]
 
-    def _get_ldif_entries_schema(self) -> Mapping[str, t.GeneralValueType]:
+    def _get_ldif_entries_schema(self) -> Mapping[str, t.ContainerValue]:
         """Get the schema for LDIF entries stream.
 
         Returns:

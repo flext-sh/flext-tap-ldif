@@ -52,11 +52,11 @@ class TestsFlextTapLdifTypes(FlextTestsTypes):
         # Test data types
         type MockLdifEntry = dict[str, str | dict[str, list[str]]]
         type MockLdifFile = list[dict[str, str | dict[str, list[str]]]]
-        type TestLdifScenario = dict[str, t.GeneralValueType]
+        type TestLdifScenario = dict[str, t.ContainerValue]
 
         # Test result types
         type TestLdifValidationResult = dict[str, bool | str | list[str]]
-        type TestLdifParsingResult = dict[str, t.GeneralValueType]
+        type TestLdifParsingResult = dict[str, t.ContainerValue]
 
 
 # Alias for simplified usage
