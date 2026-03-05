@@ -33,10 +33,6 @@ class FlextLdifProcessor:
         self.config = config
         self._api = FlextLdif()
 
-    def _raise_parse_error(self, msg: str) -> NoReturn:
-        """Raise parse error with message."""
-        raise ValueError(msg)
-
     def discover_files(
         self,
         directory_path: str | Path | None = None,
@@ -144,6 +140,10 @@ class FlextLdifProcessor:
             logger.exception("Failed to process LDIF file: %s", file_path)
             if self.config.get("strict_parsing", True):
                 raise
+
+    def _raise_parse_error(self, msg: str) -> NoReturn:
+        """Raise parse error with message."""
+        raise ValueError(msg)
 
 
 LDIFProcessor = FlextLdifProcessor

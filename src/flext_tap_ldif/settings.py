@@ -103,103 +103,23 @@ class FlextTapLdifSettings(FlextSettings):
         description="Maximum file size in MB to process",
     )
 
-    @field_validator("file_path")
-    @classmethod
-    def validate_file_path_field(cls, v: str | None) -> str | None:
-        """Validate file path exists using Pydantic v2 patterns."""
-        if v is None:
-            return None
-        path = Path(v)
-        if not path.exists():
-            msg = f"File path does not exist: {v}"
-            raise ValueError(msg)
-        if not path.is_file():
-            msg = f"Path is not a file: {v}"
-            raise ValueError(msg)
-        return v
-
-    @field_validator("directory_path")
-    @classmethod
-    def validate_directory_path_field(cls, v: str | None) -> str | None:
-        """Validate directory path exists using Pydantic v2 patterns."""
-        if v is None:
-            return None
-        path = Path(v)
-        if not path.exists():
-            msg = f"Directory path does not exist: {v}"
-            raise ValueError(msg)
-        if not path.is_dir():
-            msg = f"Path is not a directory: {v}"
-            raise ValueError(msg)
-        return v
-
-    @override
-    def model_post_init(self, __context: t.JsonValue | None, /) -> None:
-        """Validate configuration after initialization using FlextSettings.BaseModel pattern."""
-        super().model_post_init(__context)
-
-        # Delegate to business rules validation
-        validation_result: FlextResult[bool] = self.validate_business_rules()
-        if validation_result.is_failure:
-            raise ValueError(validation_result.error)
-
-    def validate_business_rules(self) -> FlextResult[bool]:
-        """Validate LDIF tap configuration business rules."""
-        # Validate input sources using FlextResult chaining
-        return (
-            self
-            ._validate_input_sources()
-            .flat_map(lambda _: self._validate_constraints())
-            .flat_map(lambda _: self._validate_filters())
-        )
-
-    def _validate_input_sources(self) -> FlextResult[bool]:
-        """Validate input source configuration."""
-        if not any([self.file_path, self.file_pattern, self.directory_path]):
-            return FlextResult[bool].fail(
-                'At least one input source must be specified: "file_path", "file_pattern", or "directory_path"',
-            )
-        return FlextResult[bool].ok(value=True)
-
-    def _validate_constraints(self) -> FlextResult[bool]:
-        """Validate configuration constraints."""
-        # Validate batch size constraints
-        if self.batch_size <= 0:
-            return FlextResult[bool].fail("Batch size must be positive")
-        max_batch = FlextConstants.Performance.MAX_BATCH_SIZE
-        if self.batch_size > max_batch:
-            return FlextResult[bool].fail(f"Batch size cannot exceed {max_batch}")
-
-        # Validate file size constraints
-        if self.max_file_size_mb <= 0:
-            return FlextResult[bool].fail("Max file size must be positive")
-        max_file_mb = FlextConstants.Logging.MAX_FILE_SIZE // (1024 * 1024)
-        if self.max_file_size_mb > max_file_mb:
-            return FlextResult[bool].fail(
-                f"Max file size cannot exceed {max_file_mb} MB",
-            )
-
-        # Validate encoding
-        if not self.encoding:
-            return FlextResult[bool].fail("Encoding must be specified")
-
-        return FlextResult[bool].ok(value=True)
-
-    def _validate_filters(self) -> FlextResult[bool]:
-        """Validate filter configuration."""
-        if self.attribute_filter and self.exclude_attributes:
-            overlapping = set(self.attribute_filter) & set(self.exclude_attributes)
-            if overlapping:
-                return FlextResult[bool].fail(
-                    f"Attributes cannot be both included and excluded: {overlapping}",
-                )
-        return FlextResult[bool].ok(value=True)
-
-    @classmethod
-    @override
-    def get_global_instance(cls) -> Self:
-        """Get the global singleton instance using enhanced FlextSettings pattern."""
-        return cls.model_validate({})
+    @property
+    def ldif_config(self) -> Mapping[str, t.JsonValue]:
+        """Get LDIF-specific configuration as a dictionary."""
+        return {
+            "file_path": self.file_path,
+            "file_pattern": self.file_pattern,
+            "directory_path": self.directory_path,
+            "base_dn_filter": self.base_dn_filter,
+            "object_class_filter": self.object_class_filter,
+            "attribute_filter": self.attribute_filter,
+            "exclude_attributes": self.exclude_attributes,
+            "encoding": self.encoding,
+            "batch_size": self.batch_size,
+            "include_operational_attributes": self.include_operational_attributes,
+            "strict_parsing": self.strict_parsing,
+            "max_file_size_mb": self.max_file_size_mb,
+        }
 
     @classmethod
     def create_for_development(cls, **overrides: t.JsonValue) -> Self:
@@ -239,23 +159,103 @@ class FlextTapLdifSettings(FlextSettings):
         defaults.update(overrides)
         return cls.model_validate(defaults)
 
-    @property
-    def ldif_config(self) -> Mapping[str, t.JsonValue]:
-        """Get LDIF-specific configuration as a dictionary."""
-        return {
-            "file_path": self.file_path,
-            "file_pattern": self.file_pattern,
-            "directory_path": self.directory_path,
-            "base_dn_filter": self.base_dn_filter,
-            "object_class_filter": self.object_class_filter,
-            "attribute_filter": self.attribute_filter,
-            "exclude_attributes": self.exclude_attributes,
-            "encoding": self.encoding,
-            "batch_size": self.batch_size,
-            "include_operational_attributes": self.include_operational_attributes,
-            "strict_parsing": self.strict_parsing,
-            "max_file_size_mb": self.max_file_size_mb,
-        }
+    @classmethod
+    @override
+    def get_global_instance(cls) -> Self:
+        """Get the global singleton instance using enhanced FlextSettings pattern."""
+        return cls.model_validate({})
+
+    @field_validator("directory_path")
+    @classmethod
+    def validate_directory_path_field(cls, v: str | None) -> str | None:
+        """Validate directory path exists using Pydantic v2 patterns."""
+        if v is None:
+            return None
+        path = Path(v)
+        if not path.exists():
+            msg = f"Directory path does not exist: {v}"
+            raise ValueError(msg)
+        if not path.is_dir():
+            msg = f"Path is not a directory: {v}"
+            raise ValueError(msg)
+        return v
+
+    @field_validator("file_path")
+    @classmethod
+    def validate_file_path_field(cls, v: str | None) -> str | None:
+        """Validate file path exists using Pydantic v2 patterns."""
+        if v is None:
+            return None
+        path = Path(v)
+        if not path.exists():
+            msg = f"File path does not exist: {v}"
+            raise ValueError(msg)
+        if not path.is_file():
+            msg = f"Path is not a file: {v}"
+            raise ValueError(msg)
+        return v
+
+    @override
+    def model_post_init(self, __context: t.JsonValue | None, /) -> None:
+        """Validate configuration after initialization using FlextSettings.BaseModel pattern."""
+        super().model_post_init(__context)
+
+        # Delegate to business rules validation
+        validation_result: FlextResult[bool] = self.validate_business_rules()
+        if validation_result.is_failure:
+            raise ValueError(validation_result.error)
+
+    def validate_business_rules(self) -> FlextResult[bool]:
+        """Validate LDIF tap configuration business rules."""
+        # Validate input sources using FlextResult chaining
+        return (
+            self
+            ._validate_input_sources()
+            .flat_map(lambda _: self._validate_constraints())
+            .flat_map(lambda _: self._validate_filters())
+        )
+
+    def _validate_constraints(self) -> FlextResult[bool]:
+        """Validate configuration constraints."""
+        # Validate batch size constraints
+        if self.batch_size <= 0:
+            return FlextResult[bool].fail("Batch size must be positive")
+        max_batch = FlextConstants.Performance.MAX_BATCH_SIZE
+        if self.batch_size > max_batch:
+            return FlextResult[bool].fail(f"Batch size cannot exceed {max_batch}")
+
+        # Validate file size constraints
+        if self.max_file_size_mb <= 0:
+            return FlextResult[bool].fail("Max file size must be positive")
+        max_file_mb = FlextConstants.Logging.MAX_FILE_SIZE // (1024 * 1024)
+        if self.max_file_size_mb > max_file_mb:
+            return FlextResult[bool].fail(
+                f"Max file size cannot exceed {max_file_mb} MB",
+            )
+
+        # Validate encoding
+        if not self.encoding:
+            return FlextResult[bool].fail("Encoding must be specified")
+
+        return FlextResult[bool].ok(value=True)
+
+    def _validate_filters(self) -> FlextResult[bool]:
+        """Validate filter configuration."""
+        if self.attribute_filter and self.exclude_attributes:
+            overlapping = set(self.attribute_filter) & set(self.exclude_attributes)
+            if overlapping:
+                return FlextResult[bool].fail(
+                    f"Attributes cannot be both included and excluded: {overlapping}",
+                )
+        return FlextResult[bool].ok(value=True)
+
+    def _validate_input_sources(self) -> FlextResult[bool]:
+        """Validate input source configuration."""
+        if not any([self.file_path, self.file_pattern, self.directory_path]):
+            return FlextResult[bool].fail(
+                'At least one input source must be specified: "file_path", "file_pattern", or "directory_path"',
+            )
+        return FlextResult[bool].ok(value=True)
 
 
 # Export main configuration class

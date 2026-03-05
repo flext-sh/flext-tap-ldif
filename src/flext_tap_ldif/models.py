@@ -131,35 +131,6 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             },
         }
 
-    @model_validator(mode="after")
-    def validate_ldif_tap_system_consistency(self) -> Self:
-        """Validate Singer LDIF tap system consistency and configuration."""
-        # Singer LDIF tap file validation
-        if (
-            getattr(self, "_ldif_files", None)
-            and getattr(self, "LdifFile", None) is None
-        ):
-            msg = "LdifFile model required when LDIF files configured"
-            raise ValueError(msg)
-
-        # LDIF processing validation
-        if (
-            getattr(self, "_batch_processing", None)
-            and getattr(self, "LdifBatch", None) is None
-        ):
-            msg = "LdifBatch model required for batch processing"
-            raise ValueError(msg)
-
-        # Singer protocol compliance validation
-        if getattr(self, "_singer_mode", None):
-            required_models = ["LdifStream", "LdifRecord", "LdifProcessingState"]
-            for model in required_models:
-                if getattr(self, model, None) is None:
-                    msg = f"{model} required for Singer protocol compliance"
-                    raise ValueError(msg)
-
-        return self
-
     @field_serializer("*", when_used="json")
     def serialize_with_ldif_metadata(
         self,
@@ -201,26 +172,37 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             }
         return value
 
+    @model_validator(mode="after")
+    def validate_ldif_tap_system_consistency(self) -> Self:
+        """Validate Singer LDIF tap system consistency and configuration."""
+        # Singer LDIF tap file validation
+        if (
+            getattr(self, "_ldif_files", None)
+            and getattr(self, "LdifFile", None) is None
+        ):
+            msg = "LdifFile model required when LDIF files configured"
+            raise ValueError(msg)
+
+        # LDIF processing validation
+        if (
+            getattr(self, "_batch_processing", None)
+            and getattr(self, "LdifBatch", None) is None
+        ):
+            msg = "LdifBatch model required for batch processing"
+            raise ValueError(msg)
+
+        # Singer protocol compliance validation
+        if getattr(self, "_singer_mode", None):
+            required_models = ["LdifStream", "LdifRecord", "LdifProcessingState"]
+            for model in required_models:
+                if getattr(self, model, None) is None:
+                    msg = f"{model} required for Singer protocol compliance"
+                    raise ValueError(msg)
+
+        return self
+
     class TapLdif:
         """Utility functions for LDIF data processing."""
-
-        @staticmethod
-        def parse_dn(dn: str) -> Mapping[str, str]:
-            """Parse Distinguished Name into components."""
-            components = {}
-            parts = dn.split(",")
-            for part in parts:
-                if "=" in part:
-                    key, value = part.strip().split("=", 1)
-                    components[key.strip()] = value.strip()
-            return components
-
-        @staticmethod
-        def validate_ldif_line(line: str) -> bool:
-            """Validate LDIF line format."""
-            if not line or line.startswith("#"):
-                return True  # Comment or empty line
-            return ":" in line or line.startswith(" ")
 
         @staticmethod
         def decode_base64_value(value: str) -> str:
@@ -242,6 +224,24 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         def normalize_attribute_name(name: str) -> str:
             """Normalize LDIF attribute name."""
             return name.lower().strip()
+
+        @staticmethod
+        def parse_dn(dn: str) -> Mapping[str, str]:
+            """Parse Distinguished Name into components."""
+            components = {}
+            parts = dn.split(",")
+            for part in parts:
+                if "=" in part:
+                    key, value = part.strip().split("=", 1)
+                    components[key.strip()] = value.strip()
+            return components
+
+        @staticmethod
+        def validate_ldif_line(line: str) -> bool:
+            """Validate LDIF line format."""
+            if not line or line.startswith("#"):
+                return True  # Comment or empty line
+            return ":" in line or line.startswith(" ")
 
     class LdifEntry(BaseModel):
         """Represents an LDIF entry with complete parsing support."""
@@ -309,19 +309,6 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
                 "source_location": {"file": self.source_file, "line": self.line_number},
             }
 
-        @model_validator(mode="after")
-        def validate_ldif_entry(self) -> Self:
-            """Validate LDIF entry structure."""
-            if not self.dn:
-                msg = "DN cannot be empty"
-                raise ValueError(msg)
-
-            # Validate object classes are in attributes
-            if self.object_classes and "objectClass" not in self.attributes:
-                self.attributes["objectClass"] = self.object_classes
-
-            return self
-
         def get_attribute_values(self, name: str) -> list[str]:
             """Get attribute values by name (case-insensitive)."""
             normalized_name = name.lower()
@@ -334,6 +321,19 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             """Get first attribute value by name."""
             values = self.get_attribute_values(name)
             return values[0] if values else None
+
+        @model_validator(mode="after")
+        def validate_ldif_entry(self) -> Self:
+            """Validate LDIF entry structure."""
+            if not self.dn:
+                msg = "DN cannot be empty"
+                raise ValueError(msg)
+
+            # Validate object classes are in attributes
+            if self.object_classes and "objectClass" not in self.attributes:
+                self.attributes["objectClass"] = self.object_classes
+
+            return self
 
     class LdifChangeRecord(BaseModel):
         """Represents an LDIF change record for modify operations."""

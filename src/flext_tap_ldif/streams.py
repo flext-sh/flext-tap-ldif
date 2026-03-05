@@ -80,48 +80,6 @@ class LDIFEntriesStream(Stream):
                         exc_msg,
                     )
 
-    def _get_schema(self) -> dict[str, object]:
-        """Get schema for LDIF entries."""
-        return t_meltano.Singer.Typing.PropertiesList(
-            t_meltano.Singer.Typing.Property(
-                c.EntrySchema.DN_FIELD,
-                t_meltano.Singer.Typing.StringType,
-                description="Distinguished Name",
-            ),
-            t_meltano.Singer.Typing.Property(
-                c.EntrySchema.ATTRIBUTES_FIELD,
-                t_meltano.Singer.Typing.ObjectType(),
-                description="Entry attributes",
-            ),
-            t_meltano.Singer.Typing.Property(
-                c.EntrySchema.OBJECT_CLASS_FIELD,
-                t_meltano.Singer.Typing.ArrayType(
-                    t_meltano.Singer.Typing.StringType,
-                ),
-                description="Object classes",
-            ),
-            t_meltano.Singer.Typing.Property(
-                c.EntrySchema.CHANGE_TYPE_FIELD,
-                t_meltano.Singer.Typing.StringType,
-                description="Change type",
-            ),
-            t_meltano.Singer.Typing.Property(
-                c.EntrySchema.SOURCE_FILE_FIELD,
-                t_meltano.Singer.Typing.StringType,
-                description="Source file path",
-            ),
-            t_meltano.Singer.Typing.Property(
-                c.EntrySchema.LINE_NUMBER_FIELD,
-                t_meltano.Singer.Typing.IntegerType,
-                description="Line number in file",
-            ),
-            t_meltano.Singer.Typing.Property(
-                c.EntrySchema.ENTRY_SIZE_FIELD,
-                t_meltano.Singer.Typing.IntegerType,
-                description="Entry size in bytes",
-            ),
-        ).to_dict()
-
     @override
     @override
     def get_records(
@@ -209,3 +167,45 @@ class LDIFEntriesStream(Stream):
                         err_msg,
                     )
                     continue
+
+    def _get_schema(self) -> dict[str, object]:
+        """Get schema for LDIF entries."""
+        return t_meltano.Singer.Typing.PropertiesList(
+            t_meltano.Singer.Typing.Property(
+                c.EntrySchema.DN_FIELD,
+                t_meltano.Singer.Typing.StringType,
+                description="Distinguished Name",
+            ),
+            t_meltano.Singer.Typing.Property(
+                c.EntrySchema.ATTRIBUTES_FIELD,
+                t_meltano.Singer.Typing.ObjectType(),
+                description="Entry attributes",
+            ),
+            t_meltano.Singer.Typing.Property(
+                c.EntrySchema.OBJECT_CLASS_FIELD,
+                t_meltano.Singer.Typing.ArrayType(
+                    t_meltano.Singer.Typing.StringType,
+                ),
+                description="Object classes",
+            ),
+            t_meltano.Singer.Typing.Property(
+                c.EntrySchema.CHANGE_TYPE_FIELD,
+                t_meltano.Singer.Typing.StringType,
+                description="Change type",
+            ),
+            t_meltano.Singer.Typing.Property(
+                c.EntrySchema.SOURCE_FILE_FIELD,
+                t_meltano.Singer.Typing.StringType,
+                description="Source file path",
+            ),
+            t_meltano.Singer.Typing.Property(
+                c.EntrySchema.LINE_NUMBER_FIELD,
+                t_meltano.Singer.Typing.IntegerType,
+                description="Line number in file",
+            ),
+            t_meltano.Singer.Typing.Property(
+                c.EntrySchema.ENTRY_SIZE_FIELD,
+                t_meltano.Singer.Typing.IntegerType,
+                description="Entry size in bytes",
+            ),
+        ).to_dict()
