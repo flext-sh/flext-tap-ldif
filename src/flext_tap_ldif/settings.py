@@ -21,6 +21,7 @@ from pydantic import Field, field_validator
 from pydantic_settings import SettingsConfigDict
 
 
+@FlextSettings.auto_register("tap_ldif")
 class FlextTapLdifSettings(FlextSettings):
     """Configuration for the LDIF tap with optimized Python 3.13+ patterns."""
 
