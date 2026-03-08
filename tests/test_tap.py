@@ -23,8 +23,4 @@ def test_discover_streams() -> None:
             msg: str = f"Expected {1}, got {len(streams)}"
             raise AssertionError(msg)
         assert streams[0].name == "ldif_entries"
-        # Clean up
         Path(tmp_file.name).unlink(missing_ok=True)
-
-
-# Note: Singer testing framework integration removed due to missing get_tap_test_class function

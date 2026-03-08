@@ -42,20 +42,16 @@ class LDIFEntriesStream(Stream):
         super().__init__(tap, name="ldif_entries", schema=self._get_schema())
         self._processor = FlextLdifProcessorWrapper(dict(tap.config))
         self._tap: Tap = tap
-        # Ensure a sample LDIF file exists in temp for default tests if none provided
         cfg: dict[str, t.ContainerValue] = dict(tap.config)
-        if not cfg.get("file_path") and not cfg.get("directory_path"):
-            # Singer SDK test harness may not pre-create the file; create a minimal one
+        if not cfg.get("file_path") and (not cfg.get("directory_path")):
             fd, path = tempfile.mkstemp(suffix=".ldif")
             os.close(fd)
             _ = Path(path).write_text(
                 "dn: cn=test,dc=example,dc=com\ncn: test\nobjectClass: top\n",
                 encoding="utf-8",
             )
-            # Avoid mutating possibly immutable Mapping; store override locally
             self._sample_file_path = path
         else:
-            # If a file path exists but is empty, seed with minimal valid content
             fp = cfg.get("file_path")
             if isinstance(fp, str):
                 file_path = Path(fp)
@@ -73,18 +69,16 @@ class LDIFEntriesStream(Stream):
                     OSError,
                     RuntimeError,
                     ImportError,
-                ) as exc:  # Non-critical seeding failure
+                ) as exc:
                     exc_msg = str(exc)
                     logger.warning(
-                        "Failed to seed LDIF file with sample content: %s",
-                        exc_msg,
+                        "Failed to seed LDIF file with sample content: %s", exc_msg
                     )
 
     @override
     @override
     def get_records(
-        self,
-        context: Mapping[str, t.ContainerValue] | None = None,
+        self, context: Mapping[str, t.ContainerValue] | None = None
     ) -> Iterable[dict[str, object]]:
         """Return a generator of record-type dictionary objects.
 
@@ -100,7 +94,6 @@ class LDIFEntriesStream(Stream):
         sample_path = getattr(self, "_sample_file_path", None)
         if sample_path:
             config["file_path"] = sample_path
-        # Narrow config values to expected types for discover_files
         dir_path_raw = config.get("directory_path")
         dir_path = str(dir_path_raw) if u.Guards.is_type(dir_path_raw, str) else None
         pattern_raw = config.get("file_pattern", "*.ldif")
@@ -109,7 +102,6 @@ class LDIFEntriesStream(Stream):
         fp_val = str(fp_raw) if u.Guards.is_type(fp_raw, str) else None
         max_size_raw = config.get("max_file_size_mb", c.MAX_FILE_SIZE_MB)
         max_size = max_size_raw if isinstance(max_size_raw, int) else c.MAX_FILE_SIZE_MB
-        # Use flext-ldif generic file discovery instead of duplicated logic
         files_result = self._processor.discover_files(
             directory_path=dir_path,
             file_pattern=pattern,
@@ -118,7 +110,6 @@ class LDIFEntriesStream(Stream):
         )
         if files_result.is_failure:
             logger.error("File discovery failed: %s", files_result.error)
-            # Fallback: if a single file_path was set but discovery failed, try it
             fp = config.get("file_path")
             if isinstance(fp, str):
                 try:
@@ -137,7 +128,6 @@ class LDIFEntriesStream(Stream):
             return
         files_to_process = files_result.data or []
         logger.info("Processing %d LDIF files", len(files_to_process))
-        # If discovery returned no files but a file_path was provided, emit a synthetic record
         if not files_to_process:
             yield {
                 c.EntrySchema.DN_FIELD: c.SampleEntry.DN,
@@ -152,7 +142,6 @@ class LDIFEntriesStream(Stream):
         for file_path in files_to_process:
             logger.info("Processing file: %s", file_path)
             try:
-                # Process the LDIF file and yield records
                 for record in self._processor.process_file(file_path):
                     yield dict(record)
             except (RuntimeError, ValueError, TypeError) as e:
@@ -162,9 +151,7 @@ class LDIFEntriesStream(Stream):
                 else:
                     err_msg = str(e)
                     logger.warning(
-                        "Skipping file %s due to error: %s",
-                        file_path,
-                        err_msg,
+                        "Skipping file %s due to error: %s", file_path, err_msg
                     )
                     continue
 
@@ -183,9 +170,7 @@ class LDIFEntriesStream(Stream):
             ),
             t_meltano.Singer.Typing.Property(
                 c.EntrySchema.OBJECT_CLASS_FIELD,
-                t_meltano.Singer.Typing.ArrayType(
-                    t_meltano.Singer.Typing.StringType,
-                ),
+                t_meltano.Singer.Typing.ArrayType(t_meltano.Singer.Typing.StringType),
                 description="Object classes",
             ),
             t_meltano.Singer.Typing.Property(

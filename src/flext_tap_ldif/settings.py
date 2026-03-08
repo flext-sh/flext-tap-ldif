@@ -7,7 +7,4 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-# Export main configuration class
-__all__ = [
-    "FlextTapLdifSettings",
-]
+__all__ = ["FlextTapLdifSettings"]

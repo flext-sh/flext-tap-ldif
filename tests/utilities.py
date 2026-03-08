@@ -24,5 +24,4 @@ class TestsFlextTapLdifUtilities(FlextTestsUtilities, FlextTapLdifUtilities):
 
 
 u = TestsFlextTapLdifUtilities
-
 __all__ = ["TestsFlextTapLdifUtilities", "u"]

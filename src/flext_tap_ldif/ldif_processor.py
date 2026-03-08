@@ -54,8 +54,6 @@ class FlextLdifProcessor:
         """
         max_size_bytes = max_file_size_mb * 1024 * 1024
         discovered: list[Path] = []
-
-        # Single file mode
         if file_path is not None:
             match file_path:
                 case str() as file_path_text:
@@ -68,8 +66,6 @@ class FlextLdifProcessor:
                 return FlextResult[list[Path]].fail(f"File exceeds max size: {p}")
             discovered.append(p)
             return FlextResult[list[Path]].ok(discovered)
-
-        # Directory mode
         if directory_path is not None:
             match directory_path:
                 case str() as directory_path_text:
@@ -84,12 +80,10 @@ class FlextLdifProcessor:
                 if f.is_file() and f.stat().st_size <= max_size_bytes
             )
             return FlextResult[list[Path]].ok(discovered)
-
         return FlextResult[list[Path]].fail("No file_path or directory_path specified")
 
     def process_file(
-        self,
-        file_path: Path,
+        self, file_path: Path
     ) -> Generator[Mapping[str, str | int | Mapping[str, list[str]] | list[str]]]:
         """Process a single LDIF file and yield records using flext-ldif.
 
@@ -102,7 +96,6 @@ class FlextLdifProcessor:
         """
         logger.info("Processing LDIF file: %s", file_path)
         try:
-            # Ensure encoding is properly typed
             encoding = self.config.get("encoding", "utf-8")
             match encoding:
                 case str() as text_encoding:
@@ -117,7 +110,6 @@ class FlextLdifProcessor:
                     self._raise_parse_error(msg)
                 for raw_entry in parse_result.value:
                     entry = m.Ldif.Entry.model_validate(raw_entry)
-                    # Convert entry to expected dictionary format
                     dn_val = entry.dn.value if entry.dn is not None else ""
                     attrs_dict = (
                         dict(entry.attributes.attributes)
@@ -128,8 +120,7 @@ class FlextLdifProcessor:
                         c.EntrySchema.DN_FIELD: str(dn_val),
                         c.EntrySchema.ATTRIBUTES_FIELD: attrs_dict,
                         c.EntrySchema.OBJECT_CLASS_FIELD: attrs_dict.get(
-                            "objectClass",
-                            [],
+                            "objectClass", []
                         ),
                         c.EntrySchema.CHANGE_TYPE_FIELD: c.EntrySchema.DEFAULT_CHANGE_TYPE,
                         c.EntrySchema.SOURCE_FILE_FIELD: str(file_path),
@@ -147,8 +138,4 @@ class FlextLdifProcessor:
 
 
 LDIFProcessor = FlextLdifProcessor
-
-__all__ = [
-    "FlextLdifProcessor",
-    "LDIFProcessor",
-]
+__all__ = ["FlextLdifProcessor", "LDIFProcessor"]

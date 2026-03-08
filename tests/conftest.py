@@ -11,10 +11,7 @@ from flext_tests import FlextTestsDocker
 
 from flext_tap_ldif import t
 
-# Import shared LDAP fixtures from docker directory
 
-
-# Docker container management with FlextTestsDocker
 @pytest.fixture(scope="session")
 def docker_control() -> FlextTestsDocker:
     """Provide Docker control instance for tests."""
@@ -22,16 +19,12 @@ def docker_control() -> FlextTestsDocker:
 
 
 @pytest.fixture(scope="session")
-def shared_ldap_container(
-    docker_control: FlextTestsDocker,
-) -> Generator[str]:
+def shared_ldap_container(docker_control: FlextTestsDocker) -> Generator[str]:
     """Managed LDAP container using FlextTestsDocker with auto-start."""
     result = docker_control.start_existing_container("flext-openldap-test")
     if result.is_failure:
         pytest.skip(f"Failed to start LDAP container: {result.error}")
-
     yield "flext-openldap-test"
-
     try:
         docker_control.get_client().containers.get("flext-openldap-test").stop()
     except (
@@ -46,7 +39,6 @@ def shared_ldap_container(
         pass
 
 
-# Test environment setup
 @pytest.fixture(autouse=True)
 def set_test_environment() -> Generator[None]:
     """Set test environment variables."""
@@ -54,78 +46,21 @@ def set_test_environment() -> Generator[None]:
     os.environ["FLEXT_LOG_LEVEL"] = "DEBUG"
     os.environ["SINGER_SDK_LOG_LEVEL"] = "debug"
     yield
-    # Cleanup
     _ = os.environ.pop("FLEXT_ENV", None)
     _ = os.environ.pop("FLEXT_LOG_LEVEL", None)
     _ = os.environ.pop("SINGER_SDK_LOG_LEVEL", None)
 
 
-# LDIF test data fixtures
 @pytest.fixture
 def sample_ldif_content() -> str:
     """Sample LDIF content for testing."""
-    return """version: 1
-
-dn: cn=John Doe,ou=users,dc=example,dc=com
-objectClass: inetOrgPerson
-objectClass: person
-cn: John Doe
-sn: Doe
-givenName: John
-mail: john.doe@example.com
-telephoneNumber: +1-555-123-4567
-userPassword:: e1NTSEF9VGVzdFBhc3N3b3JkMTIz
-
-dn: cn=Jane Smith,ou=users,dc=example,dc=com
-objectClass: inetOrgPerson
-objectClass: person
-cn: Jane Smith
-sn: Smith
-givenName: Jane
-mail: jane.smith@example.com
-telephoneNumber: +1-555-987-6543
-
-dn: cn=Administrators,ou=groups,dc=example,dc=com
-objectClass: groupOfNames
-cn: Administrators
-description: System REDACTED_LDAP_BIND_PASSWORDistrators group
-member: cn=John Doe,ou=users,dc=example,dc=com
-member: cn=Jane Smith,ou=users,dc=example,dc=com
-
-dn: cn=IT Department,ou=groups,dc=example,dc=com
-objectClass: groupOfNames
-cn: IT Department
-description: Information Technology department
-member: cn=John Doe,ou=users,dc=example,dc=com
-"""
+    return "version: 1\n\ndn: cn=John Doe,ou=users,dc=example,dc=com\nobjectClass: inetOrgPerson\nobjectClass: person\ncn: John Doe\nsn: Doe\ngivenName: John\nmail: john.doe@example.com\ntelephoneNumber: +1-555-123-4567\nuserPassword:: e1NTSEF9VGVzdFBhc3N3b3JkMTIz\n\ndn: cn=Jane Smith,ou=users,dc=example,dc=com\nobjectClass: inetOrgPerson\nobjectClass: person\ncn: Jane Smith\nsn: Smith\ngivenName: Jane\nmail: jane.smith@example.com\ntelephoneNumber: +1-555-987-6543\n\ndn: cn=Administrators,ou=groups,dc=example,dc=com\nobjectClass: groupOfNames\ncn: Administrators\ndescription: System REDACTED_LDAP_BIND_PASSWORDistrators group\nmember: cn=John Doe,ou=users,dc=example,dc=com\nmember: cn=Jane Smith,ou=users,dc=example,dc=com\n\ndn: cn=IT Department,ou=groups,dc=example,dc=com\nobjectClass: groupOfNames\ncn: IT Department\ndescription: Information Technology department\nmember: cn=John Doe,ou=users,dc=example,dc=com\n"
 
 
 @pytest.fixture
 def sample_ldif_changes() -> str:
     """Sample LDIF changes content for testing."""
-    return """version: 1
-
-dn: cn=John Doe,ou=users,dc=example,dc=com
-changetype: modify
-replace: telephoneNumber
-telephoneNumber: +1-555-111-2222
--
-add: description
-description: Senior System Administrator
--
-
-dn: cn=New User,ou=users,dc=example,dc=com
-changetype: add
-objectClass: inetOrgPerson
-objectClass: person
-cn: New User
-sn: User
-givenName: New
-mail: new.user@example.com
-
-dn: cn=Old User,ou=users,dc=example,dc=com
-changetype: delete
-"""
+    return "version: 1\n\ndn: cn=John Doe,ou=users,dc=example,dc=com\nchangetype: modify\nreplace: telephoneNumber\ntelephoneNumber: +1-555-111-2222\n-\nadd: description\ndescription: Senior System Administrator\n-\n\ndn: cn=New User,ou=users,dc=example,dc=com\nchangetype: add\nobjectClass: inetOrgPerson\nobjectClass: person\ncn: New User\nsn: User\ngivenName: New\nmail: new.user@example.com\n\ndn: cn=Old User,ou=users,dc=example,dc=com\nchangetype: delete\n"
 
 
 @pytest.fixture
@@ -148,39 +83,20 @@ def sample_ldif_changes_file(tmp_path: Path, sample_ldif_changes: str) -> Path:
 
 @pytest.fixture
 def ldif_directory(
-    tmp_path: Path,
-    sample_ldif_content: str,
-    sample_ldif_changes: str,
+    tmp_path: Path, sample_ldif_content: str, sample_ldif_changes: str
 ) -> Path:
     """Create directory with multiple LDIF files."""
     ldif_dir = tmp_path / "ldif_files"
     ldif_dir.mkdir()
-
-    # Create multiple LDIF files
     written = (ldif_dir / "users.ldif").write_text(
-        sample_ldif_content,
-        encoding="utf-8",
+        sample_ldif_content, encoding="utf-8"
     ) + (ldif_dir / "changes.ldif").write_text(sample_ldif_changes, encoding="utf-8")
     assert written >= 0
-
-    # Create additional test file
-    additional_content = """version: 1
-
-dn: cn=Test User,ou=users,dc=example,dc=com
-objectClass: inetOrgPerson
-objectClass: person
-cn: Test User
-sn: User
-givenName: Test
-mail: test.user@example.com
-"""
-
+    additional_content = "version: 1\n\ndn: cn=Test User,ou=users,dc=example,dc=com\nobjectClass: inetOrgPerson\nobjectClass: person\ncn: Test User\nsn: User\ngivenName: Test\nmail: test.user@example.com\n"
     _ = (ldif_dir / "additional.ldif").write_text(additional_content, encoding="utf-8")
-
     return ldif_dir
 
 
-# Tap configuration fixtures
 @pytest.fixture
 def basic_tap_config(sample_ldif_file: Path) -> dict[str, t.ContainerValue]:
     """Basic LDIF tap configuration."""
@@ -243,16 +159,12 @@ def filtered_tap_config(sample_ldif_file: Path) -> dict[str, t.ContainerValue]:
     }
 
 
-# Large test data fixtures
 @pytest.fixture
 def large_ldif_file(tmp_path: Path) -> Path:
     """Create large LDIF file for performance testing."""
     ldif_file = tmp_path / "large.ldif"
-
     with ldif_file.open("w", encoding="utf-8") as f:
         _ = f.write("version: 1\n\n")
-
-        # Generate 1000 entries for performance testing
         for i in range(1000):
             _ = f.write(f"dn: cn=user{i:04d},ou=users,dc=example,dc=com\n")
             _ = f.write("objectClass: inetOrgPerson\n")
@@ -263,7 +175,6 @@ def large_ldif_file(tmp_path: Path) -> Path:
             _ = f.write(f"mail: user{i:04d}@example.com\n")
             _ = f.write(f"employeeNumber: {i:04d}\n")
             _ = f.write("\n")
-
     return ldif_file
 
 
@@ -280,26 +191,14 @@ def performance_tap_config(large_ldif_file: Path) -> dict[str, t.ContainerValue]
         "validate_entries": True,
         "enable_streaming": True,
         "buffer_size": 16384,
-        "max_memory_usage": 50 * 1024 * 1024,  # 50MB
+        "max_memory_usage": 50 * 1024 * 1024,
     }
 
 
-# Binary data fixtures
 @pytest.fixture
 def binary_ldif_content() -> str:
     """LDIF content with binary attributes."""
-    return """version: 1
-
-dn: cn=Binary User,ou=users,dc=example,dc=com
-objectClass: inetOrgPerson
-objectClass: person
-cn: Binary User
-sn: User
-givenName: Binary
-mail: binary.user@example.com
-userCertificate;binary:: MIICXjCCAcegAwIBAgIJAODNcKgAQMRAMA0GCSqGSIb3DQEBCwUAMEUxCzAJBgNVBAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBXaWRnaXRzIFB0eSBMdGQwHhcNMTgwNjA1MTI0ODM3WhcNMTkwNjA1MTI0ODM3WjBFMQswCQYDVQQGEwJBVTETMBEGA1UECAwKU29tZS1TdGF0ZTEhMB8GA1UECgwYSW50ZXJuZXQgV2lkZ2l0cyBQdHkgTHRkMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDZFQZ1ZZ1Z
-jpegPhoto:: /9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=
-"""
+    return "version: 1\n\ndn: cn=Binary User,ou=users,dc=example,dc=com\nobjectClass: inetOrgPerson\nobjectClass: person\ncn: Binary User\nsn: User\ngivenName: Binary\nmail: binary.user@example.com\nuserCertificate;binary:: MIICXjCCAcegAwIBAgIJAODNcKgAQMRAMA0GCSqGSIb3DQEBCwUAMEUxCzAJBgNVBAYTAkFVMRMwEQYDVQQIDApTb21lLVN0YXRlMSEwHwYDVQQKDBhJbnRlcm5ldCBXaWRnaXRzIFB0eSBMdGQwHhcNMTgwNjA1MTI0ODM3WhcNMTkwNjA1MTI0ODM3WjBFMQswCQYDVQQGEwJBVTETMBEGA1UECAwKU29tZS1TdGF0ZTEhMB8GA1UECgwYSW50ZXJuZXQgV2lkZ2l0cyBQdHkgTHRkMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDZFQZ1ZZ1Z\njpegPhoto:: /9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=\n"
 
 
 @pytest.fixture
@@ -310,28 +209,15 @@ def binary_ldif_file(tmp_path: Path, binary_ldif_content: str) -> Path:
     return ldif_file
 
 
-# Encoding test fixtures
 @pytest.fixture
 def utf16_ldif_file(tmp_path: Path) -> Path:
     """Create UTF-16 encoded LDIF file."""
-    content = """version: 1
-
-dn: cn=Unicode User,ou=users,dc=example,dc=com
-objectClass: inetOrgPerson
-objectClass: person
-cn: Unicode User
-sn: Üser
-givenName: Ünicöde
-mail: unicode.user@example.com
-description: User with unicode characters: àáâãäåæç
-"""
-
+    content = "version: 1\n\ndn: cn=Unicode User,ou=users,dc=example,dc=com\nobjectClass: inetOrgPerson\nobjectClass: person\ncn: Unicode User\nsn: Üser\ngivenName: Ünicöde\nmail: unicode.user@example.com\ndescription: User with unicode characters: àáâãäåæç\n"
     ldif_file = tmp_path / "utf16.ldif"
     _ = ldif_file.write_text(content, encoding="utf-16")
     return ldif_file
 
 
-# Singer protocol fixtures
 @pytest.fixture
 def singer_catalog_config() -> dict[str, t.ContainerValue]:
     """Singer catalog configuration."""
@@ -358,10 +244,10 @@ def singer_catalog_config() -> dict[str, t.ContainerValue]:
                             "replication-key": "source_file_mtime",
                             "selected": True,
                         },
-                    },
+                    }
                 ],
-            },
-        ],
+            }
+        ]
     }
 
 
@@ -372,28 +258,18 @@ def singer_state() -> dict[str, t.ContainerValue]:
         "currently_syncing": None,
         "bookmarks": {
             "ldif_entries": {
-                "replication_key_value": 1640995200.0,  # 2022-01-01 00:00:00
+                "replication_key_value": 1640995200.0,
                 "version": 1,
                 "processed_files": [],
-            },
+            }
         },
     }
 
 
-# Error handling fixtures
 @pytest.fixture
 def invalid_ldif_content() -> str:
     """Invalid LDIF content for error testing."""
-    return """version: 1
-
-dn: cn=Invalid User,ou=users,dc=example,dc=com
-objectClass: inetOrgPerson
-objectClass: person
-cn: Invalid User
-sn: User
-invalid_line_without_colon
-mail: invalid.user@example.com
-"""
+    return "version: 1\n\ndn: cn=Invalid User,ou=users,dc=example,dc=com\nobjectClass: inetOrgPerson\nobjectClass: person\ncn: Invalid User\nsn: User\ninvalid_line_without_colon\nmail: invalid.user@example.com\n"
 
 
 @pytest.fixture
@@ -404,19 +280,17 @@ def invalid_ldif_file(tmp_path: Path, invalid_ldif_content: str) -> Path:
     return ldif_file
 
 
-# Performance benchmarking fixtures
 @pytest.fixture
 def benchmark_config() -> dict[str, t.ContainerValue]:
     """Configuration for performance benchmarking."""
     return {
         "max_entries_to_process": 1000,
-        "expected_processing_time": 30.0,  # seconds
-        "memory_limit": 100 * 1024 * 1024,  # 100MB
+        "expected_processing_time": 30.0,
+        "memory_limit": 100 * 1024 * 1024,
         "batch_sizes": [50, 100, 250, 500, 1000],
     }
 
 
-# Pytest markers for test categorization
 def pytest_configure(config: pytest.Config) -> None:
     """Configure pytest markers."""
     config.addinivalue_line("markers", "unit: Unit tests")
@@ -430,7 +304,6 @@ def pytest_configure(config: pytest.Config) -> None:
     config.addinivalue_line("markers", "slow: Slow tests")
 
 
-# Mock services
 class MockLDIFTap:
     """Mock implementation of the LDIF Tap."""
 
@@ -452,7 +325,7 @@ class MockLDIFTap:
                 "mail": ["test@example.com"],
                 "source_file": "test.ldif",
                 "source_file_mtime": 1640995200.0,
-            },
+            }
         ]
 
 
@@ -472,11 +345,7 @@ class MockLDIFParser:
         self.parsed_entries: list[dict[str, t.ContainerValue]] = []
 
     def parse_file(self, _file_path: str) -> dict[str, t.ContainerValue]:
-        return {
-            "success": True,
-            "entries": self.parsed_entries,
-            "errors": [],
-        }
+        return {"success": True, "entries": self.parsed_entries, "errors": []}
 
     def add_mock_entry(self, entry: dict[str, t.ContainerValue]) -> None:
         self.parsed_entries.append(entry)

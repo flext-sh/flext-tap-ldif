@@ -31,10 +31,6 @@ class TestsFlextTapLdifTypes(FlextTestsTypes):
     - Generic types accessed via Tests namespace
     """
 
-    # Composition: expose FlextTestsTypes
-    # Tests = FlextTestsTypes  # Avoid override issues
-
-    # TapLdif-specific test types namespace
     class TapLdif:
         """Tap LDIF test types - domain-specific for LDIF tap testing.
 
@@ -44,26 +40,15 @@ class TestsFlextTapLdifTypes(FlextTestsTypes):
         - Test scenario types
         """
 
-        # Test configuration literals
         type TestLdifFilePath = Literal["/tmp/test.ldif", "/tmp/sample.ldif"]
         type TestLdifEncoding = Literal["utf-8", "ascii", "iso-8859-1"]
         type TestObjectClass = Literal["person", "organization", "groupOfNames"]
-
-        # Test data types
         type MockLdifEntry = dict[str, str | dict[str, list[str]]]
         type MockLdifFile = list[dict[str, str | dict[str, list[str]]]]
         type TestLdifScenario = dict[str, t.ContainerValue]
-
-        # Test result types
         type TestLdifValidationResult = dict[str, bool | str | list[str]]
         type TestLdifParsingResult = dict[str, t.ContainerValue]
 
 
-# Alias for simplified usage
 tt = TestsFlextTapLdifTypes
-
-__all__ = [
-    "TestsFlextTapLdifTypes",
-    "t",
-    "tt",
-]
+__all__ = ["TestsFlextTapLdifTypes", "t", "tt"]

@@ -34,7 +34,6 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols):
     class Tests(FlextTestsProtocols.Tests):
         """Project-specific test protocols."""
 
-    # TapLdif-specific test protocols namespace
     class TapLdif:
         """Tap LDIF test protocols - domain-specific for LDIF tap testing.
 
@@ -81,31 +80,23 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols):
             """Protocol for test LDIF assertions."""
 
             def assert_ldif_file_parsed(
-                self,
-                entries: list[dict[str, t.ContainerValue]],
+                self, entries: list[dict[str, t.ContainerValue]]
             ) -> None:
                 """Assert LDIF file was parsed correctly."""
                 ...
 
             def assert_ldif_entries_valid(
-                self,
-                entries: list[dict[str, t.ContainerValue]],
+                self, entries: list[dict[str, t.ContainerValue]]
             ) -> None:
                 """Assert LDIF entries are valid."""
                 ...
 
             def assert_ldif_stream_config_valid(
-                self,
-                stream: dict[str, t.ContainerValue],
+                self, stream: dict[str, t.ContainerValue]
             ) -> None:
                 """Assert LDIF stream configuration is valid."""
                 ...
 
 
-# Aliases for simplified usage
 p = TestsFlextTapLdifProtocols
-
-__all__ = [
-    "TestsFlextTapLdifProtocols",
-    "p",
-]
+__all__ = ["TestsFlextTapLdifProtocols", "p"]

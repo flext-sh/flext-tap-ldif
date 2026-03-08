@@ -20,23 +20,15 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
     Composes with FlextTapLdifConstants to avoid duplication and ensure consistency.
     """
 
-    # LDIF File Configuration using composition
     DEFAULT_LDIF_ENCODING: Final[str] = FlextLdifConstants.Ldif.DEFAULT_ENCODING
-
-    # Supported encodings - defined locally as frozenset
     SUPPORTED_ENCODINGS: ClassVar[frozenset[str]] = frozenset({
         FlextLdifConstants.Ldif.Encoding.UTF8,
         FlextLdifConstants.Ldif.Encoding.ASCII,
         FlextLdifConstants.Ldif.Encoding.LATIN1,
         FlextLdifConstants.Ldif.Encoding.UTF16,
     })
-
-    # Singer Tap Configuration - using FlextConstants composition
-    # Note: DEFAULT_BATCH_SIZE inherited from FlextConstants (Final, cannot override)
     MAX_BATCH_SIZE: Final[int] = FlextConstants.Performance.BatchProcessing.MAX_ITEMS
     MAX_FILE_SIZE_MB: Final[int] = 100
-
-    # LDIF Change Types from FlextLdifConstants
     LDIF_CHANGE_TYPES: ClassVar[list[str]] = [
         FlextLdifConstants.Ldif.EntryModification.ADD,
         FlextLdifConstants.Ldif.EntryModification.MODIFY,
@@ -116,5 +108,4 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
 
 
 c = FlextTapLdifConstants
-
 __all__ = ["FlextTapLdifConstants", "c"]

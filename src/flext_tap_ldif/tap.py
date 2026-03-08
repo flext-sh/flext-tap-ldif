@@ -29,10 +29,8 @@ class TapLDIF(Tap):
 
     name: str = "tap-ldif"
     config_class = FlextTapLdifSettings
-    # Schema combining file-based configuration with LDIF-specific properties
     config_jsonschema: ClassVar[dict[str, t.ContainerValue]] = (
         t_meltano.Singer.Typing.PropertiesList(
-            # File-based properties
             t_meltano.Singer.Typing.Property(
                 "file_path",
                 t_meltano.Singer.Typing.StringType,
@@ -55,7 +53,6 @@ class TapLDIF(Tap):
                 default="utf-8",
                 description="Text encoding for LDIF files",
             ),
-            # LDIF-specific additional properties
             t_meltano.Singer.Typing.Property(
                 "base_dn_filter",
                 t_meltano.Singer.Typing.StringType,
@@ -63,23 +60,17 @@ class TapLDIF(Tap):
             ),
             t_meltano.Singer.Typing.Property(
                 "object_class_filter",
-                t_meltano.Singer.Typing.ArrayType(
-                    t_meltano.Singer.Typing.StringType,
-                ),
+                t_meltano.Singer.Typing.ArrayType(t_meltano.Singer.Typing.StringType),
                 description="Filter entries by object class",
             ),
             t_meltano.Singer.Typing.Property(
                 "attribute_filter",
-                t_meltano.Singer.Typing.ArrayType(
-                    t_meltano.Singer.Typing.StringType,
-                ),
+                t_meltano.Singer.Typing.ArrayType(t_meltano.Singer.Typing.StringType),
                 description="Include only specified attributes",
             ),
             t_meltano.Singer.Typing.Property(
                 "exclude_attributes",
-                t_meltano.Singer.Typing.ArrayType(
-                    t_meltano.Singer.Typing.StringType,
-                ),
+                t_meltano.Singer.Typing.ArrayType(t_meltano.Singer.Typing.StringType),
                 description="Exclude specified attributes",
             ),
             t_meltano.Singer.Typing.Property(
@@ -111,9 +102,7 @@ class TapLDIF(Tap):
         A list of discovered streams.
 
         """
-        return [
-            LDIFEntriesStream(tap=self),
-        ]
+        return [LDIFEntriesStream(tap=self)]
 
     def _get_ldif_entries_schema(self) -> Mapping[str, t.ContainerValue]:
         """Get the schema for LDIF entries stream.
@@ -131,9 +120,7 @@ class TapLDIF(Tap):
             ),
             t_meltano.Singer.Typing.Property(
                 "object_class",
-                t_meltano.Singer.Typing.ArrayType(
-                    t_meltano.Singer.Typing.StringType,
-                ),
+                t_meltano.Singer.Typing.ArrayType(t_meltano.Singer.Typing.StringType),
                 description="Object classes",
             ),
             t_meltano.Singer.Typing.Property(
