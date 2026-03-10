@@ -7,4 +7,4 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-__all__ = ["FlextTapLdifSettings"]
+__all__ = ["FlextTapLdifSettings"]  # noqa: F822
