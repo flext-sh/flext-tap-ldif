@@ -139,21 +139,19 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
     ) -> t.ContainerValue:
         """Add Singer LDIF tap metadata to all serialized fields."""
         if u.is_dict_like(value):
+            value_dict: dict[str, str] = {}
             if isinstance(value, m.ConfigMap):
-                value_dict = dict(value.root)
+                value_dict = {str(k): str(v) for k, v in value.root.items()}
             elif isinstance(value, Mapping):
-                value_dict = dict(value)
-            else:
-                value_dict = value
-            return {
-                **value_dict,
-                "_ldif_tap_metadata": {
-                    "extraction_timestamp": datetime.now(UTC).isoformat(),
-                    "tap_type": "ldif_file_extractor",
-                    "singer_protocol": "v1.0",
-                    "data_source": "ldif_files",
-                },
+                value_dict = {str(k): str(v) for k, v in value.items()}
+            metadata_dict: dict[str, t.ContainerValue] = dict(value_dict)
+            metadata_dict["_ldif_tap_metadata"] = {
+                "extraction_timestamp": datetime.now(UTC).isoformat(),
+                "tap_type": "ldif_file_extractor",
+                "singer_protocol": "v1.0",
+                "data_source": "ldif_files",
             }
+            return metadata_dict
         if (
             value.__class__ in {str, int, float, bool}
             and getattr(
@@ -228,7 +226,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         @staticmethod
         def parse_dn(dn: str) -> Mapping[str, str]:
             """Parse Distinguished Name into components."""
-            components = {}
+            components: dict[str, str] = {}
             parts = dn.split(",")
             for part in parts:
                 if "=" in part:
@@ -360,8 +358,8 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ...,
             description="Type of change (add, modify, delete, modrdn)",
         )
-        changes: list[dict[str, t.ContainerValue]] = Field(
-            default_factory=list,
+        changes: list[dict[str, str]] = Field(
+            default_factory=lambda: list[dict[str, str]](),
             description="List of changes",
         )
 
@@ -564,8 +562,8 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             default_factory=dict,
             description="JSON schema",
         )
-        stream_metadata: list[dict[str, t.ContainerValue]] = Field(
-            default_factory=list,
+        stream_metadata: list[dict[str, str]] = Field(
+            default_factory=lambda: list[dict[str, str]](),
             description="Stream metadata",
         )
 
@@ -754,8 +752,8 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         )
 
         # Error tracking
-        processing_errors: list[dict[str, t.ContainerValue]] = Field(
-            default_factory=list,
+        processing_errors: list[dict[str, str]] = Field(
+            default_factory=lambda: list[dict[str, str]](),
             description="Processing errors with context",
         )
         recoverable_errors: int = Field(
@@ -973,12 +971,12 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         is_valid: bool = Field(..., description="Overall validation result")
 
         # Validation results
-        validation_errors: list[dict[str, t.ContainerValue]] = Field(
-            default_factory=list,
+        validation_errors: list[dict[str, str]] = Field(
+            default_factory=lambda: list[dict[str, str]](),
             description="Validation errors with details",
         )
-        warnings: list[dict[str, t.ContainerValue]] = Field(
-            default_factory=list,
+        warnings: list[dict[str, str]] = Field(
+            default_factory=lambda: list[dict[str, str]](),
             description="Validation warnings",
         )
 

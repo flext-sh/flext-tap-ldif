@@ -137,5 +137,4 @@ class FlextLdifProcessor:
         raise ValueError(msg)
 
 
-LDIFProcessor = FlextLdifProcessor
-__all__ = ["FlextLdifProcessor", "LDIFProcessor"]
+__all__ = ["FlextLdifProcessor"]

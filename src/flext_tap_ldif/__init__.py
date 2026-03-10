@@ -18,7 +18,7 @@ if TYPE_CHECKING:
         FlextTapLdifConstants,
         FlextTapLdifConstants as c,
     )
-    from flext_tap_ldif.ldif_processor import FlextLdifProcessor, LDIFProcessor
+    from flext_tap_ldif.ldif_processor import FlextLdifProcessor
     from flext_tap_ldif.models import FlextTapLdifModels, FlextTapLdifModels as m
     from flext_tap_ldif.protocols import (
         FlextTapLdifProtocols,
@@ -46,7 +46,6 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "FlextTapLdifTypes": ("flext_tap_ldif.typings", "FlextTapLdifTypes"),
     "FlextTapLdifUtilities": ("flext_tap_ldif.utilities", "FlextTapLdifUtilities"),
     "LDIFEntriesStream": ("flext_tap_ldif.streams", "LDIFEntriesStream"),
-    "LDIFProcessor": ("flext_tap_ldif.ldif_processor", "LDIFProcessor"),
     "TapLDIF": ("flext_tap_ldif.tap", "TapLDIF"),
     "__version__": ("flext_tap_ldif.__version__", "__version__"),
     "__version_info__": ("flext_tap_ldif.__version__", "__version_info__"),
@@ -69,7 +68,6 @@ __all__ = [
     "FlextTapLdifTypes",
     "FlextTapLdifUtilities",
     "LDIFEntriesStream",
-    "LDIFProcessor",
     "TapLDIF",
     "__version__",
     "__version_info__",

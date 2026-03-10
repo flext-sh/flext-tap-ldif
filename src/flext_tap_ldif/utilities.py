@@ -514,11 +514,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             file_state_raw = files_raw.get(file_path)
             if not isinstance(file_state_raw, dict):
                 return {}
-            return {
-                str(key): value
-                for key, value in file_state_raw.items()
-                if isinstance(key, str)
-            }
+            return {str(key): value for key, value in file_state_raw.items()}
 
         @staticmethod
         def set_file_position(
@@ -566,11 +562,10 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             files_dict: dict[str, dict[str, t.ContainerValue]] = {}
             if isinstance(files_raw, dict):
                 for key, value in files_raw.items():
-                    if isinstance(key, str) and isinstance(value, dict):
-                        files_dict[key] = {
+                    if isinstance(value, dict):
+                        files_dict[str(key)] = {
                             str(inner_key): inner_value
                             for inner_key, inner_value in value.items()
-                            if isinstance(inner_key, str)
                         }
             files_dict[file_path] = dict(file_state)
             updated_state: dict[str, t.ContainerValue] = dict(state)

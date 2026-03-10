@@ -13,11 +13,8 @@ from pathlib import Path
 from typing import override
 
 from flext_core import FlextLogger, u
-from flext_meltano import (
-    FlextMeltanoStream as Stream,
-    FlextMeltanoTap as Tap,
-    t as t_meltano,
-)
+from singer_sdk.streams import Stream
+from singer_sdk.tap_base import Tap
 
 from flext_tap_ldif.constants import c
 from flext_tap_ldif.ldif_processor import (
@@ -76,10 +73,9 @@ class LDIFEntriesStream(Stream):
                     )
 
     @override
-    @override
     def get_records(
         self, context: Mapping[str, t.ContainerValue] | None = None
-    ) -> Iterable[dict[str, object]]:
+    ) -> Iterable[dict[str, t.ContainerValue]]:
         """Return a generator of record-type dictionary objects.
 
         Args:
@@ -155,42 +151,20 @@ class LDIFEntriesStream(Stream):
                     )
                     continue
 
-    def _get_schema(self) -> dict[str, object]:
+    def _get_schema(self) -> dict[str, t.ContainerValue]:
         """Get schema for LDIF entries."""
-        return t_meltano.Singer.Typing.PropertiesList(
-            t_meltano.Singer.Typing.Property(
-                c.EntrySchema.DN_FIELD,
-                t_meltano.Singer.Typing.StringType,
-                description="Distinguished Name",
-            ),
-            t_meltano.Singer.Typing.Property(
-                c.EntrySchema.ATTRIBUTES_FIELD,
-                t_meltano.Singer.Typing.ObjectType(),
-                description="Entry attributes",
-            ),
-            t_meltano.Singer.Typing.Property(
-                c.EntrySchema.OBJECT_CLASS_FIELD,
-                t_meltano.Singer.Typing.ArrayType(t_meltano.Singer.Typing.StringType),
-                description="Object classes",
-            ),
-            t_meltano.Singer.Typing.Property(
-                c.EntrySchema.CHANGE_TYPE_FIELD,
-                t_meltano.Singer.Typing.StringType,
-                description="Change type",
-            ),
-            t_meltano.Singer.Typing.Property(
-                c.EntrySchema.SOURCE_FILE_FIELD,
-                t_meltano.Singer.Typing.StringType,
-                description="Source file path",
-            ),
-            t_meltano.Singer.Typing.Property(
-                c.EntrySchema.LINE_NUMBER_FIELD,
-                t_meltano.Singer.Typing.IntegerType,
-                description="Line number in file",
-            ),
-            t_meltano.Singer.Typing.Property(
-                c.EntrySchema.ENTRY_SIZE_FIELD,
-                t_meltano.Singer.Typing.IntegerType,
-                description="Entry size in bytes",
-            ),
-        ).to_dict()
+        return {
+            "type": "object",
+            "properties": {
+                c.EntrySchema.DN_FIELD: {"type": "string"},
+                c.EntrySchema.ATTRIBUTES_FIELD: {"type": "object"},
+                c.EntrySchema.OBJECT_CLASS_FIELD: {
+                    "type": "array",
+                    "items": {"type": "string"},
+                },
+                c.EntrySchema.CHANGE_TYPE_FIELD: {"type": "string"},
+                c.EntrySchema.SOURCE_FILE_FIELD: {"type": "string"},
+                c.EntrySchema.LINE_NUMBER_FIELD: {"type": "integer"},
+                c.EntrySchema.ENTRY_SIZE_FIELD: {"type": "integer"},
+            },
+        }
