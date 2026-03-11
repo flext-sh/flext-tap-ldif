@@ -12,7 +12,7 @@ from collections.abc import Generator, Mapping
 from pathlib import Path
 from typing import NoReturn
 
-from flext_core import FlextLogger, FlextResult
+from flext_core import FlextLogger, r
 from flext_ldif import FlextLdif, m
 
 from flext_tap_ldif.constants import c
@@ -39,7 +39,7 @@ class FlextLdifProcessor:
         file_pattern: str = "*.ldif",
         file_path: str | Path | None = None,
         max_file_size_mb: int = 100,
-    ) -> FlextResult[list[Path]]:
+    ) -> r[list[Path]]:
         """Discover LDIF files using local file discovery.
 
         Args:
@@ -49,7 +49,7 @@ class FlextLdifProcessor:
             max_file_size_mb: Maximum file size in MB
 
         Returns:
-            FlextResult[list[Path]]: Success with discovered files or failure with error
+            r[list[Path]]: Success with discovered files or failure with error
 
         """
         max_size_bytes = max_file_size_mb * 1024 * 1024
@@ -61,11 +61,11 @@ class FlextLdifProcessor:
                 case _:
                     p = file_path
             if not p.exists():
-                return FlextResult[list[Path]].fail(f"File not found: {p}")
+                return r[list[Path]].fail(f"File not found: {p}")
             if p.stat().st_size > max_size_bytes:
-                return FlextResult[list[Path]].fail(f"File exceeds max size: {p}")
+                return r[list[Path]].fail(f"File exceeds max size: {p}")
             discovered.append(p)
-            return FlextResult[list[Path]].ok(discovered)
+            return r[list[Path]].ok(discovered)
         if directory_path is not None:
             match directory_path:
                 case str() as directory_path_text:
@@ -73,14 +73,14 @@ class FlextLdifProcessor:
                 case _:
                     d = directory_path
             if not d.exists() or not d.is_dir():
-                return FlextResult[list[Path]].fail(f"Directory not found: {d}")
+                return r[list[Path]].fail(f"Directory not found: {d}")
             discovered.extend(
                 f
                 for f in sorted(d.glob(file_pattern))
                 if f.is_file() and f.stat().st_size <= max_size_bytes
             )
-            return FlextResult[list[Path]].ok(discovered)
-        return FlextResult[list[Path]].fail("No file_path or directory_path specified")
+            return r[list[Path]].ok(discovered)
+        return r[list[Path]].fail("No file_path or directory_path specified")
 
     def process_file(
         self, file_path: Path

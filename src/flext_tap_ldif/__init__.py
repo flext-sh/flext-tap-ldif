@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING, Any
 from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
 
 if TYPE_CHECKING:
-    from flext_core import FlextLogger, FlextModels, FlextResult
+    from flext_core import FlextLogger, FlextModels, r
 
     from flext_tap_ldif.__version__ import __version__, __version_info__
     from flext_tap_ldif.constants import (
@@ -38,7 +38,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "FlextLdifProcessor": ("flext_tap_ldif.ldif_processor", "FlextLdifProcessor"),
     "FlextLogger": ("flext_core", "FlextLogger"),
     "FlextModels": ("flext_core", "FlextModels"),
-    "FlextResult": ("flext_core", "FlextResult"),
+    "r": ("flext_core", "r"),
     "FlextTapLdifConstants": ("flext_tap_ldif.constants", "FlextTapLdifConstants"),
     "FlextTapLdifModels": ("flext_tap_ldif.models", "FlextTapLdifModels"),
     "FlextTapLdifProtocols": ("flext_tap_ldif.protocols", "FlextTapLdifProtocols"),
@@ -60,7 +60,6 @@ __all__ = [
     "FlextLdifProcessor",
     "FlextLogger",
     "FlextModels",
-    "FlextResult",
     "FlextTapLdifConstants",
     "FlextTapLdifModels",
     "FlextTapLdifProtocols",
@@ -74,6 +73,7 @@ __all__ = [
     "c",
     "m",
     "p",
+    "r",
     "t",
     "u",
 ]
