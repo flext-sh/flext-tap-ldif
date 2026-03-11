@@ -8,7 +8,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import ClassVar
+from typing import ClassVar, override
 
 from flext_core import FlextConstants, FlextLogger
 from singer_sdk.streams import Stream
@@ -46,6 +46,7 @@ class TapLDIF(Tap):
         },
     }
 
+    @override
     def discover_streams(self) -> list[Stream]:
         """Return a list of discovered streams.
 
