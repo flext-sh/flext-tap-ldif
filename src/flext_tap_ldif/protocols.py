@@ -19,8 +19,6 @@ from typing import Protocol, runtime_checkable
 from flext_ldif import FlextLdifProtocols
 from flext_meltano import FlextMeltanoModels as m, FlextMeltanoProtocols
 
-from flext_tap_ldif.typings import t
-
 
 class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
     """LDIF tap-specific protocol definitions extending p.
