@@ -45,7 +45,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
         @staticmethod
         def create_record_message(
             stream_name: str,
-            record: Mapping[str, object
+            record: Mapping[str, t.Scalar],
             time_extracted: datetime | None = None,
         ) -> m.Meltano.SingerRecordMessage:
             """Create Singer record message.
@@ -69,7 +69,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
         @staticmethod
         def create_schema_message(
             stream_name: str,
-            schema: Mapping[str, object
+            schema: Mapping[str, t.Container],
             key_properties: list[str] | None = None,
         ) -> m.Meltano.SingerSchemaMessage:
             """Create Singer schema message.
@@ -206,9 +206,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 RuntimeError,
                 ImportError,
             ) as e:
-                return r[object].fail(
-                    f"Error extracting LDIF metadata: {e}"
-                )
+                return r[object].fail(f"Error extracting LDIF metadata: {e}")
 
         @staticmethod
         def validate_ldif_file(file_path: Path) -> r[bool]:
@@ -337,9 +335,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 RuntimeError,
                 ImportError,
             ) as e:
-                return r[object].fail(
-                    f"Error converting LDIF entry: {e}"
-                )
+                return r[object].fail(f"Error converting LDIF entry: {e}")
 
         @staticmethod
         def normalize_ldif_attribute_name(attr_name: str) -> str:
@@ -444,9 +440,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             if not u.Guards.is_list(files):
                 return r[object].fail("Files must be a list")
             if not files:
-                return r[object].fail(
-                    "At least one file must be specified"
-                )
+                return r[object].fail("At least one file must be specified")
             for file_path in files:
                 if not u.Guards.is_type(file_path, str):
                     return r[object].fail("File paths must be strings")
@@ -456,9 +450,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     else Path(str(file_path))
                 )
                 if not path_obj.exists():
-                    return r[object].fail(
-                        f"File does not exist: {file_path}"
-                    )
+                    return r[object].fail(f"File does not exist: {file_path}")
             return r[object].ok(config)
 
     class StateManagement:
@@ -576,7 +568,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
     def create_record_message(
         cls,
         stream_name: str,
-        record: Mapping[str, object
+        record: Mapping[str, t.Scalar],
         time_extracted: datetime | None = None,
     ) -> m.Meltano.SingerRecordMessage:
         """Proxy method for SingerUtilities.create_record_message()."""
@@ -586,7 +578,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
     def create_schema_message(
         cls,
         stream_name: str,
-        schema: Mapping[str, object
+        schema: Mapping[str, t.Container],
         key_properties: list[str] | None = None,
     ) -> m.Meltano.SingerSchemaMessage:
         """Proxy method for SingerUtilities.create_schema_message()."""
