@@ -437,12 +437,12 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     f"Missing required fields: {', '.join(missing_fields)}"
                 )
             files = config["files"]
-            if not u.Guards.is_list(files):
+            if not u.is_list(files):
                 return r[object].fail("Files must be a list")
             if not files:
                 return r[object].fail("At least one file must be specified")
             for file_path in files:
-                if not u.Guards.is_type(file_path, str):
+                if not u.is_type(file_path, str):
                     return r[object].fail("File paths must be strings")
                 path_obj = (
                     Path(file_path)

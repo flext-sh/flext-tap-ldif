@@ -90,11 +90,11 @@ class LDIFEntriesStream(Stream):
         if sample_path:
             config["file_path"] = sample_path
         dir_path_raw = config.get("directory_path")
-        dir_path = str(dir_path_raw) if u.Guards.is_type(dir_path_raw, str) else None
+        dir_path = str(dir_path_raw) if u.is_type(dir_path_raw, str) else None
         pattern_raw = config.get("file_pattern", "*.ldif")
-        pattern = str(pattern_raw) if u.Guards.is_type(pattern_raw, str) else "*.ldif"
+        pattern = str(pattern_raw) if u.is_type(pattern_raw, str) else "*.ldif"
         fp_raw = config.get("file_path")
-        fp_val = str(fp_raw) if u.Guards.is_type(fp_raw, str) else None
+        fp_val = str(fp_raw) if u.is_type(fp_raw, str) else None
         max_size_raw = config.get("max_file_size_mb", c.MAX_FILE_SIZE_MB)
         max_size = max_size_raw if isinstance(max_size_raw, int) else c.MAX_FILE_SIZE_MB
         files_result = self._processor.discover_files(
