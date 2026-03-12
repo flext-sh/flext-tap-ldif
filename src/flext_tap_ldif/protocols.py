@@ -68,13 +68,13 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
 
             def parse_ldif_entry(
                 self, entry_text: str
-            ) -> FlextMeltanoProtocols.Result[t.ConfigurationMapping]:
+            ) -> FlextMeltanoProtocols.Result[object]:
                 """Parse single LDIF entry."""
                 ...
 
             def parse_ldif_file(
                 self, file_path: str
-            ) -> FlextMeltanoProtocols.Result[list[t.ConfigurationMapping]]:
+            ) -> FlextMeltanoProtocols.Result[list[object]]:
                 """Parse entire LDIF file."""
                 ...
 
@@ -86,7 +86,7 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 self,
                 entries: list[Mapping[str, object]],
                 filter_criteria: Mapping[str, object],
-            ) -> FlextMeltanoProtocols.Result[list[t.ConfigurationMapping]]:
+            ) -> FlextMeltanoProtocols.Result[list[object]]:
                 """Extract LDIF entries matching filter criteria."""
                 ...
 
@@ -94,7 +94,7 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 self,
                 entry: Mapping[str, object],
                 attributes: list[str] | None = None,
-            ) -> FlextMeltanoProtocols.Result[t.ConfigurationMapping]:
+            ) -> FlextMeltanoProtocols.Result[object]:
                 """Extract specific attributes from LDIF entry."""
                 ...
 
@@ -104,7 +104,7 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
 
             def normalize_ldif_attributes(
                 self, attributes: Mapping[str, list[object]]
-            ) -> FlextMeltanoProtocols.Result[t.ConfigurationMapping]:
+            ) -> FlextMeltanoProtocols.Result[object]:
                 """Normalize LDIF attribute values."""
                 ...
 

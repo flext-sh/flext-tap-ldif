@@ -45,7 +45,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
         @staticmethod
         def create_record_message(
             stream_name: str,
-            record: Mapping[str, t.JsonValue],
+            record: Mapping[str, object
             time_extracted: datetime | None = None,
         ) -> m.Meltano.SingerRecordMessage:
             """Create Singer record message.
@@ -69,7 +69,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
         @staticmethod
         def create_schema_message(
             stream_name: str,
-            schema: Mapping[str, t.JsonValue],
+            schema: Mapping[str, object
             key_properties: list[str] | None = None,
         ) -> m.Meltano.SingerSchemaMessage:
             """Create Singer schema message.
@@ -196,7 +196,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     "base_dns": list(base_dns),
                     "object_classes": list(object_classes),
                 }
-                return r[t.ConfigurationMapping].ok(metadata)
+                return r[object].ok(metadata)
             except (
                 ValueError,
                 TypeError,
@@ -206,7 +206,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 RuntimeError,
                 ImportError,
             ) as e:
-                return r[t.ConfigurationMapping].fail(
+                return r[object].fail(
                     f"Error extracting LDIF metadata: {e}"
                 )
 
@@ -327,7 +327,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     )
                 )
                 out: dict[str, object] = dict(record)
-                return r[t.ConfigurationMapping].ok(out)
+                return r[object].ok(out)
             except (
                 ValueError,
                 TypeError,
@@ -337,7 +337,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 RuntimeError,
                 ImportError,
             ) as e:
-                return r[t.ConfigurationMapping].fail(
+                return r[object].fail(
                     f"Error converting LDIF entry: {e}"
                 )
 
@@ -437,29 +437,29 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             required_fields = ["files"]
             missing_fields = [field for field in required_fields if field not in config]
             if missing_fields:
-                return r[t.ConfigurationMapping].fail(
+                return r[object].fail(
                     f"Missing required fields: {', '.join(missing_fields)}"
                 )
             files = config["files"]
             if not u.Guards.is_list(files):
-                return r[t.ConfigurationMapping].fail("Files must be a list")
+                return r[object].fail("Files must be a list")
             if not files:
-                return r[t.ConfigurationMapping].fail(
+                return r[object].fail(
                     "At least one file must be specified"
                 )
             for file_path in files:
                 if not u.Guards.is_type(file_path, str):
-                    return r[t.ConfigurationMapping].fail("File paths must be strings")
+                    return r[object].fail("File paths must be strings")
                 path_obj = (
                     Path(file_path)
                     if isinstance(file_path, str)
                     else Path(str(file_path))
                 )
                 if not path_obj.exists():
-                    return r[t.ConfigurationMapping].fail(
+                    return r[object].fail(
                         f"File does not exist: {file_path}"
                     )
-            return r[t.ConfigurationMapping].ok(config)
+            return r[object].ok(config)
 
     class StateManagement:
         """State management utilities for incremental syncs."""
@@ -576,7 +576,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
     def create_record_message(
         cls,
         stream_name: str,
-        record: Mapping[str, t.JsonValue],
+        record: Mapping[str, object
         time_extracted: datetime | None = None,
     ) -> m.Meltano.SingerRecordMessage:
         """Proxy method for SingerUtilities.create_record_message()."""
@@ -586,7 +586,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
     def create_schema_message(
         cls,
         stream_name: str,
-        schema: Mapping[str, t.JsonValue],
+        schema: Mapping[str, object
         key_properties: list[str] | None = None,
     ) -> m.Meltano.SingerSchemaMessage:
         """Proxy method for SingerUtilities.create_schema_message()."""
