@@ -151,7 +151,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             }
             return metadata_dict
         if (
-            value.__class__ in {str, int, float, bool}
+            isinstance(value, (str, int, float, bool))
             and getattr(
                 self,
                 "_include_ldif_metadata",
