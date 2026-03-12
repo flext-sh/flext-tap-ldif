@@ -11,8 +11,6 @@ from typing import Protocol, runtime_checkable
 
 from flext_tests import FlextTestsProtocols
 
-from flext_tap_ldif import t
-
 
 class TestsFlextTapLdifProtocols(FlextTestsProtocols):
     """Protocols for flext-tap-ldif tests - uses composition with FlextTestsProtocols.
@@ -55,7 +53,7 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols):
                 """Close mock LDIF file."""
                 ...
 
-            def read_entries(self) -> list[dict[str, t.ContainerValue]]:
+            def read_entries(self) -> list[dict[str, object]]:
                 """Read entries from mock LDIF file."""
                 ...
 
@@ -63,7 +61,7 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols):
         class TestLdifDataProviderProtocol(Protocol):
             """Protocol for test LDIF data providers."""
 
-            def get_test_entries(self) -> list[dict[str, t.ContainerValue]]:
+            def get_test_entries(self) -> list[dict[str, object]]:
                 """Get test LDIF entries."""
                 ...
 
@@ -71,7 +69,7 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols):
                 """Get test LDIF file content."""
                 ...
 
-            def get_test_config(self) -> dict[str, t.ContainerValue]:
+            def get_test_config(self) -> dict[str, object]:
                 """Get test LDIF configuration."""
                 ...
 
@@ -79,20 +77,18 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols):
         class TestLdifAssertionProtocol(Protocol):
             """Protocol for test LDIF assertions."""
 
-            def assert_ldif_file_parsed(
-                self, entries: list[dict[str, t.ContainerValue]]
-            ) -> None:
+            def assert_ldif_file_parsed(self, entries: list[dict[str, object]]) -> None:
                 """Assert LDIF file was parsed correctly."""
                 ...
 
             def assert_ldif_entries_valid(
-                self, entries: list[dict[str, t.ContainerValue]]
+                self, entries: list[dict[str, object]]
             ) -> None:
                 """Assert LDIF entries are valid."""
                 ...
 
             def assert_ldif_stream_config_valid(
-                self, stream: dict[str, t.ContainerValue]
+                self, stream: dict[str, object]
             ) -> None:
                 """Assert LDIF stream configuration is valid."""
                 ...

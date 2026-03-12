@@ -45,9 +45,9 @@ class TestsFlextTapLdifTypes(FlextTestsTypes):
         type TestObjectClass = Literal["person", "organization", "groupOfNames"]
         type MockLdifEntry = dict[str, str | dict[str, list[str]]]
         type MockLdifFile = list[dict[str, str | dict[str, list[str]]]]
-        type TestLdifScenario = dict[str, t.ContainerValue]
+        type TestLdifScenario = dict[str, object]
         type TestLdifValidationResult = dict[str, bool | str | list[str]]
-        type TestLdifParsingResult = dict[str, t.ContainerValue]
+        type TestLdifParsingResult = dict[str, object]
 
 
 tt = TestsFlextTapLdifTypes

@@ -9,8 +9,6 @@ from pathlib import Path
 import pytest
 from flext_tests import FlextTestsDocker
 
-from flext_tap_ldif import t
-
 
 @pytest.fixture(scope="session")
 def docker_control() -> FlextTestsDocker:
@@ -98,7 +96,7 @@ def ldif_directory(
 
 
 @pytest.fixture
-def basic_tap_config(sample_ldif_file: Path) -> dict[str, t.ContainerValue]:
+def basic_tap_config(sample_ldif_file: Path) -> dict[str, object]:
     """Basic LDIF tap configuration."""
     return {
         "ldif_file_path": str(sample_ldif_file),
@@ -113,7 +111,7 @@ def basic_tap_config(sample_ldif_file: Path) -> dict[str, t.ContainerValue]:
 
 
 @pytest.fixture
-def changes_tap_config(sample_ldif_changes_file: Path) -> dict[str, t.ContainerValue]:
+def changes_tap_config(sample_ldif_changes_file: Path) -> dict[str, object]:
     """LDIF tap configuration for changes processing."""
     return {
         "ldif_file_path": str(sample_ldif_changes_file),
@@ -128,7 +126,7 @@ def changes_tap_config(sample_ldif_changes_file: Path) -> dict[str, t.ContainerV
 
 
 @pytest.fixture
-def directory_tap_config(ldif_directory: Path) -> dict[str, t.ContainerValue]:
+def directory_tap_config(ldif_directory: Path) -> dict[str, object]:
     """LDIF tap configuration for directory processing."""
     return {
         "ldif_file_path": str(ldif_directory),
@@ -144,7 +142,7 @@ def directory_tap_config(ldif_directory: Path) -> dict[str, t.ContainerValue]:
 
 
 @pytest.fixture
-def filtered_tap_config(sample_ldif_file: Path) -> dict[str, t.ContainerValue]:
+def filtered_tap_config(sample_ldif_file: Path) -> dict[str, object]:
     """LDIF tap configuration with filters."""
     return {
         "ldif_file_path": str(sample_ldif_file),
@@ -179,7 +177,7 @@ def large_ldif_file(tmp_path: Path) -> Path:
 
 
 @pytest.fixture
-def performance_tap_config(large_ldif_file: Path) -> dict[str, t.ContainerValue]:
+def performance_tap_config(large_ldif_file: Path) -> dict[str, object]:
     """LDIF tap configuration for performance testing."""
     return {
         "ldif_file_path": str(large_ldif_file),
@@ -219,7 +217,7 @@ def utf16_ldif_file(tmp_path: Path) -> Path:
 
 
 @pytest.fixture
-def singer_catalog_config() -> dict[str, t.ContainerValue]:
+def singer_catalog_config() -> dict[str, object]:
     """Singer catalog configuration."""
     return {
         "streams": [
@@ -252,7 +250,7 @@ def singer_catalog_config() -> dict[str, t.ContainerValue]:
 
 
 @pytest.fixture
-def singer_state() -> dict[str, t.ContainerValue]:
+def singer_state() -> dict[str, object]:
     """Singer state for incremental sync."""
     return {
         "currently_syncing": None,
@@ -281,7 +279,7 @@ def invalid_ldif_file(tmp_path: Path, invalid_ldif_content: str) -> Path:
 
 
 @pytest.fixture
-def benchmark_config() -> dict[str, t.ContainerValue]:
+def benchmark_config() -> dict[str, object]:
     """Configuration for performance benchmarking."""
     return {
         "max_entries_to_process": 1000,
@@ -307,16 +305,16 @@ def pytest_configure(config: pytest.Config) -> None:
 class MockLDIFTap:
     """Mock implementation of the LDIF Tap."""
 
-    def __init__(self, config: dict[str, t.ContainerValue]) -> None:
+    def __init__(self, config: dict[str, object]) -> None:
         """Initialize the instance."""
         super().__init__()
         self.config = config
-        self.discovered_streams: list[dict[str, t.ContainerValue]] = []
+        self.discovered_streams: list[dict[str, object]] = []
 
-    def discover_streams(self) -> list[dict[str, t.ContainerValue]]:
+    def discover_streams(self) -> list[dict[str, object]]:
         return self.discovered_streams
 
-    def sync_records(self) -> list[dict[str, t.ContainerValue]]:
+    def sync_records(self) -> list[dict[str, object]]:
         return [
             {
                 "dn": "cn=test,ou=users,dc=example,dc=com",
@@ -338,16 +336,16 @@ def mock_ldif_tap() -> type[MockLDIFTap]:
 class MockLDIFParser:
     """Mock implementation of the LDIF Parser."""
 
-    def __init__(self, config: dict[str, t.ContainerValue]) -> None:
+    def __init__(self, config: dict[str, object]) -> None:
         """Initialize the instance."""
         super().__init__()
         self.config = config
-        self.parsed_entries: list[dict[str, t.ContainerValue]] = []
+        self.parsed_entries: list[dict[str, object]] = []
 
-    def parse_file(self, _file_path: str) -> dict[str, t.ContainerValue]:
+    def parse_file(self, _file_path: str) -> dict[str, object]:
         return {"success": True, "entries": self.parsed_entries, "errors": []}
 
-    def add_mock_entry(self, entry: dict[str, t.ContainerValue]) -> None:
+    def add_mock_entry(self, entry: dict[str, object]) -> None:
         self.parsed_entries.append(entry)
 
 

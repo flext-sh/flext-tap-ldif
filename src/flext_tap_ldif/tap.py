@@ -16,7 +16,6 @@ from singer_sdk.tap_base import Tap
 
 from flext_tap_ldif.settings import FlextTapLdifSettings
 from flext_tap_ldif.streams import LDIFEntriesStream
-from flext_tap_ldif.typings import t
 
 logger = FlextLogger(__name__)
 
@@ -26,7 +25,7 @@ class TapLDIF(Tap):
 
     name: str = "tap-ldif"
     config_class = FlextTapLdifSettings
-    config_jsonschema: ClassVar[dict[str, t.ContainerValue]] = {
+    config_jsonschema: ClassVar[dict[str, object]] = {
         "type": "object",
         "properties": {
             "file_path": {"type": "string"},
@@ -56,7 +55,7 @@ class TapLDIF(Tap):
         """
         return [LDIFEntriesStream(tap=self)]
 
-    def _get_ldif_entries_schema(self) -> Mapping[str, t.ContainerValue]:
+    def _get_ldif_entries_schema(self) -> Mapping[str, object]:
         """Get the schema for LDIF entries stream.
 
         Returns:

@@ -20,7 +20,6 @@ from flext_tap_ldif.constants import c
 from flext_tap_ldif.ldif_processor import (
     FlextLdifProcessor as FlextLdifProcessorWrapper,
 )
-from flext_tap_ldif.typings import t
 
 logger = FlextLogger(__name__)
 
@@ -39,7 +38,7 @@ class LDIFEntriesStream(Stream):
         super().__init__(tap, name="ldif_entries", schema=self._get_schema())
         self._processor = FlextLdifProcessorWrapper(dict(tap.config))
         self._tap: Tap = tap
-        cfg: dict[str, t.ContainerValue] = dict(tap.config)
+        cfg: dict[str, object] = dict(tap.config)
         if not cfg.get("file_path") and (not cfg.get("directory_path")):
             fd, path = tempfile.mkstemp(suffix=".ldif")
             os.close(fd)
@@ -74,8 +73,8 @@ class LDIFEntriesStream(Stream):
 
     @override
     def get_records(
-        self, context: Mapping[str, t.ContainerValue] | None = None
-    ) -> Iterable[dict[str, t.ContainerValue]]:
+        self, context: Mapping[str, object] | None = None
+    ) -> Iterable[dict[str, object]]:
         """Return a generator of record-type dictionary objects.
 
         Args:
@@ -86,7 +85,7 @@ class LDIFEntriesStream(Stream):
 
         """
         _ = context
-        config: dict[str, t.ContainerValue] = dict(self._tap.config)
+        config: dict[str, object] = dict(self._tap.config)
         sample_path = getattr(self, "_sample_file_path", None)
         if sample_path:
             config["file_path"] = sample_path
@@ -151,7 +150,7 @@ class LDIFEntriesStream(Stream):
                     )
                     continue
 
-    def _get_schema(self) -> dict[str, t.ContainerValue]:
+    def _get_schema(self) -> dict[str, object]:
         """Get schema for LDIF entries."""
         return {
             "type": "object",
