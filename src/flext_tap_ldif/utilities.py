@@ -196,7 +196,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     "base_dns": list(base_dns),
                     "object_classes": list(object_classes),
                 }
-                return r[object].ok(metadata)
+                return r[Mapping[str, object]].ok(metadata)
             except (
                 ValueError,
                 TypeError,
@@ -206,7 +206,9 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 RuntimeError,
                 ImportError,
             ) as e:
-                return r[object].fail(f"Error extracting LDIF metadata: {e}")
+                return r[Mapping[str, object]].fail(
+                    f"Error extracting LDIF metadata: {e}"
+                )
 
         @staticmethod
         def validate_ldif_file(file_path: Path) -> r[bool]:
@@ -308,14 +310,14 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
         @staticmethod
         def convert_ldif_entry_to_record(
             entry_lines: list[str],
-        ) -> r[Mapping[str, object]]:
+        ) -> r[Mapping[str, str | list[str]]]:
             """Convert LDIF entry lines to Singer record.
 
             Args:
             entry_lines: List of LDIF lines for single entry
 
             Returns:
-            r[dict[str, object]]: Singer record or error
+            r[Mapping[str, str | list[str]]]: Singer record or error
 
             """
             try:
@@ -324,8 +326,8 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         entry_lines
                     )
                 )
-                out: dict[str, object] = dict(record)
-                return r[object].ok(out)
+                out: dict[str, str | list[str]] = dict(record)
+                return r[Mapping[str, str | list[str]]].ok(out)
             except (
                 ValueError,
                 TypeError,
@@ -335,7 +337,9 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 RuntimeError,
                 ImportError,
             ) as e:
-                return r[object].fail(f"Error converting LDIF entry: {e}")
+                return r[Mapping[str, str | list[str]]].fail(
+                    f"Error converting LDIF entry: {e}"
+                )
 
         @staticmethod
         def normalize_ldif_attribute_name(attr_name: str) -> str:
@@ -433,25 +437,29 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             required_fields = ["files"]
             missing_fields = [field for field in required_fields if field not in config]
             if missing_fields:
-                return r[object].fail(
+                return r[Mapping[str, object]].fail(
                     f"Missing required fields: {', '.join(missing_fields)}"
                 )
             files = config["files"]
             if not u.is_list(files):
-                return r[object].fail("Files must be a list")
+                return r[Mapping[str, object]].fail("Files must be a list")
             if not files:
-                return r[object].fail("At least one file must be specified")
+                return r[Mapping[str, object]].fail(
+                    "At least one file must be specified"
+                )
             for file_path in files:
                 if not u.is_type(file_path, str):
-                    return r[object].fail("File paths must be strings")
+                    return r[Mapping[str, object]].fail("File paths must be strings")
                 path_obj = (
                     Path(file_path)
                     if isinstance(file_path, str)
                     else Path(str(file_path))
                 )
                 if not path_obj.exists():
-                    return r[object].fail(f"File does not exist: {file_path}")
-            return r[object].ok(config)
+                    return r[Mapping[str, object]].fail(
+                        f"File does not exist: {file_path}"
+                    )
+            return r[Mapping[str, object]].ok(config)
 
     class StateManagement:
         """State management utilities for incremental syncs."""
@@ -555,7 +563,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
     @classmethod
     def convert_ldif_entry_to_record(
         cls, entry_lines: list[str]
-    ) -> r[Mapping[str, object]]:
+    ) -> r[Mapping[str, str | list[str]]]:
         """Proxy method for LdifDataProcessing.convert_ldif_entry_to_record()."""
         return cls.LdifDataProcessing.convert_ldif_entry_to_record(entry_lines)
 

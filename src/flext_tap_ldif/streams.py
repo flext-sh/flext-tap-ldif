@@ -104,7 +104,7 @@ class LDIFEntriesStream(Stream):
             max_file_size_mb=max_size,
         )
         if files_result.is_failure:
-            logger.error("File discovery failed: %s", files_result.error)
+            logger.error("File discovery failed: %s", files_result.error or "")
             fp = config.get("file_path")
             if isinstance(fp, str):
                 try:
@@ -121,7 +121,7 @@ class LDIFEntriesStream(Stream):
                 ):
                     return
             return
-        files_to_process = files_result.data or []
+        files_to_process = files_result.value or []
         logger.info("Processing %d LDIF files", len(files_to_process))
         if not files_to_process:
             yield {
