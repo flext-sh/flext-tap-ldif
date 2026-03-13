@@ -42,7 +42,7 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols):
         """
 
         @runtime_checkable
-        class MockLdifFileProtocol(Protocol):
+        class MockLdifFile(Protocol):
             """Protocol for mock LDIF file operations in tests."""
 
             def open_file(self, file_path: str) -> bool:
@@ -58,7 +58,7 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols):
                 ...
 
         @runtime_checkable
-        class TestLdifDataProviderProtocol(Protocol):
+        class TestLdifDataProvider(Protocol):
             """Protocol for test LDIF data providers."""
 
             def get_test_entries(self) -> list[dict[str, object]]:
@@ -74,7 +74,7 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols):
                 ...
 
         @runtime_checkable
-        class TestLdifAssertionProtocol(Protocol):
+        class TestLdifAssertion(Protocol):
             """Protocol for test LDIF assertions."""
 
             def assert_ldif_file_parsed(self, entries: list[dict[str, object]]) -> None:

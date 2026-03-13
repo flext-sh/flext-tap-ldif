@@ -35,7 +35,7 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
         """
 
         @runtime_checkable
-        class LdifConnectionProtocol(FlextLdifProtocols.Service[object], Protocol):
+        class LdifConnection(FlextLdifProtocols.Service[object], Protocol):
             """Protocol for LDIF file connection management."""
 
             def close_ldif_file(self) -> FlextMeltanoProtocols.Result[bool]:
@@ -55,7 +55,7 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 ...
 
         @runtime_checkable
-        class LdifParsingProtocol(FlextLdifProtocols.Service[object], Protocol):
+        class LdifParsing(FlextLdifProtocols.Service[object], Protocol):
             """Protocol for LDIF parsing operations."""
 
             def extract_entry_dn(
@@ -77,7 +77,7 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 ...
 
         @runtime_checkable
-        class LdifExtractionProtocol(FlextLdifProtocols.Service[object], Protocol):
+        class LdifExtraction(FlextLdifProtocols.Service[object], Protocol):
             """Protocol for LDIF data extraction."""
 
             def extract_entries_by_filter(
@@ -97,7 +97,7 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 ...
 
         @runtime_checkable
-        class LdifTransformationProtocol(FlextLdifProtocols.Service[object], Protocol):
+        class LdifTransformation(FlextLdifProtocols.Service[object], Protocol):
             """Protocol for LDIF data transformation."""
 
             def normalize_ldif_attributes(
@@ -113,7 +113,7 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 ...
 
         @runtime_checkable
-        class StreamGenerationProtocol(FlextLdifProtocols.Service[object], Protocol):
+        class StreamGeneration(FlextLdifProtocols.Service[object], Protocol):
             """Protocol for Singer stream generation from LDIF."""
 
             def generate_streams_from_ldif(
