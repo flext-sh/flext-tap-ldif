@@ -60,7 +60,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
             """
             extracted_time = time_extracted or datetime.now(UTC)
-            return m.Meltano.SingerRecordMessage.model_validate({
+            return m.Meltano.SingerRecordMessage({
                 "stream": stream_name,
                 "record": record,
                 "time_extracted": extracted_time.isoformat(),
@@ -83,7 +83,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             dict[str, object]: Singer schema message
 
             """
-            return m.Meltano.SingerSchemaMessage.model_validate({
+            return m.Meltano.SingerSchemaMessage({
                 "stream": stream_name,
                 "schema": schema,
                 "key_properties": key_properties or [],
@@ -102,7 +102,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             SingerStateMessage model
 
             """
-            return m.Meltano.SingerStateMessage.model_validate({"value": state})
+            return m.Meltano.SingerStateMessage({"value": state})
 
         @staticmethod
         def write_message(
