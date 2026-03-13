@@ -8,6 +8,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Annotated
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -17,12 +18,12 @@ class FlextTapLdifSettings(BaseModel):
 
     model_config = ConfigDict(extra="ignore", validate_assignment=True)
 
-    file_path: str | None = Field(default=None)
-    directory_path: str | None = Field(default=None)
-    file_pattern: str = Field(default="*.ldif")
-    encoding: str = Field(default="utf-8")
-    strict_parsing: bool = Field(default=True)
-    max_file_size_mb: int = Field(default=100, ge=1)
+    file_path: Annotated[str | None, Field(default=None)]
+    directory_path: Annotated[str | None, Field(default=None)]
+    file_pattern: Annotated[str, Field(default="*.ldif")]
+    encoding: Annotated[str, Field(default="utf-8")]
+    strict_parsing: Annotated[bool, Field(default=True)]
+    max_file_size_mb: Annotated[int, Field(default=100, ge=1)]
 
     def normalized_file_path(self) -> Path | None:
         """Return `file_path` as `Path` when configured."""
