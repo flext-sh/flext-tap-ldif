@@ -11,7 +11,7 @@ import re
 from collections.abc import Mapping
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import override
+from typing import TypeGuard, override
 
 from flext_core import r, t
 from flext_ldif import FlextLdifUtilities
@@ -60,7 +60,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
             """
             extracted_time = time_extracted or datetime.now(UTC)
-            return m.Meltano.SingerRecordMessage({
+            return m.Meltano.SingerRecordMessage.model_validate({
                 "stream": stream_name,
                 "record": record,
                 "time_extracted": extracted_time.isoformat(),
@@ -83,7 +83,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             dict[str, object]: Singer schema message
 
             """
-            return m.Meltano.SingerSchemaMessage({
+            return m.Meltano.SingerSchemaMessage.model_validate({
                 "stream": stream_name,
                 "schema": schema,
                 "key_properties": key_properties or [],
@@ -102,11 +102,11 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             SingerStateMessage model
 
             """
-            return m.Meltano.SingerStateMessage({"value": state})
+            return m.Meltano.SingerStateMessage.model_validate({"value": state})
 
         @staticmethod
         def write_message(
-            message: m.Meltano.SingerSchemaMessage
+            _message: m.Meltano.SingerSchemaMessage
             | m.Meltano.SingerRecordMessage
             | m.Meltano.SingerStateMessage,
         ) -> None:
@@ -465,6 +465,21 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
         """State management utilities for incremental syncs."""
 
         @staticmethod
+        def _is_str_object_mapping(
+            value: Mapping[object, object] | object,
+        ) -> TypeGuard[Mapping[str, object]]:
+            return isinstance(value, Mapping)
+
+        @classmethod
+        def _is_nested_state_mapping(
+            cls,
+            value: Mapping[object, object] | object,
+        ) -> TypeGuard[Mapping[str, Mapping[str, object]]]:
+            if not cls._is_str_object_mapping(value):
+                return False
+            return all(cls._is_str_object_mapping(item) for item in value.values())
+
+        @staticmethod
         def get_file_position(state: Mapping[str, object], file_path: str) -> int:
             """Get current position in file.
 
@@ -482,9 +497,9 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             position = file_state.get("position", 0)
             return position if isinstance(position, int) else 0
 
-        @staticmethod
+        @classmethod
         def get_file_state(
-            state: Mapping[str, object], file_path: str
+            cls, state: Mapping[str, object], file_path: str
         ) -> Mapping[str, object]:
             """Get state for a specific file.
 
@@ -497,12 +512,12 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
             """
             files_raw = state.get("files")
-            if not isinstance(files_raw, dict):
+            if not cls._is_str_object_mapping(files_raw):
                 return {}
             file_state_raw = files_raw.get(file_path)
-            if not isinstance(file_state_raw, dict):
+            if not cls._is_str_object_mapping(file_state_raw):
                 return {}
-            return {str(key): value for key, value in file_state_raw.items()}
+            return dict(file_state_raw)
 
         @staticmethod
         def set_file_position(
@@ -529,8 +544,9 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 state, file_path, file_state_dict
             )
 
-        @staticmethod
+        @classmethod
         def set_file_state(
+            cls,
             state: Mapping[str, object],
             file_path: str,
             file_state: Mapping[str, object],
@@ -548,13 +564,9 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             files_raw = state.get("files")
             files_dict: dict[str, dict[str, object]] = {}
-            if isinstance(files_raw, dict):
+            if cls._is_nested_state_mapping(files_raw):
                 for key, value in files_raw.items():
-                    if isinstance(value, dict):
-                        files_dict[str(key)] = {
-                            str(inner_key): inner_value
-                            for inner_key, inner_value in value.items()
-                        }
+                    files_dict[key] = dict(value)
             files_dict[file_path] = dict(file_state)
             updated_state: dict[str, object] = dict(state)
             updated_state["files"] = files_dict

@@ -109,7 +109,7 @@ class FlextLdifProcessor:
                     msg: str = f"Failed to parse LDIF: {parse_result.error}"
                     self._raise_parse_error(msg)
                 for raw_entry in parse_result.value:
-                    entry = m.Ldif.Entry(raw_entry)
+                    entry = m.Ldif.Entry.model_validate(raw_entry)
                     dn_val = entry.dn.value if entry.dn is not None else ""
                     attrs_dict = (
                         dict(entry.attributes.attributes)
