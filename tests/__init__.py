@@ -59,7 +59,6 @@ if TYPE_CHECKING:
     from tests.typings import TestsFlextTapLdifTypes, t, tt
     from tests.utilities import TestsFlextTapLdifUtilities, u
 
-# Lazy import mapping: export_name -> (module_path, attr_name)
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "MockLDIFParser": ("tests.conftest", "MockLDIFParser"),
     "MockLDIFTap": ("tests.conftest", "MockLDIFTap"),

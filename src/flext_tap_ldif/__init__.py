@@ -37,7 +37,6 @@ if TYPE_CHECKING:
     from flext_tap_ldif.typings import FlextTapLdifTypes, t
     from flext_tap_ldif.utilities import FlextTapLdifUtilities, u
 
-# Lazy import mapping: export_name -> (module_path, attr_name)
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "FlextLdifProcessor": ("flext_tap_ldif.ldif_processor", "FlextLdifProcessor"),
     "FlextTapLdifConstants": ("flext_tap_ldif.constants", "FlextTapLdifConstants"),
