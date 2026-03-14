@@ -44,9 +44,7 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 """Close LDIF file."""
                 ...
 
-            def open_ldif_file(
-                self, file_path: str
-            ) -> FlextMeltanoProtocols.Result:
+            def open_ldif_file(self, file_path: str) -> FlextMeltanoProtocols.Result:
                 """Open LDIF file for reading."""
                 ...
 
@@ -66,9 +64,7 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 """Extract DN from LDIF entry lines."""
                 ...
 
-            def parse_ldif_entry(
-                self, entry_text: str
-            ) -> FlextMeltanoProtocols.Result:
+            def parse_ldif_entry(self, entry_text: str) -> FlextMeltanoProtocols.Result:
                 """Parse single LDIF entry."""
                 ...
 
