@@ -56,7 +56,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             time_extracted: Timestamp when record was extracted
 
             Returns:
-            dict[str, object]: Singer record message
+            dict[str, t.ContainerValue]: Singer record message
 
             """
             extracted_time = time_extracted or datetime.now(UTC)
@@ -80,7 +80,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             key_properties: List of key property names
 
             Returns:
-            dict[str, object]: Singer schema message
+            dict[str, t.ContainerValue]: Singer schema message
 
             """
             return m.Meltano.SingerSchemaMessage.model_validate({
@@ -164,7 +164,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             file_path: Path to LDIF file
 
             Returns:
-            r[dict[str, object]]: Metadata dictionary or error
+            r[dict[str, t.ContainerValue]]: Metadata dictionary or error
 
             """
             try:
@@ -431,7 +431,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             config: Configuration dictionary
 
             Returns:
-            r[dict[str, object]]: Validated config or error
+            r[dict[str, t.ContainerValue]]: Validated config or error
 
             """
             required_fields = ["files"]
@@ -516,7 +516,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             file_path: Path to the file
 
             Returns:
-            dict[str, object]: File state
+            dict[str, t.ContainerValue]: File state
 
             """
             files_raw = state.get("files")
@@ -539,7 +539,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             position: Current position
 
             Returns:
-            dict[str, object]: Updated state
+            dict[str, t.ContainerValue]: Updated state
 
             """
             file_state = FlextTapLdifUtilities.StateManagement.get_file_state(
@@ -567,7 +567,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             file_state: State data for the file
 
             Returns:
-            dict[str, object]: Updated state
+            dict[str, t.ContainerValue]: Updated state
 
             """
             files_raw = state.get("files")

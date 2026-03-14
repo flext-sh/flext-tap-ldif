@@ -85,7 +85,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         return sum(1 for attr in model_attrs if getattr(self, attr, None) is not None)
 
     @computed_field
-    def ldif_tap_system_summary(self) -> Mapping[str, object]:
+    def ldif_tap_system_summary(self) -> Mapping[str, t.ContainerValue]:
         """Complete Singer LDIF tap system summary with file processing capabilities."""
         total_models = sum(
             1
@@ -313,7 +313,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         ]
 
         @computed_field
-        def ldif_entry_summary(self) -> Mapping[str, object]:
+        def ldif_entry_summary(self) -> Mapping[str, t.ContainerValue]:
             """LDIF entry analysis summary."""
             return {
                 "dn": self.dn,
@@ -422,7 +422,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         ]
 
         @computed_field
-        def change_record_summary(self) -> Mapping[str, object]:
+        def change_record_summary(self) -> Mapping[str, t.ContainerValue]:
             """LDIF change record summary."""
             return {
                 "dn": self.dn,
@@ -537,7 +537,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         ]
 
         @computed_field
-        def ldif_file_summary(self) -> Mapping[str, object]:
+        def ldif_file_summary(self) -> Mapping[str, t.ContainerValue]:
             """LDIF file processing summary."""
             progress = 0.0
             if self.total_lines > 0:
@@ -638,7 +638,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         # Stream schema
         stream_schema: Annotated[
-            dict[str, object],
+            dict[str, t.ContainerValue],
             Field(
                 default_factory=dict,
                 description="JSON schema",
@@ -653,7 +653,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         ]
 
         @computed_field
-        def ldif_stream_summary(self) -> Mapping[str, object]:
+        def ldif_stream_summary(self) -> Mapping[str, t.ContainerValue]:
             """LDIF stream configuration summary."""
             return {
                 "stream_id": self.tap_stream_id,
@@ -776,7 +776,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         ]
 
         @computed_field
-        def batch_processing_summary(self) -> Mapping[str, object]:
+        def batch_processing_summary(self) -> Mapping[str, t.ContainerValue]:
             """LDIF batch processing summary."""
             duration = 0.0
             if self.started_at and self.completed_at:
@@ -912,7 +912,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         ]
 
         @computed_field
-        def processing_progress_summary(self) -> Mapping[str, object]:
+        def processing_progress_summary(self) -> Mapping[str, t.ContainerValue]:
             """LDIF processing progress summary."""
             total_errors = self.recoverable_errors + self.fatal_errors
             duration = 0.0
@@ -1057,7 +1057,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         ]
 
         @computed_field
-        def tap_config_summary(self) -> Mapping[str, object]:
+        def tap_config_summary(self) -> Mapping[str, t.ContainerValue]:
             """LDIF tap configuration summary."""
             return {
                 "source": {
@@ -1098,7 +1098,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         stream: Annotated[str, Field(..., description="Source stream name")]
         record: Annotated[
-            dict[str, object],
+            dict[str, t.ContainerValue],
             Field(
                 ...,
                 description="LDIF record data",
@@ -1131,7 +1131,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         ]
 
         @computed_field
-        def ldif_record_summary(self) -> Mapping[str, object]:
+        def ldif_record_summary(self) -> Mapping[str, t.ContainerValue]:
             """LDIF record analysis summary."""
             return {
                 "stream": self.stream,
@@ -1201,7 +1201,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         ]
 
         @computed_field
-        def validation_summary(self) -> Mapping[str, object]:
+        def validation_summary(self) -> Mapping[str, t.ContainerValue]:
             """LDIF validation complete summary."""
             success_rate = 0.0
             if self.total_entries > 0:
@@ -1322,7 +1322,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         ]
 
         @computed_field
-        def performance_analysis_summary(self) -> Mapping[str, object]:
+        def performance_analysis_summary(self) -> Mapping[str, t.ContainerValue]:
             """LDIF tap performance analysis summary."""
             success_rate = 0.0
             if self.files_processed > 0:

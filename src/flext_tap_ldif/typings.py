@@ -31,62 +31,76 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
     class TapLdif:
         """Singer tap protocol complex types."""
 
-        type TapConfiguration = dict[str, str | int | bool | dict[str, object]]
-        type StreamConfiguration = dict[str, str | bool | dict[str, object]]
-        type CatalogDefinition = dict[str, str | list[dict[str, object]]]
-        type SchemaDefinition = dict[str, str | dict[str, object] | bool]
-        type MessageOutput = dict[str, str | dict[str, object]]
-        type StateManagement = dict[str, str | int | dict[str, object]]
+        type TapConfiguration = dict[
+            str, str | int | bool | dict[str, t.ContainerValue]
+        ]
+        type StreamConfiguration = dict[str, str | bool | dict[str, t.ContainerValue]]
+        type CatalogDefinition = dict[str, str | list[dict[str, t.ContainerValue]]]
+        type SchemaDefinition = dict[str, str | dict[str, t.ContainerValue] | bool]
+        type MessageOutput = dict[str, str | dict[str, t.ContainerValue]]
+        type StateManagement = dict[str, str | int | dict[str, t.ContainerValue]]
 
     class LdifProcessing:
         """LDIF processing complex types."""
 
-        type ProcessingConfiguration = dict[str, str | int | bool | dict[str, object]]
-        type EntryExtraction = dict[str, str | list[str] | dict[str, object]]
+        type ProcessingConfiguration = dict[
+            str, str | int | bool | dict[str, t.ContainerValue]
+        ]
+        type EntryExtraction = dict[str, str | list[str] | dict[str, t.ContainerValue]]
         type EntryTransformation = list[dict[str, str | object]]
-        type EntryValidation = dict[str, bool | str | list[str] | dict[str, object]]
-        type BatchProcessing = dict[str, int | bool | dict[str, object]]
-        type FileProcessing = dict[str, str | int | dict[str, object]]
+        type EntryValidation = dict[
+            str, bool | str | list[str] | dict[str, t.ContainerValue]
+        ]
+        type BatchProcessing = dict[str, int | bool | dict[str, t.ContainerValue]]
+        type FileProcessing = dict[str, str | int | dict[str, t.ContainerValue]]
 
     class DataExtraction:
         """Data extraction complex types."""
 
-        type ExtractionConfiguration = dict[str, str | bool | dict[str, object]]
-        type ExtractionFilter = dict[str, str | list[str] | dict[str, object]]
-        type ExtractionMapping = dict[str, str | dict[str, object]]
-        type ExtractionResult = dict[str, bool | list[dict[str, object]]]
-        type ExtractionMetrics = dict[str, int | float | dict[str, object]]
-        type ExtractionState = dict[str, str | int | dict[str, object]]
+        type ExtractionConfiguration = dict[
+            str, str | bool | dict[str, t.ContainerValue]
+        ]
+        type ExtractionFilter = dict[str, str | list[str] | dict[str, t.ContainerValue]]
+        type ExtractionMapping = dict[str, str | dict[str, t.ContainerValue]]
+        type ExtractionResult = dict[str, bool | list[dict[str, t.ContainerValue]]]
+        type ExtractionMetrics = dict[str, int | float | dict[str, t.ContainerValue]]
+        type ExtractionState = dict[str, str | int | dict[str, t.ContainerValue]]
 
     class StreamProcessing:
         """Stream processing complex types."""
 
-        type StreamConfiguration = dict[str, str | bool | int | dict[str, object]]
-        type StreamMetadata = dict[str, str | dict[str, object]]
-        type StreamRecord = dict[str, object | dict[str, object]]
-        type StreamState = dict[str, str | int | dict[str, object]]
-        type StreamBookmark = dict[str, str | int | dict[str, object]]
-        type StreamSchema = dict[str, str | dict[str, object] | bool]
+        type StreamConfiguration = dict[
+            str, str | bool | int | dict[str, t.ContainerValue]
+        ]
+        type StreamMetadata = dict[str, str | dict[str, t.ContainerValue]]
+        type StreamRecord = dict[str, object | dict[str, t.ContainerValue]]
+        type StreamState = dict[str, str | int | dict[str, t.ContainerValue]]
+        type StreamBookmark = dict[str, str | int | dict[str, t.ContainerValue]]
+        type StreamSchema = dict[str, str | dict[str, t.ContainerValue] | bool]
 
     class FileHandling:
         """File handling complex types."""
 
-        type FileConfiguration = dict[str, str | int | bool | dict[str, object]]
+        type FileConfiguration = dict[
+            str, str | int | bool | dict[str, t.ContainerValue]
+        ]
         type FileValidation = dict[str, bool | str | int | list[str]]
-        type FileProcessing = dict[str, str | int | dict[str, object]]
-        type FileBatching = dict[str, int | bool | dict[str, object]]
-        type FileMonitoring = dict[str, bool | int | dict[str, object]]
-        type FileMetrics = dict[str, int | float | dict[str, object]]
+        type FileProcessing = dict[str, str | int | dict[str, t.ContainerValue]]
+        type FileBatching = dict[str, int | bool | dict[str, t.ContainerValue]]
+        type FileMonitoring = dict[str, bool | int | dict[str, t.ContainerValue]]
+        type FileMetrics = dict[str, int | float | dict[str, t.ContainerValue]]
 
     class ErrorHandling:
         """Error handling complex types."""
 
-        type ErrorConfiguration = dict[str, bool | str | int | dict[str, object]]
-        type ErrorRecovery = dict[str, str | bool | dict[str, object]]
-        type ErrorReporting = dict[str, str | int | dict[str, object]]
-        type ErrorClassification = dict[str, str | int | dict[str, object]]
-        type ErrorMetrics = dict[str, int | float | dict[str, object]]
-        type ErrorTracking = list[dict[str, str | int | dict[str, object]]]
+        type ErrorConfiguration = dict[
+            str, bool | str | int | dict[str, t.ContainerValue]
+        ]
+        type ErrorRecovery = dict[str, str | bool | dict[str, t.ContainerValue]]
+        type ErrorReporting = dict[str, str | int | dict[str, t.ContainerValue]]
+        type ErrorClassification = dict[str, str | int | dict[str, t.ContainerValue]]
+        type ErrorMetrics = dict[str, int | float | dict[str, t.ContainerValue]]
+        type ErrorTracking = list[dict[str, str | int | dict[str, t.ContainerValue]]]
 
     class Project:
         """Singer Tap LDIF-specific project types.
@@ -117,10 +131,10 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
             "ldif-integration",
             "singer-integration",
         ]
-        type SingerTapLdifProjectConfig = dict[str, object]
+        type SingerTapLdifProjectConfig = dict[str, t.ContainerValue]
         type LdifExtractorConfig = dict[str, str | int | bool | list[str]]
-        type SingerProtocolConfig = dict[str, bool | str | dict[str, object]]
-        type TapLdifPipelineConfig = dict[str, object]
+        type SingerProtocolConfig = dict[str, bool | str | dict[str, t.ContainerValue]]
+        type TapLdifPipelineConfig = dict[str, t.ContainerValue]
 
 
 t = FlextTapLdifTypes
