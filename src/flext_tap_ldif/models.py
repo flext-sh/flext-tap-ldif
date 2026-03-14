@@ -10,7 +10,7 @@ from collections.abc import Mapping
 from datetime import UTC, datetime
 from typing import Annotated, Self
 
-from flext_core import FlextConstants, u
+from flext_core import FlextConstants, t, u
 from flext_ldif import FlextLdifModels
 from flext_meltano import FlextMeltanoModels
 from pydantic import (
@@ -132,17 +132,17 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
     @field_serializer("*", when_used="json")
     def serialize_with_ldif_metadata(
         self,
-        value: object,
+        value: t.NormalizedValue,
         _info: FieldSerializationInfo,
-    ) -> object:
+    ) -> t.ContainerValue:
         """Add Singer LDIF tap metadata to all serialized fields."""
         if u.is_dict_like(value):
-            value_dict: dict[str, str] = {}
+            value_dict: dict[str, t.ContainerValue] = {}
             if isinstance(value, m.ConfigMap):
                 value_dict = {str(k): str(v) for k, v in value.root.items()}
-            elif isinstance(value, Mapping):
+            else:
                 value_dict = {str(k): str(v) for k, v in value.items()}
-            metadata_dict: dict[str, object] = dict(value_dict)
+            metadata_dict: dict[str, t.ContainerValue] = dict(value_dict)
             metadata_dict["_ldif_tap_metadata"] = {
                 "extraction_timestamp": datetime.now(UTC).isoformat(),
                 "tap_type": "ldif_file_extractor",
@@ -166,7 +166,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
                     "tap_name": "flext-tap-ldif",
                 },
             }
-        return value
+        return str(value)
 
     @model_validator(mode="after")
     def validate_ldif_tap_system_consistency(self) -> Self:

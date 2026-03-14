@@ -12,7 +12,7 @@ from collections.abc import Iterable, Mapping
 from pathlib import Path
 from typing import override
 
-from flext_core import FlextLogger, u
+from flext_core import FlextLogger, t
 from singer_sdk.streams import Stream
 from singer_sdk.tap_base import Tap
 
@@ -22,6 +22,8 @@ from flext_tap_ldif.ldif_processor import (
 )
 
 logger = FlextLogger(__name__)
+
+type StreamRecordValue = str | int | list[str] | Mapping[str, list[str]]
 
 
 class LDIFEntriesStream(Stream):
@@ -38,7 +40,7 @@ class LDIFEntriesStream(Stream):
         super().__init__(tap, name="ldif_entries", schema=self._get_schema())
         self._processor = FlextLdifProcessorWrapper(dict(tap.config))
         self._tap: Tap = tap
-        cfg: dict[str, object] = dict(tap.config)
+        cfg: dict[str, t.ContainerValue] = dict(tap.config)
         if not cfg.get("file_path") and (not cfg.get("directory_path")):
             fd, path = tempfile.mkstemp(suffix=".ldif")
             os.close(fd)
@@ -73,8 +75,8 @@ class LDIFEntriesStream(Stream):
 
     @override
     def get_records(
-        self, context: Mapping[str, object] | None = None
-    ) -> Iterable[dict[str, object]]:
+        self, context: Mapping[str, t.ContainerValue] | None = None
+    ) -> Iterable[dict[str, StreamRecordValue]]:
         """Return a generator of record-type dictionary objects.
 
         Args:
@@ -85,16 +87,16 @@ class LDIFEntriesStream(Stream):
 
         """
         _ = context
-        config: dict[str, object] = dict(self._tap.config)
+        config: dict[str, t.ContainerValue] = dict(self._tap.config)
         sample_path = getattr(self, "_sample_file_path", None)
         if sample_path:
             config["file_path"] = sample_path
         dir_path_raw = config.get("directory_path")
-        dir_path = str(dir_path_raw) if u.is_type(dir_path_raw, str) else None
+        dir_path = dir_path_raw if isinstance(dir_path_raw, str) else None
         pattern_raw = config.get("file_pattern", "*.ldif")
-        pattern = str(pattern_raw) if u.is_type(pattern_raw, str) else "*.ldif"
+        pattern = pattern_raw if isinstance(pattern_raw, str) else "*.ldif"
         fp_raw = config.get("file_path")
-        fp_val = str(fp_raw) if u.is_type(fp_raw, str) else None
+        fp_val = fp_raw if isinstance(fp_raw, str) else None
         max_size_raw = config.get("max_file_size_mb", c.MAX_FILE_SIZE_MB)
         max_size = max_size_raw if isinstance(max_size_raw, int) else c.MAX_FILE_SIZE_MB
         files_result = self._processor.discover_files(
@@ -141,7 +143,7 @@ class LDIFEntriesStream(Stream):
                     yield dict(record)
             except (RuntimeError, ValueError, TypeError) as e:
                 if config.get("strict_parsing", True):
-                    logger.exception("Error processing file %s", file_path)
+                    logger.exception(f"Error processing file {file_path}")
                     raise
                 else:
                     err_msg = str(e)
@@ -150,7 +152,7 @@ class LDIFEntriesStream(Stream):
                     )
                     continue
 
-    def _get_schema(self) -> dict[str, object]:
+    def _get_schema(self) -> dict[str, t.ContainerValue]:
         """Get schema for LDIF entries."""
         return {
             "type": "object",

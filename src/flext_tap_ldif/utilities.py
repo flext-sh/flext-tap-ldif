@@ -91,7 +91,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @staticmethod
         def create_state_message(
-            state: Mapping[str, object],
+            state: Mapping[str, t.NormalizedValue],
         ) -> m.Meltano.SingerStateMessage:
             """Create Singer state message from state data.
 
@@ -157,7 +157,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
         @staticmethod
         def extract_ldif_metadata(
             file_path: Path,
-        ) -> r[Mapping[str, object]]:
+        ) -> r[Mapping[str, t.NormalizedValue]]:
             """Extract metadata from LDIF file.
 
             Args:
@@ -188,7 +188,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         elif line.startswith("objectClass:"):
                             obj_class = line.split(":", 1)[1].strip()
                             object_classes.add(obj_class)
-                metadata: dict[str, object] = {
+                metadata: dict[str, t.NormalizedValue] = {
                     "file_path": str(file_path),
                     "file_size": file_path.stat().st_size,
                     "version": version,
@@ -196,7 +196,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     "base_dns": list(base_dns),
                     "object_classes": list(object_classes),
                 }
-                return r[Mapping[str, object]].ok(metadata)
+                return r[Mapping[str, t.NormalizedValue]].ok(metadata)
             except (
                 ValueError,
                 TypeError,
@@ -206,7 +206,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 RuntimeError,
                 ImportError,
             ) as e:
-                return r[Mapping[str, object]].fail(
+                return r[Mapping[str, t.NormalizedValue]].fail(
                     f"Error extracting LDIF metadata: {e}"
                 )
 
@@ -423,8 +423,8 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @staticmethod
         def validate_ldif_config(
-            config: Mapping[str, object],
-        ) -> r[Mapping[str, object]]:
+            config: Mapping[str, t.NormalizedValue],
+        ) -> r[Mapping[str, t.NormalizedValue]]:
             """Validate LDIF tap configuration.
 
             Args:
@@ -437,50 +437,58 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             required_fields = ["files"]
             missing_fields = [field for field in required_fields if field not in config]
             if missing_fields:
-                return r[Mapping[str, object]].fail(
+                return r[Mapping[str, t.NormalizedValue]].fail(
                     f"Missing required fields: {', '.join(missing_fields)}"
                 )
             files = config["files"]
             if not u.is_list(files):
-                return r[Mapping[str, object]].fail("Files must be a list")
+                return r[Mapping[str, t.NormalizedValue]].fail("Files must be a list")
             if not files:
-                return r[Mapping[str, object]].fail(
+                return r[Mapping[str, t.NormalizedValue]].fail(
                     "At least one file must be specified"
                 )
             for file_path in files:
                 if not u.is_type(file_path, str):
-                    return r[Mapping[str, object]].fail("File paths must be strings")
+                    return r[Mapping[str, t.NormalizedValue]].fail(
+                        "File paths must be strings"
+                    )
                 path_obj = (
                     Path(file_path)
                     if isinstance(file_path, str)
                     else Path(str(file_path))
                 )
                 if not path_obj.exists():
-                    return r[Mapping[str, object]].fail(
+                    return r[Mapping[str, t.NormalizedValue]].fail(
                         f"File does not exist: {file_path}"
                     )
-            return r[Mapping[str, object]].ok(config)
+            return r[Mapping[str, t.NormalizedValue]].ok(config)
 
     class StateManagement:
         """State management utilities for incremental syncs."""
 
         @staticmethod
         def _is_str_object_mapping(
-            value: Mapping[object, object] | object,
-        ) -> TypeGuard[Mapping[str, object]]:
+            value: Mapping[t.NormalizedValue, t.NormalizedValue]
+            | t.NormalizedValue
+            | None,
+        ) -> TypeGuard[Mapping[str, t.NormalizedValue]]:
             return isinstance(value, Mapping)
 
         @classmethod
         def _is_nested_state_mapping(
             cls,
-            value: Mapping[object, object] | object,
-        ) -> TypeGuard[Mapping[str, Mapping[str, object]]]:
+            value: Mapping[t.NormalizedValue, t.NormalizedValue]
+            | t.NormalizedValue
+            | None,
+        ) -> TypeGuard[Mapping[str, Mapping[str, t.NormalizedValue]]]:
             if not cls._is_str_object_mapping(value):
                 return False
             return all(cls._is_str_object_mapping(item) for item in value.values())
 
         @staticmethod
-        def get_file_position(state: Mapping[str, object], file_path: str) -> int:
+        def get_file_position(
+            state: Mapping[str, t.NormalizedValue], file_path: str
+        ) -> int:
             """Get current position in file.
 
             Args:
@@ -499,8 +507,8 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @classmethod
         def get_file_state(
-            cls, state: Mapping[str, object], file_path: str
-        ) -> Mapping[str, object]:
+            cls, state: Mapping[str, t.NormalizedValue], file_path: str
+        ) -> Mapping[str, t.NormalizedValue]:
             """Get state for a specific file.
 
             Args:
@@ -521,8 +529,8 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @staticmethod
         def set_file_position(
-            state: Mapping[str, object], file_path: str, position: int
-        ) -> Mapping[str, object]:
+            state: Mapping[str, t.NormalizedValue], file_path: str, position: int
+        ) -> Mapping[str, t.NormalizedValue]:
             """Set current position in file.
 
             Args:
@@ -537,7 +545,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             file_state = FlextTapLdifUtilities.StateManagement.get_file_state(
                 state, file_path
             )
-            file_state_dict: dict[str, object] = dict(file_state)
+            file_state_dict: dict[str, t.NormalizedValue] = dict(file_state)
             file_state_dict["position"] = position
             file_state_dict["last_updated"] = datetime.now(UTC).isoformat()
             return FlextTapLdifUtilities.StateManagement.set_file_state(
@@ -547,10 +555,10 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
         @classmethod
         def set_file_state(
             cls,
-            state: Mapping[str, object],
+            state: Mapping[str, t.NormalizedValue],
             file_path: str,
-            file_state: Mapping[str, object],
-        ) -> Mapping[str, object]:
+            file_state: Mapping[str, t.NormalizedValue],
+        ) -> Mapping[str, t.NormalizedValue]:
             """Set state for a specific file.
 
             Args:
@@ -563,12 +571,12 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
             """
             files_raw = state.get("files")
-            files_dict: dict[str, dict[str, object]] = {}
+            files_dict: dict[str, t.NormalizedValue] = {}
             if cls._is_nested_state_mapping(files_raw):
                 for key, value in files_raw.items():
                     files_dict[key] = dict(value)
             files_dict[file_path] = dict(file_state)
-            updated_state: dict[str, object] = dict(state)
+            updated_state: dict[str, t.NormalizedValue] = dict(state)
             updated_state["files"] = files_dict
             return updated_state
 
@@ -606,8 +614,8 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
     @classmethod
     def get_file_state(
-        cls, state: Mapping[str, object], file_path: str
-    ) -> Mapping[str, object]:
+        cls, state: Mapping[str, t.NormalizedValue], file_path: str
+    ) -> Mapping[str, t.NormalizedValue]:
         """Proxy method for StateManagement.get_file_state()."""
         return cls.StateManagement.get_file_state(state, file_path)
 
@@ -618,15 +626,15 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
     @classmethod
     def set_file_position(
-        cls, state: Mapping[str, object], file_path: str, position: int
-    ) -> Mapping[str, object]:
+        cls, state: Mapping[str, t.NormalizedValue], file_path: str, position: int
+    ) -> Mapping[str, t.NormalizedValue]:
         """Proxy method for StateManagement.set_file_position()."""
         return cls.StateManagement.set_file_position(state, file_path, position)
 
     @classmethod
     def validate_ldif_config(
-        cls, config: Mapping[str, object]
-    ) -> r[Mapping[str, object]]:
+        cls, config: Mapping[str, t.NormalizedValue]
+    ) -> r[Mapping[str, t.NormalizedValue]]:
         """Proxy method for ConfigValidation.validate_ldif_config()."""
         return cls.ConfigValidation.validate_ldif_config(config)
 

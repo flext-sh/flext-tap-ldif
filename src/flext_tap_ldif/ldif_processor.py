@@ -128,7 +128,7 @@ class FlextLdifProcessor:
                         c.EntrySchema.ENTRY_SIZE_FIELD: len(str(entry).encode("utf-8")),
                     }
         except (RuntimeError, ValueError, TypeError):
-            logger.exception("Failed to process LDIF file: %s", file_path)
+            logger.exception(f"Failed to process LDIF file: {file_path}")
             if self.config.get("strict_parsing", True):
                 raise
 

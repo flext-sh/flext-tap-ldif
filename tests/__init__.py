@@ -10,21 +10,20 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
 
-if TYPE_CHECKING:
-    from models import m as tm
-    from protocols import p
-    from typings import t as tt
-    from utilities import u
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "p": ("protocols", "p"),
     "tm": ("models", "m"),
     "tt": ("typings", "t"),
     "u": ("utilities", "u"),
 }
+p: Any
+tm: Any
+tt: Any
+u: Any
 __all__ = ["p", "tm", "tt", "u"]
 
 
