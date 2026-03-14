@@ -6,52 +6,89 @@ SPDX-License-Identifier: MIT.
 
 from __future__ import annotations
 
-from flext_core import FlextLogger, FlextModels, FlextResult
+from typing import TYPE_CHECKING, Any
 
-from flext_tap_ldif.__version__ import __version__, __version_info__
-from flext_tap_ldif.ldif_processor import (
-    FlextLdifProcessor,
-    FlextLdifProcessorWrapper,
-    LDIFProcessor,
-)
-from flext_tap_ldif.models import FlextMeltanoTapLdifModels, m, m_tap_ldif
-from flext_tap_ldif.protocols import FlextMeltanoTapLdifProtocols
-from flext_tap_ldif.settings import (
-    FlextMeltanoTapLdifSettings,
-    FlextMeltanoTapLdifSettings as FlextMeltanoTapLDIFSettings,
-    FlextMeltanoTapLdifSettings as TapConfig,
-    FlextMeltanoTapLdifSettings as TapLDIFConfig,
-)
-from flext_tap_ldif.streams import LDIFEntriesStream
-from flext_tap_ldif.tap import (
-    TapLDIF,
-    TapLDIF as FlextMeltanoTapLDIF,
-    TapLDIF as LDIFTap,
-    TapLDIF as LegacyTapLDIF,
-)
-from flext_tap_ldif.utilities import FlextMeltanoTapLdifUtilities
+from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
+
+if TYPE_CHECKING:
+    from flext_core import FlextLogger, FlextModels, r
+
+    from flext_tap_ldif.__version__ import __version__, __version_info__
+    from flext_tap_ldif.constants import (
+        FlextTapLdifConstants,
+        FlextTapLdifConstants as c,
+    )
+    from flext_tap_ldif.ldif_processor import FlextLdifProcessor
+    from flext_tap_ldif.models import FlextTapLdifModels, FlextTapLdifModels as m
+    from flext_tap_ldif.protocols import (
+        FlextTapLdifProtocols,
+        FlextTapLdifProtocols as p,
+    )
+    from flext_tap_ldif.settings import FlextTapLdifSettings
+    from flext_tap_ldif.streams import LDIFEntriesStream
+    from flext_tap_ldif.tap import TapLDIF
+    from flext_tap_ldif.typings import FlextTapLdifTypes, FlextTapLdifTypes as t
+    from flext_tap_ldif.utilities import (
+        FlextTapLdifUtilities,
+        FlextTapLdifUtilities as u,
+    )
+
+# Lazy import mapping: export_name -> (module_path, attr_name)
+_LAZY_IMPORTS: dict[str, tuple[str, str]] = {
+    "FlextLdifProcessor": ("flext_tap_ldif.ldif_processor", "FlextLdifProcessor"),
+    "FlextLogger": ("flext_core", "FlextLogger"),
+    "FlextModels": ("flext_core", "FlextModels"),
+    "r": ("flext_core", "r"),
+    "FlextTapLdifConstants": ("flext_tap_ldif.constants", "FlextTapLdifConstants"),
+    "FlextTapLdifModels": ("flext_tap_ldif.models", "FlextTapLdifModels"),
+    "FlextTapLdifProtocols": ("flext_tap_ldif.protocols", "FlextTapLdifProtocols"),
+    "FlextTapLdifSettings": ("flext_tap_ldif.settings", "FlextTapLdifSettings"),
+    "FlextTapLdifTypes": ("flext_tap_ldif.typings", "FlextTapLdifTypes"),
+    "FlextTapLdifUtilities": ("flext_tap_ldif.utilities", "FlextTapLdifUtilities"),
+    "LDIFEntriesStream": ("flext_tap_ldif.streams", "LDIFEntriesStream"),
+    "TapLDIF": ("flext_tap_ldif.tap", "TapLDIF"),
+    "__version__": ("flext_tap_ldif.__version__", "__version__"),
+    "__version_info__": ("flext_tap_ldif.__version__", "__version_info__"),
+    "c": ("flext_tap_ldif.constants", "FlextTapLdifConstants"),
+    "m": ("flext_tap_ldif.models", "FlextTapLdifModels"),
+    "p": ("flext_tap_ldif.protocols", "FlextTapLdifProtocols"),
+    "t": ("flext_tap_ldif.typings", "FlextTapLdifTypes"),
+    "u": ("flext_tap_ldif.utilities", "FlextTapLdifUtilities"),
+}
 
 __all__ = [
     "FlextLdifProcessor",
-    "FlextLdifProcessorWrapper",
     "FlextLogger",
-    "FlextMeltanoTapLDIF",
-    "FlextMeltanoTapLDIFSettings",
-    "FlextMeltanoTapLdifModels",
-    "FlextMeltanoTapLdifProtocols",
-    "FlextMeltanoTapLdifSettings",
-    "FlextMeltanoTapLdifUtilities",
     "FlextModels",
-    "FlextResult",
+    "FlextTapLdifConstants",
+    "FlextTapLdifModels",
+    "FlextTapLdifProtocols",
+    "FlextTapLdifSettings",
+    "FlextTapLdifTypes",
+    "FlextTapLdifUtilities",
     "LDIFEntriesStream",
-    "LDIFProcessor",
-    "LDIFTap",
-    "LegacyTapLDIF",
-    "TapConfig",
     "TapLDIF",
-    "TapLDIFConfig",
     "__version__",
     "__version_info__",
+    "c",
     "m",
-    "m_tap_ldif",
+    "p",
+    "r",
+    "t",
+    "u",
 ]
+
+
+def __getattr__(
+    name: str,
+) -> Any:  # JUSTIFIED: Ruff (any-type) with PEP 562 dynamic module exports — https://docs.astral.sh/ruff/rules/any-type/
+    """Lazy-load module attributes on first access (PEP 562)."""
+    return lazy_getattr(name, _LAZY_IMPORTS, globals(), __name__)
+
+
+def __dir__() -> list[str]:
+    """Return list of available attributes for dir() and autocomplete."""
+    return sorted(__all__)
+
+
+cleanup_submodule_namespace(__name__, _LAZY_IMPORTS)

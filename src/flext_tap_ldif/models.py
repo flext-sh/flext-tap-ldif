@@ -6,11 +6,13 @@ This module provides data models for LDIF tap operations.
 from __future__ import annotations
 
 import base64
+from collections.abc import Mapping
 from datetime import UTC, datetime
-from typing import ClassVar, Self
+from typing import Annotated, Self
 
-from flext_core import FlextConstants, FlextTypes as t
-from flext_core.utilities import u
+from flext_core import FlextConstants, t, u
+from flext_ldif import FlextLdifModels
+from flext_meltano import FlextMeltanoModels
 from pydantic import (
     BaseModel,
     ConfigDict,
@@ -21,10 +23,8 @@ from pydantic import (
     model_validator,
 )
 
-from flext_tap_ldif.utilities import FlextMeltanoTapLdifUtilities
 
-
-class FlextMeltanoTapLdifModels(BaseModel):
+class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
     """Complete models for LDIF tap operations using Pydantic BaseModel.
 
     Provides standardized models for all LDIF tap domain entities including:
@@ -38,14 +38,6 @@ class FlextMeltanoTapLdifModels(BaseModel):
     All nested classes use Pydantic BaseModel validation and patterns.
     Consolidates ALL models for LDIF file extraction and processing.
     """
-
-    def __init_subclass__(cls, **kwargs: object) -> None:
-        """Warn when FlextMeltanoTapLdifModels is subclassed directly."""
-        super().__init_subclass__(**kwargs)
-        u.Deprecation.warn_once(
-            f"subclass:{cls.__name__}",
-            "Subclassing FlextMeltanoTapLdifModels is deprecated. Use composition with BaseModel instead.",
-        )
 
     # Pydantic 2.11 Configuration - Enterprise Singer LDIF Tap Features
     model_config = ConfigDict(
@@ -90,10 +82,10 @@ class FlextMeltanoTapLdifModels(BaseModel):
             "LdifRecord",
             "LdifValidationResult",
         ]
-        return sum(1 for attr in model_attrs if hasattr(self, attr))
+        return sum(1 for attr in model_attrs if getattr(self, attr, None) is not None)
 
     @computed_field
-    def ldif_tap_system_summary(self) -> dict[str, t.GeneralValueType]:
+    def ldif_tap_system_summary(self) -> Mapping[str, t.ContainerValue]:
         """Complete Singer LDIF tap system summary with file processing capabilities."""
         total_models = sum(
             1
@@ -108,7 +100,7 @@ class FlextMeltanoTapLdifModels(BaseModel):
                 "LdifRecord",
                 "LdifValidationResult",
             ]
-            if hasattr(self, attr)
+            if getattr(self, attr, None) is not None
         )
         return {
             "total_models": total_models,
@@ -137,57 +129,35 @@ class FlextMeltanoTapLdifModels(BaseModel):
             },
         }
 
-    @model_validator(mode="after")
-    def validate_ldif_tap_system_consistency(self) -> Self:
-        """Validate Singer LDIF tap system consistency and configuration."""
-        # Singer LDIF tap file validation
-        if (
-            hasattr(self, "_ldif_files")
-            and self._ldif_files
-            and not hasattr(self, "LdifFile")
-        ):
-            msg = "LdifFile model required when LDIF files configured"
-            raise ValueError(msg)
-
-        # LDIF processing validation
-        if (
-            hasattr(self, "_batch_processing")
-            and self._batch_processing
-            and not hasattr(self, "LdifBatch")
-        ):
-            msg = "LdifBatch model required for batch processing"
-            raise ValueError(msg)
-
-        # Singer protocol compliance validation
-        if hasattr(self, "_singer_mode") and self._singer_mode:
-            required_models = ["LdifStream", "LdifRecord", "LdifProcessingState"]
-            for model in required_models:
-                if not hasattr(self, model):
-                    msg = f"{model} required for Singer protocol compliance"
-                    raise ValueError(msg)
-
-        return self
-
     @field_serializer("*", when_used="json")
     def serialize_with_ldif_metadata(
         self,
-        value: object,
+        value: t.NormalizedValue,
         _info: FieldSerializationInfo,
-    ) -> object:
+    ) -> t.ContainerValue:
         """Add Singer LDIF tap metadata to all serialized fields."""
-        if isinstance(value, dict):
-            return {
-                **value,
-                "_ldif_tap_metadata": {
-                    "extraction_timestamp": datetime.now(UTC).isoformat(),
-                    "tap_type": "ldif_file_extractor",
-                    "singer_protocol": "v1.0",
-                    "data_source": "ldif_files",
-                },
+        if u.is_dict_like(value):
+            value_dict: dict[str, t.ContainerValue] = {}
+            if isinstance(value, m.ConfigMap):
+                value_dict = {str(k): str(v) for k, v in value.root.items()}
+            else:
+                value_dict = {str(k): str(v) for k, v in value.items()}
+            metadata_dict: dict[str, t.ContainerValue] = dict(value_dict)
+            metadata_dict["_ldif_tap_metadata"] = {
+                "extraction_timestamp": datetime.now(UTC).isoformat(),
+                "tap_type": "ldif_file_extractor",
+                "singer_protocol": "v1.0",
+                "data_source": "ldif_files",
             }
-        if isinstance(value, (str, int, float, bool)) and hasattr(
-            self,
-            "_include_ldif_metadata",
+            return metadata_dict
+        if (
+            isinstance(value, (str, int, float, bool))
+            and getattr(
+                self,
+                "_include_ldif_metadata",
+                None,
+            )
+            is not None
         ):
             return {
                 "value": value,
@@ -196,19 +166,65 @@ class FlextMeltanoTapLdifModels(BaseModel):
                     "tap_name": "flext-tap-ldif",
                 },
             }
-        return value
+        return str(value)
 
-    # Legacy type aliases for backward compatibility
-    LdifRecord: ClassVar[type] = dict[str, t.GeneralValueType]
-    LdifRecords: ClassVar[type] = list[LdifRecord]
+    @model_validator(mode="after")
+    def validate_ldif_tap_system_consistency(self) -> Self:
+        """Validate Singer LDIF tap system consistency and configuration."""
+        # Singer LDIF tap file validation
+        if (
+            getattr(self, "_ldif_files", None)
+            and getattr(self, "LdifFile", None) is None
+        ):
+            msg = "LdifFile model required when LDIF files configured"
+            raise ValueError(msg)
+
+        # LDIF processing validation
+        if (
+            getattr(self, "_batch_processing", None)
+            and getattr(self, "LdifBatch", None) is None
+        ):
+            msg = "LdifBatch model required for batch processing"
+            raise ValueError(msg)
+
+        # Singer protocol compliance validation
+        if getattr(self, "_singer_mode", None):
+            required_models = ["LdifStream", "LdifRecord", "LdifProcessingState"]
+            for model in required_models:
+                if getattr(self, model, None) is None:
+                    msg = f"{model} required for Singer protocol compliance"
+                    raise ValueError(msg)
+
+        return self
 
     class TapLdif:
         """Utility functions for LDIF data processing."""
 
         @staticmethod
-        def parse_dn(dn: str) -> dict[str, str]:
+        def decode_base64_value(value: str) -> str:
+            """Decode base64 encoded LDIF value."""
+            try:
+                return base64.b64decode(value).decode("utf-8")
+            except (
+                ValueError,
+                TypeError,
+                KeyError,
+                AttributeError,
+                OSError,
+                RuntimeError,
+                ImportError,
+            ):
+                return value
+
+        @staticmethod
+        def normalize_attribute_name(name: str) -> str:
+            """Normalize LDIF attribute name."""
+            return name.lower().strip()
+
+        @staticmethod
+        def parse_dn(dn: str) -> Mapping[str, str]:
             """Parse Distinguished Name into components."""
-            components = {}
+            components: dict[str, str] = {}
             parts = dn.split(",")
             for part in parts:
                 if "=" in part:
@@ -222,19 +238,6 @@ class FlextMeltanoTapLdifModels(BaseModel):
             if not line or line.startswith("#"):
                 return True  # Comment or empty line
             return ":" in line or line.startswith(" ")
-
-        @staticmethod
-        def decode_base64_value(value: str) -> str:
-            """Decode base64 encoded LDIF value."""
-            try:
-                return base64.b64decode(value).decode("utf-8")
-            except Exception:
-                return value
-
-        @staticmethod
-        def normalize_attribute_name(name: str) -> str:
-            """Normalize LDIF attribute name."""
-            return name.lower().strip()
 
     class LdifEntry(BaseModel):
         """Represents an LDIF entry with complete parsing support."""
@@ -255,40 +258,62 @@ class FlextMeltanoTapLdifModels(BaseModel):
             },
         )
 
-        dn: str = Field(..., description="Distinguished Name")
-        attributes: dict[str, list[str]] = Field(
-            default_factory=dict,
-            description="Entry attributes",
-        )
-        object_classes: list[str] = Field(
-            default_factory=list,
-            description="Object classes",
-        )
+        dn: Annotated[str, Field(..., description="Distinguished Name")]
+        attributes: Annotated[
+            dict[str, list[str]],
+            Field(
+                default_factory=dict,
+                description="Entry attributes",
+            ),
+        ]
+        object_classes: Annotated[
+            list[str],
+            Field(
+                default_factory=list,
+                description="Object classes",
+            ),
+        ]
 
         # LDIF metadata
-        line_number: int = Field(
-            default=0,
-            description="Source line number in LDIF file",
-        )
-        source_file: str | None = Field(
-            default=None,
-            description="Source LDIF file path",
-        )
-        entry_type: str = Field(default="entry", description="Type of LDIF entry")
+        line_number: Annotated[
+            int,
+            Field(
+                default=0,
+                description="Source line number in LDIF file",
+            ),
+        ]
+        source_file: Annotated[
+            str | None,
+            Field(
+                default=None,
+                description="Source LDIF file path",
+            ),
+        ]
+        entry_type: Annotated[
+            str, Field(default="entry", description="Type of LDIF entry")
+        ]
 
         # Processing metadata
-        extracted_at: datetime = Field(
-            default_factory=lambda: datetime.now(UTC),
-            description="Extraction timestamp",
-        )
-        processed: bool = Field(default=False, description="Processing status")
-        validation_errors: list[str] = Field(
-            default_factory=list,
-            description="Validation errors",
-        )
+        extracted_at: Annotated[
+            datetime,
+            Field(
+                default_factory=lambda: datetime.now(UTC),
+                description="Extraction timestamp",
+            ),
+        ]
+        processed: Annotated[
+            bool, Field(default=False, description="Processing status")
+        ]
+        validation_errors: Annotated[
+            list[str],
+            Field(
+                default_factory=list,
+                description="Validation errors",
+            ),
+        ]
 
         @computed_field
-        def ldif_entry_summary(self) -> dict[str, t.GeneralValueType]:
+        def ldif_entry_summary(self) -> Mapping[str, t.ContainerValue]:
             """LDIF entry analysis summary."""
             return {
                 "dn": self.dn,
@@ -302,19 +327,6 @@ class FlextMeltanoTapLdifModels(BaseModel):
                 "source_location": {"file": self.source_file, "line": self.line_number},
             }
 
-        @model_validator(mode="after")
-        def validate_ldif_entry(self) -> Self:
-            """Validate LDIF entry structure."""
-            if not self.dn:
-                msg = "DN cannot be empty"
-                raise ValueError(msg)
-
-            # Validate object classes are in attributes
-            if self.object_classes and "objectClass" not in self.attributes:
-                self.attributes["objectClass"] = self.object_classes
-
-            return self
-
         def get_attribute_values(self, name: str) -> list[str]:
             """Get attribute values by name (case-insensitive)."""
             normalized_name = name.lower()
@@ -327,6 +339,19 @@ class FlextMeltanoTapLdifModels(BaseModel):
             """Get first attribute value by name."""
             values = self.get_attribute_values(name)
             return values[0] if values else None
+
+        @model_validator(mode="after")
+        def validate_ldif_entry(self) -> Self:
+            """Validate LDIF entry structure."""
+            if not self.dn:
+                msg = "DN cannot be empty"
+                raise ValueError(msg)
+
+            # Validate object classes are in attributes
+            if self.object_classes and "objectClass" not in self.attributes:
+                self.attributes["objectClass"] = self.object_classes
+
+            return self
 
     class LdifChangeRecord(BaseModel):
         """Represents an LDIF change record for modify operations."""
@@ -348,37 +373,56 @@ class FlextMeltanoTapLdifModels(BaseModel):
             },
         )
 
-        dn: str = Field(..., description="Distinguished Name")
-        change_type: str = Field(
-            ...,
-            description="Type of change (add, modify, delete, modrdn)",
-        )
-        changes: list[dict[str, t.GeneralValueType]] = Field(
-            default_factory=list,
-            description="List of changes",
-        )
+        dn: Annotated[str, Field(..., description="Distinguished Name")]
+        change_type: Annotated[
+            str,
+            Field(
+                ...,
+                description="Type of change (add, modify, delete, modrdn)",
+            ),
+        ]
+        changes: Annotated[
+            list[dict[str, str]],
+            Field(
+                default_factory=lambda: list[dict[str, str]](),
+                description="List of changes",
+            ),
+        ]
 
         # Change metadata
-        changetype: str | None = Field(
-            default=None,
-            description="LDIF changetype directive",
-        )
-        line_number: int = Field(default=0, description="Source line number")
-        source_file: str | None = Field(default=None, description="Source LDIF file")
+        changetype: Annotated[
+            str | None,
+            Field(
+                default=None,
+                description="LDIF changetype directive",
+            ),
+        ]
+        line_number: Annotated[int, Field(default=0, description="Source line number")]
+        source_file: Annotated[
+            str | None, Field(default=None, description="Source LDIF file")
+        ]
 
         # Processing metadata
-        extracted_at: datetime = Field(
-            default_factory=lambda: datetime.now(UTC),
-            description="Extraction timestamp",
-        )
-        applied: bool = Field(default=False, description="Change application status")
-        application_errors: list[str] = Field(
-            default_factory=list,
-            description="Application errors",
-        )
+        extracted_at: Annotated[
+            datetime,
+            Field(
+                default_factory=lambda: datetime.now(UTC),
+                description="Extraction timestamp",
+            ),
+        ]
+        applied: Annotated[
+            bool, Field(default=False, description="Change application status")
+        ]
+        application_errors: Annotated[
+            list[str],
+            Field(
+                default_factory=list,
+                description="Application errors",
+            ),
+        ]
 
         @computed_field
-        def change_record_summary(self) -> dict[str, t.GeneralValueType]:
+        def change_record_summary(self) -> Mapping[str, t.ContainerValue]:
             """LDIF change record summary."""
             return {
                 "dn": self.dn,
@@ -423,52 +467,77 @@ class FlextMeltanoTapLdifModels(BaseModel):
             },
         )
 
-        file_path: str = Field(..., description="Path to LDIF file")
-        file_size: int = Field(default=0, description="File size in bytes")
-        encoding: str = Field(default="utf-8", description="File encoding")
+        file_path: Annotated[str, Field(..., description="Path to LDIF file")]
+        file_size: Annotated[int, Field(default=0, description="File size in bytes")]
+        encoding: Annotated[str, Field(default="utf-8", description="File encoding")]
 
         # File metadata
-        created_at: datetime | None = Field(
-            default=None,
-            description="File creation time",
-        )
-        modified_at: datetime | None = Field(
-            default=None,
-            description="File modification time",
-        )
+        created_at: Annotated[
+            datetime | None,
+            Field(
+                default=None,
+                description="File creation time",
+            ),
+        ]
+        modified_at: Annotated[
+            datetime | None,
+            Field(
+                default=None,
+                description="File modification time",
+            ),
+        ]
 
         # Processing statistics
-        total_lines: int = Field(default=0, description="Total lines in file")
-        entry_count: int = Field(default=0, description="Number of entries")
-        change_record_count: int = Field(
-            default=0,
-            description="Number of change records",
-        )
-        comment_lines: int = Field(default=0, description="Number of comment lines")
+        total_lines: Annotated[int, Field(default=0, description="Total lines in file")]
+        entry_count: Annotated[int, Field(default=0, description="Number of entries")]
+        change_record_count: Annotated[
+            int,
+            Field(
+                default=0,
+                description="Number of change records",
+            ),
+        ]
+        comment_lines: Annotated[
+            int, Field(default=0, description="Number of comment lines")
+        ]
 
         # Processing state
-        processing_status: str = Field(
-            default="pending",
-            description="Processing status",
-        )
-        last_processed_line: int = Field(
-            default=0,
-            description="Last processed line number",
-        )
-        processing_errors: list[str] = Field(
-            default_factory=list,
-            description="Processing errors",
-        )
+        processing_status: Annotated[
+            str,
+            Field(
+                default="pending",
+                description="Processing status",
+            ),
+        ]
+        last_processed_line: Annotated[
+            int,
+            Field(
+                default=0,
+                description="Last processed line number",
+            ),
+        ]
+        processing_errors: Annotated[
+            list[str],
+            Field(
+                default_factory=list,
+                description="Processing errors",
+            ),
+        ]
 
         # Validation results
-        is_valid_ldif: bool = Field(default=True, description="LDIF format validity")
-        validation_errors: list[str] = Field(
-            default_factory=list,
-            description="Format validation errors",
-        )
+        is_valid_ldif: Annotated[
+            bool, Field(default=True, description="LDIF format validity")
+        ]
+        validation_errors: Annotated[
+            list[str],
+            Field(
+                default_factory=list,
+                description="Format validation errors",
+            ),
+        ]
 
         @computed_field
-        def ldif_file_summary(self) -> dict[str, t.GeneralValueType]:
+        def ldif_file_summary(self) -> Mapping[str, t.ContainerValue]:
             """LDIF file processing summary."""
             progress = 0.0
             if self.total_lines > 0:
@@ -524,46 +593,67 @@ class FlextMeltanoTapLdifModels(BaseModel):
             },
         )
 
-        stream_name: str = Field(..., description="Singer stream name")
-        file_path: str = Field(..., description="LDIF file path")
+        stream_name: Annotated[str, Field(..., description="Singer stream name")]
+        file_path: Annotated[str, Field(..., description="LDIF file path")]
 
         # Singer stream configuration
-        tap_stream_id: str = Field(..., description="Singer tap stream ID")
-        replication_method: str = Field(
-            default="FULL_TABLE",
-            description="Replication method",
-        )
-        key_properties: list[str] = Field(
-            default_factory=lambda: ["dn"],
-            description="Key properties",
-        )
+        tap_stream_id: Annotated[str, Field(..., description="Singer tap stream ID")]
+        replication_method: Annotated[
+            str,
+            Field(
+                default="FULL_TABLE",
+                description="Replication method",
+            ),
+        ]
+        key_properties: Annotated[
+            list[str],
+            Field(
+                default_factory=lambda: ["dn"],
+                description="Key properties",
+            ),
+        ]
 
         # LDIF-specific settings
-        include_change_records: bool = Field(
-            default=True,
-            description="Include LDIF change records",
-        )
-        filter_object_classes: list[str] = Field(
-            default_factory=list,
-            description="Filter by object classes",
-        )
-        batch_size: int = Field(
-            default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE,
-            description="Processing batch size",
-        )
+        include_change_records: Annotated[
+            bool,
+            Field(
+                default=True,
+                description="Include LDIF change records",
+            ),
+        ]
+        filter_object_classes: Annotated[
+            list[str],
+            Field(
+                default_factory=list,
+                description="Filter by object classes",
+            ),
+        ]
+        batch_size: Annotated[
+            int,
+            Field(
+                default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE,
+                description="Processing batch size",
+            ),
+        ]
 
         # Stream schema
-        schema: dict[str, t.GeneralValueType] = Field(
-            default_factory=dict,
-            description="JSON schema",
-        )
-        metadata: list[dict[str, t.GeneralValueType]] = Field(
-            default_factory=list,
-            description="Stream metadata",
-        )
+        stream_schema: Annotated[
+            dict[str, t.ContainerValue],
+            Field(
+                default_factory=dict,
+                description="JSON schema",
+            ),
+        ]
+        stream_metadata: Annotated[
+            list[dict[str, str]],
+            Field(
+                default_factory=lambda: list[dict[str, str]](),
+                description="Stream metadata",
+            ),
+        ]
 
         @computed_field
-        def ldif_stream_summary(self) -> dict[str, t.GeneralValueType]:
+        def ldif_stream_summary(self) -> Mapping[str, t.ContainerValue]:
             """LDIF stream configuration summary."""
             return {
                 "stream_id": self.tap_stream_id,
@@ -577,7 +667,7 @@ class FlextMeltanoTapLdifModels(BaseModel):
                     "object_class_filters": len(self.filter_object_classes),
                     "has_filters": bool(self.filter_object_classes),
                 },
-                "has_schema": bool(self.schema),
+                "has_schema": bool(self.stream_schema),
             }
 
         @model_validator(mode="after")
@@ -611,51 +701,82 @@ class FlextMeltanoTapLdifModels(BaseModel):
             },
         )
 
-        batch_id: str = Field(..., description="Unique batch identifier")
-        file_paths: list[str] = Field(..., description="List of LDIF files to process")
-        batch_size: int = Field(
-            default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE,
-            description="Processing batch size",
-        )
+        batch_id: Annotated[str, Field(..., description="Unique batch identifier")]
+        file_paths: Annotated[
+            list[str], Field(..., description="List of LDIF files to process")
+        ]
+        batch_size: Annotated[
+            int,
+            Field(
+                default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE,
+                description="Processing batch size",
+            ),
+        ]
 
         # Processing configuration
-        parallel_processing: bool = Field(
-            default=False,
-            description="Enable parallel processing",
-        )
-        max_workers: int = Field(default=4, description="Maximum worker threads")
-        error_threshold: int = Field(
-            default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE // 10,
-            description="Maximum errors before stopping",
-        )
+        parallel_processing: Annotated[
+            bool,
+            Field(
+                default=False,
+                description="Enable parallel processing",
+            ),
+        ]
+        max_workers: Annotated[
+            int, Field(default=4, description="Maximum worker threads")
+        ]
+        error_threshold: Annotated[
+            int,
+            Field(
+                default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE // 10,
+                description="Maximum errors before stopping",
+            ),
+        ]
 
         # Batch state
-        status: str = Field(default="pending", description="Batch processing status")
-        started_at: datetime | None = Field(
-            default=None,
-            description="Batch start time",
-        )
-        completed_at: datetime | None = Field(
-            default=None,
-            description="Batch completion time",
-        )
+        status: Annotated[
+            str, Field(default="pending", description="Batch processing status")
+        ]
+        started_at: Annotated[
+            datetime | None,
+            Field(
+                default=None,
+                description="Batch start time",
+            ),
+        ]
+        completed_at: Annotated[
+            datetime | None,
+            Field(
+                default=None,
+                description="Batch completion time",
+            ),
+        ]
 
         # Processing metrics
-        files_processed: int = Field(default=0, description="Number of files processed")
-        entries_processed: int = Field(default=0, description="Total entries processed")
-        errors_encountered: int = Field(
-            default=0,
-            description="Total errors encountered",
-        )
+        files_processed: Annotated[
+            int, Field(default=0, description="Number of files processed")
+        ]
+        entries_processed: Annotated[
+            int, Field(default=0, description="Total entries processed")
+        ]
+        errors_encountered: Annotated[
+            int,
+            Field(
+                default=0,
+                description="Total errors encountered",
+            ),
+        ]
 
         # Error tracking
-        file_errors: dict[str, list[str]] = Field(
-            default_factory=dict,
-            description="Errors by file",
-        )
+        file_errors: Annotated[
+            dict[str, list[str]],
+            Field(
+                default_factory=dict,
+                description="Errors by file",
+            ),
+        ]
 
         @computed_field
-        def batch_processing_summary(self) -> dict[str, t.GeneralValueType]:
+        def batch_processing_summary(self) -> Mapping[str, t.ContainerValue]:
             """LDIF batch processing summary."""
             duration = 0.0
             if self.started_at and self.completed_at:
@@ -718,51 +839,80 @@ class FlextMeltanoTapLdifModels(BaseModel):
             },
         )
 
-        file_path: str = Field(..., description="LDIF file being processed")
-        processing_status: str = Field(
-            default="pending",
-            description="Processing status",
-        )
+        file_path: Annotated[str, Field(..., description="LDIF file being processed")]
+        processing_status: Annotated[
+            str,
+            Field(
+                default="pending",
+                description="Processing status",
+            ),
+        ]
 
         # Progress tracking
-        current_line: int = Field(default=0, description="Current line being processed")
-        entries_processed: int = Field(default=0, description="Entries processed")
-        change_records_processed: int = Field(
-            default=0,
-            description="Change records processed",
-        )
+        current_line: Annotated[
+            int, Field(default=0, description="Current line being processed")
+        ]
+        entries_processed: Annotated[
+            int, Field(default=0, description="Entries processed")
+        ]
+        change_records_processed: Annotated[
+            int,
+            Field(
+                default=0,
+                description="Change records processed",
+            ),
+        ]
 
         # Timing information
-        started_at: datetime | None = Field(
-            default=None,
-            description="Processing start time",
-        )
-        last_update: datetime = Field(
-            default_factory=lambda: datetime.now(UTC),
-            description="Last state update",
-        )
-        estimated_completion: datetime | None = Field(
-            default=None,
-            description="Estimated completion time",
-        )
+        started_at: Annotated[
+            datetime | None,
+            Field(
+                default=None,
+                description="Processing start time",
+            ),
+        ]
+        last_update: Annotated[
+            datetime,
+            Field(
+                default_factory=lambda: datetime.now(UTC),
+                description="Last state update",
+            ),
+        ]
+        estimated_completion: Annotated[
+            datetime | None,
+            Field(
+                default=None,
+                description="Estimated completion time",
+            ),
+        ]
 
         # Error tracking
-        processing_errors: list[dict[str, t.GeneralValueType]] = Field(
-            default_factory=list,
-            description="Processing errors with context",
-        )
-        recoverable_errors: int = Field(
-            default=0,
-            description="Recoverable error count",
-        )
-        fatal_errors: int = Field(default=0, description="Fatal error count")
+        processing_errors: Annotated[
+            list[dict[str, str]],
+            Field(
+                default_factory=lambda: list[dict[str, str]](),
+                description="Processing errors with context",
+            ),
+        ]
+        recoverable_errors: Annotated[
+            int,
+            Field(
+                default=0,
+                description="Recoverable error count",
+            ),
+        ]
+        fatal_errors: Annotated[int, Field(default=0, description="Fatal error count")]
 
         # Performance metrics
-        processing_rate: float = Field(default=0.0, description="Entries per second")
-        memory_usage: int = Field(default=0, description="Memory usage in bytes")
+        processing_rate: Annotated[
+            float, Field(default=0.0, description="Entries per second")
+        ]
+        memory_usage: Annotated[
+            int, Field(default=0, description="Memory usage in bytes")
+        ]
 
         @computed_field
-        def processing_progress_summary(self) -> dict[str, t.GeneralValueType]:
+        def processing_progress_summary(self) -> Mapping[str, t.ContainerValue]:
             """LDIF processing progress summary."""
             total_errors = self.recoverable_errors + self.fatal_errors
             duration = 0.0
@@ -827,54 +977,87 @@ class FlextMeltanoTapLdifModels(BaseModel):
         )
 
         # File configuration
-        ldif_directory: str | None = Field(
-            default=None,
-            description="LDIF files directory",
-        )
-        file_patterns: list[str] = Field(
-            default_factory=lambda: ["*.ldif"],
-            description="LDIF file patterns",
-        )
-        recursive_search: bool = Field(
-            default=False,
-            description="Recursive directory search",
-        )
+        ldif_directory: Annotated[
+            str | None,
+            Field(
+                default=None,
+                description="LDIF files directory",
+            ),
+        ]
+        file_patterns: Annotated[
+            list[str],
+            Field(
+                default_factory=lambda: ["*.ldif"],
+                description="LDIF file patterns",
+            ),
+        ]
+        recursive_search: Annotated[
+            bool,
+            Field(
+                default=False,
+                description="Recursive directory search",
+            ),
+        ]
 
         # Processing configuration
-        batch_size: int = Field(
-            default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE,
-            description="Processing batch size",
-        )
-        parallel_processing: bool = Field(
-            default=False,
-            description="Enable parallel processing",
-        )
-        max_workers: int = Field(default=4, description="Maximum worker threads")
+        batch_size: Annotated[
+            int,
+            Field(
+                default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE,
+                description="Processing batch size",
+            ),
+        ]
+        parallel_processing: Annotated[
+            bool,
+            Field(
+                default=False,
+                description="Enable parallel processing",
+            ),
+        ]
+        max_workers: Annotated[
+            int, Field(default=4, description="Maximum worker threads")
+        ]
 
         # Error handling
-        continue_on_error: bool = Field(
-            default=True,
-            description="Continue processing on errors",
-        )
-        max_errors: int = Field(
-            default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE,
-            description="Maximum errors before stopping",
-        )
-        error_file: str | None = Field(default=None, description="Error output file")
+        continue_on_error: Annotated[
+            bool,
+            Field(
+                default=True,
+                description="Continue processing on errors",
+            ),
+        ]
+        max_errors: Annotated[
+            int,
+            Field(
+                default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE,
+                description="Maximum errors before stopping",
+            ),
+        ]
+        error_file: Annotated[
+            str | None, Field(default=None, description="Error output file")
+        ]
 
         # Output configuration
-        output_format: str = Field(default="jsonl", description="Output format")
-        include_metadata: bool = Field(
-            default=True,
-            description="Include processing metadata",
-        )
-        compress_output: bool = Field(
-            default=False,
-            description="Compress output files",
-        )
+        output_format: Annotated[
+            str, Field(default="jsonl", description="Output format")
+        ]
+        include_metadata: Annotated[
+            bool,
+            Field(
+                default=True,
+                description="Include processing metadata",
+            ),
+        ]
+        compress_output: Annotated[
+            bool,
+            Field(
+                default=False,
+                description="Compress output files",
+            ),
+        ]
 
         @computed_field
-        def tap_config_summary(self) -> dict[str, t.GeneralValueType]:
+        def tap_config_summary(self) -> Mapping[str, t.ContainerValue]:
             """LDIF tap configuration summary."""
             return {
                 "source": {
@@ -913,28 +1096,42 @@ class FlextMeltanoTapLdifModels(BaseModel):
     class LdifRecord(BaseModel):
         """Individual LDIF record for Singer output."""
 
-        stream: str = Field(..., description="Source stream name")
-        record: dict[str, t.GeneralValueType] = Field(
-            ..., description="LDIF record data"
-        )
-        record_type: str = Field(default="entry", description="Type of LDIF record")
+        stream: Annotated[str, Field(..., description="Source stream name")]
+        record: Annotated[
+            dict[str, t.ContainerValue],
+            Field(
+                ...,
+                description="LDIF record data",
+            ),
+        ]
+        record_type: Annotated[
+            str, Field(default="entry", description="Type of LDIF record")
+        ]
 
         # Source metadata
-        source_file: str | None = Field(default=None, description="Source LDIF file")
-        line_number: int = Field(default=0, description="Source line number")
+        source_file: Annotated[
+            str | None, Field(default=None, description="Source LDIF file")
+        ]
+        line_number: Annotated[int, Field(default=0, description="Source line number")]
 
         # Extraction metadata
-        time_extracted: datetime = Field(
-            default_factory=lambda: datetime.now(UTC),
-            description="Extraction timestamp",
-        )
-        processing_time: float = Field(
-            default=0.0,
-            description="Processing time in seconds",
-        )
+        time_extracted: Annotated[
+            datetime,
+            Field(
+                default_factory=lambda: datetime.now(UTC),
+                description="Extraction timestamp",
+            ),
+        ]
+        processing_time: Annotated[
+            float,
+            Field(
+                default=0.0,
+                description="Processing time in seconds",
+            ),
+        ]
 
         @computed_field
-        def ldif_record_summary(self) -> dict[str, t.GeneralValueType]:
+        def ldif_record_summary(self) -> Mapping[str, t.ContainerValue]:
             """LDIF record analysis summary."""
             return {
                 "stream": self.stream,
@@ -961,33 +1158,50 @@ class FlextMeltanoTapLdifModels(BaseModel):
     class LdifValidationResult(BaseModel):
         """LDIF validation result with detailed error reporting."""
 
-        file_path: str = Field(..., description="Validated LDIF file path")
-        is_valid: bool = Field(..., description="Overall validation result")
+        file_path: Annotated[str, Field(..., description="Validated LDIF file path")]
+        is_valid: Annotated[bool, Field(..., description="Overall validation result")]
 
         # Validation results
-        validation_errors: list[dict[str, t.GeneralValueType]] = Field(
-            default_factory=list,
-            description="Validation errors with details",
-        )
-        warnings: list[dict[str, t.GeneralValueType]] = Field(
-            default_factory=list,
-            description="Validation warnings",
-        )
+        validation_errors: Annotated[
+            list[dict[str, str]],
+            Field(
+                default_factory=lambda: list[dict[str, str]](),
+                description="Validation errors with details",
+            ),
+        ]
+        warnings: Annotated[
+            list[dict[str, str]],
+            Field(
+                default_factory=lambda: list[dict[str, str]](),
+                description="Validation warnings",
+            ),
+        ]
 
         # Statistics
-        total_entries: int = Field(default=0, description="Total entries validated")
-        valid_entries: int = Field(default=0, description="Valid entries count")
-        invalid_entries: int = Field(default=0, description="Invalid entries count")
+        total_entries: Annotated[
+            int, Field(default=0, description="Total entries validated")
+        ]
+        valid_entries: Annotated[
+            int, Field(default=0, description="Valid entries count")
+        ]
+        invalid_entries: Annotated[
+            int, Field(default=0, description="Invalid entries count")
+        ]
 
         # Validation metadata
-        validation_time: float = Field(
-            default=0.0,
-            description="Validation time in seconds",
-        )
-        validator_version: str = Field(default="1.0", description="Validator version")
+        validation_time: Annotated[
+            float,
+            Field(
+                default=0.0,
+                description="Validation time in seconds",
+            ),
+        ]
+        validator_version: Annotated[
+            str, Field(default="1.0", description="Validator version")
+        ]
 
         @computed_field
-        def validation_summary(self) -> dict[str, t.GeneralValueType]:
+        def validation_summary(self) -> Mapping[str, t.ContainerValue]:
             """LDIF validation complete summary."""
             success_rate = 0.0
             if self.total_entries > 0:
@@ -1033,47 +1247,82 @@ class FlextMeltanoTapLdifModels(BaseModel):
         """Performance metrics for LDIF tap operations."""
 
         # File processing metrics
-        files_processed: int = Field(default=0, description="Number of files processed")
-        total_file_size: int = Field(default=0, description="Total file size in bytes")
-        average_file_size: float = Field(default=0.0, description="Average file size")
+        files_processed: Annotated[
+            int, Field(default=0, description="Number of files processed")
+        ]
+        total_file_size: Annotated[
+            int, Field(default=0, description="Total file size in bytes")
+        ]
+        average_file_size: Annotated[
+            float, Field(default=0.0, description="Average file size")
+        ]
 
         # Entry processing metrics
-        total_entries: int = Field(default=0, description="Total entries processed")
-        entries_per_file: float = Field(
-            default=0.0,
-            description="Average entries per file",
-        )
-        processing_rate: float = Field(default=0.0, description="Entries per second")
+        total_entries: Annotated[
+            int, Field(default=0, description="Total entries processed")
+        ]
+        entries_per_file: Annotated[
+            float,
+            Field(
+                default=0.0,
+                description="Average entries per file",
+            ),
+        ]
+        processing_rate: Annotated[
+            float, Field(default=0.0, description="Entries per second")
+        ]
 
         # Time metrics
-        total_processing_time: float = Field(
-            default=0.0,
-            description="Total processing time",
-        )
-        average_processing_time: float = Field(
-            default=0.0,
-            description="Average time per file",
-        )
-        parsing_time: float = Field(default=0.0, description="Time spent parsing")
-        validation_time: float = Field(default=0.0, description="Time spent validating")
+        total_processing_time: Annotated[
+            float,
+            Field(
+                default=0.0,
+                description="Total processing time",
+            ),
+        ]
+        average_processing_time: Annotated[
+            float,
+            Field(
+                default=0.0,
+                description="Average time per file",
+            ),
+        ]
+        parsing_time: Annotated[
+            float, Field(default=0.0, description="Time spent parsing")
+        ]
+        validation_time: Annotated[
+            float, Field(default=0.0, description="Time spent validating")
+        ]
 
         # Quality metrics
-        successful_files: int = Field(
-            default=0,
-            description="Successfully processed files",
-        )
-        failed_files: int = Field(default=0, description="Failed file processing")
-        total_errors: int = Field(default=0, description="Total processing errors")
+        successful_files: Annotated[
+            int,
+            Field(
+                default=0,
+                description="Successfully processed files",
+            ),
+        ]
+        failed_files: Annotated[
+            int, Field(default=0, description="Failed file processing")
+        ]
+        total_errors: Annotated[
+            int, Field(default=0, description="Total processing errors")
+        ]
 
         # Resource metrics
-        peak_memory_usage: int = Field(
-            default=0,
-            description="Peak memory usage in bytes",
-        )
-        average_memory_usage: int = Field(default=0, description="Average memory usage")
+        peak_memory_usage: Annotated[
+            int,
+            Field(
+                default=0,
+                description="Peak memory usage in bytes",
+            ),
+        ]
+        average_memory_usage: Annotated[
+            int, Field(default=0, description="Average memory usage")
+        ]
 
         @computed_field
-        def performance_analysis_summary(self) -> dict[str, t.GeneralValueType]:
+        def performance_analysis_summary(self) -> Mapping[str, t.ContainerValue]:
             """LDIF tap performance analysis summary."""
             success_rate = 0.0
             if self.files_processed > 0:
@@ -1123,22 +1372,7 @@ class FlextMeltanoTapLdifModels(BaseModel):
             return self
 
 
-# Zero Tolerance CONSOLIDATION - FlextMeltanoTapLdifUtilities moved to utilities.py
-#
-# Critical: FlextMeltanoTapLdifUtilities was DUPLICATED between models.py and utilities.py.
-# This was a Zero Tolerance violation of the user's explicit requirements.
-#
-# Note: FlextMeltanoTapLdifUtilities imported at top for proper organization
-
-
 # Short aliases
-m = FlextMeltanoTapLdifModels
-m_tap_ldif = FlextMeltanoTapLdifModels
+m = FlextTapLdifModels
 
-# Public API exports following FLEXT standardized patterns
-__all__ = [
-    "FlextMeltanoTapLdifModels",  # Unified models class
-    "FlextMeltanoTapLdifUtilities",  # Standardized [Project]Utilities pattern
-    "m",  # Short alias
-    "m_tap_ldif",  # Domain-specific alias
-]
+__all__ = ["FlextTapLdifModels", "m"]

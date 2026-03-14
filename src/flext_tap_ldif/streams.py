@@ -6,30 +6,31 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+import os
 import tempfile
 from collections.abc import Iterable, Mapping
 from pathlib import Path
 from typing import override
 
-from flext_core import FlextLogger, FlextTypes as t
+from flext_core import FlextLogger, t
+from singer_sdk.streams import Stream
+from singer_sdk.tap_base import Tap
 
-# Use FLEXT Meltano wrappers instead of direct singer_sdk imports (domain separation)
-from flext_meltano import FlextMeltanoStream as Stream
-from flext_meltano.protocols import FlextMeltanoProtocols
-from flext_meltano.typings import t as t_meltano
-
-from flext_tap_ldif.ldif_processor import FlextLdifProcessorWrapper
-
-TapProtocol = FlextMeltanoProtocols.Meltano.TapProtocol
+from flext_tap_ldif.constants import c
+from flext_tap_ldif.ldif_processor import (
+    FlextLdifProcessor as FlextLdifProcessorWrapper,
+)
 
 logger = FlextLogger(__name__)
+
+type StreamRecordValue = str | int | list[str] | Mapping[str, list[str]]
 
 
 class LDIFEntriesStream(Stream):
     """LDIF entries stream using flext-ldif for ALL processing."""
 
     @override
-    def __init__(self, tap: TapProtocol) -> None:
+    def __init__(self, tap: Tap) -> None:
         """Initialize LDIF entries stream.
 
         Args:
@@ -38,136 +39,133 @@ class LDIFEntriesStream(Stream):
         """
         super().__init__(tap, name="ldif_entries", schema=self._get_schema())
         self._processor = FlextLdifProcessorWrapper(dict(tap.config))
-        self._tap = tap
-        # Ensure a sample LDIF file exists in temp for default tests if none provided
-        cfg = dict[str, t.GeneralValueType](tap.config)
-        if not cfg.get("file_path") and not cfg.get("directory_path"):
-            # Singer SDK test harness may not pre-create the file; create a minimal one
-            _fd, path = tempfile.mkstemp(suffix=".ldif")
-            Path(path).write_text(
+        self._tap: Tap = tap
+        cfg: dict[str, t.ContainerValue] = dict(tap.config)
+        if not cfg.get("file_path") and (not cfg.get("directory_path")):
+            fd, path = tempfile.mkstemp(suffix=".ldif")
+            os.close(fd)
+            _ = Path(path).write_text(
                 "dn: cn=test,dc=example,dc=com\ncn: test\nobjectClass: top\n",
                 encoding="utf-8",
             )
-            # Avoid mutating possibly immutable Mapping; store override locally
             self._sample_file_path = path
         else:
-            # If a file path exists but is empty, seed with minimal valid content
             fp = cfg.get("file_path")
             if isinstance(fp, str):
                 file_path = Path(fp)
                 try:
                     if file_path.exists() and file_path.stat().st_size == 0:
-                        file_path.write_text(
+                        _ = file_path.write_text(
                             "dn: cn=test,dc=example,dc=com\ncn: test\nobjectClass: top\n",
                             encoding="utf-8",
                         )
-                except Exception as exc:  # Non-critical seeding failure
+                except (
+                    ValueError,
+                    TypeError,
+                    KeyError,
+                    AttributeError,
+                    OSError,
+                    RuntimeError,
+                    ImportError,
+                ) as exc:
+                    exc_msg = str(exc)
                     logger.warning(
-                        "Failed to seed LDIF file with sample content: %s",
-                        exc,
+                        "Failed to seed LDIF file with sample content: %s", exc_msg
                     )
 
-    def _get_schema(self) -> dict[str, t.GeneralValueType]:
-        """Get schema for LDIF entries."""
-        return t_meltano.Singer.Typing.PropertiesList(
-            t_meltano.Singer.Typing.Property(
-                "dn",
-                t_meltano.Singer.Typing.StringType,
-                description="Distinguished Name",
-            ),
-            t_meltano.Singer.Typing.Property(
-                "attributes",
-                t_meltano.Singer.Typing.ObjectType(),
-                description="Entry attributes",
-            ),
-            t_meltano.Singer.Typing.Property(
-                "object_class",
-                t_meltano.Singer.Typing.ArrayType(
-                    t_meltano.Singer.Typing.StringType,
-                ),
-                description="Object classes",
-            ),
-            t_meltano.Singer.Typing.Property(
-                "change_type",
-                t_meltano.Singer.Typing.StringType,
-                description="Change type",
-            ),
-            t_meltano.Singer.Typing.Property(
-                "source_file",
-                t_meltano.Singer.Typing.StringType,
-                description="Source file path",
-            ),
-            t_meltano.Singer.Typing.Property(
-                "line_number",
-                t_meltano.Singer.Typing.IntegerType,
-                description="Line number in file",
-            ),
-            t_meltano.Singer.Typing.Property(
-                "entry_size",
-                t_meltano.Singer.Typing.IntegerType,
-                description="Entry size in bytes",
-            ),
-        ).to_dict()
-
+    @override
     def get_records(
-        self,
-        _context: Mapping[str, t.GeneralValueType] | None = None,
-    ) -> Iterable[dict[str, t.GeneralValueType]]:
+        self, context: Mapping[str, t.ContainerValue] | None = None
+    ) -> Iterable[dict[str, StreamRecordValue]]:
         """Return a generator of record-type dictionary objects.
 
         Args:
-            _context: Stream partition or context dictionary.
+            context: Stream partition or context dictionary (unused).
 
         Yields:
             Dictionary representations of LDIF entries.
 
         """
-        config: dict[str, t.GeneralValueType] = dict[str, t.GeneralValueType](
-            self._tap.config
-        )
+        _ = context
+        config: dict[str, t.ContainerValue] = dict(self._tap.config)
         sample_path = getattr(self, "_sample_file_path", None)
         if sample_path:
             config["file_path"] = sample_path
-        # Use flext-ldif generic file discovery instead of duplicated logic
+        dir_path_raw = config.get("directory_path")
+        dir_path = dir_path_raw if isinstance(dir_path_raw, str) else None
+        pattern_raw = config.get("file_pattern", "*.ldif")
+        pattern = pattern_raw if isinstance(pattern_raw, str) else "*.ldif"
+        fp_raw = config.get("file_path")
+        fp_val = fp_raw if isinstance(fp_raw, str) else None
+        max_size_raw = config.get("max_file_size_mb", c.MAX_FILE_SIZE_MB)
+        max_size = max_size_raw if isinstance(max_size_raw, int) else c.MAX_FILE_SIZE_MB
         files_result = self._processor.discover_files(
-            directory_path=config.get("directory_path"),
-            file_pattern=config.get("file_pattern", "*.ldif"),
-            file_path=config.get("file_path"),
-            max_file_size_mb=config.get("max_file_size_mb", 100),
+            directory_path=dir_path,
+            file_pattern=pattern,
+            file_path=fp_val,
+            max_file_size_mb=max_size,
         )
         if files_result.is_failure:
-            logger.error("File discovery failed: %s", files_result.error)
-            # Fallback: if a single file_path was set but discovery failed, try it
+            logger.error("File discovery failed: %s", files_result.error or "")
             fp = config.get("file_path")
-            if fp and isinstance(fp, str):
+            if isinstance(fp, str):
                 try:
-                    yield from self._processor.process_file(Path(fp))
-                except Exception:
+                    for record in self._processor.process_file(Path(fp)):
+                        yield dict(record)
+                except (
+                    ValueError,
+                    TypeError,
+                    KeyError,
+                    AttributeError,
+                    OSError,
+                    RuntimeError,
+                    ImportError,
+                ):
                     return
             return
-        files_to_process = files_result.data or []
+        files_to_process = files_result.value or []
         logger.info("Processing %d LDIF files", len(files_to_process))
-        # If discovery returned no files but a file_path was provided, emit a synthetic record
         if not files_to_process:
             yield {
-                "dn": "cn=sample,dc=example,dc=com",
-                "attributes": {"cn": ["sample"]},
-                "object_class": ["top"],
-                "change_type": "None",
-                "source_file": "fp",
-                "line_number": 0,
-                "entry_size": 0,
+                c.EntrySchema.DN_FIELD: c.SampleEntry.DN,
+                c.EntrySchema.ATTRIBUTES_FIELD: c.SampleEntry.ATTRIBUTES,
+                c.EntrySchema.OBJECT_CLASS_FIELD: c.SampleEntry.OBJECT_CLASS,
+                c.EntrySchema.CHANGE_TYPE_FIELD: c.EntrySchema.DEFAULT_CHANGE_TYPE,
+                c.EntrySchema.SOURCE_FILE_FIELD: c.SampleEntry.SOURCE_FILE,
+                c.EntrySchema.LINE_NUMBER_FIELD: c.EntrySchema.DEFAULT_LINE_NUMBER,
+                c.EntrySchema.ENTRY_SIZE_FIELD: c.EntrySchema.DEFAULT_ENTRY_SIZE,
             }
             return
         for file_path in files_to_process:
             logger.info("Processing file: %s", file_path)
             try:
-                # Process the LDIF file and yield records
-                yield from self._processor.process_file(file_path)
+                for record in self._processor.process_file(file_path):
+                    yield dict(record)
             except (RuntimeError, ValueError, TypeError) as e:
                 if config.get("strict_parsing", True):
-                    logger.exception("Error processing file %s", file_path)
+                    logger.exception(f"Error processing file {file_path}")
                     raise
                 else:
-                    logger.warning("Skipping file %s due to error: %s", file_path, e)
+                    err_msg = str(e)
+                    logger.warning(
+                        "Skipping file %s due to error: %s", file_path, err_msg
+                    )
                     continue
+
+    def _get_schema(self) -> dict[str, t.ContainerValue]:
+        """Get schema for LDIF entries."""
+        return {
+            "type": "object",
+            "properties": {
+                c.EntrySchema.DN_FIELD: {"type": "string"},
+                c.EntrySchema.ATTRIBUTES_FIELD: {"type": "object"},
+                c.EntrySchema.OBJECT_CLASS_FIELD: {
+                    "type": "array",
+                    "items": {"type": "string"},
+                },
+                c.EntrySchema.CHANGE_TYPE_FIELD: {"type": "string"},
+                c.EntrySchema.SOURCE_FILE_FIELD: {"type": "string"},
+                c.EntrySchema.LINE_NUMBER_FIELD: {"type": "integer"},
+                c.EntrySchema.ENTRY_SIZE_FIELD: {"type": "integer"},
+            },
+        }

@@ -9,20 +9,19 @@ from __future__ import annotations
 
 from typing import Protocol, runtime_checkable
 
-from flext_core import FlextTypes as t
 from flext_tests import FlextTestsProtocols
 
 
-class TestsFlextMeltanoTapLdifProtocols(FlextTestsProtocols):
+class TestsFlextTapLdifProtocols(FlextTestsProtocols):
     """Protocols for flext-tap-ldif tests - uses composition with FlextTestsProtocols.
 
-    Architecture: Uses composition (not inheritance) with FlextTestsProtocols and FlextMeltanoTapLdifProtocols
+    Architecture: Uses composition (not inheritance) with FlextTestsProtocols and FlextTapLdifProtocols
     for flext-tap-ldif-specific protocol definitions.
 
     Access patterns:
-    - TestsFlextMeltanoTapLdifProtocols.Tests.* = flext_tests test protocols (via composition)
-    - TestsFlextMeltanoTapLdifProtocols.TapLdif.* = flext-tap-ldif-specific test protocols
-    - TestsFlextMeltanoTapLdifProtocols.* = FlextTestsProtocols protocols (via composition)
+    - TestsFlextTapLdifProtocols.Tests.* = flext_tests test protocols (via composition)
+    - TestsFlextTapLdifProtocols.TapLdif.* = flext-tap-ldif-specific test protocols
+    - TestsFlextTapLdifProtocols.* = FlextTestsProtocols protocols (via composition)
 
     Rules:
     - Use composition, not inheritance (FlextTestsProtocols deprecates subclassing)
@@ -30,10 +29,9 @@ class TestsFlextMeltanoTapLdifProtocols(FlextTestsProtocols):
     - Generic protocols accessed via Tests namespace
     """
 
-    # Composition: expose FlextTestsProtocols
-    Tests = FlextTestsProtocols
+    class Tests(FlextTestsProtocols.Tests):
+        """Project-specific test protocols."""
 
-    # TapLdif-specific test protocols namespace
     class TapLdif:
         """Tap LDIF test protocols - domain-specific for LDIF tap testing.
 
@@ -44,7 +42,7 @@ class TestsFlextMeltanoTapLdifProtocols(FlextTestsProtocols):
         """
 
         @runtime_checkable
-        class MockLdifFileProtocol(Protocol):
+        class MockLdifFile(Protocol):
             """Protocol for mock LDIF file operations in tests."""
 
             def open_file(self, file_path: str) -> bool:
@@ -55,15 +53,15 @@ class TestsFlextMeltanoTapLdifProtocols(FlextTestsProtocols):
                 """Close mock LDIF file."""
                 ...
 
-            def read_entries(self) -> list[dict[str, t.GeneralValueType]]:
+            def read_entries(self) -> list[dict[str, object]]:
                 """Read entries from mock LDIF file."""
                 ...
 
         @runtime_checkable
-        class TestLdifDataProviderProtocol(Protocol):
+        class TestLdifDataProvider(Protocol):
             """Protocol for test LDIF data providers."""
 
-            def get_test_entries(self) -> list[dict[str, t.GeneralValueType]]:
+            def get_test_entries(self) -> list[dict[str, object]]:
                 """Get test LDIF entries."""
                 ...
 
@@ -71,37 +69,30 @@ class TestsFlextMeltanoTapLdifProtocols(FlextTestsProtocols):
                 """Get test LDIF file content."""
                 ...
 
-            def get_test_config(self) -> dict[str, t.GeneralValueType]:
+            def get_test_config(self) -> dict[str, object]:
                 """Get test LDIF configuration."""
                 ...
 
         @runtime_checkable
-        class TestLdifAssertionProtocol(Protocol):
+        class TestLdifAssertion(Protocol):
             """Protocol for test LDIF assertions."""
 
-            def assert_ldif_file_parsed(
-                self, entries: list[dict[str, t.GeneralValueType]]
-            ) -> None:
+            def assert_ldif_file_parsed(self, entries: list[dict[str, object]]) -> None:
                 """Assert LDIF file was parsed correctly."""
                 ...
 
             def assert_ldif_entries_valid(
-                self, entries: list[dict[str, t.GeneralValueType]]
+                self, entries: list[dict[str, object]]
             ) -> None:
                 """Assert LDIF entries are valid."""
                 ...
 
             def assert_ldif_stream_config_valid(
-                self, stream: dict[str, t.GeneralValueType]
+                self, stream: dict[str, object]
             ) -> None:
                 """Assert LDIF stream configuration is valid."""
                 ...
 
 
-# Alias for simplified usage
-tp = TestsFlextMeltanoTapLdifProtocols
-
-__all__ = [
-    "TestsFlextMeltanoTapLdifProtocols",
-    "tp",
-]
+p = TestsFlextTapLdifProtocols
+__all__ = ["TestsFlextTapLdifProtocols", "p"]
