@@ -14,6 +14,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from typing import Literal
 
 from flext_ldif import FlextLdifTypes
@@ -139,3 +140,6 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
 
 t = FlextTapLdifTypes
 __all__ = ["FlextTapLdifTypes", "t"]
+
+
+type StreamRecordValue = str | int | list[str] | Mapping[str, list[str]]

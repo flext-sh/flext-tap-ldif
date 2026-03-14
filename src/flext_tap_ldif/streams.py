@@ -20,10 +20,9 @@ from flext_tap_ldif.constants import c
 from flext_tap_ldif.ldif_processor import (
     FlextLdifProcessor as FlextLdifProcessorWrapper,
 )
+from flext_tap_ldif.typings import StreamRecordValue
 
 logger = FlextLogger(__name__)
-
-type StreamRecordValue = str | int | list[str] | Mapping[str, list[str]]
 
 
 class LDIFEntriesStream(Stream):
