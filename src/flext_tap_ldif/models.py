@@ -138,7 +138,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         """Add Singer LDIF tap metadata to all serialized fields."""
         if u.is_dict_like(value):
             value_dict: dict[str, t.ContainerValue] = {}
-            if isinstance(value, m.ConfigMap):
+            if isinstance(value, t.ConfigMap):
                 value_dict = {str(k): str(v) for k, v in value.root.items()}
             else:
                 value_dict = {str(k): str(v) for k, v in value.items()}
