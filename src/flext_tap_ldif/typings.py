@@ -15,10 +15,11 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Literal
 
 from flext_ldif import FlextLdifTypes
 from flext_meltano import FlextMeltanoTypes
+
+from flext_tap_ldif import c
 
 
 class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
@@ -111,27 +112,7 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         Singer tap LDIF domain owns LDIF extraction and Singer protocol-specific types.
         """
 
-        type ProjectType = Literal[
-            "library",
-            "application",
-            "service",
-            "singer-tap",
-            "ldif-extractor",
-            "data-extractor",
-            "singer-tap-ldif",
-            "tap-ldif",
-            "ldif-connector",
-            "data-connector",
-            "singer-protocol",
-            "ldif-processor",
-            "file-extractor",
-            "ldif-parser",
-            "singer-stream",
-            "etl-tap",
-            "data-pipeline",
-            "ldif-integration",
-            "singer-integration",
-        ]
+        type ProjectType = c.ProjectType
         type SingerTapLdifProjectConfig = dict[str, t.ContainerValue]
         type LdifExtractorConfig = dict[str, str | int | bool | list[str]]
         type SingerProtocolConfig = dict[str, bool | str | dict[str, t.ContainerValue]]

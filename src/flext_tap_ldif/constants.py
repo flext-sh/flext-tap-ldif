@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from enum import StrEnum, unique
 from typing import ClassVar, Final
 
 from flext_core import FlextConstants
@@ -105,6 +106,45 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
         ATTRIBUTES: Final[dict[str, list[str]]] = {"cn": ["sample"]}
         OBJECT_CLASS: Final[list[str]] = ["top"]
         SOURCE_FILE: Final[str] = "fp"
+
+    @unique
+    class ProjectType(StrEnum):
+        LIBRARY = "library"
+        APPLICATION = "application"
+        SERVICE = "service"
+        SINGER_TAP = "singer-tap"
+        LDIF_EXTRACTOR = "ldif-extractor"
+        DATA_EXTRACTOR = "data-extractor"
+        SINGER_TAP_LDIF = "singer-tap-ldif"
+        TAP_LDIF = "tap-ldif"
+        LDIF_CONNECTOR = "ldif-connector"
+        DATA_CONNECTOR = "data-connector"
+        SINGER_PROTOCOL = "singer-protocol"
+        LDIF_PROCESSOR = "ldif-processor"
+        FILE_EXTRACTOR = "file-extractor"
+        LDIF_PARSER = "ldif-parser"
+        SINGER_STREAM = "singer-stream"
+        ETL_TAP = "etl-tap"
+        DATA_PIPELINE = "data-pipeline"
+        LDIF_INTEGRATION = "ldif-integration"
+        SINGER_INTEGRATION = "singer-integration"
+
+    @unique
+    class TestLdifFilePath(StrEnum):
+        TMP_TEST_LDIF = "/tmp/test.ldif"
+        TMP_SAMPLE_LDIF = "/tmp/sample.ldif"
+
+    @unique
+    class TestLdifEncoding(StrEnum):
+        UTF_8 = "utf-8"
+        ASCII = "ascii"
+        ISO_8859_1 = "iso-8859-1"
+
+    @unique
+    class TestObjectClass(StrEnum):
+        PERSON = "person"
+        ORGANIZATION = "organization"
+        GROUP_OF_NAMES = "groupOfNames"
 
 
 c = FlextTapLdifConstants

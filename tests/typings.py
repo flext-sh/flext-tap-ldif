@@ -7,11 +7,9 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import Literal
-
 from flext_tests import FlextTestsTypes
 
-from flext_tap_ldif import t
+from flext_tap_ldif import c, t
 
 
 class TestsFlextTapLdifTypes(FlextTestsTypes):
@@ -40,9 +38,9 @@ class TestsFlextTapLdifTypes(FlextTestsTypes):
         - Test scenario types
         """
 
-        type TestLdifFilePath = Literal["/tmp/test.ldif", "/tmp/sample.ldif"]
-        type TestLdifEncoding = Literal["utf-8", "ascii", "iso-8859-1"]
-        type TestObjectClass = Literal["person", "organization", "groupOfNames"]
+        type TestLdifFilePath = c.TestLdifFilePath
+        type TestLdifEncoding = c.TestLdifEncoding
+        type TestObjectClass = c.TestObjectClass
         type MockLdifEntry = dict[str, str | dict[str, list[str]]]
         type MockLdifFile = list[dict[str, str | dict[str, list[str]]]]
         type TestLdifScenario = dict[str, object]

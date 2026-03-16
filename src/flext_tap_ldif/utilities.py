@@ -11,7 +11,7 @@ import re
 from collections.abc import Mapping
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import TypeGuard, override
+from typing import TypeIs, override
 
 from flext_core import r, t
 from flext_ldif import FlextLdifUtilities
@@ -471,7 +471,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             value: Mapping[t.NormalizedValue, t.NormalizedValue]
             | t.NormalizedValue
             | None,
-        ) -> TypeGuard[Mapping[str, t.NormalizedValue]]:
+        ) -> TypeIs[Mapping[str, t.NormalizedValue]]:
             return isinstance(value, Mapping)
 
         @classmethod
@@ -480,7 +480,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             value: Mapping[t.NormalizedValue, t.NormalizedValue]
             | t.NormalizedValue
             | None,
-        ) -> TypeGuard[Mapping[str, Mapping[str, t.NormalizedValue]]]:
+        ) -> TypeIs[Mapping[str, Mapping[str, t.NormalizedValue]]]:
             if not cls._is_str_object_mapping(value):
                 return False
             return all(cls._is_str_object_mapping(item) for item in value.values())
