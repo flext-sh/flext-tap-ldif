@@ -109,6 +109,8 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
 
     @unique
     class ProjectType(StrEnum):
+        """Project type literals for tap package metadata."""
+
         LIBRARY = "library"
         APPLICATION = "application"
         SERVICE = "service"
@@ -131,17 +133,23 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
 
     @unique
     class TestLdifFilePath(StrEnum):
-        TMP_TEST_LDIF = "/tmp/test.ldif"
-        TMP_SAMPLE_LDIF = "/tmp/sample.ldif"
+        """Test LDIF file path literals."""
+
+        TMP_TEST_LDIF = "test.ldif"
+        TMP_SAMPLE_LDIF = "sample.ldif"
 
     @unique
     class TestLdifEncoding(StrEnum):
+        """Test LDIF encoding literals."""
+
         UTF_8 = "utf-8"
         ASCII = "ascii"
         ISO_8859_1 = "iso-8859-1"
 
     @unique
     class TestObjectClass(StrEnum):
+        """Test object class literals."""
+
         PERSON = "person"
         ORGANIZATION = "organization"
         GROUP_OF_NAMES = "groupOfNames"
