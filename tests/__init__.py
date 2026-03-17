@@ -20,7 +20,7 @@ from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
 if TYPE_CHECKING:
     from flext_core.typings import FlextTypes
 
-    from tests.conftest import (
+    from .conftest import (
         MockLDIFParser,
         MockLDIFTap,
         basic_tap_config,
@@ -49,15 +49,12 @@ if TYPE_CHECKING:
         singer_state,
         utf16_ldif_file,
     )
-    from tests.constants import (
-        TestsFlextTapLdifConstants,
-        TestsFlextTapLdifConstants as c,
-    )
-    from tests.models import TestsFlextTapLdifModels, m
-    from tests.protocols import TestsFlextTapLdifProtocols, p
-    from tests.test_tap import test_discover_streams
-    from tests.typings import TestsFlextTapLdifTypes, t, tt
-    from tests.utilities import TestsFlextTapLdifUtilities, u
+    from .constants import TestsFlextTapLdifConstants, TestsFlextTapLdifConstants as c
+    from .models import TestsFlextTapLdifModels, m
+    from .protocols import TestsFlextTapLdifProtocols, p
+    from .test_tap import test_discover_streams
+    from .typings import TestsFlextTapLdifTypes, t, tt
+    from .utilities import TestsFlextTapLdifUtilities, u
 
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "MockLDIFParser": ("tests.conftest", "MockLDIFParser"),
