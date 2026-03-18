@@ -49,7 +49,7 @@ if TYPE_CHECKING:
         singer_state,
         utf16_ldif_file,
     )
-    from .constants import TestsFlextTapLdifConstants, TestsFlextTapLdifConstants as c
+    from .constants import TestsFlextTapLdifConstants, c
     from .models import TestsFlextTapLdifModels, m
     from .protocols import TestsFlextTapLdifProtocols, p
     from .test_tap import test_discover_streams
@@ -68,7 +68,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "benchmark_config": ("tests.conftest", "benchmark_config"),
     "binary_ldif_content": ("tests.conftest", "binary_ldif_content"),
     "binary_ldif_file": ("tests.conftest", "binary_ldif_file"),
-    "c": ("tests.constants", "TestsFlextTapLdifConstants"),
+    "c": ("tests.constants", "c"),
     "changes_tap_config": ("tests.conftest", "changes_tap_config"),
     "directory_tap_config": ("tests.conftest", "directory_tap_config"),
     "docker_control": ("tests.conftest", "docker_control"),
