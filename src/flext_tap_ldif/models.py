@@ -85,7 +85,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         return sum(1 for attr in model_attrs if getattr(self, attr, None) is not None)
 
     @computed_field
-    def ldif_tap_system_summary(self) -> Mapping[str, t.ContainerValue]:
+    def ldif_tap_system_summary(self) -> Mapping[str, t.NormalizedValue]:
         """Complete Singer LDIF tap system summary with file processing capabilities."""
         total_models = sum(
             1
@@ -315,7 +315,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         ]
 
         @computed_field
-        def ldif_entry_summary(self) -> Mapping[str, t.ContainerValue]:
+        def ldif_entry_summary(self) -> Mapping[str, t.NormalizedValue]:
             """LDIF entry analysis summary."""
             return {
                 "dn": self.dn,
@@ -426,7 +426,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         ]
 
         @computed_field
-        def change_record_summary(self) -> Mapping[str, t.ContainerValue]:
+        def change_record_summary(self) -> Mapping[str, t.NormalizedValue]:
             """LDIF change record summary."""
             return {
                 "dn": self.dn,
@@ -543,7 +543,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         ]
 
         @computed_field
-        def ldif_file_summary(self) -> Mapping[str, t.ContainerValue]:
+        def ldif_file_summary(self) -> Mapping[str, t.NormalizedValue]:
             """LDIF file processing summary."""
             progress = 0.0
             if self.total_lines > 0:
@@ -659,7 +659,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         ]
 
         @computed_field
-        def ldif_stream_summary(self) -> Mapping[str, t.ContainerValue]:
+        def ldif_stream_summary(self) -> Mapping[str, t.NormalizedValue]:
             """LDIF stream configuration summary."""
             return {
                 "stream_id": self.tap_stream_id,
@@ -787,7 +787,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         ]
 
         @computed_field
-        def batch_processing_summary(self) -> Mapping[str, t.ContainerValue]:
+        def batch_processing_summary(self) -> Mapping[str, t.NormalizedValue]:
             """LDIF batch processing summary."""
             duration = 0.0
             if self.started_at and self.completed_at:
@@ -927,7 +927,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         ]
 
         @computed_field
-        def processing_progress_summary(self) -> Mapping[str, t.ContainerValue]:
+        def processing_progress_summary(self) -> Mapping[str, t.NormalizedValue]:
             """LDIF processing progress summary."""
             total_errors = self.recoverable_errors + self.fatal_errors
             duration = 0.0
@@ -1075,7 +1075,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         ]
 
         @computed_field
-        def tap_config_summary(self) -> Mapping[str, t.ContainerValue]:
+        def tap_config_summary(self) -> Mapping[str, t.NormalizedValue]:
             """LDIF tap configuration summary."""
             return {
                 "source": {
@@ -1151,7 +1151,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         ]
 
         @computed_field
-        def ldif_record_summary(self) -> Mapping[str, t.ContainerValue]:
+        def ldif_record_summary(self) -> Mapping[str, t.NormalizedValue]:
             """LDIF record analysis summary."""
             return {
                 "stream": self.stream,
@@ -1225,7 +1225,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         ]
 
         @computed_field
-        def validation_summary(self) -> Mapping[str, t.ContainerValue]:
+        def validation_summary(self) -> Mapping[str, t.NormalizedValue]:
             """LDIF validation complete summary."""
             success_rate = 0.0
             if self.total_entries > 0:
@@ -1356,7 +1356,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         ]
 
         @computed_field
-        def performance_analysis_summary(self) -> Mapping[str, t.ContainerValue]:
+        def performance_analysis_summary(self) -> Mapping[str, t.NormalizedValue]:
             """LDIF tap performance analysis summary."""
             success_rate = 0.0
             if self.files_processed > 0:
