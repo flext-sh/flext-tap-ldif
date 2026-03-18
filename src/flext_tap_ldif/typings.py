@@ -76,6 +76,7 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         ]
         type StreamMetadata = dict[str, str | dict[str, t.ContainerValue]]
         type StreamRecord = dict[str, object | dict[str, t.ContainerValue]]
+        type StreamRecordValue = str | int | list[str] | Mapping[str, list[str]]
         type StreamState = dict[str, str | int | dict[str, t.ContainerValue]]
         type StreamBookmark = dict[str, str | int | dict[str, t.ContainerValue]]
         type StreamSchema = dict[str, str | dict[str, t.ContainerValue] | bool]
@@ -120,7 +121,7 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
 
 
 t = FlextTapLdifTypes
-__all__ = ["FlextTapLdifTypes", "t"]
+__all__ = ["FlextTapLdifTypes", "StreamRecordValue", "t"]
 
-
-type StreamRecordValue = str | int | list[str] | Mapping[str, list[str]]
+# Module-level re-export for convenience
+StreamRecordValue = t.StreamProcessing.StreamRecordValue
