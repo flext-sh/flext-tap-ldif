@@ -10,14 +10,14 @@ import pytest
 
 
 @pytest.fixture(scope="session")
-def docker_control() -> FlextTestsDocker:
+def docker_control() -> tk:
     """Provide Docker control instance for tests."""
-    return FlextTestsDocker()
+    return tk()
 
 
 @pytest.fixture(scope="session")
-def shared_ldap_container(docker_control: FlextTestsDocker) -> Generator[str]:
-    """Managed LDAP container using FlextTestsDocker with auto-start."""
+def shared_ldap_container(docker_control: tk) -> Generator[str]:
+    """Managed LDAP container using tk with auto-start."""
     result = docker_control.start_existing_container("flext-openldap-test")
     if result.is_failure:
         pytest.skip(f"Failed to start LDAP container: {result.error}")

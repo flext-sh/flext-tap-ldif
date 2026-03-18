@@ -1,4 +1,4 @@
-"""Types for flext-tap-ldif tests - uses composition with FlextTestsTypes.
+"""Types for flext-tap-ldif tests - uses composition with t.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -12,19 +12,19 @@ from flext_tests import t
 from flext_tap_ldif import c, t
 
 
-class TestsFlextTapLdifTypes(FlextTestsTypes):
-    """Types for flext-tap-ldif tests - uses composition with FlextTestsTypes.
+class TestsFlextTapLdifTypes(t):
+    """Types for flext-tap-ldif tests - uses composition with t.
 
-    Architecture: Uses composition (not inheritance) with FlextTestsTypes and FlextTapLdifTypes
+    Architecture: Uses composition (not inheritance) with t and FlextTapLdifTypes
     for flext-tap-ldif-specific type definitions.
 
     Access patterns:
     - TestsFlextTapLdifTypes.Tests.* = flext_tests test types (via composition)
     - TestsFlextTapLdifTypes.TapLdif.* = flext-tap-ldif-specific test types
-    - TestsFlextTapLdifTypes.* = FlextTestsTypes types (via composition)
+    - TestsFlextTapLdifTypes.* = t types (via composition)
 
     Rules:
-    - Use composition, not inheritance (FlextTestsTypes deprecates subclassing)
+    - Use composition, not inheritance (t deprecates subclassing)
     - flext-tap-ldif-specific types go in TapLdif namespace
     - Generic types accessed via Tests namespace
     """

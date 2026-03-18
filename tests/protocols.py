@@ -1,4 +1,4 @@
-"""Protocols for flext-tap-ldif tests - uses composition with FlextTestsProtocols.
+"""Protocols for flext-tap-ldif tests - uses composition with p.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -12,24 +12,24 @@ from typing import Protocol, runtime_checkable
 from flext_tests import p
 
 
-class TestsFlextTapLdifProtocols(FlextTestsProtocols):
-    """Protocols for flext-tap-ldif tests - uses composition with FlextTestsProtocols.
+class TestsFlextTapLdifProtocols(p):
+    """Protocols for flext-tap-ldif tests - uses composition with p.
 
-    Architecture: Uses composition (not inheritance) with FlextTestsProtocols and FlextTapLdifProtocols
+    Architecture: Uses composition (not inheritance) with p and FlextTapLdifProtocols
     for flext-tap-ldif-specific protocol definitions.
 
     Access patterns:
     - TestsFlextTapLdifProtocols.Tests.* = flext_tests test protocols (via composition)
     - TestsFlextTapLdifProtocols.TapLdif.* = flext-tap-ldif-specific test protocols
-    - TestsFlextTapLdifProtocols.* = FlextTestsProtocols protocols (via composition)
+    - TestsFlextTapLdifProtocols.* = p protocols (via composition)
 
     Rules:
-    - Use composition, not inheritance (FlextTestsProtocols deprecates subclassing)
+    - Use composition, not inheritance (p deprecates subclassing)
     - flext-tap-ldif-specific protocols go in TapLdif namespace
     - Generic protocols accessed via Tests namespace
     """
 
-    class Tests(FlextTestsProtocols.Tests):
+    class Tests(p.Tests):
         """Project-specific test protocols."""
 
     class TapLdif:
