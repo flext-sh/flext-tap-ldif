@@ -32,5 +32,5 @@ u = FlextAutoUtilities
 m = FlextAutoModels
 
 
-class StreamRecordValue(RootModel[str | int | list[str] | Mapping[str, list[str]]]):
+class StreamRecordValue(RootModel[str | int | list[str] | dict[str, list[str]]]):
     pass
