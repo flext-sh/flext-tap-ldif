@@ -50,3 +50,5 @@ class TestsFlextTapLdifTypes(FlextTestsTypes):
 
 tt = TestsFlextTapLdifTypes
 __all__ = ["TestsFlextTapLdifTypes", "t", "tt"]
+
+t = TestsFlextTapLdifTypes

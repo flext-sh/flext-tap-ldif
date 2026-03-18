@@ -34,7 +34,7 @@ if TYPE_CHECKING:
     from flext_tap_ldif.settings import FlextTapLdifSettings
     from flext_tap_ldif.streams import LDIFEntriesStream
     from flext_tap_ldif.tap import TapLDIF, logger, main
-    from flext_tap_ldif.typings import FlextTapLdifTypes, t
+    from flext_tap_ldif.typings import FlextTapLdifTypes, StreamRecordValue, t
     from flext_tap_ldif.utilities import FlextTapLdifUtilities, u
 
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
@@ -46,6 +46,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "FlextTapLdifTypes": ("flext_tap_ldif.typings", "FlextTapLdifTypes"),
     "FlextTapLdifUtilities": ("flext_tap_ldif.utilities", "FlextTapLdifUtilities"),
     "LDIFEntriesStream": ("flext_tap_ldif.streams", "LDIFEntriesStream"),
+    "StreamRecordValue": ("flext_tap_ldif.typings", "StreamRecordValue"),
     "TapLDIF": ("flext_tap_ldif.tap", "TapLDIF"),
     "__all__": ("flext_tap_ldif.__version__", "__all__"),
     "__author__": ("flext_tap_ldif.__version__", "__author__"),
@@ -74,6 +75,7 @@ __all__ = [
     "FlextTapLdifTypes",
     "FlextTapLdifUtilities",
     "LDIFEntriesStream",
+    "StreamRecordValue",
     "TapLDIF",
     "__all__",
     "__author__",
