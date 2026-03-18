@@ -7,7 +7,6 @@ from collections.abc import Generator
 from pathlib import Path
 
 import pytest
-from flext_tests import FlextTestsDocker
 
 
 @pytest.fixture(scope="session")
