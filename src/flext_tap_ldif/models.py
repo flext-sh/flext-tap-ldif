@@ -290,7 +290,8 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         entry_type: Annotated[
-            str, Field(default="entry", description="Type of LDIF entry")
+            str,
+            Field(default="entry", description="Type of LDIF entry"),
         ]
 
         # Processing metadata
@@ -302,7 +303,8 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         processed: Annotated[
-            bool, Field(default=False, description="Processing status")
+            bool,
+            Field(default=False, description="Processing status"),
         ]
         validation_errors: Annotated[
             list[str],
@@ -399,7 +401,8 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         ]
         line_number: Annotated[int, Field(default=0, description="Source line number")]
         source_file: Annotated[
-            str | None, Field(default=None, description="Source LDIF file")
+            str | None,
+            Field(default=None, description="Source LDIF file"),
         ]
 
         # Processing metadata
@@ -411,7 +414,8 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         applied: Annotated[
-            bool, Field(default=False, description="Change application status")
+            bool,
+            Field(default=False, description="Change application status"),
         ]
         application_errors: Annotated[
             list[str],
@@ -498,7 +502,8 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         comment_lines: Annotated[
-            int, Field(default=0, description="Number of comment lines")
+            int,
+            Field(default=0, description="Number of comment lines"),
         ]
 
         # Processing state
@@ -526,7 +531,8 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         # Validation results
         is_valid_ldif: Annotated[
-            bool, Field(default=True, description="LDIF format validity")
+            bool,
+            Field(default=True, description="LDIF format validity"),
         ]
         validation_errors: Annotated[
             list[str],
@@ -703,7 +709,8 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         batch_id: Annotated[str, Field(..., description="Unique batch identifier")]
         file_paths: Annotated[
-            list[str], Field(..., description="List of LDIF files to process")
+            list[str],
+            Field(..., description="List of LDIF files to process"),
         ]
         batch_size: Annotated[
             int,
@@ -722,7 +729,8 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         max_workers: Annotated[
-            int, Field(default=4, description="Maximum worker threads")
+            int,
+            Field(default=4, description="Maximum worker threads"),
         ]
         error_threshold: Annotated[
             int,
@@ -734,7 +742,8 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         # Batch state
         status: Annotated[
-            str, Field(default="pending", description="Batch processing status")
+            str,
+            Field(default="pending", description="Batch processing status"),
         ]
         started_at: Annotated[
             datetime | None,
@@ -753,10 +762,12 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         # Processing metrics
         files_processed: Annotated[
-            int, Field(default=0, description="Number of files processed")
+            int,
+            Field(default=0, description="Number of files processed"),
         ]
         entries_processed: Annotated[
-            int, Field(default=0, description="Total entries processed")
+            int,
+            Field(default=0, description="Total entries processed"),
         ]
         errors_encountered: Annotated[
             int,
@@ -850,10 +861,12 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         # Progress tracking
         current_line: Annotated[
-            int, Field(default=0, description="Current line being processed")
+            int,
+            Field(default=0, description="Current line being processed"),
         ]
         entries_processed: Annotated[
-            int, Field(default=0, description="Entries processed")
+            int,
+            Field(default=0, description="Entries processed"),
         ]
         change_records_processed: Annotated[
             int,
@@ -905,10 +918,12 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         # Performance metrics
         processing_rate: Annotated[
-            float, Field(default=0.0, description="Entries per second")
+            float,
+            Field(default=0.0, description="Entries per second"),
         ]
         memory_usage: Annotated[
-            int, Field(default=0, description="Memory usage in bytes")
+            int,
+            Field(default=0, description="Memory usage in bytes"),
         ]
 
         @computed_field
@@ -1015,7 +1030,8 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         max_workers: Annotated[
-            int, Field(default=4, description="Maximum worker threads")
+            int,
+            Field(default=4, description="Maximum worker threads"),
         ]
 
         # Error handling
@@ -1034,12 +1050,14 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         error_file: Annotated[
-            str | None, Field(default=None, description="Error output file")
+            str | None,
+            Field(default=None, description="Error output file"),
         ]
 
         # Output configuration
         output_format: Annotated[
-            str, Field(default="jsonl", description="Output format")
+            str,
+            Field(default="jsonl", description="Output format"),
         ]
         include_metadata: Annotated[
             bool,
@@ -1105,12 +1123,14 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         record_type: Annotated[
-            str, Field(default="entry", description="Type of LDIF record")
+            str,
+            Field(default="entry", description="Type of LDIF record"),
         ]
 
         # Source metadata
         source_file: Annotated[
-            str | None, Field(default=None, description="Source LDIF file")
+            str | None,
+            Field(default=None, description="Source LDIF file"),
         ]
         line_number: Annotated[int, Field(default=0, description="Source line number")]
 
@@ -1179,13 +1199,16 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         # Statistics
         total_entries: Annotated[
-            int, Field(default=0, description="Total entries validated")
+            int,
+            Field(default=0, description="Total entries validated"),
         ]
         valid_entries: Annotated[
-            int, Field(default=0, description="Valid entries count")
+            int,
+            Field(default=0, description="Valid entries count"),
         ]
         invalid_entries: Annotated[
-            int, Field(default=0, description="Invalid entries count")
+            int,
+            Field(default=0, description="Invalid entries count"),
         ]
 
         # Validation metadata
@@ -1197,7 +1220,8 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         validator_version: Annotated[
-            str, Field(default="1.0", description="Validator version")
+            str,
+            Field(default="1.0", description="Validator version"),
         ]
 
         @computed_field
@@ -1248,18 +1272,22 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         # File processing metrics
         files_processed: Annotated[
-            int, Field(default=0, description="Number of files processed")
+            int,
+            Field(default=0, description="Number of files processed"),
         ]
         total_file_size: Annotated[
-            int, Field(default=0, description="Total file size in bytes")
+            int,
+            Field(default=0, description="Total file size in bytes"),
         ]
         average_file_size: Annotated[
-            float, Field(default=0.0, description="Average file size")
+            float,
+            Field(default=0.0, description="Average file size"),
         ]
 
         # Entry processing metrics
         total_entries: Annotated[
-            int, Field(default=0, description="Total entries processed")
+            int,
+            Field(default=0, description="Total entries processed"),
         ]
         entries_per_file: Annotated[
             float,
@@ -1269,7 +1297,8 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         processing_rate: Annotated[
-            float, Field(default=0.0, description="Entries per second")
+            float,
+            Field(default=0.0, description="Entries per second"),
         ]
 
         # Time metrics
@@ -1288,10 +1317,12 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         parsing_time: Annotated[
-            float, Field(default=0.0, description="Time spent parsing")
+            float,
+            Field(default=0.0, description="Time spent parsing"),
         ]
         validation_time: Annotated[
-            float, Field(default=0.0, description="Time spent validating")
+            float,
+            Field(default=0.0, description="Time spent validating"),
         ]
 
         # Quality metrics
@@ -1303,10 +1334,12 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         failed_files: Annotated[
-            int, Field(default=0, description="Failed file processing")
+            int,
+            Field(default=0, description="Failed file processing"),
         ]
         total_errors: Annotated[
-            int, Field(default=0, description="Total processing errors")
+            int,
+            Field(default=0, description="Total processing errors"),
         ]
 
         # Resource metrics
@@ -1318,7 +1351,8 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         average_memory_usage: Annotated[
-            int, Field(default=0, description="Average memory usage")
+            int,
+            Field(default=0, description="Average memory usage"),
         ]
 
         @computed_field

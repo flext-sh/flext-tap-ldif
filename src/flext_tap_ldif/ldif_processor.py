@@ -83,7 +83,8 @@ class FlextLdifProcessor:
         return r[list[Path]].fail("No file_path or directory_path specified")
 
     def process_file(
-        self, file_path: Path
+        self,
+        file_path: Path,
     ) -> Generator[Mapping[str, str | int | Mapping[str, list[str]] | list[str]]]:
         """Process a single LDIF file and yield records using flext-ldif.
 
@@ -120,7 +121,8 @@ class FlextLdifProcessor:
                         c.EntrySchema.DN_FIELD: str(dn_val),
                         c.EntrySchema.ATTRIBUTES_FIELD: attrs_dict,
                         c.EntrySchema.OBJECT_CLASS_FIELD: attrs_dict.get(
-                            "objectClass", []
+                            "objectClass",
+                            [],
                         ),
                         c.EntrySchema.CHANGE_TYPE_FIELD: c.EntrySchema.DEFAULT_CHANGE_TYPE,
                         c.EntrySchema.SOURCE_FILE_FIELD: str(file_path),
@@ -128,7 +130,7 @@ class FlextLdifProcessor:
                         c.EntrySchema.ENTRY_SIZE_FIELD: len(str(entry).encode("utf-8")),
                     }
         except (RuntimeError, ValueError, TypeError):
-            logger.exception(f"Failed to process LDIF file: {file_path}")
+            logger.exception("Failed to process LDIF file: %s", file_path)
             if self.config.get("strict_parsing", True):
                 raise
 

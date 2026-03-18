@@ -207,7 +207,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 ImportError,
             ) as e:
                 return r[Mapping[str, t.NormalizedValue]].fail(
-                    f"Error extracting LDIF metadata: {e}"
+                    f"Error extracting LDIF metadata: {e}",
                 )
 
         @staticmethod
@@ -228,7 +228,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     return r[bool].fail(f"Path is not a file: {file_path}")
                 if file_path.suffix.lower() not in {".ldif", ".ldif3", ".ldi"}:
                     return r[bool].fail(
-                        f"File does not have LDIF extension: {file_path}"
+                        f"File does not have LDIF extension: {file_path}",
                     )
                 with file_path.open("r", encoding=c.DEFAULT_LDIF_ENCODING) as f:
                     first_lines = [f.readline().strip() for _ in range(10)]
@@ -236,7 +236,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 has_dn = any(line.startswith("dn:") for line in first_lines)
                 if not (has_version or has_dn):
                     return r[bool].fail(
-                        f"File does not appear to be valid LDIF format: {file_path}"
+                        f"File does not appear to be valid LDIF format: {file_path}",
                     )
                 return r[bool].ok(value=True)
             except UnicodeDecodeError as e:
@@ -270,7 +270,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     continue
                 if current_attr is not None and current_value:
                     normalized_attr = FlextTapLdifUtilities.LdifDataProcessing.normalize_ldif_attribute_name(
-                        current_attr
+                        current_attr,
                     )
                     if normalized_attr in record:
                         existing_value = record[normalized_attr]
@@ -284,7 +284,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     else:
                         record[normalized_attr] = current_value
                 parse_result = FlextTapLdifUtilities.LdifDataProcessing.parse_ldif_line(
-                    line
+                    line,
                 )
                 if parse_result.is_success:
                     a, v = parse_result.value
@@ -295,7 +295,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     current_value = ""
             if current_attr is not None and current_value:
                 normalized_attr = FlextTapLdifUtilities.LdifDataProcessing.normalize_ldif_attribute_name(
-                    current_attr
+                    current_attr,
                 )
                 if normalized_attr in record:
                     existing_value = record[normalized_attr]
@@ -323,7 +323,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             try:
                 record = (
                     FlextTapLdifUtilities.LdifDataProcessing.build_record_from_lines(
-                        entry_lines
+                        entry_lines,
                     )
                 )
                 out: dict[str, str | list[str]] = dict(record)
@@ -338,7 +338,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 ImportError,
             ) as e:
                 return r[Mapping[str, str | list[str]]].fail(
-                    f"Error converting LDIF entry: {e}"
+                    f"Error converting LDIF entry: {e}",
                 )
 
         @staticmethod
@@ -380,7 +380,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     attr_name, encoded_value = line.split("::", 1)
                     try:
                         decoded_value = base64.b64decode(encoded_value.strip()).decode(
-                            "utf-8"
+                            "utf-8",
                         )
                         return r[tuple[str, str]].ok((
                             attr_name.strip(),
@@ -438,19 +438,19 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             missing_fields = [field for field in required_fields if field not in config]
             if missing_fields:
                 return r[Mapping[str, t.NormalizedValue]].fail(
-                    f"Missing required fields: {', '.join(missing_fields)}"
+                    f"Missing required fields: {', '.join(missing_fields)}",
                 )
             files = config["files"]
             if not u.is_list(files):
                 return r[Mapping[str, t.NormalizedValue]].fail("Files must be a list")
             if not files:
                 return r[Mapping[str, t.NormalizedValue]].fail(
-                    "At least one file must be specified"
+                    "At least one file must be specified",
                 )
             for file_path in files:
                 if not u.is_type(file_path, str):
                     return r[Mapping[str, t.NormalizedValue]].fail(
-                        "File paths must be strings"
+                        "File paths must be strings",
                     )
                 path_obj = (
                     Path(file_path)
@@ -459,7 +459,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 )
                 if not path_obj.exists():
                     return r[Mapping[str, t.NormalizedValue]].fail(
-                        f"File does not exist: {file_path}"
+                        f"File does not exist: {file_path}",
                     )
             return r[Mapping[str, t.NormalizedValue]].ok(config)
 
@@ -487,7 +487,8 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @staticmethod
         def get_file_position(
-            state: Mapping[str, t.NormalizedValue], file_path: str
+            state: Mapping[str, t.NormalizedValue],
+            file_path: str,
         ) -> int:
             """Get current position in file.
 
@@ -500,14 +501,17 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
             """
             file_state = FlextTapLdifUtilities.StateManagement.get_file_state(
-                state, file_path
+                state,
+                file_path,
             )
             position = file_state.get("position", 0)
             return position if isinstance(position, int) else 0
 
         @classmethod
         def get_file_state(
-            cls, state: Mapping[str, t.NormalizedValue], file_path: str
+            cls,
+            state: Mapping[str, t.NormalizedValue],
+            file_path: str,
         ) -> Mapping[str, t.NormalizedValue]:
             """Get state for a specific file.
 
@@ -529,7 +533,9 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @staticmethod
         def set_file_position(
-            state: Mapping[str, t.NormalizedValue], file_path: str, position: int
+            state: Mapping[str, t.NormalizedValue],
+            file_path: str,
+            position: int,
         ) -> Mapping[str, t.NormalizedValue]:
             """Set current position in file.
 
@@ -543,13 +549,16 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
             """
             file_state = FlextTapLdifUtilities.StateManagement.get_file_state(
-                state, file_path
+                state,
+                file_path,
             )
             file_state_dict: dict[str, t.NormalizedValue] = dict(file_state)
             file_state_dict["position"] = position
             file_state_dict["last_updated"] = datetime.now(UTC).isoformat()
             return FlextTapLdifUtilities.StateManagement.set_file_state(
-                state, file_path, file_state_dict
+                state,
+                file_path,
+                file_state_dict,
             )
 
         @classmethod
@@ -582,7 +591,8 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
     @classmethod
     def convert_ldif_entry_to_record(
-        cls, entry_lines: list[str]
+        cls,
+        entry_lines: list[str],
     ) -> r[Mapping[str, str | list[str]]]:
         """Proxy method for LdifDataProcessing.convert_ldif_entry_to_record()."""
         return cls.LdifDataProcessing.convert_ldif_entry_to_record(entry_lines)
@@ -614,7 +624,9 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
     @classmethod
     def get_file_state(
-        cls, state: Mapping[str, t.NormalizedValue], file_path: str
+        cls,
+        state: Mapping[str, t.NormalizedValue],
+        file_path: str,
     ) -> Mapping[str, t.NormalizedValue]:
         """Proxy method for StateManagement.get_file_state()."""
         return cls.StateManagement.get_file_state(state, file_path)
@@ -626,14 +638,18 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
     @classmethod
     def set_file_position(
-        cls, state: Mapping[str, t.NormalizedValue], file_path: str, position: int
+        cls,
+        state: Mapping[str, t.NormalizedValue],
+        file_path: str,
+        position: int,
     ) -> Mapping[str, t.NormalizedValue]:
         """Proxy method for StateManagement.set_file_position()."""
         return cls.StateManagement.set_file_position(state, file_path, position)
 
     @classmethod
     def validate_ldif_config(
-        cls, config: Mapping[str, t.NormalizedValue]
+        cls,
+        config: Mapping[str, t.NormalizedValue],
     ) -> r[Mapping[str, t.NormalizedValue]]:
         """Proxy method for ConfigValidation.validate_ldif_config()."""
         return cls.ConfigValidation.validate_ldif_config(config)

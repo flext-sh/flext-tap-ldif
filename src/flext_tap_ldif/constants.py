@@ -11,11 +11,6 @@ from enum import StrEnum, unique
 from typing import ClassVar, Final
 
 from flext_core import FlextConstants
-from flext_core.constants import (
-    PROJECT_KIND_APPLICATION,
-    PROJECT_KIND_LIBRARY,
-    PROJECT_KIND_SERVICE,
-)
 from flext_ldif import FlextLdifConstants
 from flext_meltano import FlextMeltanoConstants
 
@@ -116,9 +111,6 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
     class ProjectType(StrEnum):
         """Project type literals for tap package metadata."""
 
-        LIBRARY = PROJECT_KIND_LIBRARY
-        APPLICATION = PROJECT_KIND_APPLICATION
-        SERVICE = PROJECT_KIND_SERVICE
         SINGER_TAP = "singer-tap"
         LDIF_EXTRACTOR = "ldif-extractor"
         DATA_EXTRACTOR = "data-extractor"

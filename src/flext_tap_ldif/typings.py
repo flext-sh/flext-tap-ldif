@@ -34,7 +34,8 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         """Singer tap protocol complex types."""
 
         type TapConfiguration = dict[
-            str, str | int | bool | dict[str, t.ContainerValue]
+            str,
+            str | int | bool | dict[str, t.ContainerValue],
         ]
         type StreamConfiguration = dict[str, str | bool | dict[str, t.ContainerValue]]
         type CatalogDefinition = dict[str, str | list[dict[str, t.ContainerValue]]]
@@ -46,12 +47,14 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         """LDIF processing complex types."""
 
         type ProcessingConfiguration = dict[
-            str, str | int | bool | dict[str, t.ContainerValue]
+            str,
+            str | int | bool | dict[str, t.ContainerValue],
         ]
         type EntryExtraction = dict[str, str | list[str] | dict[str, t.ContainerValue]]
         type EntryTransformation = list[dict[str, str | object]]
         type EntryValidation = dict[
-            str, bool | str | list[str] | dict[str, t.ContainerValue]
+            str,
+            bool | str | list[str] | dict[str, t.ContainerValue],
         ]
         type BatchProcessing = dict[str, int | bool | dict[str, t.ContainerValue]]
         type FileProcessing = dict[str, str | int | dict[str, t.ContainerValue]]
@@ -60,7 +63,8 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         """Data extraction complex types."""
 
         type ExtractionConfiguration = dict[
-            str, str | bool | dict[str, t.ContainerValue]
+            str,
+            str | bool | dict[str, t.ContainerValue],
         ]
         type ExtractionFilter = dict[str, str | list[str] | dict[str, t.ContainerValue]]
         type ExtractionMapping = dict[str, str | dict[str, t.ContainerValue]]
@@ -72,7 +76,8 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         """Stream processing complex types."""
 
         type StreamConfiguration = dict[
-            str, str | bool | int | dict[str, t.ContainerValue]
+            str,
+            str | bool | int | dict[str, t.ContainerValue],
         ]
         type StreamMetadata = dict[str, str | dict[str, t.ContainerValue]]
         type StreamRecord = dict[str, object | dict[str, t.ContainerValue]]
@@ -85,7 +90,8 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         """File handling complex types."""
 
         type FileConfiguration = dict[
-            str, str | int | bool | dict[str, t.ContainerValue]
+            str,
+            str | int | bool | dict[str, t.ContainerValue],
         ]
         type FileValidation = dict[str, bool | str | int | list[str]]
         type FileProcessing = dict[str, str | int | dict[str, t.ContainerValue]]
@@ -97,7 +103,8 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         """Error handling complex types."""
 
         type ErrorConfiguration = dict[
-            str, bool | str | int | dict[str, t.ContainerValue]
+            str,
+            bool | str | int | dict[str, t.ContainerValue],
         ]
         type ErrorRecovery = dict[str, str | bool | dict[str, t.ContainerValue]]
         type ErrorReporting = dict[str, str | int | dict[str, t.ContainerValue]]

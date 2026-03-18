@@ -69,12 +69,14 @@ class LDIFEntriesStream(Stream):
                 ) as exc:
                     exc_msg = str(exc)
                     logger.warning(
-                        "Failed to seed LDIF file with sample content: %s", exc_msg
+                        "Failed to seed LDIF file with sample content: %s",
+                        exc_msg,
                     )
 
     @override
     def get_records(
-        self, context: Mapping[str, t.ContainerValue] | None = None
+        self,
+        context: Mapping[str, t.ContainerValue] | None = None,
     ) -> Iterable[dict[str, StreamRecordValue]]:
         """Return a generator of record-type dictionary objects.
 
@@ -142,12 +144,14 @@ class LDIFEntriesStream(Stream):
                     yield dict(record)
             except (RuntimeError, ValueError, TypeError) as e:
                 if config.get("strict_parsing", True):
-                    logger.exception(f"Error processing file {file_path}")
+                    logger.exception("Error processing file %s", file_path)
                     raise
                 else:
                     err_msg = str(e)
                     logger.warning(
-                        "Skipping file %s due to error: %s", file_path, err_msg
+                        "Skipping file %s due to error: %s",
+                        file_path,
+                        err_msg,
                     )
                     continue
 
