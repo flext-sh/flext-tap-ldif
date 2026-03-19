@@ -13,11 +13,11 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import TypeIs, override
 
-from flext_core import r, t
+from flext_core import r
 from flext_ldif import FlextLdifUtilities
-from flext_meltano import FlextMeltanoUtilities, m
+from flext_meltano import FlextMeltanoUtilities
 
-from flext_tap_ldif import c
+from flext_tap_ldif import c, m, t
 
 
 class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):

@@ -12,11 +12,11 @@ from collections.abc import Iterable, Mapping
 from pathlib import Path
 from typing import override
 
-from flext_core import FlextLogger, t
+from flext_core import FlextLogger
 from singer_sdk.streams import Stream
 from singer_sdk.tap_base import Tap
 
-from flext_tap_ldif import c
+from flext_tap_ldif import c, t
 from flext_tap_ldif.ldif_processor import (
     FlextLdifProcessor as FlextLdifProcessorWrapper,
 )

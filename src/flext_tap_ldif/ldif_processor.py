@@ -13,9 +13,9 @@ from pathlib import Path
 from typing import NoReturn
 
 from flext_core import FlextLogger, r
-from flext_ldif import FlextLdif, m
+from flext_ldif import FlextLdif
 
-from flext_tap_ldif import c
+from flext_tap_ldif import c, m
 
 logger = FlextLogger(__name__)
 
