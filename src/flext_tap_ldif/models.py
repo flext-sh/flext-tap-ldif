@@ -22,8 +22,8 @@ from pydantic import (
     field_serializer,
     model_validator,
 )
-
-from flext_tap_ldif import t, u
+from flext_tap_ldif import t
+from flext_core import u
 
 
 class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):

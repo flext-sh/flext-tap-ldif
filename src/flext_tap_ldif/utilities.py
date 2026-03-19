@@ -16,8 +16,8 @@ from typing import TypeIs, override
 from flext_core import r
 from flext_ldif import FlextLdifUtilities
 from flext_meltano import FlextMeltanoUtilities
-
-from flext_tap_ldif import c, m, t
+from flext_tap_ldif import c, t
+from flext_core import m
 
 
 class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
