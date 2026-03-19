@@ -14,9 +14,9 @@ from flext_core import FlextConstants, FlextLogger
 from singer_sdk.streams import Stream
 from singer_sdk.tap_base import Tap
 
+from flext_tap_ldif import t
 from flext_tap_ldif.settings import FlextTapLdifSettings
 from flext_tap_ldif.streams import LDIFEntriesStream
-from flext_tap_ldif.typings import t
 
 logger = FlextLogger(__name__)
 

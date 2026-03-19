@@ -51,7 +51,7 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
             str | int | bool | dict[str, t.ContainerValue],
         ]
         type EntryExtraction = dict[str, str | list[str] | dict[str, t.ContainerValue]]
-        type EntryTransformation = list[dict[str, str | object]]
+        type EntryTransformation = list[dict[str, str | t.ContainerValue]]
         type EntryValidation = dict[
             str,
             bool | str | list[str] | dict[str, t.ContainerValue],
@@ -80,7 +80,7 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
             str | bool | int | dict[str, t.ContainerValue],
         ]
         type StreamMetadata = dict[str, str | dict[str, t.ContainerValue]]
-        type StreamRecord = dict[str, object | dict[str, t.ContainerValue]]
+        type StreamRecord = dict[str, t.ContainerValue | dict[str, t.ContainerValue]]
         type StreamRecordValue = str | int | list[str] | Mapping[str, list[str]]
         type StreamState = dict[str, str | int | dict[str, t.ContainerValue]]
         type StreamBookmark = dict[str, str | int | dict[str, t.ContainerValue]]

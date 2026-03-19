@@ -17,7 +17,7 @@ from flext_core import r, t
 from flext_ldif import FlextLdifUtilities
 from flext_meltano import FlextMeltanoUtilities, m
 
-from flext_tap_ldif.constants import c
+from flext_tap_ldif import c
 
 
 class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):

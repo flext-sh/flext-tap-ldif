@@ -69,7 +69,7 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
     class TapLdifPerformance:
         """Tap LDIF performance constants."""
 
-        DEFAULT_BATCH_SIZE: Final[int] = 1000
+        DEFAULT_BATCH_SIZE: Final[int] = FlextConstants.DEFAULT_BATCH_SIZE
 
     class TapLdifValidation:
         """LDIF tap validation constants.

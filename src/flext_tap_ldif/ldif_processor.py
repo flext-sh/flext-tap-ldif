@@ -15,7 +15,7 @@ from typing import NoReturn
 from flext_core import FlextLogger, r
 from flext_ldif import FlextLdif, m
 
-from flext_tap_ldif.constants import c
+from flext_tap_ldif import c
 
 logger = FlextLogger(__name__)
 

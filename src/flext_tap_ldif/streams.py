@@ -16,7 +16,7 @@ from flext_core import FlextLogger, t
 from singer_sdk.streams import Stream
 from singer_sdk.tap_base import Tap
 
-from flext_tap_ldif.constants import c
+from flext_tap_ldif import c
 from flext_tap_ldif.ldif_processor import (
     FlextLdifProcessor as FlextLdifProcessorWrapper,
 )
