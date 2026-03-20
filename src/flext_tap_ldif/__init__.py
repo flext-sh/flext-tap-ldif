@@ -28,15 +28,28 @@ if TYPE_CHECKING:
         __version__,
         __version_info__,
     )
-    from flext_tap_ldif.constants import FlextTapLdifConstants, c
+    from flext_tap_ldif.constants import (
+        FlextTapLdifConstants,
+        FlextTapLdifConstants as c,
+    )
     from flext_tap_ldif.ldif_processor import FlextLdifProcessor
-    from flext_tap_ldif.models import FlextTapLdifModels, m
-    from flext_tap_ldif.protocols import FlextTapLdifProtocols, p
+    from flext_tap_ldif.models import FlextTapLdifModels, FlextTapLdifModels as m
+    from flext_tap_ldif.protocols import (
+        FlextTapLdifProtocols,
+        FlextTapLdifProtocols as p,
+    )
     from flext_tap_ldif.settings import FlextTapLdifSettings
     from flext_tap_ldif.streams import LDIFEntriesStream
     from flext_tap_ldif.tap import TapLDIF, logger, main
-    from flext_tap_ldif.typings import FlextTapLdifTypes, StreamRecordValue, t
-    from flext_tap_ldif.utilities import FlextTapLdifUtilities, u
+    from flext_tap_ldif.typings import (
+        FlextTapLdifTypes,
+        FlextTapLdifTypes as t,
+        StreamRecordValue,
+    )
+    from flext_tap_ldif.utilities import (
+        FlextTapLdifUtilities,
+        FlextTapLdifUtilities as u,
+    )
 
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "FlextLdifProcessor": ("flext_tap_ldif.ldif_processor", "FlextLdifProcessor"),
@@ -58,18 +71,18 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "__url__": ("flext_tap_ldif.__version__", "__url__"),
     "__version__": ("flext_tap_ldif.__version__", "__version__"),
     "__version_info__": ("flext_tap_ldif.__version__", "__version_info__"),
-    "c": ("flext_tap_ldif.constants", "c"),
+    "c": ("flext_tap_ldif.constants", "FlextTapLdifConstants"),
     "d": ("flext_core", "d"),
     "e": ("flext_core", "e"),
     "h": ("flext_core", "h"),
     "logger": ("flext_tap_ldif.tap", "logger"),
-    "m": ("flext_tap_ldif.models", "m"),
+    "m": ("flext_tap_ldif.models", "FlextTapLdifModels"),
     "main": ("flext_tap_ldif.tap", "main"),
-    "p": ("flext_tap_ldif.protocols", "p"),
+    "p": ("flext_tap_ldif.protocols", "FlextTapLdifProtocols"),
     "r": ("flext_core", "r"),
     "s": ("flext_core", "s"),
-    "t": ("flext_tap_ldif.typings", "t"),
-    "u": ("flext_tap_ldif.utilities", "u"),
+    "t": ("flext_tap_ldif.typings", "FlextTapLdifTypes"),
+    "u": ("flext_tap_ldif.utilities", "FlextTapLdifUtilities"),
     "x": ("flext_core", "x"),
 }
 
