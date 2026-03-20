@@ -49,12 +49,12 @@ if TYPE_CHECKING:
         singer_state,
         utf16_ldif_file,
     )
-    from .constants import TestsFlextTapLdifConstants, c
-    from .models import TestsFlextTapLdifModels, m
-    from .protocols import TestsFlextTapLdifProtocols, p
+    from .constants import TestsFlextTapLdifConstants, TestsFlextTapLdifConstants as c
+    from .models import TestsFlextTapLdifModels, TestsFlextTapLdifModels as m
+    from .protocols import TestsFlextTapLdifProtocols, TestsFlextTapLdifProtocols as p
     from .test_tap import test_discover_streams
-    from .typings import TestsFlextTapLdifTypes, t, tt
-    from .utilities import TestsFlextTapLdifUtilities, u
+    from .typings import TestsFlextTapLdifTypes, TestsFlextTapLdifTypes as t, tt
+    from .utilities import TestsFlextTapLdifUtilities, TestsFlextTapLdifUtilities as u
 
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "MockLDIFParser": ("tests.conftest", "MockLDIFParser"),
@@ -68,7 +68,7 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "benchmark_config": ("tests.conftest", "benchmark_config"),
     "binary_ldif_content": ("tests.conftest", "binary_ldif_content"),
     "binary_ldif_file": ("tests.conftest", "binary_ldif_file"),
-    "c": ("tests.constants", "c"),
+    "c": ("tests.constants", "TestsFlextTapLdifConstants"),
     "changes_tap_config": ("tests.conftest", "changes_tap_config"),
     "directory_tap_config": ("tests.conftest", "directory_tap_config"),
     "docker_control": ("tests.conftest", "docker_control"),
@@ -77,10 +77,10 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "invalid_ldif_file": ("tests.conftest", "invalid_ldif_file"),
     "large_ldif_file": ("tests.conftest", "large_ldif_file"),
     "ldif_directory": ("tests.conftest", "ldif_directory"),
-    "m": ("tests.models", "m"),
+    "m": ("tests.models", "TestsFlextTapLdifModels"),
     "mock_ldif_parser": ("tests.conftest", "mock_ldif_parser"),
     "mock_ldif_tap": ("tests.conftest", "mock_ldif_tap"),
-    "p": ("tests.protocols", "p"),
+    "p": ("tests.protocols", "TestsFlextTapLdifProtocols"),
     "performance_tap_config": ("tests.conftest", "performance_tap_config"),
     "pytest_configure": ("tests.conftest", "pytest_configure"),
     "sample_ldif_changes": ("tests.conftest", "sample_ldif_changes"),
@@ -91,10 +91,10 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "shared_ldap_container": ("tests.conftest", "shared_ldap_container"),
     "singer_catalog_config": ("tests.conftest", "singer_catalog_config"),
     "singer_state": ("tests.conftest", "singer_state"),
-    "t": ("tests.typings", "t"),
+    "t": ("tests.typings", "TestsFlextTapLdifTypes"),
     "test_discover_streams": ("tests.test_tap", "test_discover_streams"),
     "tt": ("tests.typings", "tt"),
-    "u": ("tests.utilities", "u"),
+    "u": ("tests.utilities", "TestsFlextTapLdifUtilities"),
     "utf16_ldif_file": ("tests.conftest", "utf16_ldif_file"),
 }
 
