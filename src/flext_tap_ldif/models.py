@@ -11,6 +11,7 @@ from datetime import UTC, datetime
 from typing import Annotated, Self
 
 from flext_core import FlextConstants, u
+from flext_core.typings import t
 from flext_ldif import FlextLdifModels
 from flext_meltano import FlextMeltanoModels
 from pydantic import (
@@ -22,8 +23,6 @@ from pydantic import (
     field_serializer,
     model_validator,
 )
-
-from flext_tap_ldif import t
 
 
 class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):

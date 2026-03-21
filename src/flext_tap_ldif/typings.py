@@ -16,10 +16,9 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 
+from flext_core.constants import c
 from flext_ldif import FlextLdifTypes
 from flext_meltano import FlextMeltanoTypes
-
-from flext_tap_ldif import c
 
 
 class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):

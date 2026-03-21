@@ -14,10 +14,10 @@ from pathlib import Path
 from typing import TypeIs, override
 
 from flext_core import m, r
+from flext_core.constants import c
+from flext_core.typings import t
 from flext_ldif import FlextLdifUtilities
 from flext_meltano import FlextMeltanoUtilities
-
-from flext_tap_ldif import c, t
 
 
 class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
