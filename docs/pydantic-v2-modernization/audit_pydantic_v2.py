@@ -15,8 +15,6 @@ Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 """
 
-from __future__ import annotations
-
 import argparse
 import re
 import sys
@@ -43,15 +41,18 @@ class AuditResult(BaseModel):
 
     project: str = Field(description="Project name")
     status: str = Field(description="Audit status: PASS, FAIL, WARNING, PENDING, SKIP")
-    critical: Annotated[list[AuditViolation], Field(
-        default_factory=list, description="Critical violations"
-    )]
-    high: Annotated[list[AuditViolation], Field(
-        default_factory=list, description="High priority violations"
-    )]
-    medium: Annotated[list[AuditViolation], Field(
-        default_factory=list, description="Medium priority violations"
-    )]
+    critical: list[AuditViolation] = Field(
+        default_factory=lambda: list[AuditViolation](),
+        description="Critical violations",
+    )
+    high: list[AuditViolation] = Field(
+        default_factory=lambda: list[AuditViolation](),
+        description="High priority violations",
+    )
+    medium: list[AuditViolation] = Field(
+        default_factory=lambda: list[AuditViolation](),
+        description="Medium priority violations",
+    )
     recommendations: list[str] = Field(
         default_factory=list, description="Audit recommendations"
     )

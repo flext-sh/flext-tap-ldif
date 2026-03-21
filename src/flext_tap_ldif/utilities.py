@@ -470,18 +470,14 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @staticmethod
         def _is_str_object_mapping(
-            value: Mapping[t.NormalizedValue, t.NormalizedValue]
-            | t.NormalizedValue
-            | None,
+            value: object,
         ) -> TypeIs[Mapping[str, t.NormalizedValue]]:
             return isinstance(value, Mapping)
 
         @classmethod
         def _is_nested_state_mapping(
             cls,
-            value: Mapping[t.NormalizedValue, t.NormalizedValue]
-            | t.NormalizedValue
-            | None,
+            value: object,
         ) -> TypeIs[Mapping[str, Mapping[str, t.NormalizedValue]]]:
             if not cls._is_str_object_mapping(value):
                 return False
@@ -583,9 +579,10 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             files_raw = state.get("files")
             files_dict: dict[str, t.NormalizedValue] = {}
-            if cls._is_nested_state_mapping(files_raw):
-                for key, value in files_raw.items():
-                    files_dict[key] = dict(value)
+            if isinstance(files_raw, Mapping):
+                for k, v in files_raw.items():
+                    if isinstance(v, Mapping):
+                        files_dict[k] = dict(v)
             files_dict[file_path] = dict(file_state)
             updated_state: dict[str, t.NormalizedValue] = dict(state)
             updated_state["files"] = files_dict
