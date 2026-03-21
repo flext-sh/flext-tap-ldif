@@ -128,7 +128,4 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
 
 
 t = FlextTapLdifTypes
-__all__ = ["FlextTapLdifTypes", "StreamRecordValue", "t"]
-
-# Module-level re-export for convenience
-StreamRecordValue = t.StreamProcessing.StreamRecordValue
+__all__ = ["FlextTapLdifTypes", "t"]
