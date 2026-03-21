@@ -7,14 +7,13 @@ from collections.abc import Generator
 from pathlib import Path
 
 import pytest
-from flext_tests import u
 from flext_tests.docker import tk
 
 
 @pytest.fixture(scope="session")
 def docker_control() -> tk:
     """Provide Docker control instance for tests."""
-    return u.Tests.Docker()
+    return tk()
 
 
 @pytest.fixture(scope="session")

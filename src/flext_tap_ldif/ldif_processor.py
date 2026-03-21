@@ -13,9 +13,10 @@ from pathlib import Path
 from typing import NoReturn
 
 from flext_core import FlextLogger, r
-from flext_core.constants import c
-from flext_core.models import m
 from flext_ldif import FlextLdif
+
+from flext_tap_ldif.constants import c
+from flext_tap_ldif.models import m
 
 logger = FlextLogger(__name__)
 

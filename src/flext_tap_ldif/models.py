@@ -1078,28 +1078,33 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         @computed_field
         def tap_config_summary(self) -> Mapping[str, t.NormalizedValue]:
             """LDIF tap configuration summary."""
-            return {
-                "source": {
-                    "directory": self.ldif_directory,
-                    "patterns": self.file_patterns,
-                    "recursive": self.recursive_search,
-                },
-                "processing": {
-                    "batch_size": self.batch_size,
-                    "parallel": self.parallel_processing,
-                    "max_workers": self.max_workers,
-                },
-                "error_handling": {
-                    "continue_on_error": self.continue_on_error,
-                    "max_errors": self.max_errors,
-                    "has_error_file": bool(self.error_file),
-                },
-                "output": {
-                    "format": self.output_format,
-                    "include_metadata": self.include_metadata,
-                    "compressed": self.compress_output,
-                },
+            source: dict[str, t.NormalizedValue] = {
+                "directory": self.ldif_directory,
+                "patterns": self.file_patterns,
+                "recursive": self.recursive_search,
             }
+            processing: dict[str, t.NormalizedValue] = {
+                "batch_size": self.batch_size,
+                "parallel": self.parallel_processing,
+                "max_workers": self.max_workers,
+            }
+            error_handling: dict[str, t.NormalizedValue] = {
+                "continue_on_error": self.continue_on_error,
+                "max_errors": self.max_errors,
+                "has_error_file": bool(self.error_file),
+            }
+            output: dict[str, t.NormalizedValue] = {
+                "format": self.output_format,
+                "include_metadata": self.include_metadata,
+                "compressed": self.compress_output,
+            }
+            result: dict[str, t.NormalizedValue] = {
+                "source": source,
+                "processing": processing,
+                "error_handling": error_handling,
+                "output": output,
+            }
+            return result
 
         @model_validator(mode="after")
         def validate_tap_config(self) -> Self:

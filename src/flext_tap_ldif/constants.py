@@ -28,7 +28,6 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
         FlextLdifConstants.Ldif.Encoding.LATIN1,
         FlextLdifConstants.Ldif.Encoding.UTF16,
     })
-    MAX_BATCH_SIZE: Final[int] = FlextConstants.MAX_ITEMS
     MAX_FILE_SIZE_MB: Final[int] = 100
     LDIF_CHANGE_TYPES: ClassVar[list[str]] = [
         FlextLdifConstants.Ldif.EntryModification.ADD,
@@ -43,27 +42,19 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
         Note: Does not override parent Processing class to avoid inheritance conflicts.
         """
 
-        MIN_WORKERS_FOR_PARALLEL: Final[int] = (
-            FlextLdifConstants.Ldif.LdifProcessing.MIN_WORKERS_FOR_PARALLEL
-        )
-        MAX_WORKERS_LIMIT: Final[int] = (
-            FlextLdifConstants.Ldif.LdifProcessing.MAX_WORKERS_LIMIT
-        )
-        PERFORMANCE_MIN_CHUNK_SIZE: Final[int] = (
-            FlextLdifConstants.Ldif.LdifProcessing.PERFORMANCE_MIN_CHUNK_SIZE
-        )
-        MIN_ENTRIES: Final[int] = FlextLdifConstants.Ldif.LdifProcessing.MIN_ENTRIES
+        MIN_WORKERS_FOR_PARALLEL: Final[int] = 2
+        MAX_WORKERS_LIMIT: Final[int] = 8
+        PERFORMANCE_MIN_CHUNK_SIZE: Final[int] = 100
+        MIN_ENTRIES: Final[int] = 1
 
     class Format:
         """LDIF format specifications."""
 
-        DN_ATTRIBUTE: Final[str] = FlextLdifConstants.Ldif.Format.DN_ATTRIBUTE
-        ATTRIBUTE_SEPARATOR: Final[str] = (
-            FlextLdifConstants.Ldif.Format.ATTRIBUTE_SEPARATOR
-        )
+        DN_ATTRIBUTE: Final[str] = "dn"
+        ATTRIBUTE_SEPARATOR: Final[str] = ": "
         MAX_LINE_LENGTH: Final[int] = FlextLdifConstants.Ldif.Format.MAX_LINE_LENGTH
-        BASE64_PREFIX: Final[str] = FlextLdifConstants.Ldif.Format.BASE64_PREFIX
-        COMMENT_PREFIX: Final[str] = FlextLdifConstants.Ldif.Format.COMMENT_PREFIX
+        BASE64_PREFIX: Final[str] = ":: "
+        COMMENT_PREFIX: Final[str] = "#"
         LINE_CONTINUATION: Final[str] = " "
 
     class TapLdifPerformance:
@@ -77,13 +68,9 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
         Note: Does not override parent Validation class to avoid inheritance conflicts.
         """
 
-        MIN_DN_COMPONENTS: Final[int] = (
-            FlextLdifConstants.Ldif.LdifValidation.MIN_DN_COMPONENTS
-        )
-        MAX_DN_LENGTH: Final[int] = FlextLdifConstants.Ldif.LdifValidation.MAX_DN_LENGTH
-        MAX_ATTRIBUTES_PER_ENTRY: Final[int] = (
-            FlextLdifConstants.Ldif.LdifValidation.MAX_ATTRIBUTES_PER_ENTRY
-        )
+        MIN_DN_COMPONENTS: Final[int] = 2
+        MAX_DN_LENGTH: Final[int] = 2048
+        MAX_ATTRIBUTES_PER_ENTRY: Final[int] = 500
 
     class EntrySchema:
         """LDIF entry schema field names."""

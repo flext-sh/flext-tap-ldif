@@ -27,7 +27,7 @@ class TestsFlextTapLdifTypes(t):
     - Generic types accessed via Tests namespace
     """
 
-    class TapLdif:
+    class TapLdifTest:
         """Tap LDIF test types - domain-specific for LDIF tap testing.
 
         Contains test types specific to LDIF tap functionality including:
