@@ -638,7 +638,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         batch_size: Annotated[
             int,
             Field(
-                default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE,
+                default=FlextConstants.DEFAULT_SIZE,
                 description="Processing batch size",
             ),
         ]
@@ -716,7 +716,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         batch_size: Annotated[
             int,
             Field(
-                default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE,
+                default=FlextConstants.DEFAULT_SIZE,
                 description="Processing batch size",
             ),
         ]
@@ -736,7 +736,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         error_threshold: Annotated[
             int,
             Field(
-                default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE // 10,
+                default=FlextConstants.DEFAULT_SIZE // 10,
                 description="Maximum errors before stopping",
             ),
         ]
@@ -1019,7 +1019,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         batch_size: Annotated[
             int,
             Field(
-                default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE,
+                default=FlextConstants.DEFAULT_SIZE,
                 description="Processing batch size",
             ),
         ]
@@ -1046,7 +1046,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         max_errors: Annotated[
             int,
             Field(
-                default=FlextConstants.Performance.BatchProcessing.DEFAULT_SIZE,
+                default=FlextConstants.DEFAULT_SIZE,
                 description="Maximum errors before stopping",
             ),
         ]

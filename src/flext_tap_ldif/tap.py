@@ -41,7 +41,7 @@ class TapLDIF(Tap):
             "strict_parsing": {"type": "boolean", "default": True},
             "max_file_size_mb": {
                 "type": "integer",
-                "default": FlextConstants.Logging.MAX_FILE_SIZE // (1024 * 1024),
+                "default": FlextConstants.MAX_FILE_SIZE // (1024 * 1024),
             },
         },
     }

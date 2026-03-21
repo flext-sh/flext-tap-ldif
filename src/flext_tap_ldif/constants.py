@@ -28,7 +28,7 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
         FlextLdifConstants.Ldif.Encoding.LATIN1,
         FlextLdifConstants.Ldif.Encoding.UTF16,
     })
-    MAX_BATCH_SIZE: Final[int] = FlextConstants.Performance.BatchProcessing.MAX_ITEMS
+    MAX_BATCH_SIZE: Final[int] = FlextConstants.MAX_ITEMS
     MAX_FILE_SIZE_MB: Final[int] = 100
     LDIF_CHANGE_TYPES: ClassVar[list[str]] = [
         FlextLdifConstants.Ldif.EntryModification.ADD,
