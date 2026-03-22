@@ -127,5 +127,7 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         type TapLdifPipelineConfig = dict[str, t.ContainerValue]
 
 
+StreamRecordValue = FlextTapLdifTypes.StreamProcessing.StreamRecordValue
+
 t = FlextTapLdifTypes
-__all__ = ["FlextTapLdifTypes", "t"]
+__all__ = ["FlextTapLdifTypes", "StreamRecordValue", "t"]
