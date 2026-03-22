@@ -132,7 +132,7 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
 
     @unique
     class TestObjectClass(StrEnum):
-        """Test object class literals."""
+        """Test t.NormalizedValue class literals."""
 
         PERSON = "person"
         ORGANIZATION = "organization"

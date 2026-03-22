@@ -27,7 +27,7 @@ class TapLDIF(Tap):
     name: str = "tap-ldif"
     config_class = FlextTapLdifSettings
     config_jsonschema: ClassVar[dict[str, t.ContainerValue]] = {
-        "type": "object",
+        "type": "t.NormalizedValue",
         "properties": {
             "file_path": {"type": "string"},
             "directory_path": {"type": "string"},
@@ -64,11 +64,11 @@ class TapLDIF(Tap):
 
         """
         return {
-            "type": "object",
+            "type": "t.NormalizedValue",
             "properties": {
                 "dn": {"type": "string"},
                 "object_class": {"type": "array", "items": {"type": "string"}},
-                "attributes": {"type": "object"},
+                "attributes": {"type": "t.NormalizedValue"},
                 "change_type": {"type": "string"},
                 "source_file": {"type": "string"},
                 "line_number": {"type": "integer"},

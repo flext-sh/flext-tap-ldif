@@ -41,7 +41,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
     """
 
     # Pydantic 2.11 Configuration - Enterprise Singer LDIF Tap Features
-    model_config = ConfigDict(
+    model_config: ClassVar[ConfigDict] = ConfigDict(
         validate_assignment=True,
         use_enum_values=True,
         arbitrary_types_allowed=True,
@@ -244,7 +244,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         """Represents an LDIF entry with complete parsing support."""
 
         # Pydantic 2.11 Configuration - LDIF Entry Features
-        model_config = ConfigDict(
+        model_config: ClassVar[ConfigDict] = ConfigDict(
             validate_assignment=True,
             extra="forbid",
             frozen=False,
@@ -350,7 +350,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
                 msg = "DN cannot be empty"
                 raise ValueError(msg)
 
-            # Validate object classes are in attributes
+            # Validate t.NormalizedValue classes are in attributes
             if self.object_classes and "objectClass" not in self.attributes:
                 self.attributes["objectClass"] = self.object_classes
 
@@ -360,7 +360,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         """Represents an LDIF change record for modify operations."""
 
         # Pydantic 2.11 Configuration - Change Record Features
-        model_config = ConfigDict(
+        model_config: ClassVar[ConfigDict] = ConfigDict(
             validate_assignment=True,
             extra="forbid",
             frozen=False,
@@ -456,7 +456,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         """Represents an LDIF file with processing metadata."""
 
         # Pydantic 2.11 Configuration - File Features
-        model_config = ConfigDict(
+        model_config: ClassVar[ConfigDict] = ConfigDict(
             validate_assignment=True,
             extra="forbid",
             frozen=False,
@@ -584,7 +584,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         """Singer stream configuration for LDIF file processing."""
 
         # Pydantic 2.11 Configuration - Stream Features
-        model_config = ConfigDict(
+        model_config: ClassVar[ConfigDict] = ConfigDict(
             validate_assignment=True,
             extra="forbid",
             frozen=False,
@@ -632,7 +632,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             list[str],
             Field(
                 default_factory=list,
-                description="Filter by object classes",
+                description="Filter by t.NormalizedValue classes",
             ),
         ]
         batch_size: Annotated[
@@ -692,7 +692,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         """LDIF batch processing configuration and state."""
 
         # Pydantic 2.11 Configuration - Batch Features
-        model_config = ConfigDict(
+        model_config: ClassVar[ConfigDict] = ConfigDict(
             validate_assignment=True,
             extra="forbid",
             frozen=False,
@@ -835,7 +835,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         """LDIF processing state and progress tracking."""
 
         # Pydantic 2.11 Configuration - State Features
-        model_config = ConfigDict(
+        model_config: ClassVar[ConfigDict] = ConfigDict(
             validate_assignment=True,
             extra="forbid",
             frozen=False,
@@ -976,7 +976,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         """Configuration for LDIF tap operations."""
 
         # Pydantic 2.11 Configuration - Config Features
-        model_config = ConfigDict(
+        model_config: ClassVar[ConfigDict] = ConfigDict(
             validate_assignment=True,
             extra="forbid",
             frozen=False,

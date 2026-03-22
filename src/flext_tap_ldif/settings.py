@@ -16,7 +16,7 @@ from pydantic import BaseModel, ConfigDict, Field
 class FlextTapLdifSettings(BaseModel):
     """Validated runtime settings for tap-ldif execution."""
 
-    model_config = ConfigDict(extra="ignore", validate_assignment=True)
+    model_config: ClassVar[ConfigDict] = ConfigDict(extra="ignore", validate_assignment=True)
 
     file_path: Annotated[str | None, Field(default=None)]
     directory_path: Annotated[str | None, Field(default=None)]
