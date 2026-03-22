@@ -470,14 +470,14 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @staticmethod
         def _is_str_object_mapping(
-            value: object,
+            value: t.NormalizedValue,
         ) -> TypeIs[Mapping[str, t.NormalizedValue]]:
             return isinstance(value, Mapping)
 
         @classmethod
         def _is_nested_state_mapping(
             cls,
-            value: object,
+            value: t.NormalizedValue,
         ) -> TypeIs[Mapping[str, Mapping[str, t.NormalizedValue]]]:
             if not cls._is_str_object_mapping(value):
                 return False
