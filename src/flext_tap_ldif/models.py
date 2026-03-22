@@ -1078,7 +1078,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         @computed_field
         def tap_config_summary(self) -> Mapping[str, t.NormalizedValue]:
             """LDIF tap configuration summary."""
-            patterns: list[t.NormalizedValue] = [v for v in self.file_patterns]  # noqa: C416
+            patterns: list[t.NormalizedValue] = list(self.file_patterns)
             source: dict[str, t.NormalizedValue] = {
                 "directory": self.ldif_directory,
                 "patterns": patterns,
