@@ -19,6 +19,7 @@ from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
 
 if TYPE_CHECKING:
     from flext_core.typings import FlextTypes
+    from flext_tests import d, e, h, r, s, x
 
     from .conftest import (
         MockLDIFParser,
@@ -49,40 +50,45 @@ if TYPE_CHECKING:
         singer_state,
         utf16_ldif_file,
     )
-    from .constants import TestsFlextTapLdifConstants, TestsFlextTapLdifConstants as c
-    from .models import TestsFlextTapLdifModels, TestsFlextTapLdifModels as m
-    from .protocols import TestsFlextTapLdifProtocols, TestsFlextTapLdifProtocols as p
+    from .constants import FlextTapLdifTestConstants, FlextTapLdifTestConstants as c
+    from .models import FlextTapLdifTestModels, FlextTapLdifTestModels as m
+    from .protocols import FlextTapLdifTestProtocols, FlextTapLdifTestProtocols as p
     from .test_tap import test_discover_streams
-    from .typings import TestsFlextTapLdifTypes, TestsFlextTapLdifTypes as t, tt
-    from .utilities import TestsFlextTapLdifUtilities, TestsFlextTapLdifUtilities as u
+    from .typings import FlextTapLdifTestTypes, FlextTapLdifTestTypes as t
+    from .utilities import FlextTapLdifTestUtilities, FlextTapLdifTestUtilities as u
 
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
+    "FlextTapLdifTestConstants": ("tests.constants", "FlextTapLdifTestConstants"),
+    "FlextTapLdifTestModels": ("tests.models", "FlextTapLdifTestModels"),
+    "FlextTapLdifTestProtocols": ("tests.protocols", "FlextTapLdifTestProtocols"),
+    "FlextTapLdifTestTypes": ("tests.typings", "FlextTapLdifTestTypes"),
+    "FlextTapLdifTestUtilities": ("tests.utilities", "FlextTapLdifTestUtilities"),
     "MockLDIFParser": ("tests.conftest", "MockLDIFParser"),
     "MockLDIFTap": ("tests.conftest", "MockLDIFTap"),
-    "TestsFlextTapLdifConstants": ("tests.constants", "TestsFlextTapLdifConstants"),
-    "TestsFlextTapLdifModels": ("tests.models", "TestsFlextTapLdifModels"),
-    "TestsFlextTapLdifProtocols": ("tests.protocols", "TestsFlextTapLdifProtocols"),
-    "TestsFlextTapLdifTypes": ("tests.typings", "TestsFlextTapLdifTypes"),
-    "TestsFlextTapLdifUtilities": ("tests.utilities", "TestsFlextTapLdifUtilities"),
     "basic_tap_config": ("tests.conftest", "basic_tap_config"),
     "benchmark_config": ("tests.conftest", "benchmark_config"),
     "binary_ldif_content": ("tests.conftest", "binary_ldif_content"),
     "binary_ldif_file": ("tests.conftest", "binary_ldif_file"),
-    "c": ("tests.constants", "TestsFlextTapLdifConstants"),
+    "c": ("tests.constants", "FlextTapLdifTestConstants"),
     "changes_tap_config": ("tests.conftest", "changes_tap_config"),
+    "d": ("flext_tests", "d"),
     "directory_tap_config": ("tests.conftest", "directory_tap_config"),
     "docker_control": ("tests.conftest", "docker_control"),
+    "e": ("flext_tests", "e"),
     "filtered_tap_config": ("tests.conftest", "filtered_tap_config"),
+    "h": ("flext_tests", "h"),
     "invalid_ldif_content": ("tests.conftest", "invalid_ldif_content"),
     "invalid_ldif_file": ("tests.conftest", "invalid_ldif_file"),
     "large_ldif_file": ("tests.conftest", "large_ldif_file"),
     "ldif_directory": ("tests.conftest", "ldif_directory"),
-    "m": ("tests.models", "TestsFlextTapLdifModels"),
+    "m": ("tests.models", "FlextTapLdifTestModels"),
     "mock_ldif_parser": ("tests.conftest", "mock_ldif_parser"),
     "mock_ldif_tap": ("tests.conftest", "mock_ldif_tap"),
-    "p": ("tests.protocols", "TestsFlextTapLdifProtocols"),
+    "p": ("tests.protocols", "FlextTapLdifTestProtocols"),
     "performance_tap_config": ("tests.conftest", "performance_tap_config"),
     "pytest_configure": ("tests.conftest", "pytest_configure"),
+    "r": ("flext_tests", "r"),
+    "s": ("flext_tests", "s"),
     "sample_ldif_changes": ("tests.conftest", "sample_ldif_changes"),
     "sample_ldif_changes_file": ("tests.conftest", "sample_ldif_changes_file"),
     "sample_ldif_content": ("tests.conftest", "sample_ldif_content"),
@@ -91,30 +97,33 @@ _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "shared_ldap_container": ("tests.conftest", "shared_ldap_container"),
     "singer_catalog_config": ("tests.conftest", "singer_catalog_config"),
     "singer_state": ("tests.conftest", "singer_state"),
-    "t": ("tests.typings", "TestsFlextTapLdifTypes"),
+    "t": ("tests.typings", "FlextTapLdifTestTypes"),
     "test_discover_streams": ("tests.test_tap", "test_discover_streams"),
-    "tt": ("tests.typings", "tt"),
-    "u": ("tests.utilities", "TestsFlextTapLdifUtilities"),
+    "u": ("tests.utilities", "FlextTapLdifTestUtilities"),
     "utf16_ldif_file": ("tests.conftest", "utf16_ldif_file"),
+    "x": ("flext_tests", "x"),
 }
 
 __all__ = [
+    "FlextTapLdifTestConstants",
+    "FlextTapLdifTestModels",
+    "FlextTapLdifTestProtocols",
+    "FlextTapLdifTestTypes",
+    "FlextTapLdifTestUtilities",
     "MockLDIFParser",
     "MockLDIFTap",
-    "TestsFlextTapLdifConstants",
-    "TestsFlextTapLdifModels",
-    "TestsFlextTapLdifProtocols",
-    "TestsFlextTapLdifTypes",
-    "TestsFlextTapLdifUtilities",
     "basic_tap_config",
     "benchmark_config",
     "binary_ldif_content",
     "binary_ldif_file",
     "c",
     "changes_tap_config",
+    "d",
     "directory_tap_config",
     "docker_control",
+    "e",
     "filtered_tap_config",
+    "h",
     "invalid_ldif_content",
     "invalid_ldif_file",
     "large_ldif_file",
@@ -125,6 +134,8 @@ __all__ = [
     "p",
     "performance_tap_config",
     "pytest_configure",
+    "r",
+    "s",
     "sample_ldif_changes",
     "sample_ldif_changes_file",
     "sample_ldif_content",
@@ -135,9 +146,9 @@ __all__ = [
     "singer_state",
     "t",
     "test_discover_streams",
-    "tt",
     "u",
     "utf16_ldif_file",
+    "x",
 ]
 
 

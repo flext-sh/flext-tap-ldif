@@ -1,6 +1,6 @@
-"""Module skeleton for TestsFlextTapLdifConstants.
+"""Module skeleton for FlextTapLdifTestConstants.
 
-Test constants for flexttapldif.
+Test constants for flext-tap-ldif.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -8,12 +8,12 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_tests import c
+from flext_tests import FlextTestsConstants
 
 
-class TestsFlextTapLdifConstants(c):
-    """Test constants for flexttapldif."""
+class FlextTapLdifTestConstants(FlextTestsConstants):
+    """Test constants for flext-tap-ldif."""
 
 
-c = TestsFlextTapLdifConstants
-__all__ = ["TestsFlextTapLdifConstants", "c"]
+c = FlextTapLdifTestConstants
+__all__ = ["FlextTapLdifTestConstants", "c"]

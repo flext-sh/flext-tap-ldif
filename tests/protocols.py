@@ -1,4 +1,4 @@
-"""Protocols for flext-tap-ldif tests - uses composition with p.
+"""Protocols for flext-tap-ldif tests - uses composition with FlextTestsProtocols.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -9,30 +9,32 @@ from __future__ import annotations
 
 from typing import Protocol, runtime_checkable
 
-from flext_tests import p
+from flext_tests import FlextTestsProtocols
+
+from flext_tap_ldif import FlextTapLdifProtocols
 
 
-class TestsFlextTapLdifProtocols(p):
-    """Protocols for flext-tap-ldif tests - uses composition with p.
+class FlextTapLdifTestProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
+    """Protocols for flext-tap-ldif tests - combines FlextTestsProtocols with FlextTapLdifProtocols.
 
-    Architecture: Uses composition (not inheritance) with p and FlextTapLdifProtocols
+    Architecture: Uses composition (not inheritance) with FlextTestsProtocols and FlextTapLdifProtocols
     for flext-tap-ldif-specific protocol definitions.
 
     Access patterns:
-    - TestsFlextTapLdifProtocols.Tests.* = flext_tests test protocols (via composition)
-    - TestsFlextTapLdifProtocols.TapLdif.* = flext-tap-ldif-specific test protocols
-    - TestsFlextTapLdifProtocols.* = p protocols (via composition)
+    - FlextTapLdifTestProtocols.Tests.* = flext_tests test protocols (via composition)
+    - FlextTapLdifTestProtocols.TapLdif.* = flext-tap-ldif-specific test protocols
+    - FlextTapLdifTestProtocols.* = FlextTestsProtocols protocols (via composition)
 
     Rules:
-    - Use composition, not inheritance (p deprecates subclassing)
+    - Use composition, not inheritance (FlextTestsProtocols deprecates subclassing)
     - flext-tap-ldif-specific protocols go in TapLdif namespace
     - Generic protocols accessed via Tests namespace
     """
 
-    class Tests(p.Tests):
+    class Tests(FlextTestsProtocols.Tests):
         """Project-specific test protocols."""
 
-    class TapLdif:
+    class TapLdif(FlextTapLdifProtocols.TapLdif):
         """Tap LDIF test protocols - domain-specific for LDIF tap testing.
 
         Contains test protocols specific to LDIF tap functionality including:
@@ -94,5 +96,5 @@ class TestsFlextTapLdifProtocols(p):
                 ...
 
 
-p = TestsFlextTapLdifProtocols
-__all__ = ["TestsFlextTapLdifProtocols", "p"]
+p = FlextTapLdifTestProtocols
+__all__ = ["FlextTapLdifTestProtocols", "p"]

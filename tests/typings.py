@@ -1,4 +1,4 @@
-"""Types for flext-tap-ldif tests - uses composition with t.
+"""Types for flext-tap-ldif tests - uses composition with FlextTestsTypes.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -7,23 +7,25 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_tap_ldif import c, t
+from flext_tests import FlextTestsTypes
+
+from flext_tap_ldif import FlextTapLdifConstants as _c, FlextTapLdifTypes
 
 
-class TestsFlextTapLdifTypes(t):
-    """Types for flext-tap-ldif tests - uses composition with t.
+class FlextTapLdifTestTypes(FlextTestsTypes, FlextTapLdifTypes):
+    """Types for flext-tap-ldif tests - uses composition with FlextTestsTypes.
 
-    Architecture: Uses composition (not inheritance) with t and FlextTapLdifTypes
+    Architecture: Uses composition (not inheritance) with FlextTestsTypes and FlextTapLdifTypes
     for flext-tap-ldif-specific type definitions.
 
     Access patterns:
-    - TestsFlextTapLdifTypes.Tests.* = flext_tests test types (via composition)
-    - TestsFlextTapLdifTypes.TapLdif.* = flext-tap-ldif-specific test types
-    - TestsFlextTapLdifTypes.* = t types (via composition)
+    - FlextTapLdifTestTypes.Tests.* = flext_tests test types (via composition)
+    - FlextTapLdifTestTypes.TapLdifTest.* = flext-tap-ldif-specific test types
+    - FlextTapLdifTestTypes.* = FlextTestsTypes types (via composition)
 
     Rules:
-    - Use composition, not inheritance (t deprecates subclassing)
-    - flext-tap-ldif-specific types go in TapLdif namespace
+    - Use composition, not inheritance (FlextTestsTypes deprecates subclassing)
+    - flext-tap-ldif-specific types go in TapLdifTest namespace
     - Generic types accessed via Tests namespace
     """
 
@@ -36,9 +38,9 @@ class TestsFlextTapLdifTypes(t):
         - Test scenario types
         """
 
-        type TestLdifFilePath = c.TestLdifFilePath
-        type TestLdifEncoding = c.TestLdifEncoding
-        type TestObjectClass = c.TestObjectClass
+        type TestLdifFilePath = _c.TestLdifFilePath
+        type TestLdifEncoding = _c.TestLdifEncoding
+        type TestObjectClass = _c.TestObjectClass
         type MockLdifEntry = dict[str, str | dict[str, list[str]]]
         type MockLdifFile = list[dict[str, str | dict[str, list[str]]]]
         type TestLdifScenario = dict[str, object]
@@ -46,7 +48,5 @@ class TestsFlextTapLdifTypes(t):
         type TestLdifParsingResult = dict[str, object]
 
 
-tt = TestsFlextTapLdifTypes
-__all__ = ["TestsFlextTapLdifTypes", "t", "tt"]
-
-t = TestsFlextTapLdifTypes
+t = FlextTapLdifTestTypes
+__all__ = ["FlextTapLdifTestTypes", "t"]
