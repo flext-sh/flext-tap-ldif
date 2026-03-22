@@ -8,7 +8,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, ClassVar
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -16,7 +16,9 @@ from pydantic import BaseModel, ConfigDict, Field
 class FlextTapLdifSettings(BaseModel):
     """Validated runtime settings for tap-ldif execution."""
 
-    model_config: ClassVar[ConfigDict] = ConfigDict(extra="ignore", validate_assignment=True)
+    model_config: ClassVar[ConfigDict] = ConfigDict(
+        extra="ignore", validate_assignment=True
+    )
 
     file_path: Annotated[str | None, Field(default=None)]
     directory_path: Annotated[str | None, Field(default=None)]
