@@ -21,7 +21,7 @@ if TYPE_CHECKING:
     from flext_core import FlextTypes
     from flext_tests import d, e, h, r, s, x
 
-    from .conftest import (
+    from tests.conftest import (
         MockLDIFParser,
         MockLDIFTap,
         basic_tap_config,
@@ -50,12 +50,21 @@ if TYPE_CHECKING:
         singer_state,
         utf16_ldif_file,
     )
-    from .constants import FlextTapLdifTestConstants, FlextTapLdifTestConstants as c
-    from .models import FlextTapLdifTestModels, FlextTapLdifTestModels as m
-    from .protocols import FlextTapLdifTestProtocols, FlextTapLdifTestProtocols as p
-    from .test_tap import test_discover_streams
-    from .typings import FlextTapLdifTestTypes, FlextTapLdifTestTypes as t
-    from .utilities import FlextTapLdifTestUtilities, FlextTapLdifTestUtilities as u
+    from tests.constants import (
+        FlextTapLdifTestConstants,
+        FlextTapLdifTestConstants as c,
+    )
+    from tests.models import FlextTapLdifTestModels, FlextTapLdifTestModels as m
+    from tests.protocols import (
+        FlextTapLdifTestProtocols,
+        FlextTapLdifTestProtocols as p,
+    )
+    from tests.test_tap import test_discover_streams
+    from tests.typings import FlextTapLdifTestTypes, FlextTapLdifTestTypes as t
+    from tests.utilities import (
+        FlextTapLdifTestUtilities,
+        FlextTapLdifTestUtilities as u,
+    )
 
 _LAZY_IMPORTS: dict[str, tuple[str, str]] = {
     "FlextTapLdifTestConstants": ("tests.constants", "FlextTapLdifTestConstants"),
