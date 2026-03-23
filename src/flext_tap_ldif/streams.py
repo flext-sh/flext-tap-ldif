@@ -12,8 +12,7 @@ from collections.abc import Iterable, Mapping
 from pathlib import Path
 from typing import override
 
-from flext_core import FlextLogger
-from flext_core.typings import t
+from flext_core import FlextLogger, t
 from singer_sdk.streams import Stream
 from singer_sdk.tap_base import Tap
 
