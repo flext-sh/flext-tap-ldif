@@ -54,7 +54,7 @@ class FlextLdifProcessor:
 
         """
         max_size_bytes = max_file_size_mb * 1024 * 1024
-        discovered: Sequence[Path] = []
+        discovered: list[Path] = []
         if file_path is not None:
             match file_path:
                 case str() as file_path_text:

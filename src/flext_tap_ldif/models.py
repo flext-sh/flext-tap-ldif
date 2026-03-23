@@ -142,7 +142,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
                 value_dict = {str(k): str(v) for k, v in value.root.items()}
             else:
                 value_dict = {str(k): str(v) for k, v in value.items()}
-            metadata_dict: Mapping[str, t.ContainerValue] = dict(value_dict)
+            metadata_dict: dict[str, t.ContainerValue] = dict(value_dict)
             metadata_dict["_ldif_tap_metadata"] = {
                 "extraction_timestamp": datetime.now(UTC).isoformat(),
                 "tap_type": "ldif_file_extractor",
@@ -224,7 +224,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         @staticmethod
         def parse_dn(dn: str) -> Mapping[str, str]:
             """Parse Distinguished Name into components."""
-            components: Mapping[str, str] = {}
+            components: dict[str, str] = {}
             parts = dn.split(",")
             for part in parts:
                 if "=" in part:
@@ -260,7 +260,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         dn: Annotated[str, Field(..., description="Distinguished Name")]
         attributes: Annotated[
-            Mapping[str, Sequence[str]],
+            dict[str, Sequence[str]],
             Field(
                 default_factory=dict,
                 description="Entry attributes",

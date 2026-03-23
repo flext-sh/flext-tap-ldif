@@ -88,7 +88,7 @@ class LDIFEntriesStream(Stream):
 
         """
         _ = context
-        config: Mapping[str, t.ContainerValue] = dict(self._tap.config)
+        config: dict[str, t.ContainerValue] = dict(self._tap.config)
         sample_path = getattr(self, "_sample_file_path", None)
         if sample_path:
             config["file_path"] = sample_path
@@ -155,7 +155,7 @@ class LDIFEntriesStream(Stream):
                     )
                     continue
 
-    def _get_schema(self) -> Mapping[str, t.ContainerValue]:
+    def _get_schema(self) -> dict[str, t.ContainerValue]:
         """Get schema for LDIF entries."""
         return {
             "type": "t.NormalizedValue",

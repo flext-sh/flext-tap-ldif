@@ -259,9 +259,9 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
         @staticmethod
         def build_record_from_lines(
             entry_lines: Sequence[str],
-        ) -> Mapping[str, str | Sequence[str]]:
+        ) -> dict[str, str | Sequence[str]]:
             """Build record dict from LDIF lines. Returns concrete type for type checker."""
-            record: Mapping[str, str | Sequence[str]] = {}
+            record: dict[str, str | Sequence[str]] = {}
             current_attr: str | None = None
             current_value: str = ""
             for line in entry_lines:
@@ -549,7 +549,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 state,
                 file_path,
             )
-            file_state_dict: Mapping[str, t.NormalizedValue] = dict(file_state)
+            file_state_dict: dict[str, t.NormalizedValue] = dict(file_state)
             file_state_dict["position"] = position
             file_state_dict["last_updated"] = datetime.now(UTC).isoformat()
             return FlextTapLdifUtilities.StateManagement.set_file_state(
@@ -577,13 +577,13 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
             """
             files_raw = state.get("files")
-            files_dict: Mapping[str, t.NormalizedValue] = {}
+            files_dict: dict[str, t.NormalizedValue] = {}
             if isinstance(files_raw, Mapping):
                 for k, v in files_raw.items():
                     if isinstance(v, Mapping):
                         files_dict[k] = dict(v)
             files_dict[file_path] = dict(file_state)
-            updated_state: Mapping[str, t.NormalizedValue] = dict(state)
+            updated_state: dict[str, t.NormalizedValue] = dict(state)
             updated_state["files"] = files_dict
             return updated_state
 
