@@ -8,7 +8,7 @@ implementation from flext-ldif project.
 
 from __future__ import annotations
 
-from collections.abc import Generator, Mapping
+from collections.abc import Generator, Mapping, Sequence
 from pathlib import Path
 from typing import NoReturn
 
@@ -40,7 +40,7 @@ class FlextLdifProcessor:
         file_pattern: str = "*.ldif",
         file_path: str | Path | None = None,
         max_file_size_mb: int = 100,
-    ) -> r[list[Path]]:
+    ) -> r[Sequence[Path]]:
         """Discover LDIF files using local file discovery.
 
         Args:
@@ -50,11 +50,11 @@ class FlextLdifProcessor:
             max_file_size_mb: Maximum file size in MB
 
         Returns:
-            r[list[Path]]: Success with discovered files or failure with error
+            r[Sequence[Path]]: Success with discovered files or failure with error
 
         """
         max_size_bytes = max_file_size_mb * 1024 * 1024
-        discovered: list[Path] = []
+        discovered: Sequence[Path] = []
         if file_path is not None:
             match file_path:
                 case str() as file_path_text:
@@ -62,11 +62,11 @@ class FlextLdifProcessor:
                 case _:
                     p = file_path
             if not p.exists():
-                return r[list[Path]].fail(f"File not found: {p}")
+                return r[Sequence[Path]].fail(f"File not found: {p}")
             if p.stat().st_size > max_size_bytes:
-                return r[list[Path]].fail(f"File exceeds max size: {p}")
+                return r[Sequence[Path]].fail(f"File exceeds max size: {p}")
             discovered.append(p)
-            return r[list[Path]].ok(discovered)
+            return r[Sequence[Path]].ok(discovered)
         if directory_path is not None:
             match directory_path:
                 case str() as directory_path_text:
@@ -74,19 +74,21 @@ class FlextLdifProcessor:
                 case _:
                     d = directory_path
             if not d.exists() or not d.is_dir():
-                return r[list[Path]].fail(f"Directory not found: {d}")
+                return r[Sequence[Path]].fail(f"Directory not found: {d}")
             discovered.extend(
                 f
                 for f in sorted(d.glob(file_pattern))
                 if f.is_file() and f.stat().st_size <= max_size_bytes
             )
-            return r[list[Path]].ok(discovered)
-        return r[list[Path]].fail("No file_path or directory_path specified")
+            return r[Sequence[Path]].ok(discovered)
+        return r[Sequence[Path]].fail("No file_path or directory_path specified")
 
     def process_file(
         self,
         file_path: Path,
-    ) -> Generator[Mapping[str, str | int | Mapping[str, list[str]] | list[str]]]:
+    ) -> Generator[
+        Mapping[str, str | int | Mapping[str, Sequence[str]] | Sequence[str]]
+    ]:
         """Process a single LDIF file and yield records using flext-ldif.
 
         Args:

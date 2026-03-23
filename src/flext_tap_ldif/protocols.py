@@ -13,7 +13,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from typing import Protocol, runtime_checkable
 
 from flext_core import t
@@ -63,7 +63,7 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
 
             def extract_entry_dn(
                 self,
-                entry_lines: list[str],
+                entry_lines: Sequence[str],
             ) -> FlextMeltanoProtocols.Result[str]:
                 """Extract DN from LDIF entry lines."""
                 ...
@@ -78,7 +78,7 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
             def parse_ldif_file(
                 self,
                 file_path: str,
-            ) -> FlextMeltanoProtocols.Result[list[t.ContainerValue]]:
+            ) -> FlextMeltanoProtocols.Result[Sequence[t.ContainerValue]]:
                 """Parse entire LDIF file."""
                 ...
 
@@ -88,16 +88,16 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
 
             def extract_entries_by_filter(
                 self,
-                entries: list[Mapping[str, t.ContainerValue]],
+                entries: Sequence[Mapping[str, t.ContainerValue]],
                 filter_criteria: Mapping[str, t.ContainerValue],
-            ) -> FlextMeltanoProtocols.Result[list[t.ContainerValue]]:
+            ) -> FlextMeltanoProtocols.Result[Sequence[t.ContainerValue]]:
                 """Extract LDIF entries matching filter criteria."""
                 ...
 
             def extract_entry_attributes(
                 self,
                 entry: Mapping[str, t.ContainerValue],
-                attributes: list[str] | None = None,
+                attributes: Sequence[str] | None = None,
             ) -> FlextMeltanoProtocols.Result[t.Container]:
                 """Extract specific attributes from LDIF entry."""
                 ...
@@ -108,7 +108,7 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
 
             def normalize_ldif_attributes(
                 self,
-                attributes: Mapping[str, list[t.ContainerValue]],
+                attributes: Mapping[str, Sequence[t.ContainerValue]],
             ) -> FlextMeltanoProtocols.Result[t.Container]:
                 """Normalize LDIF attribute values."""
                 ...
@@ -128,7 +128,7 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
 
             def generate_streams_from_ldif(
                 self,
-                ldif_entries: list[Mapping[str, t.ContainerValue]],
+                ldif_entries: Sequence[Mapping[str, t.ContainerValue]],
                 config: Mapping[str, t.ContainerValue],
             ) -> FlextMeltanoProtocols.Result[FlextMeltanoModels.Meltano.SingerCatalog]:
                 """Generate Singer streams from LDIF entries."""
@@ -137,7 +137,7 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
             def sync_ldif_stream(
                 self,
                 stream_name: str,
-                ldif_entries: list[Mapping[str, t.ContainerValue]],
+                ldif_entries: Sequence[Mapping[str, t.ContainerValue]],
                 state: Mapping[str, t.ContainerValue],
             ) -> FlextMeltanoProtocols.Result[
                 FlextMeltanoModels.Meltano.SingerStateMessage

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from collections.abc import Generator
+from collections.abc import Generator, Mapping, Sequence
 from pathlib import Path
 
 import pytest
@@ -98,7 +98,7 @@ def ldif_directory(
 
 
 @pytest.fixture
-def basic_tap_config(sample_ldif_file: Path) -> dict[str, t.NormalizedValue]:
+def basic_tap_config(sample_ldif_file: Path) -> Mapping[str, t.NormalizedValue]:
     """Basic LDIF tap configuration."""
     return {
         "ldif_file_path": str(sample_ldif_file),
@@ -113,7 +113,9 @@ def basic_tap_config(sample_ldif_file: Path) -> dict[str, t.NormalizedValue]:
 
 
 @pytest.fixture
-def changes_tap_config(sample_ldif_changes_file: Path) -> dict[str, t.NormalizedValue]:
+def changes_tap_config(
+    sample_ldif_changes_file: Path,
+) -> Mapping[str, t.NormalizedValue]:
     """LDIF tap configuration for changes processing."""
     return {
         "ldif_file_path": str(sample_ldif_changes_file),
@@ -128,7 +130,7 @@ def changes_tap_config(sample_ldif_changes_file: Path) -> dict[str, t.Normalized
 
 
 @pytest.fixture
-def directory_tap_config(ldif_directory: Path) -> dict[str, t.NormalizedValue]:
+def directory_tap_config(ldif_directory: Path) -> Mapping[str, t.NormalizedValue]:
     """LDIF tap configuration for directory processing."""
     return {
         "ldif_file_path": str(ldif_directory),
@@ -144,7 +146,7 @@ def directory_tap_config(ldif_directory: Path) -> dict[str, t.NormalizedValue]:
 
 
 @pytest.fixture
-def filtered_tap_config(sample_ldif_file: Path) -> dict[str, t.NormalizedValue]:
+def filtered_tap_config(sample_ldif_file: Path) -> Mapping[str, t.NormalizedValue]:
     """LDIF tap configuration with filters."""
     return {
         "ldif_file_path": str(sample_ldif_file),
@@ -179,7 +181,7 @@ def large_ldif_file(tmp_path: Path) -> Path:
 
 
 @pytest.fixture
-def performance_tap_config(large_ldif_file: Path) -> dict[str, t.NormalizedValue]:
+def performance_tap_config(large_ldif_file: Path) -> Mapping[str, t.NormalizedValue]:
     """LDIF tap configuration for performance testing."""
     return {
         "ldif_file_path": str(large_ldif_file),
@@ -219,7 +221,7 @@ def utf16_ldif_file(tmp_path: Path) -> Path:
 
 
 @pytest.fixture
-def singer_catalog_config() -> dict[str, t.NormalizedValue]:
+def singer_catalog_config() -> Mapping[str, t.NormalizedValue]:
     """Singer catalog configuration."""
     return {
         "streams": [
@@ -252,7 +254,7 @@ def singer_catalog_config() -> dict[str, t.NormalizedValue]:
 
 
 @pytest.fixture
-def singer_state() -> dict[str, t.NormalizedValue]:
+def singer_state() -> Mapping[str, t.NormalizedValue]:
     """Singer state for incremental sync."""
     return {
         "currently_syncing": None,
@@ -281,7 +283,7 @@ def invalid_ldif_file(tmp_path: Path, invalid_ldif_content: str) -> Path:
 
 
 @pytest.fixture
-def benchmark_config() -> dict[str, t.NormalizedValue]:
+def benchmark_config() -> Mapping[str, t.NormalizedValue]:
     """Configuration for performance benchmarking."""
     return {
         "max_entries_to_process": 1000,
@@ -307,16 +309,16 @@ def pytest_configure(config: pytest.Config) -> None:
 class MockLDIFTap:
     """Mock implementation of the LDIF Tap."""
 
-    def __init__(self, config: dict[str, t.NormalizedValue]) -> None:
+    def __init__(self, config: Mapping[str, t.NormalizedValue]) -> None:
         """Initialize the instance."""
         super().__init__()
         self.config = config
-        self.discovered_streams: list[dict[str, t.NormalizedValue]] = []
+        self.discovered_streams: Sequence[Mapping[str, t.NormalizedValue]] = []
 
-    def discover_streams(self) -> list[dict[str, t.NormalizedValue]]:
+    def discover_streams(self) -> Sequence[Mapping[str, t.NormalizedValue]]:
         return self.discovered_streams
 
-    def sync_records(self) -> list[dict[str, t.NormalizedValue]]:
+    def sync_records(self) -> Sequence[Mapping[str, t.NormalizedValue]]:
         return [
             {
                 "dn": "cn=test,ou=users,dc=example,dc=com",
@@ -338,16 +340,16 @@ def mock_ldif_tap() -> type[MockLDIFTap]:
 class MockLDIFParser:
     """Mock implementation of the LDIF Parser."""
 
-    def __init__(self, config: dict[str, t.NormalizedValue]) -> None:
+    def __init__(self, config: Mapping[str, t.NormalizedValue]) -> None:
         """Initialize the instance."""
         super().__init__()
         self.config = config
-        self.parsed_entries: list[dict[str, t.NormalizedValue]] = []
+        self.parsed_entries: Sequence[Mapping[str, t.NormalizedValue]] = []
 
-    def parse_file(self, _file_path: str) -> dict[str, t.NormalizedValue]:
+    def parse_file(self, _file_path: str) -> Mapping[str, t.NormalizedValue]:
         return {"success": True, "entries": self.parsed_entries, "errors": []}
 
-    def add_mock_entry(self, entry: dict[str, t.NormalizedValue]) -> None:
+    def add_mock_entry(self, entry: Mapping[str, t.NormalizedValue]) -> None:
         self.parsed_entries.append(entry)
 
 

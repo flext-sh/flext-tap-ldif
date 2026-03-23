@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from typing import ClassVar, override
 
 from flext_core import FlextConstants, FlextLogger, t
@@ -25,7 +25,7 @@ class TapLDIF(Tap):
 
     name: str = "tap-ldif"
     config_class = FlextTapLdifSettings
-    config_jsonschema: ClassVar[dict[str, t.ContainerValue]] = {
+    config_jsonschema: ClassVar[Mapping[str, t.ContainerValue]] = {
         "type": "t.NormalizedValue",
         "properties": {
             "file_path": {"type": "string"},
@@ -46,7 +46,7 @@ class TapLDIF(Tap):
     }
 
     @override
-    def discover_streams(self) -> list[Stream]:
+    def discover_streams(self) -> Sequence[Stream]:
         """Return a list of discovered streams.
 
         Returns:

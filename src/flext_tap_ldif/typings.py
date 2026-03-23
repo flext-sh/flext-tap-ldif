@@ -14,7 +14,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 
 from flext_ldif import FlextLdifTypes
 from flext_meltano import FlextMeltanoTypes
@@ -33,84 +33,104 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
     class TapLdif:
         """Singer tap protocol complex types."""
 
-        type TapConfiguration = dict[
+        type TapConfiguration = Mapping[
             str,
-            str | int | bool | dict[str, t.ContainerValue],
+            str | int | bool | Mapping[str, t.ContainerValue],
         ]
-        type StreamConfiguration = dict[str, str | bool | dict[str, t.ContainerValue]]
-        type CatalogDefinition = dict[str, str | list[dict[str, t.ContainerValue]]]
-        type SchemaDefinition = dict[str, str | dict[str, t.ContainerValue] | bool]
-        type MessageOutput = dict[str, str | dict[str, t.ContainerValue]]
-        type StateManagement = dict[str, str | int | dict[str, t.ContainerValue]]
+        type StreamConfiguration = Mapping[
+            str, str | bool | Mapping[str, t.ContainerValue]
+        ]
+        type CatalogDefinition = Mapping[
+            str, str | Sequence[Mapping[str, t.ContainerValue]]
+        ]
+        type SchemaDefinition = Mapping[
+            str, str | Mapping[str, t.ContainerValue] | bool
+        ]
+        type MessageOutput = Mapping[str, str | Mapping[str, t.ContainerValue]]
+        type StateManagement = Mapping[str, str | int | Mapping[str, t.ContainerValue]]
 
     class LdifProcessing:
         """LDIF processing complex types."""
 
-        type ProcessingConfiguration = dict[
+        type ProcessingConfiguration = Mapping[
             str,
-            str | int | bool | dict[str, t.ContainerValue],
+            str | int | bool | Mapping[str, t.ContainerValue],
         ]
-        type EntryExtraction = dict[str, str | list[str] | dict[str, t.ContainerValue]]
-        type EntryTransformation = list[dict[str, str | t.ContainerValue]]
-        type EntryValidation = dict[
+        type EntryExtraction = Mapping[
+            str, str | Sequence[str] | Mapping[str, t.ContainerValue]
+        ]
+        type EntryTransformation = Sequence[Mapping[str, str | t.ContainerValue]]
+        type EntryValidation = Mapping[
             str,
-            bool | str | list[str] | dict[str, t.ContainerValue],
+            bool | str | Sequence[str] | Mapping[str, t.ContainerValue],
         ]
-        type BatchProcessing = dict[str, int | bool | dict[str, t.ContainerValue]]
-        type FileProcessing = dict[str, str | int | dict[str, t.ContainerValue]]
+        type BatchProcessing = Mapping[str, int | bool | Mapping[str, t.ContainerValue]]
+        type FileProcessing = Mapping[str, str | int | Mapping[str, t.ContainerValue]]
 
     class DataExtraction:
         """Data extraction complex types."""
 
-        type ExtractionConfiguration = dict[
+        type ExtractionConfiguration = Mapping[
             str,
-            str | bool | dict[str, t.ContainerValue],
+            str | bool | Mapping[str, t.ContainerValue],
         ]
-        type ExtractionFilter = dict[str, str | list[str] | dict[str, t.ContainerValue]]
-        type ExtractionMapping = dict[str, str | dict[str, t.ContainerValue]]
-        type ExtractionResult = dict[str, bool | list[dict[str, t.ContainerValue]]]
-        type ExtractionMetrics = dict[str, int | float | dict[str, t.ContainerValue]]
-        type ExtractionState = dict[str, str | int | dict[str, t.ContainerValue]]
+        type ExtractionFilter = Mapping[
+            str, str | Sequence[str] | Mapping[str, t.ContainerValue]
+        ]
+        type ExtractionMapping = Mapping[str, str | Mapping[str, t.ContainerValue]]
+        type ExtractionResult = Mapping[
+            str, bool | Sequence[Mapping[str, t.ContainerValue]]
+        ]
+        type ExtractionMetrics = Mapping[
+            str, int | float | Mapping[str, t.ContainerValue]
+        ]
+        type ExtractionState = Mapping[str, str | int | Mapping[str, t.ContainerValue]]
 
     class StreamProcessing:
         """Stream processing complex types."""
 
-        type StreamConfiguration = dict[
+        type StreamConfiguration = Mapping[
             str,
-            str | bool | int | dict[str, t.ContainerValue],
+            str | bool | int | Mapping[str, t.ContainerValue],
         ]
-        type StreamMetadata = dict[str, str | dict[str, t.ContainerValue]]
-        type StreamRecord = dict[str, t.ContainerValue | dict[str, t.ContainerValue]]
-        type StreamRecordValue = str | int | list[str] | Mapping[str, list[str]]
-        type StreamState = dict[str, str | int | dict[str, t.ContainerValue]]
-        type StreamBookmark = dict[str, str | int | dict[str, t.ContainerValue]]
-        type StreamSchema = dict[str, str | dict[str, t.ContainerValue] | bool]
+        type StreamMetadata = Mapping[str, str | Mapping[str, t.ContainerValue]]
+        type StreamRecord = Mapping[
+            str, t.ContainerValue | Mapping[str, t.ContainerValue]
+        ]
+        type StreamRecordValue = str | int | Sequence[str] | Mapping[str, Sequence[str]]
+        type StreamState = Mapping[str, str | int | Mapping[str, t.ContainerValue]]
+        type StreamBookmark = Mapping[str, str | int | Mapping[str, t.ContainerValue]]
+        type StreamSchema = Mapping[str, str | Mapping[str, t.ContainerValue] | bool]
 
     class FileHandling:
         """File handling complex types."""
 
-        type FileConfiguration = dict[
+        type FileConfiguration = Mapping[
             str,
-            str | int | bool | dict[str, t.ContainerValue],
+            str | int | bool | Mapping[str, t.ContainerValue],
         ]
-        type FileValidation = dict[str, bool | str | int | list[str]]
-        type FileProcessing = dict[str, str | int | dict[str, t.ContainerValue]]
-        type FileBatching = dict[str, int | bool | dict[str, t.ContainerValue]]
-        type FileMonitoring = dict[str, bool | int | dict[str, t.ContainerValue]]
-        type FileMetrics = dict[str, int | float | dict[str, t.ContainerValue]]
+        type FileValidation = Mapping[str, bool | str | int | Sequence[str]]
+        type FileProcessing = Mapping[str, str | int | Mapping[str, t.ContainerValue]]
+        type FileBatching = Mapping[str, int | bool | Mapping[str, t.ContainerValue]]
+        type FileMonitoring = Mapping[str, bool | int | Mapping[str, t.ContainerValue]]
+        type FileMetrics = Mapping[str, int | float | Mapping[str, t.ContainerValue]]
 
     class ErrorHandling:
         """Error handling complex types."""
 
-        type ErrorConfiguration = dict[
+        type ErrorConfiguration = Mapping[
             str,
-            bool | str | int | dict[str, t.ContainerValue],
+            bool | str | int | Mapping[str, t.ContainerValue],
         ]
-        type ErrorRecovery = dict[str, str | bool | dict[str, t.ContainerValue]]
-        type ErrorReporting = dict[str, str | int | dict[str, t.ContainerValue]]
-        type ErrorClassification = dict[str, str | int | dict[str, t.ContainerValue]]
-        type ErrorMetrics = dict[str, int | float | dict[str, t.ContainerValue]]
-        type ErrorTracking = list[dict[str, str | int | dict[str, t.ContainerValue]]]
+        type ErrorRecovery = Mapping[str, str | bool | Mapping[str, t.ContainerValue]]
+        type ErrorReporting = Mapping[str, str | int | Mapping[str, t.ContainerValue]]
+        type ErrorClassification = Mapping[
+            str, str | int | Mapping[str, t.ContainerValue]
+        ]
+        type ErrorMetrics = Mapping[str, int | float | Mapping[str, t.ContainerValue]]
+        type ErrorTracking = Sequence[
+            Mapping[str, str | int | Mapping[str, t.ContainerValue]]
+        ]
 
     class Project:
         """Singer Tap LDIF-specific project types.
@@ -121,10 +141,12 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         """
 
         type ProjectType = c.ProjectType
-        type SingerTapLdifProjectConfig = dict[str, t.ContainerValue]
-        type LdifExtractorConfig = dict[str, str | int | bool | list[str]]
-        type SingerProtocolConfig = dict[str, bool | str | dict[str, t.ContainerValue]]
-        type TapLdifPipelineConfig = dict[str, t.ContainerValue]
+        type SingerTapLdifProjectConfig = Mapping[str, t.ContainerValue]
+        type LdifExtractorConfig = Mapping[str, str | int | bool | Sequence[str]]
+        type SingerProtocolConfig = Mapping[
+            str, bool | str | Mapping[str, t.ContainerValue]
+        ]
+        type TapLdifPipelineConfig = Mapping[str, t.ContainerValue]
 
 
 StreamRecordValue = FlextTapLdifTypes.StreamProcessing.StreamRecordValue

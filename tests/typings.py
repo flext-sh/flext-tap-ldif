@@ -7,6 +7,8 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Mapping, Sequence
+
 from flext_tests import FlextTestsTypes
 
 from flext_tap_ldif import FlextTapLdifConstants as _c, FlextTapLdifTypes
@@ -41,11 +43,11 @@ class FlextTapLdifTestTypes(FlextTestsTypes, FlextTapLdifTypes):
         type TestLdifFilePath = _c.TestLdifFilePath
         type TestLdifEncoding = _c.TestLdifEncoding
         type TestObjectClass = _c.TestObjectClass
-        type MockLdifEntry = dict[str, str | dict[str, list[str]]]
-        type MockLdifFile = list[dict[str, str | dict[str, list[str]]]]
-        type TestLdifScenario = dict[str, t.NormalizedValue]
-        type TestLdifValidationResult = dict[str, bool | str | list[str]]
-        type TestLdifParsingResult = dict[str, t.NormalizedValue]
+        type MockLdifEntry = Mapping[str, str | Mapping[str, Sequence[str]]]
+        type MockLdifFile = Sequence[Mapping[str, str | Mapping[str, Sequence[str]]]]
+        type TestLdifScenario = Mapping[str, t.NormalizedValue]
+        type TestLdifValidationResult = Mapping[str, bool | str | Sequence[str]]
+        type TestLdifParsingResult = Mapping[str, t.NormalizedValue]
 
 
 t = FlextTapLdifTestTypes

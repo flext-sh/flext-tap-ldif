@@ -6,7 +6,7 @@ This module provides data models for LDIF tap operations.
 from __future__ import annotations
 
 import base64
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime
 from typing import Annotated, ClassVar, Self
 
@@ -137,12 +137,12 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
     ) -> t.ContainerValue:
         """Add Singer LDIF tap metadata to all serialized fields."""
         if u.is_dict_like(value):
-            value_dict: dict[str, t.ContainerValue] = {}
+            value_dict: Mapping[str, t.ContainerValue] = {}
             if isinstance(value, t.ConfigMap):
                 value_dict = {str(k): str(v) for k, v in value.root.items()}
             else:
                 value_dict = {str(k): str(v) for k, v in value.items()}
-            metadata_dict: dict[str, t.ContainerValue] = dict(value_dict)
+            metadata_dict: Mapping[str, t.ContainerValue] = dict(value_dict)
             metadata_dict["_ldif_tap_metadata"] = {
                 "extraction_timestamp": datetime.now(UTC).isoformat(),
                 "tap_type": "ldif_file_extractor",
@@ -224,7 +224,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         @staticmethod
         def parse_dn(dn: str) -> Mapping[str, str]:
             """Parse Distinguished Name into components."""
-            components: dict[str, str] = {}
+            components: Mapping[str, str] = {}
             parts = dn.split(",")
             for part in parts:
                 if "=" in part:
@@ -260,14 +260,14 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         dn: Annotated[str, Field(..., description="Distinguished Name")]
         attributes: Annotated[
-            dict[str, list[str]],
+            Mapping[str, Sequence[str]],
             Field(
                 default_factory=dict,
                 description="Entry attributes",
             ),
         ]
         object_classes: Annotated[
-            list[str],
+            Sequence[str],
             Field(
                 default_factory=list,
                 description="Object classes",
@@ -307,7 +307,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             Field(default=False, description="Processing status"),
         ]
         validation_errors: Annotated[
-            list[str],
+            Sequence[str],
             Field(
                 default_factory=list,
                 description="Validation errors",
@@ -329,7 +329,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
                 "source_location": {"file": self.source_file, "line": self.line_number},
             }
 
-        def get_attribute_values(self, name: str) -> list[str]:
+        def get_attribute_values(self, name: str) -> Sequence[str]:
             """Get attribute values by name (case-insensitive)."""
             normalized_name = name.lower()
             for attr_name, values in self.attributes.items():
@@ -384,9 +384,9 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         changes: Annotated[
-            list[dict[str, str]],
+            Sequence[Mapping[str, str]],
             Field(
-                default_factory=lambda: list[dict[str, str]](),
+                default_factory=lambda: Sequence[Mapping[str, str]](),
                 description="List of changes",
             ),
         ]
@@ -418,7 +418,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             Field(default=False, description="Change application status"),
         ]
         application_errors: Annotated[
-            list[str],
+            Sequence[str],
             Field(
                 default_factory=list,
                 description="Application errors",
@@ -522,7 +522,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         processing_errors: Annotated[
-            list[str],
+            Sequence[str],
             Field(
                 default_factory=list,
                 description="Processing errors",
@@ -535,7 +535,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             Field(default=True, description="LDIF format validity"),
         ]
         validation_errors: Annotated[
-            list[str],
+            Sequence[str],
             Field(
                 default_factory=list,
                 description="Format validation errors",
@@ -612,7 +612,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         key_properties: Annotated[
-            list[str],
+            Sequence[str],
             Field(
                 default_factory=lambda: ["dn"],
                 description="Key properties",
@@ -628,7 +628,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         filter_object_classes: Annotated[
-            list[str],
+            Sequence[str],
             Field(
                 default_factory=list,
                 description="Filter by t.NormalizedValue classes",
@@ -644,16 +644,16 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         # Stream schema
         stream_schema: Annotated[
-            dict[str, t.ContainerValue],
+            Mapping[str, t.ContainerValue],
             Field(
                 default_factory=dict,
                 description="JSON schema",
             ),
         ]
         stream_metadata: Annotated[
-            list[dict[str, str]],
+            Sequence[Mapping[str, str]],
             Field(
-                default_factory=lambda: list[dict[str, str]](),
+                default_factory=lambda: Sequence[Mapping[str, str]](),
                 description="Stream metadata",
             ),
         ]
@@ -709,7 +709,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         batch_id: Annotated[str, Field(..., description="Unique batch identifier")]
         file_paths: Annotated[
-            list[str],
+            Sequence[str],
             Field(..., description="List of LDIF files to process"),
         ]
         batch_size: Annotated[
@@ -779,7 +779,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         # Error tracking
         file_errors: Annotated[
-            dict[str, list[str]],
+            Mapping[str, Sequence[str]],
             Field(
                 default_factory=dict,
                 description="Errors by file",
@@ -901,9 +901,9 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         # Error tracking
         processing_errors: Annotated[
-            list[dict[str, str]],
+            Sequence[Mapping[str, str]],
             Field(
-                default_factory=lambda: list[dict[str, str]](),
+                default_factory=lambda: Sequence[Mapping[str, str]](),
                 description="Processing errors with context",
             ),
         ]
@@ -1000,7 +1000,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         file_patterns: Annotated[
-            list[str],
+            Sequence[str],
             Field(
                 default_factory=lambda: ["*.ldif"],
                 description="LDIF file patterns",
@@ -1077,28 +1077,28 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         @computed_field
         def tap_config_summary(self) -> Mapping[str, t.NormalizedValue]:
             """LDIF tap configuration summary."""
-            patterns: list[t.NormalizedValue] = list(self.file_patterns)
-            source: dict[str, t.NormalizedValue] = {
+            patterns: Sequence[t.NormalizedValue] = list(self.file_patterns)
+            source: Mapping[str, t.NormalizedValue] = {
                 "directory": self.ldif_directory,
                 "patterns": patterns,
                 "recursive": self.recursive_search,
             }
-            processing: dict[str, t.NormalizedValue] = {
+            processing: Mapping[str, t.NormalizedValue] = {
                 "batch_size": self.batch_size,
                 "parallel": self.parallel_processing,
                 "max_workers": self.max_workers,
             }
-            error_handling: dict[str, t.NormalizedValue] = {
+            error_handling: Mapping[str, t.NormalizedValue] = {
                 "continue_on_error": self.continue_on_error,
                 "max_errors": self.max_errors,
                 "has_error_file": bool(self.error_file),
             }
-            output: dict[str, t.NormalizedValue] = {
+            output: Mapping[str, t.NormalizedValue] = {
                 "format": self.output_format,
                 "include_metadata": self.include_metadata,
                 "compressed": self.compress_output,
             }
-            result: dict[str, t.NormalizedValue] = {
+            result: Mapping[str, t.NormalizedValue] = {
                 "source": source,
                 "processing": processing,
                 "error_handling": error_handling,
@@ -1122,7 +1122,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         stream: Annotated[str, Field(..., description="Source stream name")]
         record: Annotated[
-            dict[str, t.ContainerValue],
+            Mapping[str, t.ContainerValue],
             Field(
                 ...,
                 description="LDIF record data",
@@ -1189,16 +1189,16 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         # Validation results
         validation_errors: Annotated[
-            list[dict[str, str]],
+            Sequence[Mapping[str, str]],
             Field(
-                default_factory=lambda: list[dict[str, str]](),
+                default_factory=lambda: Sequence[Mapping[str, str]](),
                 description="Validation errors with details",
             ),
         ]
         warnings: Annotated[
-            list[dict[str, str]],
+            Sequence[Mapping[str, str]],
             Field(
-                default_factory=lambda: list[dict[str, str]](),
+                default_factory=lambda: Sequence[Mapping[str, str]](),
                 description="Validation warnings",
             ),
         ]

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import base64
 import re
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import TypeIs, override
@@ -57,7 +57,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             time_extracted: Timestamp when record was extracted
 
             Returns:
-            dict[str, t.ContainerValue]: Singer record message
+            Mapping[str, t.ContainerValue]: Singer record message
 
             """
             extracted_time = time_extracted or datetime.now(UTC)
@@ -71,7 +71,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
         def create_schema_message(
             stream_name: str,
             schema: Mapping[str, t.Container],
-            key_properties: list[str] | None = None,
+            key_properties: Sequence[str] | None = None,
         ) -> m.Meltano.SingerSchemaMessage:
             """Create Singer schema message.
 
@@ -81,7 +81,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             key_properties: List of key property names
 
             Returns:
-            dict[str, t.ContainerValue]: Singer schema message
+            Mapping[str, t.ContainerValue]: Singer schema message
 
             """
             return m.Meltano.SingerSchemaMessage.model_validate({
@@ -165,7 +165,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             file_path: Path to LDIF file
 
             Returns:
-            r[dict[str, t.ContainerValue]]: Metadata dictionary or error
+            r[Mapping[str, t.ContainerValue]]: Metadata dictionary or error
 
             """
             try:
@@ -189,7 +189,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         elif line.startswith("objectClass:"):
                             obj_class = line.split(":", 1)[1].strip()
                             object_classes.add(obj_class)
-                metadata: dict[str, t.NormalizedValue] = {
+                metadata: Mapping[str, t.NormalizedValue] = {
                     "file_path": str(file_path),
                     "file_size": file_path.stat().st_size,
                     "version": version,
@@ -258,10 +258,10 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @staticmethod
         def build_record_from_lines(
-            entry_lines: list[str],
-        ) -> Mapping[str, str | list[str]]:
+            entry_lines: Sequence[str],
+        ) -> Mapping[str, str | Sequence[str]]:
             """Build record dict from LDIF lines. Returns concrete type for type checker."""
-            record: dict[str, str | list[str]] = {}
+            record: Mapping[str, str | Sequence[str]] = {}
             current_attr: str | None = None
             current_value: str = ""
             for line in entry_lines:
@@ -310,15 +310,15 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
         @staticmethod
         def convert_ldif_entry_to_record(
-            entry_lines: list[str],
-        ) -> r[Mapping[str, str | list[str]]]:
+            entry_lines: Sequence[str],
+        ) -> r[Mapping[str, str | Sequence[str]]]:
             """Convert LDIF entry lines to Singer record.
 
             Args:
             entry_lines: List of LDIF lines for single entry
 
             Returns:
-            r[Mapping[str, str | list[str]]]: Singer record or error
+            r[Mapping[str, str | Sequence[str]]]: Singer record or error
 
             """
             try:
@@ -327,8 +327,8 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         entry_lines,
                     )
                 )
-                out: dict[str, str | list[str]] = dict(record)
-                return r[Mapping[str, str | list[str]]].ok(out)
+                out: Mapping[str, str | Sequence[str]] = dict(record)
+                return r[Mapping[str, str | Sequence[str]]].ok(out)
             except (
                 ValueError,
                 TypeError,
@@ -338,7 +338,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 RuntimeError,
                 ImportError,
             ) as e:
-                return r[Mapping[str, str | list[str]]].fail(
+                return r[Mapping[str, str | Sequence[str]]].fail(
                     f"Error converting LDIF entry: {e}",
                 )
 
@@ -432,7 +432,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             config: Configuration dictionary
 
             Returns:
-            r[dict[str, t.ContainerValue]]: Validated config or error
+            r[Mapping[str, t.ContainerValue]]: Validated config or error
 
             """
             required_fields = ["files"]
@@ -517,7 +517,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             file_path: Path to the file
 
             Returns:
-            dict[str, t.ContainerValue]: File state
+            Mapping[str, t.ContainerValue]: File state
 
             """
             files_raw = state.get("files")
@@ -542,14 +542,14 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             position: Current position
 
             Returns:
-            dict[str, t.ContainerValue]: Updated state
+            Mapping[str, t.ContainerValue]: Updated state
 
             """
             file_state = FlextTapLdifUtilities.StateManagement.get_file_state(
                 state,
                 file_path,
             )
-            file_state_dict: dict[str, t.NormalizedValue] = dict(file_state)
+            file_state_dict: Mapping[str, t.NormalizedValue] = dict(file_state)
             file_state_dict["position"] = position
             file_state_dict["last_updated"] = datetime.now(UTC).isoformat()
             return FlextTapLdifUtilities.StateManagement.set_file_state(
@@ -573,25 +573,25 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             file_state: State data for the file
 
             Returns:
-            dict[str, t.ContainerValue]: Updated state
+            Mapping[str, t.ContainerValue]: Updated state
 
             """
             files_raw = state.get("files")
-            files_dict: dict[str, t.NormalizedValue] = {}
+            files_dict: Mapping[str, t.NormalizedValue] = {}
             if isinstance(files_raw, Mapping):
                 for k, v in files_raw.items():
                     if isinstance(v, Mapping):
                         files_dict[k] = dict(v)
             files_dict[file_path] = dict(file_state)
-            updated_state: dict[str, t.NormalizedValue] = dict(state)
+            updated_state: Mapping[str, t.NormalizedValue] = dict(state)
             updated_state["files"] = files_dict
             return updated_state
 
     @classmethod
     def convert_ldif_entry_to_record(
         cls,
-        entry_lines: list[str],
-    ) -> r[Mapping[str, str | list[str]]]:
+        entry_lines: Sequence[str],
+    ) -> r[Mapping[str, str | Sequence[str]]]:
         """Proxy method for LdifDataProcessing.convert_ldif_entry_to_record()."""
         return cls.LdifDataProcessing.convert_ldif_entry_to_record(entry_lines)
 
@@ -615,7 +615,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
         cls,
         stream_name: str,
         schema: Mapping[str, t.Container],
-        key_properties: list[str] | None = None,
+        key_properties: Sequence[str] | None = None,
     ) -> m.Meltano.SingerSchemaMessage:
         """Proxy method for SingerUtilities.create_schema_message()."""
         return cls.TapLdif.create_schema_message(stream_name, schema, key_properties)

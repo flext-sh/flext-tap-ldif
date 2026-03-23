@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Mapping, Sequence
 from enum import StrEnum, unique
 from typing import ClassVar, Final
 
@@ -29,7 +30,7 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
         FlextLdifConstants.Ldif.Encoding.UTF16,
     })
     MAX_FILE_SIZE_MB: Final[int] = 100
-    LDIF_CHANGE_TYPES: ClassVar[list[str]] = [
+    LDIF_CHANGE_TYPES: ClassVar[Sequence[str]] = [
         FlextLdifConstants.Ldif.EntryModification.ADD,
         FlextLdifConstants.Ldif.EntryModification.MODIFY,
         FlextLdifConstants.Ldif.EntryModification.DELETE,
@@ -90,8 +91,8 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
         """Sample LDIF entry for fallback/testing."""
 
         DN: Final[str] = "cn=sample,dc=example,dc=com"
-        ATTRIBUTES: Final[dict[str, list[str]]] = {"cn": ["sample"]}
-        OBJECT_CLASS: Final[list[str]] = ["top"]
+        ATTRIBUTES: Final[Mapping[str, Sequence[str]]] = {"cn": ["sample"]}
+        OBJECT_CLASS: Final[Sequence[str]] = ["top"]
         SOURCE_FILE: Final[str] = "fp"
 
     @unique
