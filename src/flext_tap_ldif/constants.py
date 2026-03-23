@@ -52,7 +52,7 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
 
         DN_ATTRIBUTE: Final[str] = "dn"
         ATTRIBUTE_SEPARATOR: Final[str] = ": "
-        MAX_LINE_LENGTH: Final[int] = FlextLdifConstants.Ldif.Format.MAX_LINE_LENGTH
+        MAX_LINE_LENGTH: Final[int] = FlextLdifConstants.Ldif.MAX_LINE_LENGTH
         BASE64_PREFIX: Final[str] = ":: "
         COMMENT_PREFIX: Final[str] = "#"
         LINE_CONTINUATION: Final[str] = " "
