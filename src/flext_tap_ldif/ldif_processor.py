@@ -15,8 +15,7 @@ from typing import NoReturn
 from flext_core import FlextLogger, r
 from flext_ldif import FlextLdif
 
-from flext_tap_ldif.constants import c
-from flext_tap_ldif.models import m
+from flext_tap_ldif import c, m, t
 
 logger = FlextLogger(__name__)
 
@@ -24,7 +23,7 @@ logger = FlextLogger(__name__)
 class FlextLdifProcessor:
     """Wrapper for FlextLdifProcessor to maintain API compatibility."""
 
-    def __init__(self, config: Mapping[str, str | int | bool]) -> None:
+    def __init__(self, config: Mapping[str, t.Scalar]) -> None:
         """Initialize the LDIF processor using flext-ldif infrastructure.
 
         Args:

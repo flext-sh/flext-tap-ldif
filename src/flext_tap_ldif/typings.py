@@ -35,7 +35,7 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
 
         type TapConfiguration = Mapping[
             str,
-            str | int | bool | Mapping[str, t.ContainerValue],
+            t.Scalar | Mapping[str, t.ContainerValue],
         ]
         type StreamConfiguration = Mapping[
             str, str | bool | Mapping[str, t.ContainerValue]
@@ -54,7 +54,7 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
 
         type ProcessingConfiguration = Mapping[
             str,
-            str | int | bool | Mapping[str, t.ContainerValue],
+            t.Scalar | Mapping[str, t.ContainerValue],
         ]
         type EntryExtraction = Mapping[
             str, str | Sequence[str] | Mapping[str, t.ContainerValue]
@@ -107,7 +107,7 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
 
         type FileConfiguration = Mapping[
             str,
-            str | int | bool | Mapping[str, t.ContainerValue],
+            t.Scalar | Mapping[str, t.ContainerValue],
         ]
         type FileValidation = Mapping[str, bool | str | int | Sequence[str]]
         type FileProcessing = Mapping[str, str | int | Mapping[str, t.ContainerValue]]
@@ -142,7 +142,7 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
 
         type ProjectType = c.ProjectType
         type SingerTapLdifProjectConfig = Mapping[str, t.ContainerValue]
-        type LdifExtractorConfig = Mapping[str, str | int | bool | Sequence[str]]
+        type LdifExtractorConfig = Mapping[str, t.Scalar | Sequence[str]]
         type SingerProtocolConfig = Mapping[
             str, bool | str | Mapping[str, t.ContainerValue]
         ]
