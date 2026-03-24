@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import os
 import tempfile
-from collections.abc import Iterable, Mapping
+from collections.abc import Iterable, Mapping, MutableMapping
 from pathlib import Path
 from typing import override
 
@@ -88,7 +88,7 @@ class FlextTapLdifEntriesStream(Stream):
 
         """
         _ = context
-        config: dict[str, t.ContainerValue] = dict(self._tap.config)
+        config: MutableMapping[str, t.ContainerValue] = dict(self._tap.config)
         sample_path = getattr(self, "_sample_file_path", None)
         if sample_path:
             config["file_path"] = sample_path

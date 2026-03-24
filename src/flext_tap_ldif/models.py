@@ -6,7 +6,7 @@ This module provides data models for LDIF tap operations.
 from __future__ import annotations
 
 import base64
-from collections.abc import Mapping, Sequence
+from collections.abc import Mapping, MutableMapping, Sequence
 from datetime import UTC, datetime
 from typing import Annotated, ClassVar, Self
 
@@ -116,7 +116,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
                 value_dict = {str(k): str(v) for k, v in value.root.items()}
             else:
                 value_dict = {str(k): str(v) for k, v in value.items()}
-            metadata_dict: dict[str, t.ContainerValue] = dict(value_dict)
+            metadata_dict: MutableMapping[str, t.ContainerValue] = dict(value_dict)
             metadata_dict["_ldif_tap_metadata"] = {
                 "extraction_timestamp": datetime.now(UTC).isoformat(),
                 "tap_type": "ldif_file_extractor",
@@ -198,7 +198,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         @staticmethod
         def parse_dn(dn: str) -> t.StrMapping:
             """Parse Distinguished Name into components."""
-            components: dict[str, str] = {}
+            components: MutableMapping[str, str] = {}
             parts = dn.split(",")
             for part in parts:
                 if "=" in part:
