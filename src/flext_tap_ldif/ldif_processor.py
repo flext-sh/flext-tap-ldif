@@ -8,7 +8,7 @@ implementation from flext-ldif project.
 
 from __future__ import annotations
 
-from collections.abc import Generator, Mapping, Sequence
+from collections.abc import Generator, Mapping, MutableSequence, Sequence
 from pathlib import Path
 from typing import NoReturn
 
@@ -53,7 +53,7 @@ class FlextLdifProcessor:
 
         """
         max_size_bytes = max_file_size_mb * 1024 * 1024
-        discovered: list[Path] = []
+        discovered: MutableSequence[Path] = []
         if file_path is not None:
             match file_path:
                 case str() as file_path_text:

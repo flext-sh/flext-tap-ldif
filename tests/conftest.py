@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from collections.abc import Generator, Sequence
+from collections.abc import Generator, MutableSequence, Sequence
 from pathlib import Path
 
 import pytest
@@ -347,7 +347,7 @@ class MockLDIFParser:
         """Initialize the instance."""
         super().__init__()
         self.config = config
-        self.parsed_entries: list[t.ContainerMapping] = []
+        self.parsed_entries: MutableSequence[t.ContainerMapping] = []
 
     def parse_file(self, _file_path: str) -> t.ContainerMapping:
         return {"success": True, "entries": self.parsed_entries, "errors": []}

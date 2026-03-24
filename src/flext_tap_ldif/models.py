@@ -234,7 +234,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         dn: Annotated[str, Field(..., description="Distinguished Name")]
         attributes: Annotated[
-            dict[str, t.StrSequence],
+            MutableMapping[str, t.StrSequence],
             Field(
                 default_factory=dict,
                 description="Entry attributes",
