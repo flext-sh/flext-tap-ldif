@@ -63,7 +63,7 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
 
             def extract_entry_dn(
                 self,
-                entry_lines: t.StrSequence,
+                entry_lines: Sequence[str],
             ) -> FlextMeltanoProtocols.Result[str]:
                 """Extract DN from LDIF entry lines."""
                 ...
@@ -97,7 +97,7 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
             def extract_entry_attributes(
                 self,
                 entry: Mapping[str, t.ContainerValue],
-                attributes: t.StrSequence | None = None,
+                attributes: Sequence[str] | None = None,
             ) -> FlextMeltanoProtocols.Result[t.Container]:
                 """Extract specific attributes from LDIF entry."""
                 ...

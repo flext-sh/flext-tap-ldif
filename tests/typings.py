@@ -43,10 +43,10 @@ class FlextTapLdifTestTypes(FlextTestsTypes, FlextTapLdifTypes):
         type TestLdifFilePath = _c.TestLdifFilePath
         type TestLdifEncoding = _c.TestLdifEncoding
         type TestObjectClass = _c.TestObjectClass
-        type MockLdifEntry = Mapping[str, str | Mapping[str, t.StrSequence]]
-        type MockLdifFile = Sequence[Mapping[str, str | Mapping[str, t.StrSequence]]]
+        type MockLdifEntry = Mapping[str, str | Mapping[str, Sequence[str]]]
+        type MockLdifFile = Sequence[Mapping[str, str | Mapping[str, Sequence[str]]]]
         type TestLdifScenario = t.ContainerMapping
-        type TestLdifValidationResult = Mapping[str, bool | str | t.StrSequence]
+        type TestLdifValidationResult = Mapping[str, bool | str | Sequence[str]]
         type TestLdifParsingResult = t.ContainerMapping
 
 

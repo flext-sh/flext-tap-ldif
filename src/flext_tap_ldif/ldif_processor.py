@@ -86,7 +86,7 @@ class FlextLdifProcessor:
         self,
         file_path: Path,
     ) -> Generator[
-        Mapping[str, str | int | Mapping[str, t.StrSequence] | t.StrSequence]
+        Mapping[str, str | int | Mapping[str, Sequence[str]] | Sequence[str]]
     ]:
         """Process a single LDIF file and yield records using flext-ldif.
 
