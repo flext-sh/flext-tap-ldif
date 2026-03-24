@@ -347,7 +347,7 @@ class MockLDIFParser:
         """Initialize the instance."""
         super().__init__()
         self.config = config
-        self.parsed_entries: Sequence[t.ContainerMapping] = []
+        self.parsed_entries: list[t.ContainerMapping] = []
 
     def parse_file(self, _file_path: str) -> t.ContainerMapping:
         return {"success": True, "entries": self.parsed_entries, "errors": []}
