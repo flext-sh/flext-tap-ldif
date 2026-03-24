@@ -39,32 +39,6 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
     Consolidates ALL models for LDIF file extraction and processing.
     """
 
-    # Pydantic 2.11 Configuration - Enterprise Singer LDIF Tap Features
-    model_config: ClassVar[ConfigDict] = ConfigDict(
-        validate_assignment=True,
-        use_enum_values=True,
-        arbitrary_types_allowed=True,
-        extra="forbid",
-        frozen=False,
-        validate_return=True,
-        ser_json_timedelta="iso8601",
-        ser_json_bytes="base64",
-        hide_input_in_errors=True,
-        json_schema_extra={
-            "title": "FLEXT Singer LDIF Tap Models",
-            "description": "Enterprise LDIF file extraction models with Singer protocol compliance",
-            "examples": [
-                {
-                    "tap_name": "tap-ldif",
-                    "extraction_mode": "batch_file_processing",
-                    "ldif_source": "/data/directory-export.ldif",
-                },
-            ],
-            "tags": ["singer", "ldif", "tap", "extraction", "file-processing"],
-            "version": "2.11.0",
-        },
-    )
-
     # Advanced Pydantic 2.11 Features - Singer LDIF Tap Domain
 
     @computed_field
@@ -222,7 +196,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             return name.lower().strip()
 
         @staticmethod
-        def parse_dn(dn: str) -> Mapping[str, str]:
+        def parse_dn(dn: str) -> t.StrMapping:
             """Parse Distinguished Name into components."""
             components: dict[str, str] = {}
             parts = dn.split(",")
@@ -260,14 +234,14 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         dn: Annotated[str, Field(..., description="Distinguished Name")]
         attributes: Annotated[
-            dict[str, Sequence[str]],
+            dict[str, t.StrSequence],
             Field(
                 default_factory=dict,
                 description="Entry attributes",
             ),
         ]
         object_classes: Annotated[
-            Sequence[str],
+            t.StrSequence,
             Field(
                 default_factory=list,
                 description="Object classes",
@@ -276,7 +250,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         # LDIF metadata
         line_number: Annotated[
-            int,
+            t.NonNegativeInt,
             Field(
                 default=0,
                 description="Source line number in LDIF file",
@@ -307,7 +281,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             Field(default=False, description="Processing status"),
         ]
         validation_errors: Annotated[
-            Sequence[str],
+            t.StrSequence,
             Field(
                 default_factory=list,
                 description="Validation errors",
@@ -329,7 +303,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
                 "source_location": {"file": self.source_file, "line": self.line_number},
             }
 
-        def get_attribute_values(self, name: str) -> Sequence[str]:
+        def get_attribute_values(self, name: str) -> t.StrSequence:
             """Get attribute values by name (case-insensitive)."""
             normalized_name = name.lower()
             for attr_name, values in self.attributes.items():
@@ -384,9 +358,9 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         changes: Annotated[
-            Sequence[Mapping[str, str]],
+            Sequence[t.StrMapping],
             Field(
-                default_factory=lambda: Sequence[Mapping[str, str]](),
+                default_factory=lambda: Sequence[t.StrMapping](),
                 description="List of changes",
             ),
         ]
@@ -399,7 +373,9 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
                 description="LDIF changetype directive",
             ),
         ]
-        line_number: Annotated[int, Field(default=0, description="Source line number")]
+        line_number: Annotated[
+            t.NonNegativeInt, Field(default=0, description="Source line number")
+        ]
         source_file: Annotated[
             str | None,
             Field(default=None, description="Source LDIF file"),
@@ -418,7 +394,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             Field(default=False, description="Change application status"),
         ]
         application_errors: Annotated[
-            Sequence[str],
+            t.StrSequence,
             Field(
                 default_factory=list,
                 description="Application errors",
@@ -472,7 +448,9 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         )
 
         file_path: Annotated[str, Field(..., description="Path to LDIF file")]
-        file_size: Annotated[int, Field(default=0, description="File size in bytes")]
+        file_size: Annotated[
+            t.NonNegativeInt, Field(default=0, description="File size in bytes")
+        ]
         encoding: Annotated[str, Field(default="utf-8", description="File encoding")]
 
         # File metadata
@@ -492,17 +470,21 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         ]
 
         # Processing statistics
-        total_lines: Annotated[int, Field(default=0, description="Total lines in file")]
-        entry_count: Annotated[int, Field(default=0, description="Number of entries")]
+        total_lines: Annotated[
+            t.NonNegativeInt, Field(default=0, description="Total lines in file")
+        ]
+        entry_count: Annotated[
+            t.NonNegativeInt, Field(default=0, description="Number of entries")
+        ]
         change_record_count: Annotated[
-            int,
+            t.NonNegativeInt,
             Field(
                 default=0,
                 description="Number of change records",
             ),
         ]
         comment_lines: Annotated[
-            int,
+            t.NonNegativeInt,
             Field(default=0, description="Number of comment lines"),
         ]
 
@@ -515,14 +497,14 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         last_processed_line: Annotated[
-            int,
+            t.NonNegativeInt,
             Field(
                 default=0,
                 description="Last processed line number",
             ),
         ]
         processing_errors: Annotated[
-            Sequence[str],
+            t.StrSequence,
             Field(
                 default_factory=list,
                 description="Processing errors",
@@ -535,7 +517,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             Field(default=True, description="LDIF format validity"),
         ]
         validation_errors: Annotated[
-            Sequence[str],
+            t.StrSequence,
             Field(
                 default_factory=list,
                 description="Format validation errors",
@@ -612,7 +594,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         key_properties: Annotated[
-            Sequence[str],
+            t.StrSequence,
             Field(
                 default_factory=lambda: ["dn"],
                 description="Key properties",
@@ -628,7 +610,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         filter_object_classes: Annotated[
-            Sequence[str],
+            t.StrSequence,
             Field(
                 default_factory=list,
                 description="Filter by t.NormalizedValue classes",
@@ -651,9 +633,9 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         stream_metadata: Annotated[
-            Sequence[Mapping[str, str]],
+            Sequence[t.StrMapping],
             Field(
-                default_factory=lambda: Sequence[Mapping[str, str]](),
+                default_factory=lambda: Sequence[t.StrMapping](),
                 description="Stream metadata",
             ),
         ]
@@ -709,7 +691,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         batch_id: Annotated[str, Field(..., description="Unique batch identifier")]
         file_paths: Annotated[
-            Sequence[str],
+            t.StrSequence,
             Field(..., description="List of LDIF files to process"),
         ]
         batch_size: Annotated[
@@ -729,11 +711,11 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         max_workers: Annotated[
-            int,
+            t.WorkerCount,
             Field(default=4, description="Maximum worker threads"),
         ]
         error_threshold: Annotated[
-            int,
+            t.PositiveInt,
             Field(
                 default=FlextConstants.DEFAULT_SIZE // 10,
                 description="Maximum errors before stopping",
@@ -762,15 +744,15 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         # Processing metrics
         files_processed: Annotated[
-            int,
+            t.NonNegativeInt,
             Field(default=0, description="Number of files processed"),
         ]
         entries_processed: Annotated[
-            int,
+            t.NonNegativeInt,
             Field(default=0, description="Total entries processed"),
         ]
         errors_encountered: Annotated[
-            int,
+            t.NonNegativeInt,
             Field(
                 default=0,
                 description="Total errors encountered",
@@ -779,7 +761,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         # Error tracking
         file_errors: Annotated[
-            Mapping[str, Sequence[str]],
+            Mapping[str, t.StrSequence],
             Field(
                 default_factory=dict,
                 description="Errors by file",
@@ -861,15 +843,15 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         # Progress tracking
         current_line: Annotated[
-            int,
+            t.NonNegativeInt,
             Field(default=0, description="Current line being processed"),
         ]
         entries_processed: Annotated[
-            int,
+            t.NonNegativeInt,
             Field(default=0, description="Entries processed"),
         ]
         change_records_processed: Annotated[
-            int,
+            t.NonNegativeInt,
             Field(
                 default=0,
                 description="Change records processed",
@@ -901,28 +883,30 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         # Error tracking
         processing_errors: Annotated[
-            Sequence[Mapping[str, str]],
+            Sequence[t.StrMapping],
             Field(
-                default_factory=lambda: Sequence[Mapping[str, str]](),
+                default_factory=lambda: Sequence[t.StrMapping](),
                 description="Processing errors with context",
             ),
         ]
         recoverable_errors: Annotated[
-            int,
+            t.NonNegativeInt,
             Field(
                 default=0,
                 description="Recoverable error count",
             ),
         ]
-        fatal_errors: Annotated[int, Field(default=0, description="Fatal error count")]
+        fatal_errors: Annotated[
+            t.NonNegativeInt, Field(default=0, description="Fatal error count")
+        ]
 
         # Performance metrics
         processing_rate: Annotated[
-            float,
+            t.NonNegativeFloat,
             Field(default=0.0, description="Entries per second"),
         ]
         memory_usage: Annotated[
-            int,
+            t.NonNegativeInt,
             Field(default=0, description="Memory usage in bytes"),
         ]
 
@@ -1000,7 +984,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         file_patterns: Annotated[
-            Sequence[str],
+            t.StrSequence,
             Field(
                 default_factory=lambda: ["*.ldif"],
                 description="LDIF file patterns",
@@ -1030,7 +1014,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         max_workers: Annotated[
-            int,
+            t.WorkerCount,
             Field(default=4, description="Maximum worker threads"),
         ]
 
@@ -1138,7 +1122,9 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             str | None,
             Field(default=None, description="Source LDIF file"),
         ]
-        line_number: Annotated[int, Field(default=0, description="Source line number")]
+        line_number: Annotated[
+            t.NonNegativeInt, Field(default=0, description="Source line number")
+        ]
 
         # Extraction metadata
         time_extracted: Annotated[
@@ -1149,7 +1135,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         processing_time: Annotated[
-            float,
+            t.NonNegativeFloat,
             Field(
                 default=0.0,
                 description="Processing time in seconds",
@@ -1189,37 +1175,37 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         # Validation results
         validation_errors: Annotated[
-            Sequence[Mapping[str, str]],
+            Sequence[t.StrMapping],
             Field(
-                default_factory=lambda: Sequence[Mapping[str, str]](),
+                default_factory=lambda: Sequence[t.StrMapping](),
                 description="Validation errors with details",
             ),
         ]
         warnings: Annotated[
-            Sequence[Mapping[str, str]],
+            Sequence[t.StrMapping],
             Field(
-                default_factory=lambda: Sequence[Mapping[str, str]](),
+                default_factory=lambda: Sequence[t.StrMapping](),
                 description="Validation warnings",
             ),
         ]
 
         # Statistics
         total_entries: Annotated[
-            int,
+            t.NonNegativeInt,
             Field(default=0, description="Total entries validated"),
         ]
         valid_entries: Annotated[
-            int,
+            t.NonNegativeInt,
             Field(default=0, description="Valid entries count"),
         ]
         invalid_entries: Annotated[
-            int,
+            t.NonNegativeInt,
             Field(default=0, description="Invalid entries count"),
         ]
 
         # Validation metadata
         validation_time: Annotated[
-            float,
+            t.NonNegativeFloat,
             Field(
                 default=0.0,
                 description="Validation time in seconds",

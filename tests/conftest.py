@@ -228,7 +228,7 @@ def singer_catalog_config() -> t.ContainerMapping:
             {
                 "tap_stream_id": "ldif_entries",
                 "schema": {
-                    "type": "t.NormalizedValue",
+                    "type": "object",
                     "properties": {
                         "dn": {"type": "string"},
                         "source_file": {"type": "string"},

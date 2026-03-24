@@ -158,10 +158,10 @@ class LDIFEntriesStream(Stream):
     def _get_schema(self) -> dict[str, t.ContainerValue]:
         """Get schema for LDIF entries."""
         return {
-            "type": "t.NormalizedValue",
+            "type": "object",
             "properties": {
                 c.EntrySchema.DN_FIELD: {"type": "string"},
-                c.EntrySchema.ATTRIBUTES_FIELD: {"type": "t.NormalizedValue"},
+                c.EntrySchema.ATTRIBUTES_FIELD: {"type": "object"},
                 c.EntrySchema.OBJECT_CLASS_FIELD: {
                     "type": "array",
                     "items": {"type": "string"},

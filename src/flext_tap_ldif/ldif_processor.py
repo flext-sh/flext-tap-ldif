@@ -23,7 +23,7 @@ logger = FlextLogger(__name__)
 class FlextLdifProcessor:
     """Wrapper for FlextLdifProcessor to maintain API compatibility."""
 
-    def __init__(self, config: Mapping[str, t.Scalar]) -> None:
+    def __init__(self, config: t.ConfigurationMapping) -> None:
         """Initialize the LDIF processor using flext-ldif infrastructure.
 
         Args:
@@ -86,7 +86,7 @@ class FlextLdifProcessor:
         self,
         file_path: Path,
     ) -> Generator[
-        Mapping[str, str | int | Mapping[str, Sequence[str]] | Sequence[str]]
+        Mapping[str, str | int | Mapping[str, t.StrSequence] | t.StrSequence]
     ]:
         """Process a single LDIF file and yield records using flext-ldif.
 
