@@ -51,12 +51,12 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
             t.Scalar | t.ContainerValueMapping,
         ]
         type EntryExtraction = Mapping[
-            str, str | Sequence[str] | t.ContainerValueMapping
+            str, str | t.StrSequence | t.ContainerValueMapping
         ]
         type EntryTransformation = Sequence[Mapping[str, str | t.ContainerValue]]
         type EntryValidation = Mapping[
             str,
-            bool | str | Sequence[str] | t.ContainerValueMapping,
+            bool | str | t.StrSequence | t.ContainerValueMapping,
         ]
         type BatchProcessing = Mapping[str, int | bool | t.ContainerValueMapping]
         type FileProcessing = Mapping[str, str | int | t.ContainerValueMapping]
@@ -69,7 +69,7 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
             str | bool | t.ContainerValueMapping,
         ]
         type ExtractionFilter = Mapping[
-            str, str | Sequence[str] | t.ContainerValueMapping
+            str, str | t.StrSequence | t.ContainerValueMapping
         ]
         type ExtractionMapping = Mapping[str, str | t.ContainerValueMapping]
         type ExtractionResult = Mapping[str, bool | Sequence[t.ContainerValueMapping]]
@@ -85,7 +85,7 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         ]
         type StreamMetadata = Mapping[str, str | t.ContainerValueMapping]
         type StreamRecord = Mapping[str, t.ContainerValue | t.ContainerValueMapping]
-        type StreamRecordValue = str | int | Sequence[str] | Mapping[str, Sequence[str]]
+        type StreamRecordValue = str | int | t.StrSequence | Mapping[str, t.StrSequence]
         type StreamState = Mapping[str, str | int | t.ContainerValueMapping]
         type StreamBookmark = Mapping[str, str | int | t.ContainerValueMapping]
         type StreamSchema = Mapping[str, str | t.ContainerValueMapping | bool]
@@ -97,7 +97,7 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
             str,
             t.Scalar | t.ContainerValueMapping,
         ]
-        type FileValidation = Mapping[str, bool | str | int | Sequence[str]]
+        type FileValidation = Mapping[str, bool | str | int | t.StrSequence]
         type FileProcessing = Mapping[str, str | int | t.ContainerValueMapping]
         type FileBatching = Mapping[str, int | bool | t.ContainerValueMapping]
         type FileMonitoring = Mapping[str, bool | int | t.ContainerValueMapping]
@@ -126,7 +126,7 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
 
         type ProjectType = c.ProjectType
         type SingerTapLdifProjectConfig = Mapping[str, t.ContainerValue]
-        type LdifExtractorConfig = Mapping[str, t.Scalar | Sequence[str]]
+        type LdifExtractorConfig = Mapping[str, t.Scalar | t.StrSequence]
         type SingerProtocolConfig = Mapping[str, bool | str | t.ContainerValueMapping]
         type TapLdifPipelineConfig = Mapping[str, t.ContainerValue]
 
