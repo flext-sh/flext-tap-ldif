@@ -40,8 +40,8 @@ if TYPE_CHECKING:
         FlextTapLdifProtocols as p,
     )
     from flext_tap_ldif.settings import FlextTapLdifSettings
-    from flext_tap_ldif.streams import LDIFEntriesStream
-    from flext_tap_ldif.tap import TapLDIF, logger, main
+    from flext_tap_ldif.streams import FlextTapLdifEntriesStream
+    from flext_tap_ldif.tap import FlextTapLdif, logger, main
     from flext_tap_ldif.typings import (
         FlextTapLdifTypes,
         FlextTapLdifTypes as t,
@@ -54,15 +54,15 @@ if TYPE_CHECKING:
 
 _LAZY_IMPORTS: Mapping[str, tuple[str, str]] = {
     "FlextLdifProcessor": ("flext_tap_ldif.ldif_processor", "FlextLdifProcessor"),
+    "FlextTapLdif": ("flext_tap_ldif.tap", "FlextTapLdif"),
     "FlextTapLdifConstants": ("flext_tap_ldif.constants", "FlextTapLdifConstants"),
+    "FlextTapLdifEntriesStream": ("flext_tap_ldif.streams", "FlextTapLdifEntriesStream"),
     "FlextTapLdifModels": ("flext_tap_ldif.models", "FlextTapLdifModels"),
     "FlextTapLdifProtocols": ("flext_tap_ldif.protocols", "FlextTapLdifProtocols"),
     "FlextTapLdifSettings": ("flext_tap_ldif.settings", "FlextTapLdifSettings"),
     "FlextTapLdifTypes": ("flext_tap_ldif.typings", "FlextTapLdifTypes"),
     "FlextTapLdifUtilities": ("flext_tap_ldif.utilities", "FlextTapLdifUtilities"),
-    "LDIFEntriesStream": ("flext_tap_ldif.streams", "LDIFEntriesStream"),
     "StreamRecordValue": ("flext_tap_ldif.typings", "StreamRecordValue"),
-    "TapLDIF": ("flext_tap_ldif.tap", "TapLDIF"),
     "__all__": ("flext_tap_ldif.__version__", "__all__"),
     "__author__": ("flext_tap_ldif.__version__", "__author__"),
     "__author_email__": ("flext_tap_ldif.__version__", "__author_email__"),
@@ -89,15 +89,15 @@ _LAZY_IMPORTS: Mapping[str, tuple[str, str]] = {
 
 __all__ = [
     "FlextLdifProcessor",
+    "FlextTapLdif",
     "FlextTapLdifConstants",
+    "FlextTapLdifEntriesStream",
     "FlextTapLdifModels",
     "FlextTapLdifProtocols",
     "FlextTapLdifSettings",
     "FlextTapLdifTypes",
     "FlextTapLdifUtilities",
-    "LDIFEntriesStream",
     "StreamRecordValue",
-    "TapLDIF",
     "__all__",
     "__author__",
     "__author_email__",

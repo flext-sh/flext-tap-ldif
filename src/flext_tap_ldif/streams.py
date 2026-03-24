@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import override
 
 from flext_core import FlextLogger, t
+from singer_sdk.helpers.types import Context, Record
 from singer_sdk.streams import Stream
 from singer_sdk.tap_base import Tap
 
@@ -20,12 +21,11 @@ from flext_tap_ldif.constants import c
 from flext_tap_ldif.ldif_processor import (
     FlextLdifProcessor as FlextLdifProcessorWrapper,
 )
-from flext_tap_ldif.typings import StreamRecordValue
 
 logger = FlextLogger(__name__)
 
 
-class LDIFEntriesStream(Stream):
+class FlextTapLdifEntriesStream(Stream):
     """LDIF entries stream using flext-ldif for ALL processing."""
 
     @override
@@ -76,8 +76,8 @@ class LDIFEntriesStream(Stream):
     @override
     def get_records(
         self,
-        context: Mapping[str, t.ContainerValue] | None = None,
-    ) -> Iterable[Mapping[str, StreamRecordValue]]:
+        context: Context | None = None,
+    ) -> Iterable[Record]:
         """Return a generator of record-type dictionary objects.
 
         Args:

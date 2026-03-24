@@ -15,7 +15,7 @@ from singer_sdk.streams import Stream
 from singer_sdk.tap_base import Tap
 
 from flext_tap_ldif.settings import FlextTapLdifSettings
-from flext_tap_ldif.streams import LDIFEntriesStream
+from flext_tap_ldif.streams import FlextTapLdifEntriesStream
 
 logger = FlextLogger(__name__)
 
@@ -25,7 +25,7 @@ class FlextTapLdif(Tap):
 
     name: str = "tap-ldif"
     config_class = FlextTapLdifSettings
-    config_jsonschema: ClassVar[Mapping[str, t.ContainerValue]] = {
+    config_jsonschema: ClassVar[dict[str, t.ContainerValue]] = {
         "type": "object",
         "properties": {
             "file_path": {"type": "string"},
@@ -53,7 +53,7 @@ class FlextTapLdif(Tap):
         A list of discovered streams.
 
         """
-        return [LDIFEntriesStream(tap=self)]
+        return [FlextTapLdifEntriesStream(tap=self)]
 
     def _get_ldif_entries_schema(self) -> Mapping[str, t.ContainerValue]:
         """Get the schema for LDIF entries stream.
@@ -78,7 +78,7 @@ class FlextTapLdif(Tap):
 
 def main() -> None:
     """Run the tap entry point."""
-    TapLDIF().cli()
+    FlextTapLdif().cli()
 
 
 if __name__ == "__main__":
