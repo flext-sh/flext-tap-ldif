@@ -35,102 +35,86 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
 
         type TapConfiguration = Mapping[
             str,
-            t.Scalar | Mapping[str, t.ContainerValue],
+            t.Scalar | t.ContainerValueMapping,
         ]
-        type StreamConfiguration = Mapping[
-            str, str | bool | Mapping[str, t.ContainerValue]
-        ]
-        type CatalogDefinition = Mapping[
-            str, str | Sequence[Mapping[str, t.ContainerValue]]
-        ]
-        type SchemaDefinition = Mapping[
-            str, str | Mapping[str, t.ContainerValue] | bool
-        ]
-        type MessageOutput = Mapping[str, str | Mapping[str, t.ContainerValue]]
-        type StateManagement = Mapping[str, str | int | Mapping[str, t.ContainerValue]]
+        type StreamConfiguration = Mapping[str, str | bool | t.ContainerValueMapping]
+        type CatalogDefinition = Mapping[str, str | Sequence[t.ContainerValueMapping]]
+        type SchemaDefinition = Mapping[str, str | t.ContainerValueMapping | bool]
+        type MessageOutput = Mapping[str, str | t.ContainerValueMapping]
+        type StateManagement = Mapping[str, str | int | t.ContainerValueMapping]
 
     class LdifProcessing:
         """LDIF processing complex types."""
 
         type ProcessingConfiguration = Mapping[
             str,
-            t.Scalar | Mapping[str, t.ContainerValue],
+            t.Scalar | t.ContainerValueMapping,
         ]
         type EntryExtraction = Mapping[
-            str, str | Sequence[str] | Mapping[str, t.ContainerValue]
+            str, str | Sequence[str] | t.ContainerValueMapping
         ]
         type EntryTransformation = Sequence[Mapping[str, str | t.ContainerValue]]
         type EntryValidation = Mapping[
             str,
-            bool | str | Sequence[str] | Mapping[str, t.ContainerValue],
+            bool | str | Sequence[str] | t.ContainerValueMapping,
         ]
-        type BatchProcessing = Mapping[str, int | bool | Mapping[str, t.ContainerValue]]
-        type FileProcessing = Mapping[str, str | int | Mapping[str, t.ContainerValue]]
+        type BatchProcessing = Mapping[str, int | bool | t.ContainerValueMapping]
+        type FileProcessing = Mapping[str, str | int | t.ContainerValueMapping]
 
     class DataExtraction:
         """Data extraction complex types."""
 
         type ExtractionConfiguration = Mapping[
             str,
-            str | bool | Mapping[str, t.ContainerValue],
+            str | bool | t.ContainerValueMapping,
         ]
         type ExtractionFilter = Mapping[
-            str, str | Sequence[str] | Mapping[str, t.ContainerValue]
+            str, str | Sequence[str] | t.ContainerValueMapping
         ]
-        type ExtractionMapping = Mapping[str, str | Mapping[str, t.ContainerValue]]
-        type ExtractionResult = Mapping[
-            str, bool | Sequence[Mapping[str, t.ContainerValue]]
-        ]
-        type ExtractionMetrics = Mapping[
-            str, int | float | Mapping[str, t.ContainerValue]
-        ]
-        type ExtractionState = Mapping[str, str | int | Mapping[str, t.ContainerValue]]
+        type ExtractionMapping = Mapping[str, str | t.ContainerValueMapping]
+        type ExtractionResult = Mapping[str, bool | Sequence[t.ContainerValueMapping]]
+        type ExtractionMetrics = Mapping[str, int | float | t.ContainerValueMapping]
+        type ExtractionState = Mapping[str, str | int | t.ContainerValueMapping]
 
     class StreamProcessing:
         """Stream processing complex types."""
 
         type StreamConfiguration = Mapping[
             str,
-            str | bool | int | Mapping[str, t.ContainerValue],
+            str | bool | int | t.ContainerValueMapping,
         ]
-        type StreamMetadata = Mapping[str, str | Mapping[str, t.ContainerValue]]
-        type StreamRecord = Mapping[
-            str, t.ContainerValue | Mapping[str, t.ContainerValue]
-        ]
+        type StreamMetadata = Mapping[str, str | t.ContainerValueMapping]
+        type StreamRecord = Mapping[str, t.ContainerValue | t.ContainerValueMapping]
         type StreamRecordValue = str | int | Sequence[str] | Mapping[str, Sequence[str]]
-        type StreamState = Mapping[str, str | int | Mapping[str, t.ContainerValue]]
-        type StreamBookmark = Mapping[str, str | int | Mapping[str, t.ContainerValue]]
-        type StreamSchema = Mapping[str, str | Mapping[str, t.ContainerValue] | bool]
+        type StreamState = Mapping[str, str | int | t.ContainerValueMapping]
+        type StreamBookmark = Mapping[str, str | int | t.ContainerValueMapping]
+        type StreamSchema = Mapping[str, str | t.ContainerValueMapping | bool]
 
     class FileHandling:
         """File handling complex types."""
 
         type FileConfiguration = Mapping[
             str,
-            t.Scalar | Mapping[str, t.ContainerValue],
+            t.Scalar | t.ContainerValueMapping,
         ]
         type FileValidation = Mapping[str, bool | str | int | Sequence[str]]
-        type FileProcessing = Mapping[str, str | int | Mapping[str, t.ContainerValue]]
-        type FileBatching = Mapping[str, int | bool | Mapping[str, t.ContainerValue]]
-        type FileMonitoring = Mapping[str, bool | int | Mapping[str, t.ContainerValue]]
-        type FileMetrics = Mapping[str, int | float | Mapping[str, t.ContainerValue]]
+        type FileProcessing = Mapping[str, str | int | t.ContainerValueMapping]
+        type FileBatching = Mapping[str, int | bool | t.ContainerValueMapping]
+        type FileMonitoring = Mapping[str, bool | int | t.ContainerValueMapping]
+        type FileMetrics = Mapping[str, int | float | t.ContainerValueMapping]
 
     class ErrorHandling:
         """Error handling complex types."""
 
         type ErrorConfiguration = Mapping[
             str,
-            bool | str | int | Mapping[str, t.ContainerValue],
+            bool | str | int | t.ContainerValueMapping,
         ]
-        type ErrorRecovery = Mapping[str, str | bool | Mapping[str, t.ContainerValue]]
-        type ErrorReporting = Mapping[str, str | int | Mapping[str, t.ContainerValue]]
-        type ErrorClassification = Mapping[
-            str, str | int | Mapping[str, t.ContainerValue]
-        ]
-        type ErrorMetrics = Mapping[str, int | float | Mapping[str, t.ContainerValue]]
-        type ErrorTracking = Sequence[
-            Mapping[str, str | int | Mapping[str, t.ContainerValue]]
-        ]
+        type ErrorRecovery = Mapping[str, str | bool | t.ContainerValueMapping]
+        type ErrorReporting = Mapping[str, str | int | t.ContainerValueMapping]
+        type ErrorClassification = Mapping[str, str | int | t.ContainerValueMapping]
+        type ErrorMetrics = Mapping[str, int | float | t.ContainerValueMapping]
+        type ErrorTracking = Sequence[Mapping[str, str | int | t.ContainerValueMapping]]
 
     class Project:
         """Singer Tap LDIF-specific project types.
@@ -143,9 +127,7 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         type ProjectType = c.ProjectType
         type SingerTapLdifProjectConfig = Mapping[str, t.ContainerValue]
         type LdifExtractorConfig = Mapping[str, t.Scalar | Sequence[str]]
-        type SingerProtocolConfig = Mapping[
-            str, bool | str | Mapping[str, t.ContainerValue]
-        ]
+        type SingerProtocolConfig = Mapping[str, bool | str | t.ContainerValueMapping]
         type TapLdifPipelineConfig = Mapping[str, t.ContainerValue]
 
 
