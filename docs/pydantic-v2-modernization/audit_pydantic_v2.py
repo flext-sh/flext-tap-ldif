@@ -55,10 +55,12 @@ class AuditResult(BaseModel):
         description="Medium priority violations",
     )
     recommendations: MutableSequence[str] = Field(
-        default_factory=list, description="Audit recommendations"
+        default_factory=list,
+        description="Audit recommendations",
     )
     stats: MutableMapping[str, t.Primitives] = Field(
-        default_factory=dict, description="Audit statistics"
+        default_factory=dict,
+        description="Audit statistics",
     )
 
     @property

@@ -82,19 +82,22 @@ class FlextTapLdifTestProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
             """Protocol for test LDIF assertions."""
 
             def assert_ldif_file_parsed(
-                self, entries: Sequence[t.ContainerMapping]
+                self,
+                entries: Sequence[t.ContainerMapping],
             ) -> None:
                 """Assert LDIF file was parsed correctly."""
                 ...
 
             def assert_ldif_entries_valid(
-                self, entries: Sequence[t.ContainerMapping]
+                self,
+                entries: Sequence[t.ContainerMapping],
             ) -> None:
                 """Assert LDIF entries are valid."""
                 ...
 
             def assert_ldif_stream_config_valid(
-                self, stream: t.ContainerMapping
+                self,
+                stream: t.ContainerMapping,
             ) -> None:
                 """Assert LDIF stream configuration is valid."""
                 ...

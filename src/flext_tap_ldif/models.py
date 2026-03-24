@@ -374,7 +374,8 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         line_number: Annotated[
-            t.NonNegativeInt, Field(default=0, description="Source line number")
+            t.NonNegativeInt,
+            Field(default=0, description="Source line number"),
         ]
         source_file: Annotated[
             str | None,
@@ -449,7 +450,8 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         file_path: Annotated[str, Field(..., description="Path to LDIF file")]
         file_size: Annotated[
-            t.NonNegativeInt, Field(default=0, description="File size in bytes")
+            t.NonNegativeInt,
+            Field(default=0, description="File size in bytes"),
         ]
         encoding: Annotated[str, Field(default="utf-8", description="File encoding")]
 
@@ -471,10 +473,12 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
         # Processing statistics
         total_lines: Annotated[
-            t.NonNegativeInt, Field(default=0, description="Total lines in file")
+            t.NonNegativeInt,
+            Field(default=0, description="Total lines in file"),
         ]
         entry_count: Annotated[
-            t.NonNegativeInt, Field(default=0, description="Number of entries")
+            t.NonNegativeInt,
+            Field(default=0, description="Number of entries"),
         ]
         change_record_count: Annotated[
             t.NonNegativeInt,
@@ -897,7 +901,8 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             ),
         ]
         fatal_errors: Annotated[
-            t.NonNegativeInt, Field(default=0, description="Fatal error count")
+            t.NonNegativeInt,
+            Field(default=0, description="Fatal error count"),
         ]
 
         # Performance metrics
@@ -1123,7 +1128,8 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             Field(default=None, description="Source LDIF file"),
         ]
         line_number: Annotated[
-            t.NonNegativeInt, Field(default=0, description="Source line number")
+            t.NonNegativeInt,
+            Field(default=0, description="Source line number"),
         ]
 
         # Extraction metadata

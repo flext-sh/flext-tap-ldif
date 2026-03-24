@@ -83,13 +83,16 @@ def sample_ldif_changes_file(tmp_path: Path, sample_ldif_changes: str) -> Path:
 
 @pytest.fixture
 def ldif_directory(
-    tmp_path: Path, sample_ldif_content: str, sample_ldif_changes: str
+    tmp_path: Path,
+    sample_ldif_content: str,
+    sample_ldif_changes: str,
 ) -> Path:
     """Create directory with multiple LDIF files."""
     ldif_dir = tmp_path / "ldif_files"
     ldif_dir.mkdir()
     written = (ldif_dir / "users.ldif").write_text(
-        sample_ldif_content, encoding="utf-8"
+        sample_ldif_content,
+        encoding="utf-8",
     ) + (ldif_dir / "changes.ldif").write_text(sample_ldif_changes, encoding="utf-8")
     assert written >= 0
     additional_content = "version: 1\n\ndn: cn=Test User,ou=users,dc=example,dc=com\nobjectClass: inetOrgPerson\nobjectClass: person\ncn: Test User\nsn: User\ngivenName: Test\nmail: test.user@example.com\n"
@@ -246,10 +249,10 @@ def singer_catalog_config() -> t.ContainerMapping:
                             "replication-key": "source_file_mtime",
                             "selected": True,
                         },
-                    }
+                    },
                 ],
-            }
-        ]
+            },
+        ],
     }
 
 
@@ -263,7 +266,7 @@ def singer_state() -> t.ContainerMapping:
                 "replication_key_value": 1640995200.0,
                 "version": 1,
                 "processed_files": [],
-            }
+            },
         },
     }
 
@@ -327,7 +330,7 @@ class MockLDIFTap:
                 "mail": ["test@example.com"],
                 "source_file": "test.ldif",
                 "source_file_mtime": 1640995200.0,
-            }
+            },
         ]
 
 

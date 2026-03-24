@@ -38,17 +38,21 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
             FlextMeltanoTypes.Scalar | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type StreamConfiguration = Mapping[
-            str, str | bool | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            str | bool | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type CatalogDefinition = Mapping[
-            str, str | Sequence[FlextMeltanoTypes.ContainerValueMapping]
+            str,
+            str | Sequence[FlextMeltanoTypes.ContainerValueMapping],
         ]
         type SchemaDefinition = Mapping[
-            str, str | FlextMeltanoTypes.ContainerValueMapping | bool
+            str,
+            str | FlextMeltanoTypes.ContainerValueMapping | bool,
         ]
         type MessageOutput = Mapping[str, str | FlextMeltanoTypes.ContainerValueMapping]
         type StateManagement = Mapping[
-            str, str | int | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            str | int | FlextMeltanoTypes.ContainerValueMapping,
         ]
 
     class LdifProcessing:
@@ -75,10 +79,12 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
             | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type BatchProcessing = Mapping[
-            str, int | bool | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            int | bool | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type FileProcessing = Mapping[
-            str, str | int | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            str | int | FlextMeltanoTypes.ContainerValueMapping,
         ]
 
     class DataExtraction:
@@ -95,16 +101,20 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
             | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type ExtractionMapping = Mapping[
-            str, str | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            str | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type ExtractionResult = Mapping[
-            str, bool | Sequence[FlextMeltanoTypes.ContainerValueMapping]
+            str,
+            bool | Sequence[FlextMeltanoTypes.ContainerValueMapping],
         ]
         type ExtractionMetrics = Mapping[
-            str, int | float | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            int | float | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type ExtractionState = Mapping[
-            str, str | int | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            str | int | FlextMeltanoTypes.ContainerValueMapping,
         ]
 
     class StreamProcessing:
@@ -115,7 +125,8 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
             str | bool | int | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type StreamMetadata = Mapping[
-            str, str | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            str | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type StreamRecord = Mapping[
             str,
@@ -128,13 +139,16 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
             | Mapping[str, FlextMeltanoTypes.StrSequence]
         )
         type StreamState = Mapping[
-            str, str | int | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            str | int | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type StreamBookmark = Mapping[
-            str, str | int | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            str | int | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type StreamSchema = Mapping[
-            str, str | FlextMeltanoTypes.ContainerValueMapping | bool
+            str,
+            str | FlextMeltanoTypes.ContainerValueMapping | bool,
         ]
 
     class FileHandling:
@@ -145,19 +159,24 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
             FlextMeltanoTypes.Scalar | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type FileValidation = Mapping[
-            str, bool | str | int | FlextMeltanoTypes.StrSequence
+            str,
+            bool | str | int | FlextMeltanoTypes.StrSequence,
         ]
         type FileProcessing = Mapping[
-            str, str | int | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            str | int | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type FileBatching = Mapping[
-            str, int | bool | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            int | bool | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type FileMonitoring = Mapping[
-            str, bool | int | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            bool | int | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type FileMetrics = Mapping[
-            str, int | float | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            int | float | FlextMeltanoTypes.ContainerValueMapping,
         ]
 
     class ErrorHandling:
@@ -168,16 +187,20 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
             bool | str | int | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type ErrorRecovery = Mapping[
-            str, str | bool | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            str | bool | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type ErrorReporting = Mapping[
-            str, str | int | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            str | int | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type ErrorClassification = Mapping[
-            str, str | int | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            str | int | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type ErrorMetrics = Mapping[
-            str, int | float | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            int | float | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type ErrorTracking = Sequence[
             Mapping[str, str | int | FlextMeltanoTypes.ContainerValueMapping]
@@ -194,10 +217,12 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
         type ProjectType = c.ProjectType
         type SingerTapLdifProjectConfig = Mapping[str, FlextMeltanoTypes.ContainerValue]
         type LdifExtractorConfig = Mapping[
-            str, FlextMeltanoTypes.Scalar | FlextMeltanoTypes.StrSequence
+            str,
+            FlextMeltanoTypes.Scalar | FlextMeltanoTypes.StrSequence,
         ]
         type SingerProtocolConfig = Mapping[
-            str, bool | str | FlextMeltanoTypes.ContainerValueMapping
+            str,
+            bool | str | FlextMeltanoTypes.ContainerValueMapping,
         ]
         type TapLdifPipelineConfig = Mapping[str, FlextMeltanoTypes.ContainerValue]
 
