@@ -325,7 +325,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
                 if self.object_classes
                 else None,
                 "entry_type": self.entry_type,
-                "is_valid": len(self.validation_errors) == 0,
+                "is_valid": not self.validation_errors,
                 "source_location": {"file": self.source_file, "line": self.line_number},
             }
 
@@ -432,7 +432,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
                 "dn": self.dn,
                 "change_type": self.change_type,
                 "change_count": len(self.changes),
-                "has_errors": len(self.application_errors) > 0,
+                "has_errors": self.application_errors,
                 "applied": self.applied,
                 "source_location": {"file": self.source_file, "line": self.line_number},
             }
