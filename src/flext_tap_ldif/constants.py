@@ -22,7 +22,7 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
     Composes with FlextTapLdifConstants to avoid duplication and ensure consistency.
     """
 
-    DEFAULT_LDIF_ENCODING: Final[str] = FlextLdifConstants.Ldif.DEFAULT_ENCODING
+    DEFAULT_LDIF_ENCODING: Final[str] = FlextLdifConstants.Ldif.Encoding.UTF8
     SUPPORTED_ENCODINGS: ClassVar[frozenset[str]] = frozenset({
         FlextLdifConstants.Ldif.Encoding.UTF8,
         FlextLdifConstants.Ldif.Encoding.ASCII,

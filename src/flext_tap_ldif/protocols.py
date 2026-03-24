@@ -78,7 +78,7 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
             def parse_ldif_file(
                 self,
                 file_path: str,
-            ) -> FlextMeltanoProtocols.Result[Sequence[t.ContainerValue]]:
+            ) -> FlextMeltanoProtocols.Result[t.ContainerValueList]:
                 """Parse entire LDIF file."""
                 ...
 
@@ -90,7 +90,7 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 self,
                 entries: Sequence[Mapping[str, t.ContainerValue]],
                 filter_criteria: Mapping[str, t.ContainerValue],
-            ) -> FlextMeltanoProtocols.Result[Sequence[t.ContainerValue]]:
+            ) -> FlextMeltanoProtocols.Result[t.ContainerValueList]:
                 """Extract LDIF entries matching filter criteria."""
                 ...
 
