@@ -522,10 +522,12 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """
             files_raw = state.get("files")
             if not cls._is_str_object_mapping(files_raw):
-                return {}
+                empty: t.ContainerMapping = {}
+                return empty
             file_state_raw = files_raw.get(file_path)
             if not cls._is_str_object_mapping(file_state_raw):
-                return {}
+                empty_state: t.ContainerMapping = {}
+                return empty_state
             return dict(file_state_raw)
 
         @staticmethod
