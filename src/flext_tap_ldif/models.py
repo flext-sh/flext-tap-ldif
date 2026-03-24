@@ -360,7 +360,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         changes: Annotated[
             Sequence[t.StrMapping],
             Field(
-                default_factory=lambda: Sequence[t.StrMapping](),
+                default_factory=list,
                 description="List of changes",
             ),
         ]
@@ -635,7 +635,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         stream_metadata: Annotated[
             Sequence[t.StrMapping],
             Field(
-                default_factory=lambda: Sequence[t.StrMapping](),
+                default_factory=list,
                 description="Stream metadata",
             ),
         ]
@@ -885,7 +885,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         processing_errors: Annotated[
             Sequence[t.StrMapping],
             Field(
-                default_factory=lambda: Sequence[t.StrMapping](),
+                default_factory=list,
                 description="Processing errors with context",
             ),
         ]
@@ -1177,14 +1177,14 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         validation_errors: Annotated[
             Sequence[t.StrMapping],
             Field(
-                default_factory=lambda: Sequence[t.StrMapping](),
+                default_factory=list,
                 description="Validation errors with details",
             ),
         ]
         warnings: Annotated[
             Sequence[t.StrMapping],
             Field(
-                default_factory=lambda: Sequence[t.StrMapping](),
+                default_factory=list,
                 description="Validation warnings",
             ),
         ]

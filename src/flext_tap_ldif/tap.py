@@ -20,7 +20,7 @@ from flext_tap_ldif.streams import LDIFEntriesStream
 logger = FlextLogger(__name__)
 
 
-class TapLDIF(Tap):
+class FlextTapLdif(Tap):
     """Singer tap for LDIF file format data extraction."""
 
     name: str = "tap-ldif"
