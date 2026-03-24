@@ -7,13 +7,15 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Sequence, Mapping
+from collections.abc import Mapping
 from enum import StrEnum, unique
 from typing import ClassVar, Final
 
 from flext_core import FlextConstants
 from flext_ldif import FlextLdifConstants
 from flext_meltano import FlextMeltanoConstants
+
+from flext_tap_ldif import t
 
 
 class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
@@ -30,7 +32,7 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
         FlextLdifConstants.Ldif.Encoding.UTF16,
     })
     MAX_FILE_SIZE_MB: Final[int] = 100
-    LDIF_CHANGE_TYPES: ClassVar[Sequence[str]] = [
+    LDIF_CHANGE_TYPES: ClassVar[t.StrSequence] = [
         FlextLdifConstants.Ldif.EntryModification.ADD,
         FlextLdifConstants.Ldif.EntryModification.MODIFY,
         FlextLdifConstants.Ldif.EntryModification.DELETE,
@@ -91,8 +93,8 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
         """Sample LDIF entry for fallback/testing."""
 
         DN: Final[str] = "cn=sample,dc=example,dc=com"
-        ATTRIBUTES: Final[Mapping[str, Sequence[str]]] = {"cn": ["sample"]}
-        OBJECT_CLASS: Final[Sequence[str]] = ["top"]
+        ATTRIBUTES: Final[Mapping[str, t.StrSequence]] = {"cn": ["sample"]}
+        OBJECT_CLASS: Final[t.StrSequence] = ["top"]
         SOURCE_FILE: Final[str] = "fp"
 
     @unique
