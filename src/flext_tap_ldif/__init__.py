@@ -15,7 +15,8 @@ from typing import TYPE_CHECKING
 from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
 
 if TYPE_CHECKING:
-    from flext_core import FlextTypes, d, e, h, r, s, x
+    from flext_core import FlextTypes
+    from flext_ldif import d, e, h, r, s, x
 
     from flext_tap_ldif.__version__ import (
         __all__,
@@ -72,18 +73,18 @@ _LAZY_IMPORTS: Mapping[str, tuple[str, str]] = {
     "__version__": ("flext_tap_ldif.__version__", "__version__"),
     "__version_info__": ("flext_tap_ldif.__version__", "__version_info__"),
     "c": ("flext_tap_ldif.constants", "FlextTapLdifConstants"),
-    "d": ("flext_core", "d"),
-    "e": ("flext_core", "e"),
-    "h": ("flext_core", "h"),
+    "d": ("flext_ldif", "d"),
+    "e": ("flext_ldif", "e"),
+    "h": ("flext_ldif", "h"),
     "logger": ("flext_tap_ldif.tap", "logger"),
     "m": ("flext_tap_ldif.models", "FlextTapLdifModels"),
     "main": ("flext_tap_ldif.tap", "main"),
     "p": ("flext_tap_ldif.protocols", "FlextTapLdifProtocols"),
-    "r": ("flext_core", "r"),
-    "s": ("flext_core", "s"),
+    "r": ("flext_ldif", "r"),
+    "s": ("flext_ldif", "s"),
     "t": ("flext_tap_ldif.typings", "FlextTapLdifTypes"),
     "u": ("flext_tap_ldif.utilities", "FlextTapLdifUtilities"),
-    "x": ("flext_core", "x"),
+    "x": ("flext_ldif", "x"),
 }
 
 __all__ = [

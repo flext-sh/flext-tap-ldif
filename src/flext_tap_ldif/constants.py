@@ -11,7 +11,6 @@ from collections.abc import Mapping
 from enum import StrEnum, unique
 from typing import ClassVar, Final
 
-from flext_core import FlextConstants
 from flext_ldif import FlextLdifConstants
 from flext_meltano import FlextMeltanoConstants
 
@@ -63,7 +62,7 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
     class TapLdifPerformance:
         """Tap LDIF performance constants."""
 
-        DEFAULT_BATCH_SIZE: Final[int] = FlextConstants.DEFAULT_BATCH_SIZE
+        DEFAULT_BATCH_SIZE: Final[int] = FlextMeltanoConstants.DEFAULT_BATCH_SIZE
 
     class TapLdifValidation:
         """LDIF tap validation constants.
