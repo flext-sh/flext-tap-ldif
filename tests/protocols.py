@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping, Sequence
+from collections.abc import Sequence
 from typing import Protocol, runtime_checkable
 
 from flext_tests import FlextTestsProtocols
@@ -57,7 +57,7 @@ class FlextTapLdifTestProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
                 """Close mock LDIF file."""
                 ...
 
-            def read_entries(self) -> Sequence[Mapping[str, t.NormalizedValue]]:
+            def read_entries(self) -> Sequence[t.ContainerMapping]:
                 """Read entries from mock LDIF file."""
                 ...
 
@@ -65,7 +65,7 @@ class FlextTapLdifTestProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
         class TestLdifDataProvider(Protocol):
             """Protocol for test LDIF data providers."""
 
-            def get_test_entries(self) -> Sequence[Mapping[str, t.NormalizedValue]]:
+            def get_test_entries(self) -> Sequence[t.ContainerMapping]:
                 """Get test LDIF entries."""
                 ...
 
@@ -73,7 +73,7 @@ class FlextTapLdifTestProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
                 """Get test LDIF file content."""
                 ...
 
-            def get_test_config(self) -> Mapping[str, t.NormalizedValue]:
+            def get_test_config(self) -> t.ContainerMapping:
                 """Get test LDIF configuration."""
                 ...
 
@@ -82,19 +82,19 @@ class FlextTapLdifTestProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
             """Protocol for test LDIF assertions."""
 
             def assert_ldif_file_parsed(
-                self, entries: Sequence[Mapping[str, t.NormalizedValue]]
+                self, entries: Sequence[t.ContainerMapping]
             ) -> None:
                 """Assert LDIF file was parsed correctly."""
                 ...
 
             def assert_ldif_entries_valid(
-                self, entries: Sequence[Mapping[str, t.NormalizedValue]]
+                self, entries: Sequence[t.ContainerMapping]
             ) -> None:
                 """Assert LDIF entries are valid."""
                 ...
 
             def assert_ldif_stream_config_valid(
-                self, stream: Mapping[str, t.NormalizedValue]
+                self, stream: t.ContainerMapping
             ) -> None:
                 """Assert LDIF stream configuration is valid."""
                 ...
