@@ -107,7 +107,7 @@ class FlextLdifProcessor:
                     file_encoding = "utf-8"
             with file_path.open("r", encoding=file_encoding) as file:
                 content = file.read()
-                parse_result = self._api.parse(content)
+                parse_result = self._api.parse_ldif(content)
                 if parse_result.is_failure:
                     msg: str = f"Failed to parse LDIF: {parse_result.error}"
                     self._raise_parse_error(msg)

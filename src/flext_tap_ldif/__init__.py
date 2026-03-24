@@ -42,11 +42,7 @@ if TYPE_CHECKING:
     from flext_tap_ldif.settings import FlextTapLdifSettings
     from flext_tap_ldif.streams import FlextTapLdifEntriesStream
     from flext_tap_ldif.tap import FlextTapLdif, logger, main
-    from flext_tap_ldif.typings import (
-        FlextTapLdifTypes,
-        FlextTapLdifTypes as t,
-        StreamRecordValue,
-    )
+    from flext_tap_ldif.typings import FlextTapLdifTypes, FlextTapLdifTypes as t
     from flext_tap_ldif.utilities import (
         FlextTapLdifUtilities,
         FlextTapLdifUtilities as u,
@@ -56,13 +52,15 @@ _LAZY_IMPORTS: Mapping[str, tuple[str, str]] = {
     "FlextLdifProcessor": ("flext_tap_ldif.ldif_processor", "FlextLdifProcessor"),
     "FlextTapLdif": ("flext_tap_ldif.tap", "FlextTapLdif"),
     "FlextTapLdifConstants": ("flext_tap_ldif.constants", "FlextTapLdifConstants"),
-    "FlextTapLdifEntriesStream": ("flext_tap_ldif.streams", "FlextTapLdifEntriesStream"),
+    "FlextTapLdifEntriesStream": (
+        "flext_tap_ldif.streams",
+        "FlextTapLdifEntriesStream",
+    ),
     "FlextTapLdifModels": ("flext_tap_ldif.models", "FlextTapLdifModels"),
     "FlextTapLdifProtocols": ("flext_tap_ldif.protocols", "FlextTapLdifProtocols"),
     "FlextTapLdifSettings": ("flext_tap_ldif.settings", "FlextTapLdifSettings"),
     "FlextTapLdifTypes": ("flext_tap_ldif.typings", "FlextTapLdifTypes"),
     "FlextTapLdifUtilities": ("flext_tap_ldif.utilities", "FlextTapLdifUtilities"),
-    "StreamRecordValue": ("flext_tap_ldif.typings", "StreamRecordValue"),
     "__all__": ("flext_tap_ldif.__version__", "__all__"),
     "__author__": ("flext_tap_ldif.__version__", "__author__"),
     "__author_email__": ("flext_tap_ldif.__version__", "__author_email__"),
@@ -97,7 +95,6 @@ __all__ = [
     "FlextTapLdifSettings",
     "FlextTapLdifTypes",
     "FlextTapLdifUtilities",
-    "StreamRecordValue",
     "__all__",
     "__author__",
     "__author_email__",
