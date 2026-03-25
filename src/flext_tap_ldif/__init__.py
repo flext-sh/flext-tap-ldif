@@ -14,6 +14,7 @@ from typing import TYPE_CHECKING
 
 from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
 
+
 if TYPE_CHECKING:
     from flext_core import FlextTypes
     from flext_ldif import d, e, h, r, s, x
@@ -52,10 +53,7 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "FlextLdifProcessor": ["flext_tap_ldif.ldif_processor", "FlextLdifProcessor"],
     "FlextTapLdif": ["flext_tap_ldif.tap", "FlextTapLdif"],
     "FlextTapLdifConstants": ["flext_tap_ldif.constants", "FlextTapLdifConstants"],
-    "FlextTapLdifEntriesStream": [
-        "flext_tap_ldif.streams",
-        "FlextTapLdifEntriesStream",
-    ],
+    "FlextTapLdifEntriesStream": ["flext_tap_ldif.streams", "FlextTapLdifEntriesStream"],
     "FlextTapLdifModels": ["flext_tap_ldif.models", "FlextTapLdifModels"],
     "FlextTapLdifProtocols": ["flext_tap_ldif.protocols", "FlextTapLdifProtocols"],
     "FlextTapLdifSettings": ["flext_tap_ldif.settings", "FlextTapLdifSettings"],
@@ -137,7 +135,6 @@ def __getattr__(name: str) -> FlextTypes.ModuleExport:
 
     Raises:
         AttributeError: If attribute not registered.
-
     """
     if name in _LAZY_CACHE:
         return _LAZY_CACHE[name]
@@ -152,7 +149,6 @@ def __dir__() -> Sequence[str]:
 
     Returns:
         List of public names from module exports.
-
     """
     return sorted(__all__)
 
