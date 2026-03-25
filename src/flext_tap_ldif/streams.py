@@ -13,11 +13,11 @@ from pathlib import Path
 from typing import override
 
 from flext_core import FlextLogger
-from flext_tap_ldif import t
 from singer_sdk.helpers.types import Context, Record
 from singer_sdk.streams import Stream
 from singer_sdk.tap_base import Tap
 
+from flext_tap_ldif import t
 from flext_tap_ldif.constants import c
 from flext_tap_ldif.ldif_processor import (
     FlextLdifProcessor as FlextLdifProcessorWrapper,
