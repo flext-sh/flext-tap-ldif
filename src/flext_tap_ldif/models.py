@@ -236,17 +236,15 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         attributes: Annotated[
             MutableMapping[str, t.StrSequence],
             Field(
-                default_factory=dict,
                 description="Entry attributes",
             ),
-        ]
+        ] = Field(default_factory=dict)
         object_classes: Annotated[
             t.StrSequence,
             Field(
-                default_factory=list,
                 description="Object classes",
             ),
-        ]
+        ] = Field(default_factory=list)
 
         # LDIF metadata
         line_number: Annotated[
@@ -272,10 +270,9 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         extracted_at: Annotated[
             datetime,
             Field(
-                default_factory=lambda: datetime.now(UTC),
                 description="Extraction timestamp",
             ),
-        ]
+        ] = Field(default_factory=lambda: datetime.now(UTC))
         processed: Annotated[
             bool,
             Field(default=False, description="Processing status"),
@@ -283,10 +280,9 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         validation_errors: Annotated[
             t.StrSequence,
             Field(
-                default_factory=list,
                 description="Validation errors",
             ),
-        ]
+        ] = Field(default_factory=list)
 
         @computed_field
         def ldif_entry_summary(self) -> t.ContainerMapping:
@@ -360,10 +356,9 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         changes: Annotated[
             Sequence[t.StrMapping],
             Field(
-                default_factory=list,
                 description="List of changes",
             ),
-        ]
+        ] = Field(default_factory=list)
 
         # Change metadata
         changetype: Annotated[
@@ -386,10 +381,9 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         extracted_at: Annotated[
             datetime,
             Field(
-                default_factory=lambda: datetime.now(UTC),
                 description="Extraction timestamp",
             ),
-        ]
+        ] = Field(default_factory=lambda: datetime.now(UTC))
         applied: Annotated[
             bool,
             Field(default=False, description="Change application status"),
@@ -397,10 +391,9 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         application_errors: Annotated[
             t.StrSequence,
             Field(
-                default_factory=list,
                 description="Application errors",
             ),
-        ]
+        ] = Field(default_factory=list)
 
         @computed_field
         def change_record_summary(self) -> t.ContainerMapping:
@@ -510,10 +503,9 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         processing_errors: Annotated[
             t.StrSequence,
             Field(
-                default_factory=list,
                 description="Processing errors",
             ),
-        ]
+        ] = Field(default_factory=list)
 
         # Validation results
         is_valid_ldif: Annotated[
@@ -523,10 +515,9 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         validation_errors: Annotated[
             t.StrSequence,
             Field(
-                default_factory=list,
                 description="Format validation errors",
             ),
-        ]
+        ] = Field(default_factory=list)
 
         @computed_field
         def ldif_file_summary(self) -> t.ContainerMapping:
@@ -600,10 +591,9 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         key_properties: Annotated[
             t.StrSequence,
             Field(
-                default_factory=lambda: ["dn"],
                 description="Key properties",
             ),
-        ]
+        ] = Field(default_factory=lambda: ["dn"])
 
         # LDIF-specific settings
         include_change_records: Annotated[
@@ -616,10 +606,9 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         filter_object_classes: Annotated[
             t.StrSequence,
             Field(
-                default_factory=list,
                 description="Filter by t.NormalizedValue classes",
             ),
-        ]
+        ] = Field(default_factory=list)
         batch_size: Annotated[
             int,
             Field(
@@ -632,17 +621,15 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         stream_schema: Annotated[
             Mapping[str, t.ContainerValue],
             Field(
-                default_factory=dict,
                 description="JSON schema",
             ),
-        ]
+        ] = Field(default_factory=dict)
         stream_metadata: Annotated[
             Sequence[t.StrMapping],
             Field(
-                default_factory=list,
                 description="Stream metadata",
             ),
-        ]
+        ] = Field(default_factory=list)
 
         @computed_field
         def ldif_stream_summary(self) -> t.ContainerMapping:
@@ -767,10 +754,9 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         file_errors: Annotated[
             Mapping[str, t.StrSequence],
             Field(
-                default_factory=dict,
                 description="Errors by file",
             ),
-        ]
+        ] = Field(default_factory=dict)
 
         @computed_field
         def batch_processing_summary(self) -> t.ContainerMapping:
@@ -873,10 +859,9 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         last_update: Annotated[
             datetime,
             Field(
-                default_factory=lambda: datetime.now(UTC),
                 description="Last state update",
             ),
-        ]
+        ] = Field(default_factory=lambda: datetime.now(UTC))
         estimated_completion: Annotated[
             datetime | None,
             Field(
@@ -889,10 +874,9 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         processing_errors: Annotated[
             Sequence[t.StrMapping],
             Field(
-                default_factory=list,
                 description="Processing errors with context",
             ),
-        ]
+        ] = Field(default_factory=list)
         recoverable_errors: Annotated[
             t.NonNegativeInt,
             Field(
@@ -991,10 +975,9 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         file_patterns: Annotated[
             t.StrSequence,
             Field(
-                default_factory=lambda: ["*.ldif"],
                 description="LDIF file patterns",
             ),
-        ]
+        ] = Field(default_factory=lambda: ["*.ldif"])
         recursive_search: Annotated[
             bool,
             Field(
@@ -1136,10 +1119,9 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         time_extracted: Annotated[
             datetime,
             Field(
-                default_factory=lambda: datetime.now(UTC),
                 description="Extraction timestamp",
             ),
-        ]
+        ] = Field(default_factory=lambda: datetime.now(UTC))
         processing_time: Annotated[
             t.NonNegativeFloat,
             Field(
@@ -1183,17 +1165,15 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         validation_errors: Annotated[
             Sequence[t.StrMapping],
             Field(
-                default_factory=list,
                 description="Validation errors with details",
             ),
-        ]
+        ] = Field(default_factory=list)
         warnings: Annotated[
             Sequence[t.StrMapping],
             Field(
-                default_factory=list,
                 description="Validation warnings",
             ),
-        ]
+        ] = Field(default_factory=list)
 
         # Statistics
         total_entries: Annotated[
