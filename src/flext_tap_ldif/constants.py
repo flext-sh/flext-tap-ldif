@@ -9,12 +9,13 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from enum import StrEnum, unique
-from typing import ClassVar, Final
+from typing import TYPE_CHECKING, ClassVar, Final
 
 from flext_ldif import FlextLdifConstants
 from flext_meltano import FlextMeltanoConstants
 
-from flext_tap_ldif import t
+if TYPE_CHECKING:
+    from flext_tap_ldif import t
 
 
 class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
