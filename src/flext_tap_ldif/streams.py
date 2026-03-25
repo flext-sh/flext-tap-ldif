@@ -100,7 +100,11 @@ class FlextTapLdifEntriesStream(Stream):
         fp_raw = config.get("file_path")
         fp_val = fp_raw if isinstance(fp_raw, str) else None
         max_size_raw = config.get("max_file_size_mb", c.TapLdif.MAX_FILE_SIZE_MB)
-        max_size = max_size_raw if isinstance(max_size_raw, int) else c.TapLdif.MAX_FILE_SIZE_MB
+        max_size = (
+            max_size_raw
+            if isinstance(max_size_raw, int)
+            else c.TapLdif.MAX_FILE_SIZE_MB
+        )
         files_result = self._processor.discover_files(
             directory_path=dir_path,
             file_pattern=pattern,
