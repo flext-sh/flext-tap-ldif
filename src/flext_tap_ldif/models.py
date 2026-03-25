@@ -10,7 +10,8 @@ from collections.abc import Mapping, MutableMapping, Sequence
 from datetime import UTC, datetime
 from typing import Annotated, ClassVar, Self
 
-from flext_core import FlextConstants, t, u
+from flext_core import FlextConstants, u
+from flext_tap_ldif import t
 from flext_ldif import FlextLdifModels
 from flext_meltano import FlextMeltanoModels
 from pydantic import (
