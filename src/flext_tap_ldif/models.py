@@ -363,7 +363,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
                 Field(
                     description="List of changes",
                 ),
-            ] = Field(default_factory=lambda: [])
+            ] = Field(default_factory=list)
 
             # Change metadata
             changetype: Annotated[
@@ -641,7 +641,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
                 Field(
                     description="Stream metadata",
                 ),
-            ] = Field(default_factory=lambda: [])
+            ] = Field(default_factory=list)
 
             @computed_field
             def ldif_stream_summary(self) -> t.ContainerMapping:
@@ -890,7 +890,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
                 Field(
                     description="Processing errors with context",
                 ),
-            ] = Field(default_factory=lambda: [])
+            ] = Field(default_factory=list)
             recoverable_errors: Annotated[
                 t.NonNegativeInt,
                 Field(
@@ -1185,13 +1185,13 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
                 Field(
                     description="Validation errors with details",
                 ),
-            ] = Field(default_factory=lambda: [])
+            ] = Field(default_factory=list)
             warnings: Annotated[
                 Sequence[t.StrMapping],
                 Field(
                     description="Validation warnings",
                 ),
-            ] = Field(default_factory=lambda: [])
+            ] = Field(default_factory=list)
 
             # Statistics
             total_entries: Annotated[
