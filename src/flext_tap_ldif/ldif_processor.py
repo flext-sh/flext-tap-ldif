@@ -114,7 +114,7 @@ class FlextLdifProcessor:
                 for raw_entry in parse_result.value:
                     entry = m.Ldif.Entry.model_validate(raw_entry)
                     dn_val = entry.dn.value if entry.dn is not None else ""
-                    attrs_dict = (
+                    attrs_dict: dict[str, MutableSequence[str]] = (
                         dict(entry.attributes.attributes)
                         if entry.attributes is not None
                         else {}
