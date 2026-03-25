@@ -213,9 +213,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         @staticmethod
         def validate_ldif_line(line: str) -> bool:
             """Validate LDIF line format."""
-            if not line or line.startswith("#"):
-                return True  # Comment or empty line
-            return None
+            return not line or line.startswith("#")
 
         class LdifEntry(BaseModel):
             """Represents an LDIF entry with complete parsing support."""

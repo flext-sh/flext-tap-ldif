@@ -132,7 +132,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     if not file_path.exists():
                         return r[int].fail(f"LDIF file does not exist: {file_path}")
                     entry_count = 0
-                    with file_path.open("r", encoding=c.DEFAULT_LDIF_ENCODING) as f:
+                    with file_path.open("r", encoding=c.TapLdif.DEFAULT_LDIF_ENCODING) as f:
                         for line_str in f:
                             line = line_str.strip()
                             if line.startswith("dn:"):
@@ -169,7 +169,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     entry_count = 0
                     base_dns: set[str] = set()
                     object_classes: set[str] = set()
-                    with file_path.open("r", encoding=c.DEFAULT_LDIF_ENCODING) as f:
+                    with file_path.open("r", encoding=c.TapLdif.DEFAULT_LDIF_ENCODING) as f:
                         for line_str in f:
                             line = line_str.strip()
                             if line.startswith("version:"):
@@ -227,7 +227,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         return r[bool].fail(
                             f"File does not have LDIF extension: {file_path}",
                         )
-                    with file_path.open("r", encoding=c.DEFAULT_LDIF_ENCODING) as f:
+                    with file_path.open("r", encoding=c.TapLdif.DEFAULT_LDIF_ENCODING) as f:
                         first_lines = [f.readline().strip() for _ in range(10)]
                     has_version = any(
                         line.startswith("version:") for line in first_lines
@@ -268,7 +268,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                             current_value += line[1:]
                         continue
                     if current_attr is not None and current_value:
-                        normalized_attr = FlextTapLdifUtilities.LdifDataProcessing.normalize_ldif_attribute_name(
+                        normalized_attr = FlextTapLdifUtilities.TapLdif.LdifDataProcessing.normalize_ldif_attribute_name(
                             current_attr,
                         )
                         if normalized_attr in record:
@@ -283,7 +283,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         else:
                             record[normalized_attr] = current_value
                     parse_result = (
-                        FlextTapLdifUtilities.LdifDataProcessing.parse_ldif_line(
+                        FlextTapLdifUtilities.TapLdif.LdifDataProcessing.parse_ldif_line(
                             line,
                         )
                     )
@@ -295,7 +295,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         current_attr = None
                         current_value = ""
                 if current_attr is not None and current_value:
-                    normalized_attr = FlextTapLdifUtilities.LdifDataProcessing.normalize_ldif_attribute_name(
+                    normalized_attr = FlextTapLdifUtilities.TapLdif.LdifDataProcessing.normalize_ldif_attribute_name(
                         current_attr,
                     )
                     if normalized_attr in record:
@@ -325,7 +325,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
                 """
                 try:
-                    record = FlextTapLdifUtilities.LdifDataProcessing.build_record_from_lines(
+                    record = FlextTapLdifUtilities.TapLdif.LdifDataProcessing.build_record_from_lines(
                         entry_lines,
                     )
                     out: Mapping[str, str | t.StrSequence] = dict(record)
@@ -502,7 +502,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 int: Current position or 0
 
                 """
-                file_state = FlextTapLdifUtilities.StateManagement.get_file_state(
+                file_state = FlextTapLdifUtilities.TapLdif.StateManagement.get_file_state(
                     state,
                     file_path,
                 )
@@ -552,7 +552,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 Mapping[str, t.ContainerValue]: Updated state
 
                 """
-                file_state = FlextTapLdifUtilities.StateManagement.get_file_state(
+                file_state = FlextTapLdifUtilities.TapLdif.StateManagement.get_file_state(
                     state,
                     file_path,
                 )
@@ -561,7 +561,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 )
                 file_state_dict["position"] = position
                 file_state_dict["last_updated"] = datetime.now(UTC).isoformat()
-                return FlextTapLdifUtilities.StateManagement.set_file_state(
+                return FlextTapLdifUtilities.TapLdif.StateManagement.set_file_state(
                     state,
                     file_path,
                     file_state_dict,
