@@ -24,122 +24,122 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
     Composes with FlextTapLdifConstants to avoid duplication and ensure consistency.
     """
 
-    DEFAULT_LDIF_ENCODING: Final[str] = FlextLdifConstants.Ldif.Encoding.UTF8
-    SUPPORTED_ENCODINGS: ClassVar[frozenset[str]] = frozenset({
-        FlextLdifConstants.Ldif.Encoding.UTF8,
-        FlextLdifConstants.Ldif.Encoding.ASCII,
-        FlextLdifConstants.Ldif.Encoding.LATIN1,
-        FlextLdifConstants.Ldif.Encoding.UTF16,
-    })
-    MAX_FILE_SIZE_MB: Final[int] = 100
-    LDIF_CHANGE_TYPES: ClassVar[t.StrSequence] = [
-        FlextLdifConstants.Ldif.EntryModification.ADD,
-        FlextLdifConstants.Ldif.EntryModification.MODIFY,
-        FlextLdifConstants.Ldif.EntryModification.DELETE,
-        FlextLdifConstants.Ldif.EntryModification.MODRDN,
-    ]
-
     class TapLdif:
         """LDIF tap processing configuration.
 
         Note: Does not override parent Processing class to avoid inheritance conflicts.
         """
 
+        DEFAULT_LDIF_ENCODING: Final[str] = FlextLdifConstants.Ldif.Encoding.UTF8
+        SUPPORTED_ENCODINGS: ClassVar[frozenset[str]] = frozenset({
+            FlextLdifConstants.Ldif.Encoding.UTF8,
+            FlextLdifConstants.Ldif.Encoding.ASCII,
+            FlextLdifConstants.Ldif.Encoding.LATIN1,
+            FlextLdifConstants.Ldif.Encoding.UTF16,
+        })
+        MAX_FILE_SIZE_MB: Final[int] = 100
+        LDIF_CHANGE_TYPES: ClassVar[t.StrSequence] = [
+            FlextLdifConstants.Ldif.EntryModification.ADD,
+            FlextLdifConstants.Ldif.EntryModification.MODIFY,
+            FlextLdifConstants.Ldif.EntryModification.DELETE,
+            FlextLdifConstants.Ldif.EntryModification.MODRDN,
+        ]
+
         MIN_WORKERS_FOR_PARALLEL: Final[int] = 2
         MAX_WORKERS_LIMIT: Final[int] = 8
         PERFORMANCE_MIN_CHUNK_SIZE: Final[int] = 100
         MIN_ENTRIES: Final[int] = 1
 
-    class Format:
-        """LDIF format specifications."""
+        class Format:
+            """LDIF format specifications."""
 
-        DN_ATTRIBUTE: Final[str] = "dn"
-        ATTRIBUTE_SEPARATOR: Final[str] = ": "
-        MAX_LINE_LENGTH: Final[int] = FlextLdifConstants.Ldif.MAX_LINE_LENGTH
-        BASE64_PREFIX: Final[str] = ":: "
-        COMMENT_PREFIX: Final[str] = "#"
-        LINE_CONTINUATION: Final[str] = " "
+            DN_ATTRIBUTE: Final[str] = "dn"
+            ATTRIBUTE_SEPARATOR: Final[str] = ": "
+            MAX_LINE_LENGTH: Final[int] = FlextLdifConstants.Ldif.MAX_LINE_LENGTH
+            BASE64_PREFIX: Final[str] = ":: "
+            COMMENT_PREFIX: Final[str] = "#"
+            LINE_CONTINUATION: Final[str] = " "
 
-    class TapLdifPerformance:
-        """Tap LDIF performance constants."""
+        class TapLdifPerformance:
+            """Tap LDIF performance constants."""
 
-        DEFAULT_BATCH_SIZE: Final[int] = FlextMeltanoConstants.DEFAULT_BATCH_SIZE
+            DEFAULT_BATCH_SIZE: Final[int] = FlextMeltanoConstants.DEFAULT_BATCH_SIZE
 
-    class TapLdifValidation:
-        """LDIF tap validation constants.
+        class TapLdifValidation:
+            """LDIF tap validation constants.
 
-        Note: Does not override parent Validation class to avoid inheritance conflicts.
-        """
+            Note: Does not override parent Validation class to avoid inheritance conflicts.
+            """
 
-        MIN_DN_COMPONENTS: Final[int] = 2
-        MAX_DN_LENGTH: Final[int] = 2048
-        MAX_ATTRIBUTES_PER_ENTRY: Final[int] = 500
+            MIN_DN_COMPONENTS: Final[int] = 2
+            MAX_DN_LENGTH: Final[int] = 2048
+            MAX_ATTRIBUTES_PER_ENTRY: Final[int] = 500
 
-    class EntrySchema:
-        """LDIF entry schema field names."""
+        class EntrySchema:
+            """LDIF entry schema field names."""
 
-        DN_FIELD: Final[str] = "dn"
-        ATTRIBUTES_FIELD: Final[str] = "attributes"
-        OBJECT_CLASS_FIELD: Final[str] = "object_class"
-        CHANGE_TYPE_FIELD: Final[str] = "change_type"
-        SOURCE_FILE_FIELD: Final[str] = "source_file"
-        LINE_NUMBER_FIELD: Final[str] = "line_number"
-        ENTRY_SIZE_FIELD: Final[str] = "entry_size"
-        DEFAULT_CHANGE_TYPE: Final[str] = "None"
-        DEFAULT_LINE_NUMBER: Final[int] = 0
-        DEFAULT_ENTRY_SIZE: Final[int] = 0
+            DN_FIELD: Final[str] = "dn"
+            ATTRIBUTES_FIELD: Final[str] = "attributes"
+            OBJECT_CLASS_FIELD: Final[str] = "object_class"
+            CHANGE_TYPE_FIELD: Final[str] = "change_type"
+            SOURCE_FILE_FIELD: Final[str] = "source_file"
+            LINE_NUMBER_FIELD: Final[str] = "line_number"
+            ENTRY_SIZE_FIELD: Final[str] = "entry_size"
+            DEFAULT_CHANGE_TYPE: Final[str] = "None"
+            DEFAULT_LINE_NUMBER: Final[int] = 0
+            DEFAULT_ENTRY_SIZE: Final[int] = 0
 
-    class SampleEntry:
-        """Sample LDIF entry for fallback/testing."""
+        class SampleEntry:
+            """Sample LDIF entry for fallback/testing."""
 
-        DN: Final[str] = "cn=sample,dc=example,dc=com"
-        ATTRIBUTES: Final[Mapping[str, t.StrSequence]] = {"cn": ["sample"]}
-        OBJECT_CLASS: Final[t.StrSequence] = ["top"]
-        SOURCE_FILE: Final[str] = "fp"
+            DN: Final[str] = "cn=sample,dc=example,dc=com"
+            ATTRIBUTES: Final[Mapping[str, t.StrSequence]] = {"cn": ["sample"]}
+            OBJECT_CLASS: Final[t.StrSequence] = ["top"]
+            SOURCE_FILE: Final[str] = "fp"
 
-    @unique
-    class ProjectType(StrEnum):
-        """Project type literals for tap package metadata."""
+        @unique
+        class ProjectType(StrEnum):
+            """Project type literals for tap package metadata."""
 
-        SINGER_TAP = "singer-tap"
-        LDIF_EXTRACTOR = "ldif-extractor"
-        DATA_EXTRACTOR = "data-extractor"
-        SINGER_TAP_LDIF = "singer-tap-ldif"
-        TAP_LDIF = "tap-ldif"
-        LDIF_CONNECTOR = "ldif-connector"
-        DATA_CONNECTOR = "data-connector"
-        SINGER_PROTOCOL = "singer-protocol"
-        LDIF_PROCESSOR = "ldif-processor"
-        FILE_EXTRACTOR = "file-extractor"
-        LDIF_PARSER = "ldif-parser"
-        SINGER_STREAM = "singer-stream"
-        ETL_TAP = "etl-tap"
-        DATA_PIPELINE = "data-pipeline"
-        LDIF_INTEGRATION = "ldif-integration"
-        SINGER_INTEGRATION = "singer-integration"
+            SINGER_TAP = "singer-tap"
+            LDIF_EXTRACTOR = "ldif-extractor"
+            DATA_EXTRACTOR = "data-extractor"
+            SINGER_TAP_LDIF = "singer-tap-ldif"
+            TAP_LDIF = "tap-ldif"
+            LDIF_CONNECTOR = "ldif-connector"
+            DATA_CONNECTOR = "data-connector"
+            SINGER_PROTOCOL = "singer-protocol"
+            LDIF_PROCESSOR = "ldif-processor"
+            FILE_EXTRACTOR = "file-extractor"
+            LDIF_PARSER = "ldif-parser"
+            SINGER_STREAM = "singer-stream"
+            ETL_TAP = "etl-tap"
+            DATA_PIPELINE = "data-pipeline"
+            LDIF_INTEGRATION = "ldif-integration"
+            SINGER_INTEGRATION = "singer-integration"
 
-    @unique
-    class TestLdifFilePath(StrEnum):
-        """Test LDIF file path literals."""
+        @unique
+        class TestLdifFilePath(StrEnum):
+            """Test LDIF file path literals."""
 
-        TMP_TEST_LDIF = "test.ldif"
-        TMP_SAMPLE_LDIF = "sample.ldif"
+            TMP_TEST_LDIF = "test.ldif"
+            TMP_SAMPLE_LDIF = "sample.ldif"
 
-    @unique
-    class TestLdifEncoding(StrEnum):
-        """Test LDIF encoding literals."""
+        @unique
+        class TestLdifEncoding(StrEnum):
+            """Test LDIF encoding literals."""
 
-        UTF_8 = "utf-8"
-        ASCII = "ascii"
-        ISO_8859_1 = "iso-8859-1"
+            UTF_8 = "utf-8"
+            ASCII = "ascii"
+            ISO_8859_1 = "iso-8859-1"
 
-    @unique
-    class TestObjectClass(StrEnum):
-        """Test t.NormalizedValue class literals."""
+        @unique
+        class TestObjectClass(StrEnum):
+            """Test t.NormalizedValue class literals."""
 
-        PERSON = "person"
-        ORGANIZATION = "organization"
-        GROUP_OF_NAMES = "groupOfNames"
+            PERSON = "person"
+            ORGANIZATION = "organization"
+            GROUP_OF_NAMES = "groupOfNames"
 
 
 c = FlextTapLdifConstants

@@ -41,31 +41,16 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
     Consolidates ALL models for LDIF file extraction and processing.
     """
 
-    # Advanced Pydantic 2.11 Features - Singer LDIF Tap Domain
+    class TapLdif:
+        """Utility functions for LDIF data processing."""
 
-    @computed_field
-    def active_ldif_tap_models_count(self) -> int:
-        """Count of active LDIF tap models with file processing capabilities."""
-        # Count core Singer LDIF tap models
-        model_attrs = [
-            "LdifEntry",
-            "LdifChangeRecord",
-            "LdifFile",
-            "LdifStream",
-            "LdifBatch",
-            "LdifProcessingState",
-            "LdifTapConfig",
-            "LdifRecord",
-            "LdifValidationResult",
-        ]
-        return sum(1 for attr in model_attrs if getattr(self, attr, None) is not None)
+        # Advanced Pydantic 2.11 Features - Singer LDIF Tap Domain
 
-    @computed_field
-    def ldif_tap_system_summary(self) -> t.ContainerMapping:
-        """Complete Singer LDIF tap system summary with file processing capabilities."""
-        total_models = sum(
-            1
-            for attr in [
+        @computed_field
+        def active_ldif_tap_models_count(self) -> int:
+            """Count of active LDIF tap models with file processing capabilities."""
+            # Count core Singer LDIF tap models
+            model_attrs = [
                 "LdifEntry",
                 "LdifChangeRecord",
                 "LdifFile",
@@ -76,105 +61,122 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
                 "LdifRecord",
                 "LdifValidationResult",
             ]
-            if getattr(self, attr, None) is not None
-        )
-        return {
-            "total_models": total_models,
-            "tap_type": "singer_ldif_file_extractor",
-            "extraction_features": [
-                "ldif_file_parsing",
-                "change_record_processing",
-                "entry_validation",
-                "batch_file_processing",
-                "format_compliance_checking",
-                "performance_monitoring",
-            ],
-            "singer_compliance": {
-                "protocol_version": "singer_v1",
-                "stream_discovery": True,
-                "catalog_generation": True,
-                "state_management": True,
-                "file_bookmarking": True,
-            },
-            "ldif_capabilities": {
-                "format_validation": True,
-                "change_record_support": True,
-                "batch_processing": True,
-                "error_recovery": True,
-                "schema_inference": True,
-            },
-        }
-
-    @field_serializer("*", when_used="json")
-    def serialize_with_ldif_metadata(
-        self,
-        value: t.NormalizedValue,
-        _info: FieldSerializationInfo,
-    ) -> t.ContainerValue:
-        """Add Singer LDIF tap metadata to all serialized fields."""
-        if u.is_dict_like(value):
-            value_dict: Mapping[str, t.ContainerValue] = {}
-            if isinstance(value, t.ConfigMap):
-                value_dict = {str(k): str(v) for k, v in value.root.items()}
-            else:
-                value_dict = {str(k): str(v) for k, v in value.items()}
-            metadata_dict: MutableMapping[str, t.ContainerValue] = dict(value_dict)
-            metadata_dict["_ldif_tap_metadata"] = {
-                "extraction_timestamp": datetime.now(UTC).isoformat(),
-                "tap_type": "ldif_file_extractor",
-                "singer_protocol": "v1.0",
-                "data_source": "ldif_files",
-            }
-            return metadata_dict
-        if (
-            isinstance(value, (str, int, float, bool))
-            and getattr(
-                self,
-                "_include_ldif_metadata",
-                None,
+            return sum(
+                1 for attr in model_attrs if getattr(self, attr, None) is not None
             )
-            is not None
-        ):
+
+        @computed_field
+        def ldif_tap_system_summary(self) -> t.ContainerMapping:
+            """Complete Singer LDIF tap system summary with file processing capabilities."""
+            total_models = sum(
+                1
+                for attr in [
+                    "LdifEntry",
+                    "LdifChangeRecord",
+                    "LdifFile",
+                    "LdifStream",
+                    "LdifBatch",
+                    "LdifProcessingState",
+                    "LdifTapConfig",
+                    "LdifRecord",
+                    "LdifValidationResult",
+                ]
+                if getattr(self, attr, None) is not None
+            )
             return {
-                "value": value,
-                "_ldif_context": {
-                    "extracted_at": datetime.now(UTC).isoformat(),
-                    "tap_name": "flext-tap-ldif",
+                "total_models": total_models,
+                "tap_type": "singer_ldif_file_extractor",
+                "extraction_features": [
+                    "ldif_file_parsing",
+                    "change_record_processing",
+                    "entry_validation",
+                    "batch_file_processing",
+                    "format_compliance_checking",
+                    "performance_monitoring",
+                ],
+                "singer_compliance": {
+                    "protocol_version": "singer_v1",
+                    "stream_discovery": True,
+                    "catalog_generation": True,
+                    "state_management": True,
+                    "file_bookmarking": True,
+                },
+                "ldif_capabilities": {
+                    "format_validation": True,
+                    "change_record_support": True,
+                    "batch_processing": True,
+                    "error_recovery": True,
+                    "schema_inference": True,
                 },
             }
-        return str(value)
 
-    @model_validator(mode="after")
-    def validate_ldif_tap_system_consistency(self) -> Self:
-        """Validate Singer LDIF tap system consistency and configuration."""
-        # Singer LDIF tap file validation
-        if (
-            getattr(self, "_ldif_files", None)
-            and getattr(self, "LdifFile", None) is None
-        ):
-            msg = "LdifFile model required when LDIF files configured"
-            raise ValueError(msg)
+        @field_serializer("*", when_used="json")
+        def serialize_with_ldif_metadata(
+            self,
+            value: t.NormalizedValue,
+            _info: FieldSerializationInfo,
+        ) -> t.ContainerValue:
+            """Add Singer LDIF tap metadata to all serialized fields."""
+            if u.is_dict_like(value):
+                value_dict: Mapping[str, t.ContainerValue] = {}
+                if isinstance(value, t.ConfigMap):
+                    value_dict = {str(k): str(v) for k, v in value.root.items()}
+                else:
+                    value_dict = {str(k): str(v) for k, v in value.items()}
+                metadata_dict: MutableMapping[str, t.ContainerValue] = dict(value_dict)
+                metadata_dict["_ldif_tap_metadata"] = {
+                    "extraction_timestamp": datetime.now(UTC).isoformat(),
+                    "tap_type": "ldif_file_extractor",
+                    "singer_protocol": "v1.0",
+                    "data_source": "ldif_files",
+                }
+                return metadata_dict
+            if (
+                isinstance(value, (str, int, float, bool))
+                and getattr(
+                    self,
+                    "_include_ldif_metadata",
+                    None,
+                )
+                is not None
+            ):
+                return {
+                    "value": value,
+                    "_ldif_context": {
+                        "extracted_at": datetime.now(UTC).isoformat(),
+                        "tap_name": "flext-tap-ldif",
+                    },
+                }
+            return str(value)
 
-        # LDIF processing validation
-        if (
-            getattr(self, "_batch_processing", None)
-            and getattr(self, "LdifBatch", None) is None
-        ):
-            msg = "LdifBatch model required for batch processing"
-            raise ValueError(msg)
+        @model_validator(mode="after")
+        def validate_ldif_tap_system_consistency(self) -> Self:
+            """Validate Singer LDIF tap system consistency and configuration."""
+            # Singer LDIF tap file validation
+            if (
+                getattr(self, "_ldif_files", None)
+                and getattr(self, "LdifFile", None) is None
+            ):
+                msg = "LdifFile model required when LDIF files configured"
+                raise ValueError(msg)
 
-        # Singer protocol compliance validation
-        if getattr(self, "_singer_mode", None):
-            required_models = ["LdifStream", "LdifRecord", "LdifProcessingState"]
-            for model in required_models:
-                if getattr(self, model, None) is None:
-                    msg = f"{model} required for Singer protocol compliance"
-                    raise ValueError(msg)
+            # LDIF processing validation
+            if (
+                getattr(self, "_batch_processing", None)
+                and getattr(self, "LdifBatch", None) is None
+            ):
+                msg = "LdifBatch model required for batch processing"
+                raise ValueError(msg)
 
-        return self
+            # Singer protocol compliance validation
+            if getattr(self, "_singer_mode", None):
+                required_models = ["LdifStream", "LdifRecord", "LdifProcessingState"]
+                for model in required_models:
+                    if getattr(self, model, None) is None:
+                        msg = f"{model} required for Singer protocol compliance"
+                        raise ValueError(msg)
 
-    class TapLdif:
-        """Utility functions for LDIF data processing."""
+            return self
 
         @staticmethod
         def decode_base64_value(value: str) -> str:
@@ -213,1177 +215,1193 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             """Validate LDIF line format."""
             if not line or line.startswith("#"):
                 return True  # Comment or empty line
-            return ":" in line or line.startswith(" ")
+            return None
 
-    class LdifEntry(BaseModel):
-        """Represents an LDIF entry with complete parsing support."""
+        class LdifEntry(BaseModel):
+            """Represents an LDIF entry with complete parsing support."""
 
-        # Pydantic 2.11 Configuration - LDIF Entry Features
-        model_config: ClassVar[ConfigDict] = ConfigDict(
-            validate_assignment=True,
-            extra="forbid",
-            frozen=False,
-            json_schema_extra={
-                "description": "LDIF directory entry with full attribute support",
-                "examples": [
-                    {
-                        "dn": "cn=John Doe,ou=users,dc=example,dc=com",
-                        "object_classes": ["inetOrgPerson", "organizationalPerson"],
-                    },
-                ],
-            },
-        )
-
-        dn: Annotated[str, Field(..., description="Distinguished Name")]
-        attributes: Annotated[
-            MutableMapping[str, t.StrSequence],
-            Field(
-                description="Entry attributes",
-            ),
-        ] = Field(default_factory=dict)
-        object_classes: Annotated[
-            t.StrSequence,
-            Field(
-                description="Object classes",
-            ),
-        ] = Field(default_factory=list)
-
-        # LDIF metadata
-        line_number: Annotated[
-            t.NonNegativeInt,
-            Field(
-                default=0,
-                description="Source line number in LDIF file",
-            ),
-        ]
-        source_file: Annotated[
-            str | None,
-            Field(
-                default=None,
-                description="Source LDIF file path",
-            ),
-        ]
-        entry_type: Annotated[
-            str,
-            Field(default="entry", description="Type of LDIF entry"),
-        ]
-
-        # Processing metadata
-        extracted_at: Annotated[
-            datetime,
-            Field(
-                description="Extraction timestamp",
-            ),
-        ] = Field(default_factory=lambda: datetime.now(UTC))
-        processed: Annotated[
-            bool,
-            Field(default=False, description="Processing status"),
-        ]
-        validation_errors: Annotated[
-            t.StrSequence,
-            Field(
-                description="Validation errors",
-            ),
-        ] = Field(default_factory=list)
-
-        @computed_field
-        def ldif_entry_summary(self) -> t.ContainerMapping:
-            """LDIF entry analysis summary."""
-            return {
-                "dn": self.dn,
-                "attribute_count": len(self.attributes),
-                "object_class_count": len(self.object_classes),
-                "primary_object_class": self.object_classes[0]
-                if self.object_classes
-                else None,
-                "entry_type": self.entry_type,
-                "is_valid": not self.validation_errors,
-                "source_location": {"file": self.source_file, "line": self.line_number},
-            }
-
-        def get_attribute_values(self, name: str) -> t.StrSequence:
-            """Get attribute values by name (case-insensitive)."""
-            normalized_name = name.lower()
-            for attr_name, values in self.attributes.items():
-                if attr_name.lower() == normalized_name:
-                    return values
-            return []
-
-        def get_first_attribute_value(self, name: str) -> str | None:
-            """Get first attribute value by name."""
-            values = self.get_attribute_values(name)
-            return values[0] if values else None
-
-        @model_validator(mode="after")
-        def validate_ldif_entry(self) -> Self:
-            """Validate LDIF entry structure."""
-            if not self.dn:
-                msg = "DN cannot be empty"
-                raise ValueError(msg)
-
-            # Validate t.NormalizedValue classes are in attributes
-            if self.object_classes and "objectClass" not in self.attributes:
-                self.attributes["objectClass"] = self.object_classes
-
-            return self
-
-    class LdifChangeRecord(BaseModel):
-        """Represents an LDIF change record for modify operations."""
-
-        # Pydantic 2.11 Configuration - Change Record Features
-        model_config: ClassVar[ConfigDict] = ConfigDict(
-            validate_assignment=True,
-            extra="forbid",
-            frozen=False,
-            json_schema_extra={
-                "description": "LDIF change record with modification tracking",
-                "examples": [
-                    {
-                        "dn": "cn=John Doe,ou=users,dc=example,dc=com",
-                        "change_type": "modify",
-                        "changes": [{"action": "replace", "attribute": "mail"}],
-                    },
-                ],
-            },
-        )
-
-        dn: Annotated[str, Field(..., description="Distinguished Name")]
-        change_type: Annotated[
-            str,
-            Field(
-                ...,
-                description="Type of change (add, modify, delete, modrdn)",
-            ),
-        ]
-        changes: Annotated[
-            Sequence[t.StrMapping],
-            Field(
-                description="List of changes",
-            ),
-        ] = Field(default_factory=list)
-
-        # Change metadata
-        changetype: Annotated[
-            str | None,
-            Field(
-                default=None,
-                description="LDIF changetype directive",
-            ),
-        ]
-        line_number: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Source line number"),
-        ]
-        source_file: Annotated[
-            str | None,
-            Field(default=None, description="Source LDIF file"),
-        ]
-
-        # Processing metadata
-        extracted_at: Annotated[
-            datetime,
-            Field(
-                description="Extraction timestamp",
-            ),
-        ] = Field(default_factory=lambda: datetime.now(UTC))
-        applied: Annotated[
-            bool,
-            Field(default=False, description="Change application status"),
-        ]
-        application_errors: Annotated[
-            t.StrSequence,
-            Field(
-                description="Application errors",
-            ),
-        ] = Field(default_factory=list)
-
-        @computed_field
-        def change_record_summary(self) -> t.ContainerMapping:
-            """LDIF change record summary."""
-            return {
-                "dn": self.dn,
-                "change_type": self.change_type,
-                "change_count": len(self.changes),
-                "has_errors": self.application_errors,
-                "applied": self.applied,
-                "source_location": {"file": self.source_file, "line": self.line_number},
-            }
-
-        @model_validator(mode="after")
-        def validate_change_record(self) -> Self:
-            """Validate LDIF change record."""
-            if not self.dn:
-                msg = "Change record DN cannot be empty"
-                raise ValueError(msg)
-
-            valid_types = ["add", "modify", "delete", "modrdn"]
-            if self.change_type not in valid_types:
-                msg = f"Invalid change type: {self.change_type}"
-                raise ValueError(msg)
-
-            return self
-
-    class LdifFile(BaseModel):
-        """Represents an LDIF file with processing metadata."""
-
-        # Pydantic 2.11 Configuration - File Features
-        model_config: ClassVar[ConfigDict] = ConfigDict(
-            validate_assignment=True,
-            extra="forbid",
-            frozen=False,
-            json_schema_extra={
-                "description": "LDIF file with complete processing support",
-                "examples": [
-                    {
-                        "file_path": "/data/directory-export.ldif",
-                        "file_size": 1048576,
-                        "encoding": "utf-8",
-                    },
-                ],
-            },
-        )
-
-        file_path: Annotated[str, Field(..., description="Path to LDIF file")]
-        file_size: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="File size in bytes"),
-        ]
-        encoding: Annotated[str, Field(default="utf-8", description="File encoding")]
-
-        # File metadata
-        created_at: Annotated[
-            datetime | None,
-            Field(
-                default=None,
-                description="File creation time",
-            ),
-        ]
-        modified_at: Annotated[
-            datetime | None,
-            Field(
-                default=None,
-                description="File modification time",
-            ),
-        ]
-
-        # Processing statistics
-        total_lines: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Total lines in file"),
-        ]
-        entry_count: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Number of entries"),
-        ]
-        change_record_count: Annotated[
-            t.NonNegativeInt,
-            Field(
-                default=0,
-                description="Number of change records",
-            ),
-        ]
-        comment_lines: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Number of comment lines"),
-        ]
-
-        # Processing state
-        processing_status: Annotated[
-            str,
-            Field(
-                default="pending",
-                description="Processing status",
-            ),
-        ]
-        last_processed_line: Annotated[
-            t.NonNegativeInt,
-            Field(
-                default=0,
-                description="Last processed line number",
-            ),
-        ]
-        processing_errors: Annotated[
-            t.StrSequence,
-            Field(
-                description="Processing errors",
-            ),
-        ] = Field(default_factory=list)
-
-        # Validation results
-        is_valid_ldif: Annotated[
-            bool,
-            Field(default=True, description="LDIF format validity"),
-        ]
-        validation_errors: Annotated[
-            t.StrSequence,
-            Field(
-                description="Format validation errors",
-            ),
-        ] = Field(default_factory=list)
-
-        @computed_field
-        def ldif_file_summary(self) -> t.ContainerMapping:
-            """LDIF file processing summary."""
-            progress = 0.0
-            if self.total_lines > 0:
-                progress = self.last_processed_line / self.total_lines
-
-            return {
-                "file_path": self.file_path,
-                "file_stats": {
-                    "size_bytes": self.file_size,
-                    "total_lines": self.total_lines,
-                    "entries": self.entry_count,
-                    "change_records": self.change_record_count,
+            # Pydantic 2.11 Configuration - LDIF Entry Features
+            model_config: ClassVar[ConfigDict] = ConfigDict(
+                validate_assignment=True,
+                extra="forbid",
+                frozen=False,
+                json_schema_extra={
+                    "description": "LDIF directory entry with full attribute support",
+                    "examples": [
+                        {
+                            "dn": "cn=John Doe,ou=users,dc=example,dc=com",
+                            "object_classes": ["inetOrgPerson", "organizationalPerson"],
+                        },
+                    ],
                 },
-                "processing": {
-                    "status": self.processing_status,
-                    "progress_percent": progress * 100,
-                    "errors": len(self.processing_errors),
-                },
-                "validation": {
-                    "is_valid": self.is_valid_ldif,
-                    "validation_errors": len(self.validation_errors),
-                },
-            }
+            )
 
-        @model_validator(mode="after")
-        def validate_ldif_file(self) -> Self:
-            """Validate LDIF file configuration."""
-            if not self.file_path:
-                msg = "LDIF file path is required"
-                raise ValueError(msg)
-            if self.file_size < 0:
-                msg = "File size cannot be negative"
-                raise ValueError(msg)
-            return self
+            dn: Annotated[str, Field(..., description="Distinguished Name")]
+            attributes: Annotated[
+                MutableMapping[str, t.StrSequence],
+                Field(
+                    description="Entry attributes",
+                ),
+            ] = Field(default_factory=dict)
+            object_classes: Annotated[
+                t.StrSequence,
+                Field(
+                    description="Object classes",
+                ),
+            ] = Field(default_factory=list)
 
-    class LdifStream(BaseModel):
-        """Singer stream configuration for LDIF file processing."""
+            # LDIF metadata
+            line_number: Annotated[
+                t.NonNegativeInt,
+                Field(
+                    default=0,
+                    description="Source line number in LDIF file",
+                ),
+            ]
+            source_file: Annotated[
+                str | None,
+                Field(
+                    default=None,
+                    description="Source LDIF file path",
+                ),
+            ]
+            entry_type: Annotated[
+                str,
+                Field(default="entry", description="Type of LDIF entry"),
+            ]
 
-        # Pydantic 2.11 Configuration - Stream Features
-        model_config: ClassVar[ConfigDict] = ConfigDict(
-            validate_assignment=True,
-            extra="forbid",
-            frozen=False,
-            json_schema_extra={
-                "description": "Singer stream for LDIF file extraction",
-                "examples": [
-                    {
-                        "stream_name": "ldif_entries",
-                        "file_path": "/data/users.ldif",
-                        "replication_method": "FULL_TABLE",
+            # Processing metadata
+            extracted_at: Annotated[
+                datetime,
+                Field(
+                    description="Extraction timestamp",
+                ),
+            ] = Field(default_factory=lambda: datetime.now(UTC))
+            processed: Annotated[
+                bool,
+                Field(default=False, description="Processing status"),
+            ]
+            validation_errors: Annotated[
+                t.StrSequence,
+                Field(
+                    description="Validation errors",
+                ),
+            ] = Field(default_factory=list)
+
+            @computed_field
+            def ldif_entry_summary(self) -> t.ContainerMapping:
+                """LDIF entry analysis summary."""
+                return {
+                    "dn": self.dn,
+                    "attribute_count": len(self.attributes),
+                    "object_class_count": len(self.object_classes),
+                    "primary_object_class": self.object_classes[0]
+                    if self.object_classes
+                    else None,
+                    "entry_type": self.entry_type,
+                    "is_valid": not self.validation_errors,
+                    "source_location": {
+                        "file": self.source_file,
+                        "line": self.line_number,
                     },
-                ],
-            },
-        )
+                }
 
-        stream_name: Annotated[str, Field(..., description="Singer stream name")]
-        file_path: Annotated[str, Field(..., description="LDIF file path")]
+            def get_attribute_values(self, name: str) -> t.StrSequence:
+                """Get attribute values by name (case-insensitive)."""
+                normalized_name = name.lower()
+                for attr_name, values in self.attributes.items():
+                    if attr_name.lower() == normalized_name:
+                        return values
+                return []
 
-        # Singer stream configuration
-        tap_stream_id: Annotated[str, Field(..., description="Singer tap stream ID")]
-        replication_method: Annotated[
-            str,
-            Field(
-                default="FULL_TABLE",
-                description="Replication method",
-            ),
-        ]
-        key_properties: Annotated[
-            t.StrSequence,
-            Field(
-                description="Key properties",
-            ),
-        ] = Field(default_factory=lambda: ["dn"])
+            def get_first_attribute_value(self, name: str) -> str | None:
+                """Get first attribute value by name."""
+                values = self.get_attribute_values(name)
+                return values[0] if values else None
 
-        # LDIF-specific settings
-        include_change_records: Annotated[
-            bool,
-            Field(
-                default=True,
-                description="Include LDIF change records",
-            ),
-        ]
-        filter_object_classes: Annotated[
-            t.StrSequence,
-            Field(
-                description="Filter by t.NormalizedValue classes",
-            ),
-        ] = Field(default_factory=list)
-        batch_size: Annotated[
-            int,
-            Field(
-                default=FlextConstants.DEFAULT_SIZE,
-                description="Processing batch size",
-            ),
-        ]
+            @model_validator(mode="after")
+            def validate_ldif_entry(self) -> Self:
+                """Validate LDIF entry structure."""
+                if not self.dn:
+                    msg = "DN cannot be empty"
+                    raise ValueError(msg)
 
-        # Stream schema
-        stream_schema: Annotated[
-            Mapping[str, t.ContainerValue],
-            Field(
-                description="JSON schema",
-            ),
-        ] = Field(default_factory=dict)
-        stream_metadata: Annotated[
-            Sequence[t.StrMapping],
-            Field(
-                description="Stream metadata",
-            ),
-        ] = Field(default_factory=list)
+                # Validate t.NormalizedValue classes are in attributes
+                if self.object_classes and "objectClass" not in self.attributes:
+                    self.attributes["objectClass"] = self.object_classes
 
-        @computed_field
-        def ldif_stream_summary(self) -> t.ContainerMapping:
-            """LDIF stream configuration summary."""
-            return {
-                "stream_id": self.tap_stream_id,
-                "extraction_type": self.replication_method,
-                "ldif_settings": {
+                return self
+
+        class LdifChangeRecord(BaseModel):
+            """Represents an LDIF change record for modify operations."""
+
+            # Pydantic 2.11 Configuration - Change Record Features
+            model_config: ClassVar[ConfigDict] = ConfigDict(
+                validate_assignment=True,
+                extra="forbid",
+                frozen=False,
+                json_schema_extra={
+                    "description": "LDIF change record with modification tracking",
+                    "examples": [
+                        {
+                            "dn": "cn=John Doe,ou=users,dc=example,dc=com",
+                            "change_type": "modify",
+                            "changes": [{"action": "replace", "attribute": "mail"}],
+                        },
+                    ],
+                },
+            )
+
+            dn: Annotated[str, Field(..., description="Distinguished Name")]
+            change_type: Annotated[
+                str,
+                Field(
+                    ...,
+                    description="Type of change (add, modify, delete, modrdn)",
+                ),
+            ]
+            changes: Annotated[
+                Sequence[t.StrMapping],
+                Field(
+                    description="List of changes",
+                ),
+            ] = Field(default_factory=list)
+
+            # Change metadata
+            changetype: Annotated[
+                str | None,
+                Field(
+                    default=None,
+                    description="LDIF changetype directive",
+                ),
+            ]
+            line_number: Annotated[
+                t.NonNegativeInt,
+                Field(default=0, description="Source line number"),
+            ]
+            source_file: Annotated[
+                str | None,
+                Field(default=None, description="Source LDIF file"),
+            ]
+
+            # Processing metadata
+            extracted_at: Annotated[
+                datetime,
+                Field(
+                    description="Extraction timestamp",
+                ),
+            ] = Field(default_factory=lambda: datetime.now(UTC))
+            applied: Annotated[
+                bool,
+                Field(default=False, description="Change application status"),
+            ]
+            application_errors: Annotated[
+                t.StrSequence,
+                Field(
+                    description="Application errors",
+                ),
+            ] = Field(default_factory=list)
+
+            @computed_field
+            def change_record_summary(self) -> t.ContainerMapping:
+                """LDIF change record summary."""
+                return {
+                    "dn": self.dn,
+                    "change_type": self.change_type,
+                    "change_count": len(self.changes),
+                    "has_errors": self.application_errors,
+                    "applied": self.applied,
+                    "source_location": {
+                        "file": self.source_file,
+                        "line": self.line_number,
+                    },
+                }
+
+            @model_validator(mode="after")
+            def validate_change_record(self) -> Self:
+                """Validate LDIF change record."""
+                if not self.dn:
+                    msg = "Change record DN cannot be empty"
+                    raise ValueError(msg)
+
+                valid_types = ["add", "modify", "delete", "modrdn"]
+                if self.change_type not in valid_types:
+                    msg = f"Invalid change type: {self.change_type}"
+                    raise ValueError(msg)
+
+                return self
+
+        class LdifFile(BaseModel):
+            """Represents an LDIF file with processing metadata."""
+
+            # Pydantic 2.11 Configuration - File Features
+            model_config: ClassVar[ConfigDict] = ConfigDict(
+                validate_assignment=True,
+                extra="forbid",
+                frozen=False,
+                json_schema_extra={
+                    "description": "LDIF file with complete processing support",
+                    "examples": [
+                        {
+                            "file_path": "/data/directory-export.ldif",
+                            "file_size": 1048576,
+                            "encoding": "utf-8",
+                        },
+                    ],
+                },
+            )
+
+            file_path: Annotated[str, Field(..., description="Path to LDIF file")]
+            file_size: Annotated[
+                t.NonNegativeInt,
+                Field(default=0, description="File size in bytes"),
+            ]
+            encoding: Annotated[
+                str, Field(default="utf-8", description="File encoding")
+            ]
+
+            # File metadata
+            created_at: Annotated[
+                datetime | None,
+                Field(
+                    default=None,
+                    description="File creation time",
+                ),
+            ]
+            modified_at: Annotated[
+                datetime | None,
+                Field(
+                    default=None,
+                    description="File modification time",
+                ),
+            ]
+
+            # Processing statistics
+            total_lines: Annotated[
+                t.NonNegativeInt,
+                Field(default=0, description="Total lines in file"),
+            ]
+            entry_count: Annotated[
+                t.NonNegativeInt,
+                Field(default=0, description="Number of entries"),
+            ]
+            change_record_count: Annotated[
+                t.NonNegativeInt,
+                Field(
+                    default=0,
+                    description="Number of change records",
+                ),
+            ]
+            comment_lines: Annotated[
+                t.NonNegativeInt,
+                Field(default=0, description="Number of comment lines"),
+            ]
+
+            # Processing state
+            processing_status: Annotated[
+                str,
+                Field(
+                    default="pending",
+                    description="Processing status",
+                ),
+            ]
+            last_processed_line: Annotated[
+                t.NonNegativeInt,
+                Field(
+                    default=0,
+                    description="Last processed line number",
+                ),
+            ]
+            processing_errors: Annotated[
+                t.StrSequence,
+                Field(
+                    description="Processing errors",
+                ),
+            ] = Field(default_factory=list)
+
+            # Validation results
+            is_valid_ldif: Annotated[
+                bool,
+                Field(default=True, description="LDIF format validity"),
+            ]
+            validation_errors: Annotated[
+                t.StrSequence,
+                Field(
+                    description="Format validation errors",
+                ),
+            ] = Field(default_factory=list)
+
+            @computed_field
+            def ldif_file_summary(self) -> t.ContainerMapping:
+                """LDIF file processing summary."""
+                progress = 0.0
+                if self.total_lines > 0:
+                    progress = self.last_processed_line / self.total_lines
+
+                return {
                     "file_path": self.file_path,
-                    "batch_size": self.batch_size,
-                    "include_changes": self.include_change_records,
-                },
-                "filtering": {
-                    "object_class_filters": len(self.filter_object_classes),
-                    "has_filters": bool(self.filter_object_classes),
-                },
-                "has_schema": bool(self.stream_schema),
-            }
-
-        @model_validator(mode="after")
-        def validate_ldif_stream(self) -> Self:
-            """Validate LDIF stream configuration."""
-            if not self.stream_name:
-                msg = "Stream name is required"
-                raise ValueError(msg)
-            if not self.file_path:
-                msg = "LDIF file path is required"
-                raise ValueError(msg)
-            return self
-
-    class LdifBatch(BaseModel):
-        """LDIF batch processing configuration and state."""
-
-        # Pydantic 2.11 Configuration - Batch Features
-        model_config: ClassVar[ConfigDict] = ConfigDict(
-            validate_assignment=True,
-            extra="forbid",
-            frozen=False,
-            json_schema_extra={
-                "description": "LDIF batch processing with performance optimization",
-                "examples": [
-                    {
-                        "batch_id": "batch_001",
-                        "file_paths": ["/data/users.ldif", "/data/groups.ldif"],
-                        "batch_size": 1000,
+                    "file_stats": {
+                        "size_bytes": self.file_size,
+                        "total_lines": self.total_lines,
+                        "entries": self.entry_count,
+                        "change_records": self.change_record_count,
                     },
-                ],
-            },
-        )
+                    "processing": {
+                        "status": self.processing_status,
+                        "progress_percent": progress * 100,
+                        "errors": len(self.processing_errors),
+                    },
+                    "validation": {
+                        "is_valid": self.is_valid_ldif,
+                        "validation_errors": len(self.validation_errors),
+                    },
+                }
 
-        batch_id: Annotated[str, Field(..., description="Unique batch identifier")]
-        file_paths: Annotated[
-            t.StrSequence,
-            Field(..., description="List of LDIF files to process"),
-        ]
-        batch_size: Annotated[
-            int,
-            Field(
-                default=FlextConstants.DEFAULT_SIZE,
-                description="Processing batch size",
-            ),
-        ]
+            @model_validator(mode="after")
+            def validate_ldif_file(self) -> Self:
+                """Validate LDIF file configuration."""
+                if not self.file_path:
+                    msg = "LDIF file path is required"
+                    raise ValueError(msg)
+                if self.file_size < 0:
+                    msg = "File size cannot be negative"
+                    raise ValueError(msg)
+                return self
 
-        # Processing configuration
-        parallel_processing: Annotated[
-            bool,
-            Field(
-                default=False,
-                description="Enable parallel processing",
-            ),
-        ]
-        max_workers: Annotated[
-            t.WorkerCount,
-            Field(default=4, description="Maximum worker threads"),
-        ]
-        error_threshold: Annotated[
-            t.PositiveInt,
-            Field(
-                default=FlextConstants.DEFAULT_SIZE // 10,
-                description="Maximum errors before stopping",
-            ),
-        ]
+        class LdifStream(BaseModel):
+            """Singer stream configuration for LDIF file processing."""
 
-        # Batch state
-        status: Annotated[
-            str,
-            Field(default="pending", description="Batch processing status"),
-        ]
-        started_at: Annotated[
-            datetime | None,
-            Field(
-                default=None,
-                description="Batch start time",
-            ),
-        ]
-        completed_at: Annotated[
-            datetime | None,
-            Field(
-                default=None,
-                description="Batch completion time",
-            ),
-        ]
+            # Pydantic 2.11 Configuration - Stream Features
+            model_config: ClassVar[ConfigDict] = ConfigDict(
+                validate_assignment=True,
+                extra="forbid",
+                frozen=False,
+                json_schema_extra={
+                    "description": "Singer stream for LDIF file extraction",
+                    "examples": [
+                        {
+                            "stream_name": "ldif_entries",
+                            "file_path": "/data/users.ldif",
+                            "replication_method": "FULL_TABLE",
+                        },
+                    ],
+                },
+            )
 
-        # Processing metrics
-        files_processed: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Number of files processed"),
-        ]
-        entries_processed: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Total entries processed"),
-        ]
-        errors_encountered: Annotated[
-            t.NonNegativeInt,
-            Field(
-                default=0,
-                description="Total errors encountered",
-            ),
-        ]
+            stream_name: Annotated[str, Field(..., description="Singer stream name")]
+            file_path: Annotated[str, Field(..., description="LDIF file path")]
 
-        # Error tracking
-        file_errors: Annotated[
-            Mapping[str, t.StrSequence],
-            Field(
-                description="Errors by file",
-            ),
-        ] = Field(default_factory=dict)
+            # Singer stream configuration
+            tap_stream_id: Annotated[
+                str, Field(..., description="Singer tap stream ID")
+            ]
+            replication_method: Annotated[
+                str,
+                Field(
+                    default="FULL_TABLE",
+                    description="Replication method",
+                ),
+            ]
+            key_properties: Annotated[
+                t.StrSequence,
+                Field(
+                    description="Key properties",
+                ),
+            ] = Field(default_factory=lambda: ["dn"])
 
-        @computed_field
-        def batch_processing_summary(self) -> t.ContainerMapping:
-            """LDIF batch processing summary."""
-            duration = 0.0
-            if self.started_at and self.completed_at:
-                duration = (self.completed_at - self.started_at).total_seconds()
+            # LDIF-specific settings
+            include_change_records: Annotated[
+                bool,
+                Field(
+                    default=True,
+                    description="Include LDIF change records",
+                ),
+            ]
+            filter_object_classes: Annotated[
+                t.StrSequence,
+                Field(
+                    description="Filter by t.NormalizedValue classes",
+                ),
+            ] = Field(default_factory=list)
+            batch_size: Annotated[
+                int,
+                Field(
+                    default=FlextConstants.DEFAULT_SIZE,
+                    description="Processing batch size",
+                ),
+            ]
 
-            return {
-                "batch_id": self.batch_id,
-                "configuration": {
-                    "file_count": len(self.file_paths),
+            # Stream schema
+            stream_schema: Annotated[
+                Mapping[str, t.ContainerValue],
+                Field(
+                    description="JSON schema",
+                ),
+            ] = Field(default_factory=dict)
+            stream_metadata: Annotated[
+                Sequence[t.StrMapping],
+                Field(
+                    description="Stream metadata",
+                ),
+            ] = Field(default_factory=list)
+
+            @computed_field
+            def ldif_stream_summary(self) -> t.ContainerMapping:
+                """LDIF stream configuration summary."""
+                return {
+                    "stream_id": self.tap_stream_id,
+                    "extraction_type": self.replication_method,
+                    "ldif_settings": {
+                        "file_path": self.file_path,
+                        "batch_size": self.batch_size,
+                        "include_changes": self.include_change_records,
+                    },
+                    "filtering": {
+                        "object_class_filters": len(self.filter_object_classes),
+                        "has_filters": bool(self.filter_object_classes),
+                    },
+                    "has_schema": bool(self.stream_schema),
+                }
+
+            @model_validator(mode="after")
+            def validate_ldif_stream(self) -> Self:
+                """Validate LDIF stream configuration."""
+                if not self.stream_name:
+                    msg = "Stream name is required"
+                    raise ValueError(msg)
+                if not self.file_path:
+                    msg = "LDIF file path is required"
+                    raise ValueError(msg)
+                return self
+
+        class LdifBatch(BaseModel):
+            """LDIF batch processing configuration and state."""
+
+            # Pydantic 2.11 Configuration - Batch Features
+            model_config: ClassVar[ConfigDict] = ConfigDict(
+                validate_assignment=True,
+                extra="forbid",
+                frozen=False,
+                json_schema_extra={
+                    "description": "LDIF batch processing with performance optimization",
+                    "examples": [
+                        {
+                            "batch_id": "batch_001",
+                            "file_paths": ["/data/users.ldif", "/data/groups.ldif"],
+                            "batch_size": 1000,
+                        },
+                    ],
+                },
+            )
+
+            batch_id: Annotated[str, Field(..., description="Unique batch identifier")]
+            file_paths: Annotated[
+                t.StrSequence,
+                Field(..., description="List of LDIF files to process"),
+            ]
+            batch_size: Annotated[
+                int,
+                Field(
+                    default=FlextConstants.DEFAULT_SIZE,
+                    description="Processing batch size",
+                ),
+            ]
+
+            # Processing configuration
+            parallel_processing: Annotated[
+                bool,
+                Field(
+                    default=False,
+                    description="Enable parallel processing",
+                ),
+            ]
+            max_workers: Annotated[
+                t.WorkerCount,
+                Field(default=4, description="Maximum worker threads"),
+            ]
+            error_threshold: Annotated[
+                t.PositiveInt,
+                Field(
+                    default=FlextConstants.DEFAULT_SIZE // 10,
+                    description="Maximum errors before stopping",
+                ),
+            ]
+
+            # Batch state
+            status: Annotated[
+                str,
+                Field(default="pending", description="Batch processing status"),
+            ]
+            started_at: Annotated[
+                datetime | None,
+                Field(
+                    default=None,
+                    description="Batch start time",
+                ),
+            ]
+            completed_at: Annotated[
+                datetime | None,
+                Field(
+                    default=None,
+                    description="Batch completion time",
+                ),
+            ]
+
+            # Processing metrics
+            files_processed: Annotated[
+                t.NonNegativeInt,
+                Field(default=0, description="Number of files processed"),
+            ]
+            entries_processed: Annotated[
+                t.NonNegativeInt,
+                Field(default=0, description="Total entries processed"),
+            ]
+            errors_encountered: Annotated[
+                t.NonNegativeInt,
+                Field(
+                    default=0,
+                    description="Total errors encountered",
+                ),
+            ]
+
+            # Error tracking
+            file_errors: Annotated[
+                Mapping[str, t.StrSequence],
+                Field(
+                    description="Errors by file",
+                ),
+            ] = Field(default_factory=dict)
+
+            @computed_field
+            def batch_processing_summary(self) -> t.ContainerMapping:
+                """LDIF batch processing summary."""
+                duration = 0.0
+                if self.started_at and self.completed_at:
+                    duration = (self.completed_at - self.started_at).total_seconds()
+
+                return {
+                    "batch_id": self.batch_id,
+                    "configuration": {
+                        "file_count": len(self.file_paths),
+                        "batch_size": self.batch_size,
+                        "parallel": self.parallel_processing,
+                        "max_workers": self.max_workers,
+                    },
+                    "progress": {
+                        "status": self.status,
+                        "files_processed": self.files_processed,
+                        "entries_processed": self.entries_processed,
+                        "duration_seconds": duration,
+                    },
+                    "quality": {
+                        "errors_encountered": self.errors_encountered,
+                        "error_rate": self.errors_encountered / self.entries_processed
+                        if self.entries_processed > 0
+                        else 0,
+                        "files_with_errors": len(self.file_errors),
+                    },
+                }
+
+            @model_validator(mode="after")
+            def validate_batch_config(self) -> Self:
+                """Validate LDIF batch configuration."""
+                if not self.batch_id:
+                    msg = "Batch ID is required"
+                    raise ValueError(msg)
+                if not self.file_paths:
+                    msg = "At least one LDIF file is required"
+                    raise ValueError(msg)
+                if self.batch_size <= 0:
+                    msg = "Batch size must be positive"
+                    raise ValueError(msg)
+                return self
+
+        class LdifProcessingState(BaseModel):
+            """LDIF processing state and progress tracking."""
+
+            # Pydantic 2.11 Configuration - State Features
+            model_config: ClassVar[ConfigDict] = ConfigDict(
+                validate_assignment=True,
+                extra="forbid",
+                frozen=False,
+                json_schema_extra={
+                    "description": "LDIF processing state with complete tracking",
+                    "examples": [
+                        {
+                            "file_path": "/data/users.ldif",
+                            "entries_processed": 5000,
+                            "processing_status": "in_progress",
+                        },
+                    ],
+                },
+            )
+
+            file_path: Annotated[
+                str, Field(..., description="LDIF file being processed")
+            ]
+            processing_status: Annotated[
+                str,
+                Field(
+                    default="pending",
+                    description="Processing status",
+                ),
+            ]
+
+            # Progress tracking
+            current_line: Annotated[
+                t.NonNegativeInt,
+                Field(default=0, description="Current line being processed"),
+            ]
+            entries_processed: Annotated[
+                t.NonNegativeInt,
+                Field(default=0, description="Entries processed"),
+            ]
+            change_records_processed: Annotated[
+                t.NonNegativeInt,
+                Field(
+                    default=0,
+                    description="Change records processed",
+                ),
+            ]
+
+            # Timing information
+            started_at: Annotated[
+                datetime | None,
+                Field(
+                    default=None,
+                    description="Processing start time",
+                ),
+            ]
+            last_update: Annotated[
+                datetime,
+                Field(
+                    description="Last state update",
+                ),
+            ] = Field(default_factory=lambda: datetime.now(UTC))
+            estimated_completion: Annotated[
+                datetime | None,
+                Field(
+                    default=None,
+                    description="Estimated completion time",
+                ),
+            ]
+
+            # Error tracking
+            processing_errors: Annotated[
+                Sequence[t.StrMapping],
+                Field(
+                    description="Processing errors with context",
+                ),
+            ] = Field(default_factory=list)
+            recoverable_errors: Annotated[
+                t.NonNegativeInt,
+                Field(
+                    default=0,
+                    description="Recoverable error count",
+                ),
+            ]
+            fatal_errors: Annotated[
+                t.NonNegativeInt,
+                Field(default=0, description="Fatal error count"),
+            ]
+
+            # Performance metrics
+            processing_rate: Annotated[
+                t.NonNegativeFloat,
+                Field(default=0.0, description="Entries per second"),
+            ]
+            memory_usage: Annotated[
+                t.NonNegativeInt,
+                Field(default=0, description="Memory usage in bytes"),
+            ]
+
+            @computed_field
+            def processing_progress_summary(self) -> t.ContainerMapping:
+                """LDIF processing progress summary."""
+                total_errors = self.recoverable_errors + self.fatal_errors
+                duration = 0.0
+                if self.started_at:
+                    duration = (datetime.now(UTC) - self.started_at).total_seconds()
+
+                return {
+                    "file_path": self.file_path,
+                    "status": self.processing_status,
+                    "progress": {
+                        "current_line": self.current_line,
+                        "entries_processed": self.entries_processed,
+                        "change_records": self.change_records_processed,
+                        "processing_rate": self.processing_rate,
+                    },
+                    "timing": {
+                        "duration_seconds": duration,
+                        "estimated_completion": self.estimated_completion.isoformat()
+                        if self.estimated_completion
+                        else None,
+                    },
+                    "quality": {
+                        "total_errors": total_errors,
+                        "recoverable_errors": self.recoverable_errors,
+                        "fatal_errors": self.fatal_errors,
+                        "error_rate": total_errors / self.entries_processed
+                        if self.entries_processed > 0
+                        else 0,
+                    },
+                    "resources": {"memory_usage_mb": self.memory_usage / (1024 * 1024)},
+                }
+
+            @model_validator(mode="after")
+            def validate_processing_state(self) -> Self:
+                """Validate LDIF processing state."""
+                if not self.file_path:
+                    msg = "File path is required"
+                    raise ValueError(msg)
+                if self.current_line < 0:
+                    msg = "Current line cannot be negative"
+                    raise ValueError(msg)
+                return self
+
+        class LdifTapConfig(BaseModel):
+            """Configuration for LDIF tap operations."""
+
+            # Pydantic 2.11 Configuration - Config Features
+            model_config: ClassVar[ConfigDict] = ConfigDict(
+                validate_assignment=True,
+                extra="forbid",
+                frozen=False,
+                json_schema_extra={
+                    "description": "LDIF tap configuration with complete settings",
+                    "examples": [
+                        {
+                            "ldif_directory": "/data/ldif",
+                            "file_patterns": ["*.ldif"],
+                            "batch_size": 1000,
+                        },
+                    ],
+                },
+            )
+
+            # File configuration
+            ldif_directory: Annotated[
+                str | None,
+                Field(
+                    default=None,
+                    description="LDIF files directory",
+                ),
+            ]
+            file_patterns: Annotated[
+                t.StrSequence,
+                Field(
+                    description="LDIF file patterns",
+                ),
+            ] = Field(default_factory=lambda: ["*.ldif"])
+            recursive_search: Annotated[
+                bool,
+                Field(
+                    default=False,
+                    description="Recursive directory search",
+                ),
+            ]
+
+            # Processing configuration
+            batch_size: Annotated[
+                int,
+                Field(
+                    default=FlextConstants.DEFAULT_SIZE,
+                    description="Processing batch size",
+                ),
+            ]
+            parallel_processing: Annotated[
+                bool,
+                Field(
+                    default=False,
+                    description="Enable parallel processing",
+                ),
+            ]
+            max_workers: Annotated[
+                t.WorkerCount,
+                Field(default=4, description="Maximum worker threads"),
+            ]
+
+            # Error handling
+            continue_on_error: Annotated[
+                bool,
+                Field(
+                    default=True,
+                    description="Continue processing on errors",
+                ),
+            ]
+            max_errors: Annotated[
+                int,
+                Field(
+                    default=FlextConstants.DEFAULT_SIZE,
+                    description="Maximum errors before stopping",
+                ),
+            ]
+            error_file: Annotated[
+                str | None,
+                Field(default=None, description="Error output file"),
+            ]
+
+            # Output configuration
+            output_format: Annotated[
+                str,
+                Field(default="jsonl", description="Output format"),
+            ]
+            include_metadata: Annotated[
+                bool,
+                Field(
+                    default=True,
+                    description="Include processing metadata",
+                ),
+            ]
+            compress_output: Annotated[
+                bool,
+                Field(
+                    default=False,
+                    description="Compress output files",
+                ),
+            ]
+
+            @computed_field
+            def tap_config_summary(self) -> t.ContainerMapping:
+                """LDIF tap configuration summary."""
+                patterns: t.ContainerList = list(self.file_patterns)
+                source: t.ContainerMapping = {
+                    "directory": self.ldif_directory,
+                    "patterns": patterns,
+                    "recursive": self.recursive_search,
+                }
+                processing: t.ContainerMapping = {
                     "batch_size": self.batch_size,
                     "parallel": self.parallel_processing,
                     "max_workers": self.max_workers,
-                },
-                "progress": {
-                    "status": self.status,
-                    "files_processed": self.files_processed,
-                    "entries_processed": self.entries_processed,
-                    "duration_seconds": duration,
-                },
-                "quality": {
-                    "errors_encountered": self.errors_encountered,
-                    "error_rate": self.errors_encountered / self.entries_processed
-                    if self.entries_processed > 0
-                    else 0,
-                    "files_with_errors": len(self.file_errors),
-                },
-            }
+                }
+                error_handling: t.ContainerMapping = {
+                    "continue_on_error": self.continue_on_error,
+                    "max_errors": self.max_errors,
+                    "has_error_file": bool(self.error_file),
+                }
+                output: t.ContainerMapping = {
+                    "format": self.output_format,
+                    "include_metadata": self.include_metadata,
+                    "compressed": self.compress_output,
+                }
+                result: t.ContainerMapping = {
+                    "source": source,
+                    "processing": processing,
+                    "error_handling": error_handling,
+                    "output": output,
+                }
+                return result
 
-        @model_validator(mode="after")
-        def validate_batch_config(self) -> Self:
-            """Validate LDIF batch configuration."""
-            if not self.batch_id:
-                msg = "Batch ID is required"
-                raise ValueError(msg)
-            if not self.file_paths:
-                msg = "At least one LDIF file is required"
-                raise ValueError(msg)
-            if self.batch_size <= 0:
-                msg = "Batch size must be positive"
-                raise ValueError(msg)
-            return self
+            @model_validator(mode="after")
+            def validate_tap_config(self) -> Self:
+                """Validate LDIF tap configuration."""
+                if self.batch_size <= 0:
+                    msg = "Batch size must be positive"
+                    raise ValueError(msg)
+                if self.max_workers <= 0:
+                    msg = "Max workers must be positive"
+                    raise ValueError(msg)
+                return self
 
-    class LdifProcessingState(BaseModel):
-        """LDIF processing state and progress tracking."""
+        class LdifRecord(BaseModel):
+            """Individual LDIF record for Singer output."""
 
-        # Pydantic 2.11 Configuration - State Features
-        model_config: ClassVar[ConfigDict] = ConfigDict(
-            validate_assignment=True,
-            extra="forbid",
-            frozen=False,
-            json_schema_extra={
-                "description": "LDIF processing state with complete tracking",
-                "examples": [
-                    {
-                        "file_path": "/data/users.ldif",
-                        "entries_processed": 5000,
-                        "processing_status": "in_progress",
+            stream: Annotated[str, Field(..., description="Source stream name")]
+            record: Annotated[
+                Mapping[str, t.ContainerValue],
+                Field(
+                    ...,
+                    description="LDIF record data",
+                ),
+            ]
+            record_type: Annotated[
+                str,
+                Field(default="entry", description="Type of LDIF record"),
+            ]
+
+            # Source metadata
+            source_file: Annotated[
+                str | None,
+                Field(default=None, description="Source LDIF file"),
+            ]
+            line_number: Annotated[
+                t.NonNegativeInt,
+                Field(default=0, description="Source line number"),
+            ]
+
+            # Extraction metadata
+            time_extracted: Annotated[
+                datetime,
+                Field(
+                    description="Extraction timestamp",
+                ),
+            ] = Field(default_factory=lambda: datetime.now(UTC))
+            processing_time: Annotated[
+                t.NonNegativeFloat,
+                Field(
+                    default=0.0,
+                    description="Processing time in seconds",
+                ),
+            ]
+
+            @computed_field
+            def ldif_record_summary(self) -> t.ContainerMapping:
+                """LDIF record analysis summary."""
+                return {
+                    "stream": self.stream,
+                    "record_type": self.record_type,
+                    "field_count": len(self.record),
+                    "has_dn": "dn" in self.record,
+                    "source": {"file": self.source_file, "line": self.line_number},
+                    "extraction_time": self.time_extracted.isoformat(),
+                    "processing_time_ms": self.processing_time * 1000,
+                    "record_size_bytes": len(str(self.record).encode("utf-8")),
+                }
+
+            @model_validator(mode="after")
+            def validate_ldif_record(self) -> Self:
+                """Validate LDIF record structure."""
+                if not self.stream:
+                    msg = "Stream name is required"
+                    raise ValueError(msg)
+                if not self.record:
+                    msg = "Record data cannot be empty"
+                    raise ValueError(msg)
+                return self
+
+        class LdifValidationResult(BaseModel):
+            """LDIF validation result with detailed error reporting."""
+
+            file_path: Annotated[
+                str, Field(..., description="Validated LDIF file path")
+            ]
+            is_valid: Annotated[
+                bool, Field(..., description="Overall validation result")
+            ]
+
+            # Validation results
+            validation_errors: Annotated[
+                Sequence[t.StrMapping],
+                Field(
+                    description="Validation errors with details",
+                ),
+            ] = Field(default_factory=list)
+            warnings: Annotated[
+                Sequence[t.StrMapping],
+                Field(
+                    description="Validation warnings",
+                ),
+            ] = Field(default_factory=list)
+
+            # Statistics
+            total_entries: Annotated[
+                t.NonNegativeInt,
+                Field(default=0, description="Total entries validated"),
+            ]
+            valid_entries: Annotated[
+                t.NonNegativeInt,
+                Field(default=0, description="Valid entries count"),
+            ]
+            invalid_entries: Annotated[
+                t.NonNegativeInt,
+                Field(default=0, description="Invalid entries count"),
+            ]
+
+            # Validation metadata
+            validation_time: Annotated[
+                t.NonNegativeFloat,
+                Field(
+                    default=0.0,
+                    description="Validation time in seconds",
+                ),
+            ]
+            validator_version: Annotated[
+                str,
+                Field(default="1.0", description="Validator version"),
+            ]
+
+            @computed_field
+            def validation_summary(self) -> t.ContainerMapping:
+                """LDIF validation complete summary."""
+                success_rate = 0.0
+                if self.total_entries > 0:
+                    success_rate = self.valid_entries / self.total_entries
+
+                return {
+                    "file_path": self.file_path,
+                    "validation_result": "valid" if self.is_valid else "invalid",
+                    "statistics": {
+                        "total_entries": self.total_entries,
+                        "valid_entries": self.valid_entries,
+                        "invalid_entries": self.invalid_entries,
+                        "success_rate": success_rate,
                     },
-                ],
-            },
-        )
-
-        file_path: Annotated[str, Field(..., description="LDIF file being processed")]
-        processing_status: Annotated[
-            str,
-            Field(
-                default="pending",
-                description="Processing status",
-            ),
-        ]
-
-        # Progress tracking
-        current_line: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Current line being processed"),
-        ]
-        entries_processed: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Entries processed"),
-        ]
-        change_records_processed: Annotated[
-            t.NonNegativeInt,
-            Field(
-                default=0,
-                description="Change records processed",
-            ),
-        ]
-
-        # Timing information
-        started_at: Annotated[
-            datetime | None,
-            Field(
-                default=None,
-                description="Processing start time",
-            ),
-        ]
-        last_update: Annotated[
-            datetime,
-            Field(
-                description="Last state update",
-            ),
-        ] = Field(default_factory=lambda: datetime.now(UTC))
-        estimated_completion: Annotated[
-            datetime | None,
-            Field(
-                default=None,
-                description="Estimated completion time",
-            ),
-        ]
-
-        # Error tracking
-        processing_errors: Annotated[
-            Sequence[t.StrMapping],
-            Field(
-                description="Processing errors with context",
-            ),
-        ] = Field(default_factory=list)
-        recoverable_errors: Annotated[
-            t.NonNegativeInt,
-            Field(
-                default=0,
-                description="Recoverable error count",
-            ),
-        ]
-        fatal_errors: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Fatal error count"),
-        ]
-
-        # Performance metrics
-        processing_rate: Annotated[
-            t.NonNegativeFloat,
-            Field(default=0.0, description="Entries per second"),
-        ]
-        memory_usage: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Memory usage in bytes"),
-        ]
-
-        @computed_field
-        def processing_progress_summary(self) -> t.ContainerMapping:
-            """LDIF processing progress summary."""
-            total_errors = self.recoverable_errors + self.fatal_errors
-            duration = 0.0
-            if self.started_at:
-                duration = (datetime.now(UTC) - self.started_at).total_seconds()
-
-            return {
-                "file_path": self.file_path,
-                "status": self.processing_status,
-                "progress": {
-                    "current_line": self.current_line,
-                    "entries_processed": self.entries_processed,
-                    "change_records": self.change_records_processed,
-                    "processing_rate": self.processing_rate,
-                },
-                "timing": {
-                    "duration_seconds": duration,
-                    "estimated_completion": self.estimated_completion.isoformat()
-                    if self.estimated_completion
-                    else None,
-                },
-                "quality": {
-                    "total_errors": total_errors,
-                    "recoverable_errors": self.recoverable_errors,
-                    "fatal_errors": self.fatal_errors,
-                    "error_rate": total_errors / self.entries_processed
-                    if self.entries_processed > 0
-                    else 0,
-                },
-                "resources": {"memory_usage_mb": self.memory_usage / (1024 * 1024)},
-            }
-
-        @model_validator(mode="after")
-        def validate_processing_state(self) -> Self:
-            """Validate LDIF processing state."""
-            if not self.file_path:
-                msg = "File path is required"
-                raise ValueError(msg)
-            if self.current_line < 0:
-                msg = "Current line cannot be negative"
-                raise ValueError(msg)
-            return self
-
-    class LdifTapConfig(BaseModel):
-        """Configuration for LDIF tap operations."""
-
-        # Pydantic 2.11 Configuration - Config Features
-        model_config: ClassVar[ConfigDict] = ConfigDict(
-            validate_assignment=True,
-            extra="forbid",
-            frozen=False,
-            json_schema_extra={
-                "description": "LDIF tap configuration with complete settings",
-                "examples": [
-                    {
-                        "ldif_directory": "/data/ldif",
-                        "file_patterns": ["*.ldif"],
-                        "batch_size": 1000,
+                    "issues": {
+                        "error_count": len(self.validation_errors),
+                        "warning_count": len(self.warnings),
+                        "has_critical_errors": any(
+                            error.get("severity") == "critical"
+                            for error in self.validation_errors
+                        ),
                     },
-                ],
-            },
-        )
+                    "performance": {
+                        "validation_time_seconds": self.validation_time,
+                        "entries_per_second": self.total_entries / self.validation_time
+                        if self.validation_time > 0
+                        else 0,
+                    },
+                }
 
-        # File configuration
-        ldif_directory: Annotated[
-            str | None,
-            Field(
-                default=None,
-                description="LDIF files directory",
-            ),
-        ]
-        file_patterns: Annotated[
-            t.StrSequence,
-            Field(
-                description="LDIF file patterns",
-            ),
-        ] = Field(default_factory=lambda: ["*.ldif"])
-        recursive_search: Annotated[
-            bool,
-            Field(
-                default=False,
-                description="Recursive directory search",
-            ),
-        ]
+            @model_validator(mode="after")
+            def validate_result_consistency(self) -> Self:
+                """Validate result consistency."""
+                if self.valid_entries + self.invalid_entries != self.total_entries:
+                    msg = "Valid + invalid entries must equal total entries"
+                    raise ValueError(msg)
+                if self.is_valid and self.validation_errors:
+                    msg = "Cannot be valid with validation errors"
+                    raise ValueError(msg)
+                return self
 
-        # Processing configuration
-        batch_size: Annotated[
-            int,
-            Field(
-                default=FlextConstants.DEFAULT_SIZE,
-                description="Processing batch size",
-            ),
-        ]
-        parallel_processing: Annotated[
-            bool,
-            Field(
-                default=False,
-                description="Enable parallel processing",
-            ),
-        ]
-        max_workers: Annotated[
-            t.WorkerCount,
-            Field(default=4, description="Maximum worker threads"),
-        ]
+        class LdifPerformanceMetrics(BaseModel):
+            """Performance metrics for LDIF tap operations."""
 
-        # Error handling
-        continue_on_error: Annotated[
-            bool,
-            Field(
-                default=True,
-                description="Continue processing on errors",
-            ),
-        ]
-        max_errors: Annotated[
-            int,
-            Field(
-                default=FlextConstants.DEFAULT_SIZE,
-                description="Maximum errors before stopping",
-            ),
-        ]
-        error_file: Annotated[
-            str | None,
-            Field(default=None, description="Error output file"),
-        ]
+            # File processing metrics
+            files_processed: Annotated[
+                int,
+                Field(default=0, description="Number of files processed"),
+            ]
+            total_file_size: Annotated[
+                int,
+                Field(default=0, description="Total file size in bytes"),
+            ]
+            average_file_size: Annotated[
+                float,
+                Field(default=0.0, description="Average file size"),
+            ]
 
-        # Output configuration
-        output_format: Annotated[
-            str,
-            Field(default="jsonl", description="Output format"),
-        ]
-        include_metadata: Annotated[
-            bool,
-            Field(
-                default=True,
-                description="Include processing metadata",
-            ),
-        ]
-        compress_output: Annotated[
-            bool,
-            Field(
-                default=False,
-                description="Compress output files",
-            ),
-        ]
+            # Entry processing metrics
+            total_entries: Annotated[
+                int,
+                Field(default=0, description="Total entries processed"),
+            ]
+            entries_per_file: Annotated[
+                float,
+                Field(
+                    default=0.0,
+                    description="Average entries per file",
+                ),
+            ]
+            processing_rate: Annotated[
+                float,
+                Field(default=0.0, description="Entries per second"),
+            ]
 
-        @computed_field
-        def tap_config_summary(self) -> t.ContainerMapping:
-            """LDIF tap configuration summary."""
-            patterns: t.ContainerList = list(self.file_patterns)
-            source: t.ContainerMapping = {
-                "directory": self.ldif_directory,
-                "patterns": patterns,
-                "recursive": self.recursive_search,
-            }
-            processing: t.ContainerMapping = {
-                "batch_size": self.batch_size,
-                "parallel": self.parallel_processing,
-                "max_workers": self.max_workers,
-            }
-            error_handling: t.ContainerMapping = {
-                "continue_on_error": self.continue_on_error,
-                "max_errors": self.max_errors,
-                "has_error_file": bool(self.error_file),
-            }
-            output: t.ContainerMapping = {
-                "format": self.output_format,
-                "include_metadata": self.include_metadata,
-                "compressed": self.compress_output,
-            }
-            result: t.ContainerMapping = {
-                "source": source,
-                "processing": processing,
-                "error_handling": error_handling,
-                "output": output,
-            }
-            return result
+            # Time metrics
+            total_processing_time: Annotated[
+                float,
+                Field(
+                    default=0.0,
+                    description="Total processing time",
+                ),
+            ]
+            average_processing_time: Annotated[
+                float,
+                Field(
+                    default=0.0,
+                    description="Average time per file",
+                ),
+            ]
+            parsing_time: Annotated[
+                float,
+                Field(default=0.0, description="Time spent parsing"),
+            ]
+            validation_time: Annotated[
+                float,
+                Field(default=0.0, description="Time spent validating"),
+            ]
 
-        @model_validator(mode="after")
-        def validate_tap_config(self) -> Self:
-            """Validate LDIF tap configuration."""
-            if self.batch_size <= 0:
-                msg = "Batch size must be positive"
-                raise ValueError(msg)
-            if self.max_workers <= 0:
-                msg = "Max workers must be positive"
-                raise ValueError(msg)
-            return self
+            # Quality metrics
+            successful_files: Annotated[
+                int,
+                Field(
+                    default=0,
+                    description="Successfully processed files",
+                ),
+            ]
+            failed_files: Annotated[
+                int,
+                Field(default=0, description="Failed file processing"),
+            ]
+            total_errors: Annotated[
+                int,
+                Field(default=0, description="Total processing errors"),
+            ]
 
-    class LdifRecord(BaseModel):
-        """Individual LDIF record for Singer output."""
+            # Resource metrics
+            peak_memory_usage: Annotated[
+                int,
+                Field(
+                    default=0,
+                    description="Peak memory usage in bytes",
+                ),
+            ]
+            average_memory_usage: Annotated[
+                int,
+                Field(default=0, description="Average memory usage"),
+            ]
 
-        stream: Annotated[str, Field(..., description="Source stream name")]
-        record: Annotated[
-            Mapping[str, t.ContainerValue],
-            Field(
-                ...,
-                description="LDIF record data",
-            ),
-        ]
-        record_type: Annotated[
-            str,
-            Field(default="entry", description="Type of LDIF record"),
-        ]
+            @computed_field
+            def performance_analysis_summary(self) -> t.ContainerMapping:
+                """LDIF tap performance analysis summary."""
+                success_rate = 0.0
+                if self.files_processed > 0:
+                    success_rate = self.successful_files / self.files_processed
 
-        # Source metadata
-        source_file: Annotated[
-            str | None,
-            Field(default=None, description="Source LDIF file"),
-        ]
-        line_number: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Source line number"),
-        ]
+                return {
+                    "file_processing": {
+                        "files_processed": self.files_processed,
+                        "success_rate": success_rate,
+                        "total_size_mb": self.total_file_size / (1024 * 1024),
+                        "average_size_mb": self.average_file_size / (1024 * 1024),
+                    },
+                    "entry_processing": {
+                        "total_entries": self.total_entries,
+                        "processing_rate": self.processing_rate,
+                        "entries_per_file": self.entries_per_file,
+                    },
+                    "performance": {
+                        "total_time_seconds": self.total_processing_time,
+                        "parsing_time_seconds": self.parsing_time,
+                        "validation_time_seconds": self.validation_time,
+                        "time_per_file": self.average_processing_time,
+                    },
+                    "quality": {
+                        "successful_files": self.successful_files,
+                        "failed_files": self.failed_files,
+                        "total_errors": self.total_errors,
+                        "error_rate": self.total_errors / self.total_entries
+                        if self.total_entries > 0
+                        else 0,
+                    },
+                    "resources": {
+                        "peak_memory_mb": self.peak_memory_usage / (1024 * 1024),
+                        "average_memory_mb": self.average_memory_usage / (1024 * 1024),
+                    },
+                }
 
-        # Extraction metadata
-        time_extracted: Annotated[
-            datetime,
-            Field(
-                description="Extraction timestamp",
-            ),
-        ] = Field(default_factory=lambda: datetime.now(UTC))
-        processing_time: Annotated[
-            t.NonNegativeFloat,
-            Field(
-                default=0.0,
-                description="Processing time in seconds",
-            ),
-        ]
-
-        @computed_field
-        def ldif_record_summary(self) -> t.ContainerMapping:
-            """LDIF record analysis summary."""
-            return {
-                "stream": self.stream,
-                "record_type": self.record_type,
-                "field_count": len(self.record),
-                "has_dn": "dn" in self.record,
-                "source": {"file": self.source_file, "line": self.line_number},
-                "extraction_time": self.time_extracted.isoformat(),
-                "processing_time_ms": self.processing_time * 1000,
-                "record_size_bytes": len(str(self.record).encode("utf-8")),
-            }
-
-        @model_validator(mode="after")
-        def validate_ldif_record(self) -> Self:
-            """Validate LDIF record structure."""
-            if not self.stream:
-                msg = "Stream name is required"
-                raise ValueError(msg)
-            if not self.record:
-                msg = "Record data cannot be empty"
-                raise ValueError(msg)
-            return self
-
-    class LdifValidationResult(BaseModel):
-        """LDIF validation result with detailed error reporting."""
-
-        file_path: Annotated[str, Field(..., description="Validated LDIF file path")]
-        is_valid: Annotated[bool, Field(..., description="Overall validation result")]
-
-        # Validation results
-        validation_errors: Annotated[
-            Sequence[t.StrMapping],
-            Field(
-                description="Validation errors with details",
-            ),
-        ] = Field(default_factory=list)
-        warnings: Annotated[
-            Sequence[t.StrMapping],
-            Field(
-                description="Validation warnings",
-            ),
-        ] = Field(default_factory=list)
-
-        # Statistics
-        total_entries: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Total entries validated"),
-        ]
-        valid_entries: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Valid entries count"),
-        ]
-        invalid_entries: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Invalid entries count"),
-        ]
-
-        # Validation metadata
-        validation_time: Annotated[
-            t.NonNegativeFloat,
-            Field(
-                default=0.0,
-                description="Validation time in seconds",
-            ),
-        ]
-        validator_version: Annotated[
-            str,
-            Field(default="1.0", description="Validator version"),
-        ]
-
-        @computed_field
-        def validation_summary(self) -> t.ContainerMapping:
-            """LDIF validation complete summary."""
-            success_rate = 0.0
-            if self.total_entries > 0:
-                success_rate = self.valid_entries / self.total_entries
-
-            return {
-                "file_path": self.file_path,
-                "validation_result": "valid" if self.is_valid else "invalid",
-                "statistics": {
-                    "total_entries": self.total_entries,
-                    "valid_entries": self.valid_entries,
-                    "invalid_entries": self.invalid_entries,
-                    "success_rate": success_rate,
-                },
-                "issues": {
-                    "error_count": len(self.validation_errors),
-                    "warning_count": len(self.warnings),
-                    "has_critical_errors": any(
-                        error.get("severity") == "critical"
-                        for error in self.validation_errors
-                    ),
-                },
-                "performance": {
-                    "validation_time_seconds": self.validation_time,
-                    "entries_per_second": self.total_entries / self.validation_time
-                    if self.validation_time > 0
-                    else 0,
-                },
-            }
-
-        @model_validator(mode="after")
-        def validate_result_consistency(self) -> Self:
-            """Validate result consistency."""
-            if self.valid_entries + self.invalid_entries != self.total_entries:
-                msg = "Valid + invalid entries must equal total entries"
-                raise ValueError(msg)
-            if self.is_valid and self.validation_errors:
-                msg = "Cannot be valid with validation errors"
-                raise ValueError(msg)
-            return self
-
-    class LdifPerformanceMetrics(BaseModel):
-        """Performance metrics for LDIF tap operations."""
-
-        # File processing metrics
-        files_processed: Annotated[
-            int,
-            Field(default=0, description="Number of files processed"),
-        ]
-        total_file_size: Annotated[
-            int,
-            Field(default=0, description="Total file size in bytes"),
-        ]
-        average_file_size: Annotated[
-            float,
-            Field(default=0.0, description="Average file size"),
-        ]
-
-        # Entry processing metrics
-        total_entries: Annotated[
-            int,
-            Field(default=0, description="Total entries processed"),
-        ]
-        entries_per_file: Annotated[
-            float,
-            Field(
-                default=0.0,
-                description="Average entries per file",
-            ),
-        ]
-        processing_rate: Annotated[
-            float,
-            Field(default=0.0, description="Entries per second"),
-        ]
-
-        # Time metrics
-        total_processing_time: Annotated[
-            float,
-            Field(
-                default=0.0,
-                description="Total processing time",
-            ),
-        ]
-        average_processing_time: Annotated[
-            float,
-            Field(
-                default=0.0,
-                description="Average time per file",
-            ),
-        ]
-        parsing_time: Annotated[
-            float,
-            Field(default=0.0, description="Time spent parsing"),
-        ]
-        validation_time: Annotated[
-            float,
-            Field(default=0.0, description="Time spent validating"),
-        ]
-
-        # Quality metrics
-        successful_files: Annotated[
-            int,
-            Field(
-                default=0,
-                description="Successfully processed files",
-            ),
-        ]
-        failed_files: Annotated[
-            int,
-            Field(default=0, description="Failed file processing"),
-        ]
-        total_errors: Annotated[
-            int,
-            Field(default=0, description="Total processing errors"),
-        ]
-
-        # Resource metrics
-        peak_memory_usage: Annotated[
-            int,
-            Field(
-                default=0,
-                description="Peak memory usage in bytes",
-            ),
-        ]
-        average_memory_usage: Annotated[
-            int,
-            Field(default=0, description="Average memory usage"),
-        ]
-
-        @computed_field
-        def performance_analysis_summary(self) -> t.ContainerMapping:
-            """LDIF tap performance analysis summary."""
-            success_rate = 0.0
-            if self.files_processed > 0:
-                success_rate = self.successful_files / self.files_processed
-
-            return {
-                "file_processing": {
-                    "files_processed": self.files_processed,
-                    "success_rate": success_rate,
-                    "total_size_mb": self.total_file_size / (1024 * 1024),
-                    "average_size_mb": self.average_file_size / (1024 * 1024),
-                },
-                "entry_processing": {
-                    "total_entries": self.total_entries,
-                    "processing_rate": self.processing_rate,
-                    "entries_per_file": self.entries_per_file,
-                },
-                "performance": {
-                    "total_time_seconds": self.total_processing_time,
-                    "parsing_time_seconds": self.parsing_time,
-                    "validation_time_seconds": self.validation_time,
-                    "time_per_file": self.average_processing_time,
-                },
-                "quality": {
-                    "successful_files": self.successful_files,
-                    "failed_files": self.failed_files,
-                    "total_errors": self.total_errors,
-                    "error_rate": self.total_errors / self.total_entries
-                    if self.total_entries > 0
-                    else 0,
-                },
-                "resources": {
-                    "peak_memory_mb": self.peak_memory_usage / (1024 * 1024),
-                    "average_memory_mb": self.average_memory_usage / (1024 * 1024),
-                },
-            }
-
-        @model_validator(mode="after")
-        def validate_performance_metrics(self) -> Self:
-            """Validate performance metrics consistency."""
-            if self.files_processed < 0:
-                msg = "Files processed cannot be negative"
-                raise ValueError(msg)
-            if self.successful_files + self.failed_files > self.files_processed:
-                msg = "Successful + failed files cannot exceed total files"
-                raise ValueError(msg)
-            return self
+            @model_validator(mode="after")
+            def validate_performance_metrics(self) -> Self:
+                """Validate performance metrics consistency."""
+                if self.files_processed < 0:
+                    msg = "Files processed cannot be negative"
+                    raise ValueError(msg)
+                if self.successful_files + self.failed_files > self.files_processed:
+                    msg = "Successful + failed files cannot exceed total files"
+                    raise ValueError(msg)
+                return self
 
 
 # Short aliases

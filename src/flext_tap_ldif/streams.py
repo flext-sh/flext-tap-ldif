@@ -129,13 +129,13 @@ class FlextTapLdifEntriesStream(Stream):
         logger.info("Processing %d LDIF files", len(files_to_process))
         if not files_to_process:
             yield {
-                c.EntrySchema.DN_FIELD: c.SampleEntry.DN,
-                c.EntrySchema.ATTRIBUTES_FIELD: c.SampleEntry.ATTRIBUTES,
-                c.EntrySchema.OBJECT_CLASS_FIELD: c.SampleEntry.OBJECT_CLASS,
-                c.EntrySchema.CHANGE_TYPE_FIELD: c.EntrySchema.DEFAULT_CHANGE_TYPE,
-                c.EntrySchema.SOURCE_FILE_FIELD: c.SampleEntry.SOURCE_FILE,
-                c.EntrySchema.LINE_NUMBER_FIELD: c.EntrySchema.DEFAULT_LINE_NUMBER,
-                c.EntrySchema.ENTRY_SIZE_FIELD: c.EntrySchema.DEFAULT_ENTRY_SIZE,
+                c.TapLdif.EntrySchema.DN_FIELD: c.TapLdif.SampleEntry.DN,
+                c.TapLdif.EntrySchema.ATTRIBUTES_FIELD: c.TapLdif.SampleEntry.ATTRIBUTES,
+                c.TapLdif.EntrySchema.OBJECT_CLASS_FIELD: c.TapLdif.SampleEntry.OBJECT_CLASS,
+                c.TapLdif.EntrySchema.CHANGE_TYPE_FIELD: c.TapLdif.EntrySchema.DEFAULT_CHANGE_TYPE,
+                c.TapLdif.EntrySchema.SOURCE_FILE_FIELD: c.TapLdif.SampleEntry.SOURCE_FILE,
+                c.TapLdif.EntrySchema.LINE_NUMBER_FIELD: c.TapLdif.EntrySchema.DEFAULT_LINE_NUMBER,
+                c.TapLdif.EntrySchema.ENTRY_SIZE_FIELD: c.TapLdif.EntrySchema.DEFAULT_ENTRY_SIZE,
             }
             return
         for file_path in files_to_process:
@@ -161,15 +161,15 @@ class FlextTapLdifEntriesStream(Stream):
         return {
             "type": "object",
             "properties": {
-                c.EntrySchema.DN_FIELD: {"type": "string"},
-                c.EntrySchema.ATTRIBUTES_FIELD: {"type": "object"},
-                c.EntrySchema.OBJECT_CLASS_FIELD: {
+                c.TapLdif.EntrySchema.DN_FIELD: {"type": "string"},
+                c.TapLdif.EntrySchema.ATTRIBUTES_FIELD: {"type": "object"},
+                c.TapLdif.EntrySchema.OBJECT_CLASS_FIELD: {
                     "type": "array",
                     "items": {"type": "string"},
                 },
-                c.EntrySchema.CHANGE_TYPE_FIELD: {"type": "string"},
-                c.EntrySchema.SOURCE_FILE_FIELD: {"type": "string"},
-                c.EntrySchema.LINE_NUMBER_FIELD: {"type": "integer"},
-                c.EntrySchema.ENTRY_SIZE_FIELD: {"type": "integer"},
+                c.TapLdif.EntrySchema.CHANGE_TYPE_FIELD: {"type": "string"},
+                c.TapLdif.EntrySchema.SOURCE_FILE_FIELD: {"type": "string"},
+                c.TapLdif.EntrySchema.LINE_NUMBER_FIELD: {"type": "integer"},
+                c.TapLdif.EntrySchema.ENTRY_SIZE_FIELD: {"type": "integer"},
             },
         }

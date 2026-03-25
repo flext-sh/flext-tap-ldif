@@ -120,16 +120,18 @@ class FlextLdifProcessor:
                         else {}
                     )
                     yield {
-                        c.EntrySchema.DN_FIELD: str(dn_val),
-                        c.EntrySchema.ATTRIBUTES_FIELD: attrs_dict,
-                        c.EntrySchema.OBJECT_CLASS_FIELD: attrs_dict.get(
+                        c.TapLdif.EntrySchema.DN_FIELD: str(dn_val),
+                        c.TapLdif.EntrySchema.ATTRIBUTES_FIELD: attrs_dict,
+                        c.TapLdif.EntrySchema.OBJECT_CLASS_FIELD: attrs_dict.get(
                             "objectClass",
                             [],
                         ),
-                        c.EntrySchema.CHANGE_TYPE_FIELD: c.EntrySchema.DEFAULT_CHANGE_TYPE,
-                        c.EntrySchema.SOURCE_FILE_FIELD: str(file_path),
-                        c.EntrySchema.LINE_NUMBER_FIELD: c.EntrySchema.DEFAULT_LINE_NUMBER,
-                        c.EntrySchema.ENTRY_SIZE_FIELD: len(str(entry).encode("utf-8")),
+                        c.TapLdif.EntrySchema.CHANGE_TYPE_FIELD: c.TapLdif.EntrySchema.DEFAULT_CHANGE_TYPE,
+                        c.TapLdif.EntrySchema.SOURCE_FILE_FIELD: str(file_path),
+                        c.TapLdif.EntrySchema.LINE_NUMBER_FIELD: c.TapLdif.EntrySchema.DEFAULT_LINE_NUMBER,
+                        c.TapLdif.EntrySchema.ENTRY_SIZE_FIELD: len(
+                            str(entry).encode("utf-8")
+                        ),
                     }
         except (RuntimeError, ValueError, TypeError):
             logger.exception("Failed to process LDIF file: %s", file_path)
