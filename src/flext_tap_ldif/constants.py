@@ -39,10 +39,10 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
         })
         MAX_FILE_SIZE_MB: Final[int] = 100
         LDIF_CHANGE_TYPES: ClassVar[t.StrSequence] = [
-            FlextLdifConstants.Ldif.EntryModification.ADD,
-            FlextLdifConstants.Ldif.EntryModification.MODIFY,
-            FlextLdifConstants.Ldif.EntryModification.DELETE,
-            FlextLdifConstants.Ldif.EntryModification.MODRDN,
+            "add",
+            "modify",
+            "delete",
+            "modrdn",
         ]
 
         MIN_WORKERS_FOR_PARALLEL: Final[int] = 2
@@ -55,7 +55,7 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
 
             DN_ATTRIBUTE: Final[str] = "dn"
             ATTRIBUTE_SEPARATOR: Final[str] = ": "
-            MAX_LINE_LENGTH: Final[int] = FlextLdifConstants.Ldif.MAX_LINE_LENGTH
+            MAX_LINE_LENGTH: Final[int] = FlextLdifConstants.Ldif.DEFAULT_LINE_WIDTH
             BASE64_PREFIX: Final[str] = ":: "
             COMMENT_PREFIX: Final[str] = "#"
             LINE_CONTINUATION: Final[str] = " "
