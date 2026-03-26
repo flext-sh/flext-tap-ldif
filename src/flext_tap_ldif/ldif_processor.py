@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import NoReturn
 
 from flext_core import FlextLogger, r
-from flext_ldif import FlextLdif
+from flext_ldif import ldif
 
 from flext_tap_ldif import c, m, t
 
@@ -31,7 +31,7 @@ class FlextLdifProcessor:
 
         """
         self.config = config
-        self._api = FlextLdif()
+        self._api = ldif()
 
     def discover_files(
         self,
