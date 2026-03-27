@@ -52,7 +52,10 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "FlextLdifProcessor": ["flext_tap_ldif.ldif_processor", "FlextLdifProcessor"],
     "FlextTapLdif": ["flext_tap_ldif.tap", "FlextTapLdif"],
     "FlextTapLdifConstants": ["flext_tap_ldif.constants", "FlextTapLdifConstants"],
-    "FlextTapLdifEntriesStream": ["flext_tap_ldif.streams", "FlextTapLdifEntriesStream"],
+    "FlextTapLdifEntriesStream": [
+        "flext_tap_ldif.streams",
+        "FlextTapLdifEntriesStream",
+    ],
     "FlextTapLdifModels": ["flext_tap_ldif.models", "FlextTapLdifModels"],
     "FlextTapLdifProtocols": ["flext_tap_ldif.protocols", "FlextTapLdifProtocols"],
     "FlextTapLdifSettings": ["flext_tap_ldif.settings", "FlextTapLdifSettings"],
