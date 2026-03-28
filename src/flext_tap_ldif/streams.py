@@ -6,31 +6,27 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-import os
-import tempfile
-from collections.abc import Iterable, Mapping, MutableMapping
-from pathlib import Path
+from collections.abc import Iterable, MutableMapping
 from typing import override
 
 from flext_core import FlextLogger
-from singer_sdk.helpers.types import Context, Record
-from singer_sdk.streams import Stream
-from singer_sdk.tap_base import Tap
-
-from flext_tap_ldif import t
-from flext_tap_ldif.constants import c
-from flext_tap_ldif.ldif_processor import (
-    FlextLdifProcessor as FlextLdifProcessorWrapper,
+from flext_meltano.singer.sdk import (
+    FlextMeltanoSingerContext,
+    FlextMeltanoSingerRecord,
+    FlextMeltanoSingerStreamBase,
+    FlextMeltanoSingerTapBase,
 )
+
+from flext_tap_ldif import FlextLdifProcessor, c, t
 
 logger = FlextLogger(__name__)
 
 
-class FlextTapLdifEntriesStream(Stream):
+class FlextTapLdifEntriesStream(FlextMeltanoSingerStreamBase):
     """LDIF entries stream using flext-ldif for ALL processing."""
 
     @override
-    def __init__(self, tap: Tap) -> None:
+    def __init__(self, tap: FlextMeltanoSingerTapBase) -> None:
         """Initialize LDIF entries stream.
 
         Args:
@@ -38,47 +34,14 @@ class FlextTapLdifEntriesStream(Stream):
 
         """
         super().__init__(tap, name="ldif_entries", schema=self._get_schema())
-        self._processor = FlextLdifProcessorWrapper(dict(tap.config))
-        self._tap: Tap = tap
-        cfg: Mapping[str, t.ContainerValue] = dict(tap.config)
-        if not cfg.get("file_path") and (not cfg.get("directory_path")):
-            fd, path = tempfile.mkstemp(suffix=".ldif")
-            os.close(fd)
-            _ = Path(path).write_text(
-                "dn: cn=test,dc=example,dc=com\ncn: test\nobjectClass: top\n",
-                encoding="utf-8",
-            )
-            self._sample_file_path = path
-        else:
-            fp = cfg.get("file_path")
-            if isinstance(fp, str):
-                file_path = Path(fp)
-                try:
-                    if file_path.exists() and file_path.stat().st_size == 0:
-                        _ = file_path.write_text(
-                            "dn: cn=test,dc=example,dc=com\ncn: test\nobjectClass: top\n",
-                            encoding="utf-8",
-                        )
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as exc:
-                    exc_msg = str(exc)
-                    logger.warning(
-                        "Failed to seed LDIF file with sample content: %s",
-                        exc_msg,
-                    )
+        self._processor = FlextLdifProcessor(dict(tap.config))
+        self._tap: FlextMeltanoSingerTapBase = tap
 
     @override
     def get_records(
         self,
-        context: Context | None = None,
-    ) -> Iterable[Record]:
+        context: FlextMeltanoSingerContext | None = None,
+    ) -> Iterable[FlextMeltanoSingerRecord]:
         """Return a generator of record-type dictionary objects.
 
         Args:
@@ -90,9 +53,6 @@ class FlextTapLdifEntriesStream(Stream):
         """
         _ = context
         config: MutableMapping[str, t.ContainerValue] = dict(self._tap.config)
-        sample_path = getattr(self, "_sample_file_path", None)
-        if sample_path:
-            config["file_path"] = sample_path
         dir_path_raw = config.get("directory_path")
         dir_path = dir_path_raw if isinstance(dir_path_raw, str) else None
         pattern_raw = config.get("file_pattern", "*.ldif")
@@ -112,35 +72,18 @@ class FlextTapLdifEntriesStream(Stream):
             max_file_size_mb=max_size,
         )
         if files_result.is_failure:
-            logger.error("File discovery failed: %s", files_result.error or "")
-            fp = config.get("file_path")
-            if isinstance(fp, str):
-                try:
-                    for record in self._processor.process_file(Path(fp)):
-                        yield dict(record)
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ):
-                    return
+            error_msg = files_result.error or "LDIF file discovery failed"
+            if bool(config.get("strict_parsing", True)):
+                raise RuntimeError(error_msg)
+            logger.error("File discovery failed: %s", error_msg)
             return
         files_to_process = files_result.value or []
         logger.info("Processing %d LDIF files", len(files_to_process))
         if not files_to_process:
-            yield {
-                c.TapLdif.EntrySchema.DN_FIELD: c.TapLdif.SampleEntry.DN,
-                c.TapLdif.EntrySchema.ATTRIBUTES_FIELD: c.TapLdif.SampleEntry.ATTRIBUTES,
-                c.TapLdif.EntrySchema.OBJECT_CLASS_FIELD: c.TapLdif.SampleEntry.OBJECT_CLASS,
-                c.TapLdif.EntrySchema.CHANGE_TYPE_FIELD: c.TapLdif.EntrySchema.DEFAULT_CHANGE_TYPE,
-                c.TapLdif.EntrySchema.SOURCE_FILE_FIELD: c.TapLdif.SampleEntry.SOURCE_FILE,
-                c.TapLdif.EntrySchema.LINE_NUMBER_FIELD: c.TapLdif.EntrySchema.DEFAULT_LINE_NUMBER,
-                c.TapLdif.EntrySchema.ENTRY_SIZE_FIELD: c.TapLdif.EntrySchema.DEFAULT_ENTRY_SIZE,
-            }
+            error_msg = "No LDIF files discovered"
+            if bool(config.get("strict_parsing", True)):
+                raise RuntimeError(error_msg)
+            logger.warning(error_msg)
             return
         for file_path in files_to_process:
             logger.info("Processing file: %s", file_path)

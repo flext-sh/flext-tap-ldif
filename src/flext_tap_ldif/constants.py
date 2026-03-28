@@ -7,7 +7,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping
 from enum import StrEnum, unique
 from typing import TYPE_CHECKING, ClassVar, Final
 
@@ -88,14 +87,6 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
             DEFAULT_CHANGE_TYPE: Final[str] = "None"
             DEFAULT_LINE_NUMBER: Final[int] = 0
             DEFAULT_ENTRY_SIZE: Final[int] = 0
-
-        class SampleEntry:
-            """Sample LDIF entry for fallback/testing."""
-
-            DN: Final[str] = "cn=sample,dc=example,dc=com"
-            ATTRIBUTES: Final[Mapping[str, t.StrSequence]] = {"cn": ["sample"]}
-            OBJECT_CLASS: Final[t.StrSequence] = ["top"]
-            SOURCE_FILE: Final[str] = "fp"
 
         @unique
         class ProjectType(StrEnum):

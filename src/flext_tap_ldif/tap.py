@@ -11,17 +11,17 @@ from collections.abc import Mapping, Sequence
 from typing import ClassVar, override
 
 from flext_core import FlextConstants, FlextLogger
-from singer_sdk.streams import Stream
-from singer_sdk.tap_base import Tap
+from flext_meltano.singer.sdk import (
+    FlextMeltanoSingerStreamBase,
+    FlextMeltanoSingerTapBase,
+)
 
-from flext_tap_ldif import t
-from flext_tap_ldif.settings import FlextTapLdifSettings
-from flext_tap_ldif.streams import FlextTapLdifEntriesStream
+from flext_tap_ldif import FlextTapLdifEntriesStream, FlextTapLdifSettings, t
 
 logger = FlextLogger(__name__)
 
 
-class FlextTapLdif(Tap):
+class FlextTapLdif(FlextMeltanoSingerTapBase):
     """Singer tap for LDIF file format data extraction."""
 
     name: str = "tap-ldif"
@@ -47,7 +47,7 @@ class FlextTapLdif(Tap):
     }
 
     @override
-    def discover_streams(self) -> Sequence[Stream]:
+    def discover_streams(self) -> Sequence[FlextMeltanoSingerStreamBase]:
         """Return a list of discovered streams.
 
         Returns:
