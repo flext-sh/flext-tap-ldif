@@ -925,11 +925,8 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
 
 u = FlextTapLdifUtilities
-FlextLdifProcessor = FlextTapLdifUtilities.TapLdif.Processor
-FlextTapLdifEntriesStream = FlextTapLdifUtilities.TapLdif.EntriesStream
+
 __all__ = [
-    "FlextLdifProcessor",
-    "FlextTapLdifEntriesStream",
     "FlextTapLdifUtilities",
     "u",
 ]
