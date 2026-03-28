@@ -16,7 +16,7 @@ from flext_meltano.singer.sdk import (
     FlextMeltanoSingerTapBase,
 )
 
-from flext_tap_ldif import FlextTapLdifEntriesStream, FlextTapLdifSettings, t
+from flext_tap_ldif import FlextTapLdifSettings, t, u
 
 logger = FlextLogger(__name__)
 
@@ -54,7 +54,7 @@ class FlextTapLdif(FlextMeltanoSingerTapBase):
         A list of discovered streams.
 
         """
-        return [FlextTapLdifEntriesStream(tap=self)]
+        return [u.TapLdif.EntriesStream(tap=self)]
 
     def _get_ldif_entries_schema(self) -> Mapping[str, t.ContainerValue]:
         """Get the schema for LDIF entries stream.

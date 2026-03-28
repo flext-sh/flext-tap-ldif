@@ -33,27 +33,27 @@ if TYPE_CHECKING:
         FlextTapLdifConstants,
         FlextTapLdifConstants as c,
     )
-    from flext_tap_ldif.ldif_processor import FlextLdifProcessor
     from flext_tap_ldif.models import FlextTapLdifModels, FlextTapLdifModels as m
     from flext_tap_ldif.protocols import (
         FlextTapLdifProtocols,
         FlextTapLdifProtocols as p,
     )
     from flext_tap_ldif.settings import FlextTapLdifSettings
-    from flext_tap_ldif.streams import FlextTapLdifEntriesStream
     from flext_tap_ldif.tap import FlextTapLdif, logger, main
     from flext_tap_ldif.typings import FlextTapLdifTypes, FlextTapLdifTypes as t
     from flext_tap_ldif.utilities import (
+        FlextLdifProcessor,
+        FlextTapLdifEntriesStream,
         FlextTapLdifUtilities,
         FlextTapLdifUtilities as u,
     )
 
 _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
-    "FlextLdifProcessor": ["flext_tap_ldif.ldif_processor", "FlextLdifProcessor"],
+    "FlextLdifProcessor": ["flext_tap_ldif.utilities", "FlextLdifProcessor"],
     "FlextTapLdif": ["flext_tap_ldif.tap", "FlextTapLdif"],
     "FlextTapLdifConstants": ["flext_tap_ldif.constants", "FlextTapLdifConstants"],
     "FlextTapLdifEntriesStream": [
-        "flext_tap_ldif.streams",
+        "flext_tap_ldif.utilities",
         "FlextTapLdifEntriesStream",
     ],
     "FlextTapLdifModels": ["flext_tap_ldif.models", "FlextTapLdifModels"],
