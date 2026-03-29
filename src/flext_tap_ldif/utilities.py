@@ -23,7 +23,7 @@ from typing import NoReturn, TypeIs, override
 from flext_core import FlextLogger, r
 from flext_ldif import FlextLdifUtilities, ldif
 from flext_meltano import FlextMeltanoUtilities
-from flext_meltano.singer.sdk import (
+from flext_meltano import (
     FlextMeltanoSingerContext,
     FlextMeltanoSingerRecord,
     FlextMeltanoSingerStreamBase,
@@ -157,15 +157,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     return r[int].ok(entry_count)
                 except UnicodeDecodeError as e:
                     return r[int].fail(f"LDIF file encoding error: {e}")
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as e:
+                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
                     return r[int].fail(f"Error counting LDIF entries: {e}")
 
             @staticmethod
@@ -213,15 +205,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         "object_classes": list(object_classes),
                     }
                     return r[t.ContainerMapping].ok(metadata)
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as e:
+                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
                     return r[t.ContainerMapping].fail(
                         f"Error extracting LDIF metadata: {e}",
                     )
@@ -261,15 +245,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     return r[bool].ok(value=True)
                 except UnicodeDecodeError as e:
                     return r[bool].fail(f"LDIF file encoding error: {e}")
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as e:
+                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
                     return r[bool].fail(f"Error validating LDIF file: {e}")
 
         class LdifDataProcessing:
@@ -349,15 +325,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     )
                     out: Mapping[str, str | t.StrSequence] = dict(record)
                     return r[Mapping[str, str | t.StrSequence]].ok(out)
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as e:
+                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
                     return r[Mapping[str, str | t.StrSequence]].fail(
                         f"Error converting LDIF entry: {e}",
                     )
@@ -430,15 +398,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         attr_name.strip(),
                         value.strip(),
                     ))
-                except (
-                    ValueError,
-                    TypeError,
-                    KeyError,
-                    AttributeError,
-                    OSError,
-                    RuntimeError,
-                    ImportError,
-                ) as e:
+                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
                     return r[tuple[str, str]].fail(f"Error parsing LDIF line: {e}")
 
         class ConfigValidation:

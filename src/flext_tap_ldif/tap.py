@@ -11,10 +11,7 @@ from collections.abc import Mapping, Sequence
 from typing import ClassVar, override
 
 from flext_core import FlextConstants, FlextLogger
-from flext_meltano.singer.sdk import (
-    FlextMeltanoSingerStreamBase,
-    FlextMeltanoSingerTapBase,
-)
+from flext_meltano import FlextMeltanoSingerStreamBase, FlextMeltanoSingerTapBase
 
 from flext_tap_ldif import FlextTapLdifSettings, t, u
 
