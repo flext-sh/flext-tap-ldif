@@ -24,6 +24,7 @@ from pydantic import (
 )
 
 from flext_tap_ldif import t
+from flext_tap_ldif.constants import c
 
 
 class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
@@ -183,15 +184,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
             """Decode base64 encoded LDIF value."""
             try:
                 return base64.b64decode(value).decode("utf-8")
-            except (
-                ValueError,
-                TypeError,
-                KeyError,
-                AttributeError,
-                OSError,
-                RuntimeError,
-                ImportError,
-            ):
+            except c.Meltano.Singer.SAFE_EXCEPTIONS:
                 return value
 
         @staticmethod

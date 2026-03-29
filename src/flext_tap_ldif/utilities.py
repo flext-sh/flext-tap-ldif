@@ -22,12 +22,12 @@ from typing import NoReturn, TypeIs, override
 
 from flext_core import FlextLogger, r
 from flext_ldif import FlextLdifUtilities, ldif
-from flext_meltano import FlextMeltanoUtilities
 from flext_meltano import (
     FlextMeltanoSingerContext,
     FlextMeltanoSingerRecord,
     FlextMeltanoSingerStreamBase,
     FlextMeltanoSingerTapBase,
+    FlextMeltanoUtilities,
 )
 
 from flext_tap_ldif import t
@@ -377,15 +377,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                                 attr_name.strip(),
                                 decoded_value,
                             ))
-                        except (
-                            ValueError,
-                            TypeError,
-                            KeyError,
-                            AttributeError,
-                            OSError,
-                            RuntimeError,
-                            ImportError,
-                        ) as e:
+                        except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
                             return r[tuple[str, str]].fail(f"Base64 decode error: {e}")
                     if ":<" in line:
                         attr_name, url_value = line.split(":<", 1)
@@ -698,7 +690,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                                     str(entry).encode("utf-8")
                                 ),
                             }
-                except (RuntimeError, ValueError, TypeError):
+                except c.Meltano.Singer.SAFE_EXCEPTIONS:
                     logger.exception("Failed to process LDIF file: %s", file_path)
                     if self.config.get("strict_parsing", True):
                         raise
@@ -782,7 +774,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     try:
                         for record in self._processor.process_file(file_path):
                             yield dict(record)
-                    except (RuntimeError, ValueError, TypeError) as e:
+                    except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
                         if config.get("strict_parsing", True):
                             logger.exception("Error processing file %s", file_path)
                             raise
