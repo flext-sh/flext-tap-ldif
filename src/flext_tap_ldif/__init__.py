@@ -29,7 +29,17 @@ if TYPE_CHECKING:
     from flext_core import FlextTypes
     from flext_ldif import d, e, h, r, s, x
 
-    from flext_tap_ldif import _models
+    from flext_tap_ldif import (
+        _models,
+        constants,
+        models,
+        protocols,
+        settings,
+        tap,
+        typings,
+        utilities,
+    )
+    from flext_tap_ldif._models import base, batch, config, entry, file, record
     from flext_tap_ldif._models.base import FlextTapLdifModelsBase
     from flext_tap_ldif._models.batch import FlextTapLdifModelsBatch
     from flext_tap_ldif._models.config import FlextTapLdifModelsConfig
@@ -80,18 +90,31 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "FlextTapLdifTypes": ["flext_tap_ldif.typings", "FlextTapLdifTypes"],
     "FlextTapLdifUtilities": ["flext_tap_ldif.utilities", "FlextTapLdifUtilities"],
     "_models": ["flext_tap_ldif._models", ""],
+    "base": ["flext_tap_ldif._models.base", ""],
+    "batch": ["flext_tap_ldif._models.batch", ""],
     "c": ["flext_tap_ldif.constants", "FlextTapLdifConstants"],
+    "config": ["flext_tap_ldif._models.config", ""],
+    "constants": ["flext_tap_ldif.constants", ""],
     "d": ["flext_ldif", "d"],
     "e": ["flext_ldif", "e"],
+    "entry": ["flext_tap_ldif._models.entry", ""],
+    "file": ["flext_tap_ldif._models.file", ""],
     "h": ["flext_ldif", "h"],
     "logger": ["flext_tap_ldif.tap", "logger"],
     "m": ["flext_tap_ldif.models", "FlextTapLdifModels"],
     "main": ["flext_tap_ldif.tap", "main"],
+    "models": ["flext_tap_ldif.models", ""],
     "p": ["flext_tap_ldif.protocols", "FlextTapLdifProtocols"],
+    "protocols": ["flext_tap_ldif.protocols", ""],
     "r": ["flext_ldif", "r"],
+    "record": ["flext_tap_ldif._models.record", ""],
     "s": ["flext_ldif", "s"],
+    "settings": ["flext_tap_ldif.settings", ""],
     "t": ["flext_tap_ldif.typings", "FlextTapLdifTypes"],
+    "tap": ["flext_tap_ldif.tap", ""],
+    "typings": ["flext_tap_ldif.typings", ""],
     "u": ["flext_tap_ldif.utilities", "FlextTapLdifUtilities"],
+    "utilities": ["flext_tap_ldif.utilities", ""],
     "x": ["flext_ldif", "x"],
 }
 
@@ -118,18 +141,31 @@ __all__ = [
     "__version__",
     "__version_info__",
     "_models",
+    "base",
+    "batch",
     "c",
+    "config",
+    "constants",
     "d",
     "e",
+    "entry",
+    "file",
     "h",
     "logger",
     "m",
     "main",
+    "models",
     "p",
+    "protocols",
     "r",
+    "record",
     "s",
+    "settings",
     "t",
+    "tap",
+    "typings",
     "u",
+    "utilities",
     "x",
 ]
 

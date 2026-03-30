@@ -22,6 +22,15 @@ if TYPE_CHECKING:
     from flext_core import FlextTypes
     from flext_tests import d, e, h, r, s, x
 
+    from tests import (
+        conftest,
+        constants,
+        models,
+        protocols,
+        test_tap,
+        typings,
+        utilities,
+    )
     from tests.conftest import (
         MockLDIFParser,
         MockLDIFTap,
@@ -81,6 +90,8 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "binary_ldif_file": ["tests.conftest", "binary_ldif_file"],
     "c": ["tests.constants", "FlextTapLdifTestConstants"],
     "changes_tap_config": ["tests.conftest", "changes_tap_config"],
+    "conftest": ["tests.conftest", ""],
+    "constants": ["tests.constants", ""],
     "d": ["flext_tests", "d"],
     "directory_tap_config": ["tests.conftest", "directory_tap_config"],
     "docker_control": ["tests.conftest", "docker_control"],
@@ -94,8 +105,10 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "m": ["tests.models", "FlextTapLdifTestModels"],
     "mock_ldif_parser": ["tests.conftest", "mock_ldif_parser"],
     "mock_ldif_tap": ["tests.conftest", "mock_ldif_tap"],
+    "models": ["tests.models", ""],
     "p": ["tests.protocols", "FlextTapLdifTestProtocols"],
     "performance_tap_config": ["tests.conftest", "performance_tap_config"],
+    "protocols": ["tests.protocols", ""],
     "pytest_configure": ["tests.conftest", "pytest_configure"],
     "r": ["flext_tests", "r"],
     "s": ["flext_tests", "s"],
@@ -109,8 +122,11 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "singer_state": ["tests.conftest", "singer_state"],
     "t": ["tests.typings", "FlextTapLdifTestTypes"],
     "test_discover_streams": ["tests.test_tap", "test_discover_streams"],
+    "test_tap": ["tests.test_tap", ""],
+    "typings": ["tests.typings", ""],
     "u": ["tests.utilities", "FlextTapLdifTestUtilities"],
     "utf16_ldif_file": ["tests.conftest", "utf16_ldif_file"],
+    "utilities": ["tests.utilities", ""],
     "x": ["flext_tests", "x"],
 }
 
@@ -128,6 +144,8 @@ __all__ = [
     "binary_ldif_file",
     "c",
     "changes_tap_config",
+    "conftest",
+    "constants",
     "d",
     "directory_tap_config",
     "docker_control",
@@ -141,8 +159,10 @@ __all__ = [
     "m",
     "mock_ldif_parser",
     "mock_ldif_tap",
+    "models",
     "p",
     "performance_tap_config",
+    "protocols",
     "pytest_configure",
     "r",
     "s",
@@ -156,8 +176,11 @@ __all__ = [
     "singer_state",
     "t",
     "test_discover_streams",
+    "test_tap",
+    "typings",
     "u",
     "utf16_ldif_file",
+    "utilities",
     "x",
 ]
 

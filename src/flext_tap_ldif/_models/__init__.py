@@ -13,6 +13,7 @@ from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
 if TYPE_CHECKING:
     from flext_core import FlextTypes
 
+    from flext_tap_ldif._models import base, batch, config, entry, file, record
     from flext_tap_ldif._models.base import FlextTapLdifModelsBase
     from flext_tap_ldif._models.batch import FlextTapLdifModelsBatch
     from flext_tap_ldif._models.config import FlextTapLdifModelsConfig
@@ -39,6 +40,12 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
         "flext_tap_ldif._models.record",
         "FlextTapLdifModelsRecord",
     ],
+    "base": ["flext_tap_ldif._models.base", ""],
+    "batch": ["flext_tap_ldif._models.batch", ""],
+    "config": ["flext_tap_ldif._models.config", ""],
+    "entry": ["flext_tap_ldif._models.entry", ""],
+    "file": ["flext_tap_ldif._models.file", ""],
+    "record": ["flext_tap_ldif._models.record", ""],
 }
 
 __all__ = [
@@ -48,6 +55,12 @@ __all__ = [
     "FlextTapLdifModelsEntry",
     "FlextTapLdifModelsFile",
     "FlextTapLdifModelsRecord",
+    "base",
+    "batch",
+    "config",
+    "entry",
+    "file",
+    "record",
 ]
 
 
