@@ -23,6 +23,7 @@ from typing import NoReturn, TypeIs, override
 from flext_core import FlextLogger, r
 from flext_ldif import FlextLdifUtilities, ldif
 from flext_meltano import (
+    FlextMeltanoSingerContext,
     FlextMeltanoSingerRecord,
     FlextMeltanoSingerStreamBase,
     FlextMeltanoSingerTapBase,
@@ -719,8 +720,8 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             @override
             def get_records(
                 self,
-                context: m.Meltano.SingerContext | None = None,
-            ) -> Iterable[m.Meltano.SingerRecord]:
+                context: FlextMeltanoSingerContext | None = None,
+            ) -> Iterable[FlextMeltanoSingerRecord]:
                 """Return a generator of record-type dictionary objects.
 
                 Args:
