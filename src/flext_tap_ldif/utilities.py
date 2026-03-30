@@ -23,15 +23,13 @@ from typing import NoReturn, TypeIs, override
 from flext_core import FlextLogger, r
 from flext_ldif import FlextLdifUtilities, ldif
 from flext_meltano import (
+    FlextMeltanoSingerRecord,
     FlextMeltanoSingerStreamBase,
     FlextMeltanoSingerTapBase,
     FlextMeltanoUtilities,
-    m,
 )
 
-from flext_tap_ldif import t
-from flext_tap_ldif.constants import c
-from flext_tap_ldif.models import m
+from flext_tap_ldif import c, m, t
 
 logger = FlextLogger(__name__)
 
@@ -417,14 +415,14 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         f"Missing required fields: {', '.join(missing_fields)}",
                     )
                 files = config["files"]
-                if not u.is_list(files):
+                if not FlextMeltanoUtilities.is_list(files):
                     return r[t.ContainerMapping].fail("Files must be a list")
                 if not files:
                     return r[t.ContainerMapping].fail(
                         "At least one file must be specified",
                     )
                 for file_path in files:
-                    if not u.is_type(file_path, str):
+                    if not FlextMeltanoUtilities.is_type(file_path, str):
                         return r[t.ContainerMapping].fail(
                             "File paths must be strings",
                         )
