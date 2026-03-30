@@ -23,11 +23,10 @@ from typing import NoReturn, TypeIs, override
 from flext_core import FlextLogger, r
 from flext_ldif import FlextLdifUtilities, ldif
 from flext_meltano import (
-    FlextMeltanoSingerContext,
-    FlextMeltanoSingerRecord,
     FlextMeltanoSingerStreamBase,
     FlextMeltanoSingerTapBase,
     FlextMeltanoUtilities,
+    m,
 )
 
 from flext_tap_ldif import t
@@ -722,8 +721,8 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             @override
             def get_records(
                 self,
-                context: FlextMeltanoSingerContext | None = None,
-            ) -> Iterable[FlextMeltanoSingerRecord]:
+                context: m.Meltano.SingerContext | None = None,
+            ) -> Iterable[m.Meltano.SingerRecord]:
                 """Return a generator of record-type dictionary objects.
 
                 Args:
@@ -773,8 +772,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     logger.info("Processing file: %s", file_path)
                     try:
                         for record in self._processor.process_file(file_path):
-                            singer_record: FlextMeltanoSingerRecord = dict(record)
-                            yield singer_record
+                            yield FlextMeltanoSingerRecord(record)
                     except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
                         if config.get("strict_parsing", True):
                             logger.exception("Error processing file %s", file_path)
