@@ -773,7 +773,8 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     logger.info("Processing file: %s", file_path)
                     try:
                         for record in self._processor.process_file(file_path):
-                            yield dict(record)
+                            singer_record: FlextMeltanoSingerRecord = dict(record)
+                            yield singer_record
                     except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
                         if config.get("strict_parsing", True):
                             logger.exception("Error processing file %s", file_path)
