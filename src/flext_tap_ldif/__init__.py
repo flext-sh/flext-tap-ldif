@@ -14,29 +14,10 @@ from typing import TYPE_CHECKING
 
 from flext_core.lazy import install_lazy_exports
 
-from flext_tap_ldif.__version__ import (
-    __author__,
-    __author_email__,
-    __description__,
-    __license__,
-    __title__,
-    __url__,
-    __version__,
-    __version_info__,
-)
+from flext_tap_ldif._models import _LAZY_IMPORTS as _CHILD_LAZY_0
 
 if TYPE_CHECKING:
-    from flext_ldif import *
-
-    from flext_tap_ldif import (
-        constants,
-        models,
-        protocols,
-        settings,
-        tap,
-        typings,
-        utilities,
-    )
+    from flext_tap_ldif.__version__ import *
     from flext_tap_ldif._models import *
     from flext_tap_ldif.constants import *
     from flext_tap_ldif.models import *
@@ -47,29 +28,27 @@ if TYPE_CHECKING:
     from flext_tap_ldif.utilities import *
 
 _LAZY_IMPORTS: Mapping[str, str | Sequence[str]] = {
+    **_CHILD_LAZY_0,
     "FlextTapLdif": "flext_tap_ldif.tap",
     "FlextTapLdifConstants": "flext_tap_ldif.constants",
     "FlextTapLdifModels": "flext_tap_ldif.models",
-    "FlextTapLdifModelsBase": "flext_tap_ldif._models.base",
-    "FlextTapLdifModelsBatch": "flext_tap_ldif._models.batch",
-    "FlextTapLdifModelsConfig": "flext_tap_ldif._models.config",
-    "FlextTapLdifModelsEntry": "flext_tap_ldif._models.entry",
-    "FlextTapLdifModelsFile": "flext_tap_ldif._models.file",
-    "FlextTapLdifModelsRecord": "flext_tap_ldif._models.record",
     "FlextTapLdifProtocols": "flext_tap_ldif.protocols",
     "FlextTapLdifSettings": "flext_tap_ldif.settings",
     "FlextTapLdifTypes": "flext_tap_ldif.typings",
     "FlextTapLdifUtilities": "flext_tap_ldif.utilities",
+    "__author__": "flext_tap_ldif.__version__",
+    "__author_email__": "flext_tap_ldif.__version__",
+    "__description__": "flext_tap_ldif.__version__",
+    "__license__": "flext_tap_ldif.__version__",
+    "__title__": "flext_tap_ldif.__version__",
+    "__url__": "flext_tap_ldif.__version__",
+    "__version__": "flext_tap_ldif.__version__",
+    "__version_info__": "flext_tap_ldif.__version__",
     "_models": "flext_tap_ldif._models",
-    "base": "flext_tap_ldif._models.base",
-    "batch": "flext_tap_ldif._models.batch",
     "c": ["flext_tap_ldif.constants", "FlextTapLdifConstants"],
-    "config": "flext_tap_ldif._models.config",
     "constants": "flext_tap_ldif.constants",
     "d": "flext_ldif",
     "e": "flext_ldif",
-    "entry": "flext_tap_ldif._models.entry",
-    "file": "flext_tap_ldif._models.file",
     "h": "flext_ldif",
     "logger": "flext_tap_ldif.tap",
     "m": ["flext_tap_ldif.models", "FlextTapLdifModels"],
@@ -78,7 +57,6 @@ _LAZY_IMPORTS: Mapping[str, str | Sequence[str]] = {
     "p": ["flext_tap_ldif.protocols", "FlextTapLdifProtocols"],
     "protocols": "flext_tap_ldif.protocols",
     "r": "flext_ldif",
-    "record": "flext_tap_ldif._models.record",
     "s": "flext_ldif",
     "settings": "flext_tap_ldif.settings",
     "t": ["flext_tap_ldif.typings", "FlextTapLdifTypes"],
@@ -90,4 +68,4 @@ _LAZY_IMPORTS: Mapping[str, str | Sequence[str]] = {
 }
 
 
-install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, sorted(_LAZY_IMPORTS))
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS)
