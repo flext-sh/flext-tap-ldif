@@ -15,8 +15,7 @@ from pydantic import (
     model_validator,
 )
 
-from flext_tap_ldif import t
-from flext_tap_ldif.constants import c
+from flext_tap_ldif import c, t
 
 
 class FlextTapLdifModelsBase:

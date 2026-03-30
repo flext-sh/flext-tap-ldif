@@ -20,7 +20,6 @@ if TYPE_CHECKING:
 
     from flext_tap_ldif import _models
     from flext_tap_ldif.__version__ import (
-        __all__,
         __author__,
         __author_email__,
         __description__,
@@ -79,7 +78,6 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "FlextTapLdifSettings": ["flext_tap_ldif.settings", "FlextTapLdifSettings"],
     "FlextTapLdifTypes": ["flext_tap_ldif.typings", "FlextTapLdifTypes"],
     "FlextTapLdifUtilities": ["flext_tap_ldif.utilities", "FlextTapLdifUtilities"],
-    "__all__": ["flext_tap_ldif.__version__", "__all__"],
     "__author__": ["flext_tap_ldif.__version__", "__author__"],
     "__author_email__": ["flext_tap_ldif.__version__", "__author_email__"],
     "__description__": ["flext_tap_ldif.__version__", "__description__"],
@@ -118,7 +116,6 @@ __all__ = [
     "FlextTapLdifSettings",
     "FlextTapLdifTypes",
     "FlextTapLdifUtilities",
-    "__all__",
     "__author__",
     "__author_email__",
     "__description__",

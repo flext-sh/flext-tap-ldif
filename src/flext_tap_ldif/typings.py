@@ -19,7 +19,7 @@ from collections.abc import Mapping, Sequence
 from flext_ldif import FlextLdifTypes
 from flext_meltano import FlextMeltanoTypes
 
-from flext_tap_ldif.constants import c
+from flext_tap_ldif import c
 
 
 class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):

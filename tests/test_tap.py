@@ -10,7 +10,7 @@ from __future__ import annotations
 import tempfile
 from pathlib import Path
 
-from flext_tap_ldif.tap import FlextTapLdif
+from flext_tap_ldif import FlextTapLdif
 
 
 def test_discover_streams() -> None:

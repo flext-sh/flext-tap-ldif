@@ -8,12 +8,14 @@ from __future__ import annotations
 from flext_ldif import FlextLdifModels
 from flext_meltano import FlextMeltanoModels
 
-from flext_tap_ldif._models.base import FlextTapLdifModelsBase
-from flext_tap_ldif._models.batch import FlextTapLdifModelsBatch
-from flext_tap_ldif._models.config import FlextTapLdifModelsConfig
-from flext_tap_ldif._models.entry import FlextTapLdifModelsEntry
-from flext_tap_ldif._models.file import FlextTapLdifModelsFile
-from flext_tap_ldif._models.record import FlextTapLdifModelsRecord
+from flext_tap_ldif import (
+    FlextTapLdifModelsBase,
+    FlextTapLdifModelsBatch,
+    FlextTapLdifModelsConfig,
+    FlextTapLdifModelsEntry,
+    FlextTapLdifModelsFile,
+    FlextTapLdifModelsRecord,
+)
 
 
 class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
