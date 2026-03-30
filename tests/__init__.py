@@ -13,66 +13,69 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping, MutableMapping, Sequence
+from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING
 
-from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
+from flext_core.lazy import install_lazy_exports
 
 if TYPE_CHECKING:
-    from flext_core import FlextTypes
-    from flext_tests import d, e, h, r, s, x
-
     from tests import (
-        conftest,
-        constants,
-        models,
-        protocols,
-        test_tap,
-        typings,
-        utilities,
+        conftest as conftest,
+        constants as constants,
+        models as models,
+        protocols as protocols,
+        test_tap as test_tap,
+        typings as typings,
+        utilities as utilities,
     )
     from tests.conftest import (
-        MockLDIFParser,
-        MockLDIFTap,
-        basic_tap_config,
-        benchmark_config,
-        binary_ldif_content,
-        binary_ldif_file,
-        changes_tap_config,
-        directory_tap_config,
-        docker_control,
-        filtered_tap_config,
-        invalid_ldif_content,
-        invalid_ldif_file,
-        large_ldif_file,
-        ldif_directory,
-        mock_ldif_parser,
-        mock_ldif_tap,
-        performance_tap_config,
-        pytest_configure,
-        sample_ldif_changes,
-        sample_ldif_changes_file,
-        sample_ldif_content,
-        sample_ldif_file,
-        set_test_environment,
-        shared_ldap_container,
-        singer_catalog_config,
-        singer_state,
-        utf16_ldif_file,
+        MockLDIFParser as MockLDIFParser,
+        MockLDIFTap as MockLDIFTap,
+        basic_tap_config as basic_tap_config,
+        benchmark_config as benchmark_config,
+        binary_ldif_content as binary_ldif_content,
+        binary_ldif_file as binary_ldif_file,
+        changes_tap_config as changes_tap_config,
+        directory_tap_config as directory_tap_config,
+        docker_control as docker_control,
+        filtered_tap_config as filtered_tap_config,
+        invalid_ldif_content as invalid_ldif_content,
+        invalid_ldif_file as invalid_ldif_file,
+        large_ldif_file as large_ldif_file,
+        ldif_directory as ldif_directory,
+        mock_ldif_parser as mock_ldif_parser,
+        mock_ldif_tap as mock_ldif_tap,
+        performance_tap_config as performance_tap_config,
+        pytest_configure as pytest_configure,
+        sample_ldif_changes as sample_ldif_changes,
+        sample_ldif_changes_file as sample_ldif_changes_file,
+        sample_ldif_content as sample_ldif_content,
+        sample_ldif_file as sample_ldif_file,
+        set_test_environment as set_test_environment,
+        shared_ldap_container as shared_ldap_container,
+        singer_catalog_config as singer_catalog_config,
+        singer_state as singer_state,
+        utf16_ldif_file as utf16_ldif_file,
     )
     from tests.constants import (
-        FlextTapLdifTestConstants,
+        FlextTapLdifTestConstants as FlextTapLdifTestConstants,
         FlextTapLdifTestConstants as c,
     )
-    from tests.models import FlextTapLdifTestModels, FlextTapLdifTestModels as m
+    from tests.models import (
+        FlextTapLdifTestModels as FlextTapLdifTestModels,
+        FlextTapLdifTestModels as m,
+    )
     from tests.protocols import (
-        FlextTapLdifTestProtocols,
+        FlextTapLdifTestProtocols as FlextTapLdifTestProtocols,
         FlextTapLdifTestProtocols as p,
     )
-    from tests.test_tap import test_discover_streams
-    from tests.typings import FlextTapLdifTestTypes, FlextTapLdifTestTypes as t
+    from tests.test_tap import test_discover_streams as test_discover_streams
+    from tests.typings import (
+        FlextTapLdifTestTypes as FlextTapLdifTestTypes,
+        FlextTapLdifTestTypes as t,
+    )
     from tests.utilities import (
-        FlextTapLdifTestUtilities,
+        FlextTapLdifTestUtilities as FlextTapLdifTestUtilities,
         FlextTapLdifTestUtilities as u,
     )
 
@@ -130,7 +133,7 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "x": ["flext_tests", "x"],
 }
 
-__all__ = [
+_EXPORTS: Sequence[str] = [
     "FlextTapLdifTestConstants",
     "FlextTapLdifTestModels",
     "FlextTapLdifTestProtocols",
@@ -185,41 +188,4 @@ __all__ = [
 ]
 
 
-_LAZY_CACHE: MutableMapping[str, FlextTypes.ModuleExport] = {}
-
-
-def __getattr__(name: str) -> FlextTypes.ModuleExport:
-    """Lazy-load module attributes on first access (PEP 562).
-
-    A local cache ``_LAZY_CACHE`` persists resolved objects across repeated
-    accesses during process lifetime.
-
-    Args:
-        name: Attribute name requested by dir()/import.
-
-    Returns:
-        Lazy-loaded module export type.
-
-    Raises:
-        AttributeError: If attribute not registered.
-
-    """
-    if name in _LAZY_CACHE:
-        return _LAZY_CACHE[name]
-
-    value = lazy_getattr(name, _LAZY_IMPORTS, globals(), __name__)
-    _LAZY_CACHE[name] = value
-    return value
-
-
-def __dir__() -> Sequence[str]:
-    """Return list of available attributes for dir() and autocomplete.
-
-    Returns:
-        List of public names from module exports.
-
-    """
-    return sorted(__all__)
-
-
-cleanup_submodule_namespace(__name__, _LAZY_IMPORTS)
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, _EXPORTS)

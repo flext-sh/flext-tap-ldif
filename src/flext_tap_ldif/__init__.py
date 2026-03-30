@@ -9,57 +9,85 @@ SPDX-License-Identifier: MIT.
 
 from __future__ import annotations
 
-from collections.abc import Mapping, MutableMapping, Sequence
+from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING
 
-from flext_core.lazy import cleanup_submodule_namespace, lazy_getattr
+from flext_core.lazy import install_lazy_exports
 
 from flext_tap_ldif.__version__ import (
-    __author__,
-    __author_email__,
-    __description__,
-    __license__,
-    __title__,
-    __url__,
-    __version__,
-    __version_info__,
+    __author__ as __author__,
+    __author_email__ as __author_email__,
+    __description__ as __description__,
+    __license__ as __license__,
+    __title__ as __title__,
+    __url__ as __url__,
+    __version__ as __version__,
+    __version_info__ as __version_info__,
 )
 
 if TYPE_CHECKING:
-    from flext_core import FlextTypes
     from flext_ldif import d, e, h, r, s, x
 
     from flext_tap_ldif import (
-        _models,
-        constants,
-        models,
-        protocols,
-        settings,
-        tap,
-        typings,
-        utilities,
+        _models as _models,
+        constants as constants,
+        models as models,
+        protocols as protocols,
+        settings as settings,
+        tap as tap,
+        typings as typings,
+        utilities as utilities,
     )
-    from flext_tap_ldif._models import base, batch, config, entry, file, record
-    from flext_tap_ldif._models.base import FlextTapLdifModelsBase
-    from flext_tap_ldif._models.batch import FlextTapLdifModelsBatch
-    from flext_tap_ldif._models.config import FlextTapLdifModelsConfig
-    from flext_tap_ldif._models.entry import FlextTapLdifModelsEntry
-    from flext_tap_ldif._models.file import FlextTapLdifModelsFile
-    from flext_tap_ldif._models.record import FlextTapLdifModelsRecord
+    from flext_tap_ldif._models import (
+        base as base,
+        batch as batch,
+        config as config,
+        entry as entry,
+        file as file,
+        record as record,
+    )
+    from flext_tap_ldif._models.base import (
+        FlextTapLdifModelsBase as FlextTapLdifModelsBase,
+    )
+    from flext_tap_ldif._models.batch import (
+        FlextTapLdifModelsBatch as FlextTapLdifModelsBatch,
+    )
+    from flext_tap_ldif._models.config import (
+        FlextTapLdifModelsConfig as FlextTapLdifModelsConfig,
+    )
+    from flext_tap_ldif._models.entry import (
+        FlextTapLdifModelsEntry as FlextTapLdifModelsEntry,
+    )
+    from flext_tap_ldif._models.file import (
+        FlextTapLdifModelsFile as FlextTapLdifModelsFile,
+    )
+    from flext_tap_ldif._models.record import (
+        FlextTapLdifModelsRecord as FlextTapLdifModelsRecord,
+    )
     from flext_tap_ldif.constants import (
-        FlextTapLdifConstants,
+        FlextTapLdifConstants as FlextTapLdifConstants,
         FlextTapLdifConstants as c,
     )
-    from flext_tap_ldif.models import FlextTapLdifModels, FlextTapLdifModels as m
+    from flext_tap_ldif.models import (
+        FlextTapLdifModels as FlextTapLdifModels,
+        FlextTapLdifModels as m,
+    )
     from flext_tap_ldif.protocols import (
-        FlextTapLdifProtocols,
+        FlextTapLdifProtocols as FlextTapLdifProtocols,
         FlextTapLdifProtocols as p,
     )
-    from flext_tap_ldif.settings import FlextTapLdifSettings
-    from flext_tap_ldif.tap import FlextTapLdif, logger, main
-    from flext_tap_ldif.typings import FlextTapLdifTypes, FlextTapLdifTypes as t
+    from flext_tap_ldif.settings import FlextTapLdifSettings as FlextTapLdifSettings
+    from flext_tap_ldif.tap import (
+        FlextTapLdif as FlextTapLdif,
+        logger as logger,
+        main as main,
+    )
+    from flext_tap_ldif.typings import (
+        FlextTapLdifTypes as FlextTapLdifTypes,
+        FlextTapLdifTypes as t,
+    )
     from flext_tap_ldif.utilities import (
-        FlextTapLdifUtilities,
+        FlextTapLdifUtilities as FlextTapLdifUtilities,
         FlextTapLdifUtilities as u,
     )
 
@@ -68,23 +96,11 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "FlextTapLdifConstants": ["flext_tap_ldif.constants", "FlextTapLdifConstants"],
     "FlextTapLdifModels": ["flext_tap_ldif.models", "FlextTapLdifModels"],
     "FlextTapLdifModelsBase": ["flext_tap_ldif._models.base", "FlextTapLdifModelsBase"],
-    "FlextTapLdifModelsBatch": [
-        "flext_tap_ldif._models.batch",
-        "FlextTapLdifModelsBatch",
-    ],
-    "FlextTapLdifModelsConfig": [
-        "flext_tap_ldif._models.config",
-        "FlextTapLdifModelsConfig",
-    ],
-    "FlextTapLdifModelsEntry": [
-        "flext_tap_ldif._models.entry",
-        "FlextTapLdifModelsEntry",
-    ],
+    "FlextTapLdifModelsBatch": ["flext_tap_ldif._models.batch", "FlextTapLdifModelsBatch"],
+    "FlextTapLdifModelsConfig": ["flext_tap_ldif._models.config", "FlextTapLdifModelsConfig"],
+    "FlextTapLdifModelsEntry": ["flext_tap_ldif._models.entry", "FlextTapLdifModelsEntry"],
     "FlextTapLdifModelsFile": ["flext_tap_ldif._models.file", "FlextTapLdifModelsFile"],
-    "FlextTapLdifModelsRecord": [
-        "flext_tap_ldif._models.record",
-        "FlextTapLdifModelsRecord",
-    ],
+    "FlextTapLdifModelsRecord": ["flext_tap_ldif._models.record", "FlextTapLdifModelsRecord"],
     "FlextTapLdifProtocols": ["flext_tap_ldif.protocols", "FlextTapLdifProtocols"],
     "FlextTapLdifSettings": ["flext_tap_ldif.settings", "FlextTapLdifSettings"],
     "FlextTapLdifTypes": ["flext_tap_ldif.typings", "FlextTapLdifTypes"],
@@ -118,7 +134,7 @@ _LAZY_IMPORTS: Mapping[str, Sequence[str]] = {
     "x": ["flext_ldif", "x"],
 }
 
-__all__ = [
+_EXPORTS: Sequence[str] = [
     "FlextTapLdif",
     "FlextTapLdifConstants",
     "FlextTapLdifModels",
@@ -170,41 +186,4 @@ __all__ = [
 ]
 
 
-_LAZY_CACHE: MutableMapping[str, FlextTypes.ModuleExport] = {}
-
-
-def __getattr__(name: str) -> FlextTypes.ModuleExport:
-    """Lazy-load module attributes on first access (PEP 562).
-
-    A local cache ``_LAZY_CACHE`` persists resolved objects across repeated
-    accesses during process lifetime.
-
-    Args:
-        name: Attribute name requested by dir()/import.
-
-    Returns:
-        Lazy-loaded module export type.
-
-    Raises:
-        AttributeError: If attribute not registered.
-
-    """
-    if name in _LAZY_CACHE:
-        return _LAZY_CACHE[name]
-
-    value = lazy_getattr(name, _LAZY_IMPORTS, globals(), __name__)
-    _LAZY_CACHE[name] = value
-    return value
-
-
-def __dir__() -> Sequence[str]:
-    """Return list of available attributes for dir() and autocomplete.
-
-    Returns:
-        List of public names from module exports.
-
-    """
-    return sorted(__all__)
-
-
-cleanup_submodule_namespace(__name__, _LAZY_IMPORTS)
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, _EXPORTS)
