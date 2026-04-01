@@ -26,7 +26,7 @@ if _TYPE_CHECKING:
     from tests.constants import *
     from tests.models import *
     from tests.protocols import *
-    from tests.test_tap import *
+    from tests.test_tap import test_discover_streams
     from tests.typings import *
     from tests.utilities import *
 
