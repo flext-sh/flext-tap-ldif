@@ -13,12 +13,13 @@ from flext_core.lazy import install_lazy_exports
 if _TYPE_CHECKING:
     from flext_core import FlextTypes
 
-    from flext_tap_ldif._models.base import *
-    from flext_tap_ldif._models.batch import *
-    from flext_tap_ldif._models.config import *
-    from flext_tap_ldif._models.entry import *
-    from flext_tap_ldif._models.file import *
-    from flext_tap_ldif._models.record import *
+    from flext_tap_ldif._models import base, batch, config, entry, file, record
+    from flext_tap_ldif._models.base import FlextTapLdifModelsBase
+    from flext_tap_ldif._models.batch import FlextTapLdifModelsBatch
+    from flext_tap_ldif._models.config import FlextTapLdifModelsConfig
+    from flext_tap_ldif._models.entry import FlextTapLdifModelsEntry
+    from flext_tap_ldif._models.file import FlextTapLdifModelsFile
+    from flext_tap_ldif._models.record import FlextTapLdifModelsRecord
 
 _LAZY_IMPORTS: Mapping[str, str | Sequence[str]] = {
     "FlextTapLdifModelsBase": "flext_tap_ldif._models.base",
