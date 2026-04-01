@@ -14,10 +14,21 @@ from typing import TYPE_CHECKING as _TYPE_CHECKING
 
 from flext_core.lazy import install_lazy_exports, merge_lazy_imports
 
+from flext_tap_ldif.__version__ import (
+    __author__,
+    __author_email__,
+    __description__,
+    __license__,
+    __title__,
+    __url__,
+    __version__,
+    __version_info__,
+)
+
 if _TYPE_CHECKING:
+    from flext_core import FlextTypes
     from flext_ldif import d, e, h, r, s, x
 
-    from flext_tap_ldif.__version__ import *
     from flext_tap_ldif._models import *
     from flext_tap_ldif.constants import *
     from flext_tap_ldif.models import *
@@ -37,14 +48,6 @@ _LAZY_IMPORTS: Mapping[str, str | Sequence[str]] = merge_lazy_imports(
         "FlextTapLdifSettings": "flext_tap_ldif.settings",
         "FlextTapLdifTypes": "flext_tap_ldif.typings",
         "FlextTapLdifUtilities": "flext_tap_ldif.utilities",
-        "__author__": "flext_tap_ldif.__version__",
-        "__author_email__": "flext_tap_ldif.__version__",
-        "__description__": "flext_tap_ldif.__version__",
-        "__license__": "flext_tap_ldif.__version__",
-        "__title__": "flext_tap_ldif.__version__",
-        "__url__": "flext_tap_ldif.__version__",
-        "__version__": "flext_tap_ldif.__version__",
-        "__version_info__": "flext_tap_ldif.__version__",
         "_models": "flext_tap_ldif._models",
         "c": ("flext_tap_ldif.constants", "FlextTapLdifConstants"),
         "constants": "flext_tap_ldif.constants",
@@ -70,4 +73,18 @@ _LAZY_IMPORTS: Mapping[str, str | Sequence[str]] = merge_lazy_imports(
 )
 
 
-install_lazy_exports(__name__, globals(), _LAZY_IMPORTS)
+install_lazy_exports(
+    __name__,
+    globals(),
+    _LAZY_IMPORTS,
+    [
+        "__author__",
+        "__author_email__",
+        "__description__",
+        "__license__",
+        "__title__",
+        "__url__",
+        "__version__",
+        "__version_info__",
+    ],
+)
