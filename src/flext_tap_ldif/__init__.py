@@ -26,7 +26,12 @@ from flext_tap_ldif.__version__ import (
 
 if _TYPE_CHECKING:
     from flext_core import FlextTypes
-    from flext_ldif import d, e, h, r, s, x
+    from flext_core.decorators import FlextDecorators as d
+    from flext_core.exceptions import FlextExceptions as e
+    from flext_core.handlers import FlextHandlers as h
+    from flext_core.mixins import FlextMixins as x
+    from flext_core.result import FlextResult as r
+    from flext_core.service import FlextService as s
     from flext_tap_ldif import (
         _models,
         api,
@@ -85,24 +90,24 @@ _LAZY_IMPORTS: FlextTypes.LazyImportIndex = merge_lazy_imports(
         "api": "flext_tap_ldif.api",
         "c": ("flext_tap_ldif.constants", "FlextTapLdifConstants"),
         "constants": "flext_tap_ldif.constants",
-        "d": "flext_ldif",
-        "e": "flext_ldif",
-        "h": "flext_ldif",
+        "d": ("flext_core.decorators", "FlextDecorators"),
+        "e": ("flext_core.exceptions", "FlextExceptions"),
+        "h": ("flext_core.handlers", "FlextHandlers"),
         "logger": "flext_tap_ldif.tap",
         "m": ("flext_tap_ldif.models", "FlextTapLdifModels"),
         "main": "flext_tap_ldif.tap",
         "models": "flext_tap_ldif.models",
         "p": ("flext_tap_ldif.protocols", "FlextTapLdifProtocols"),
         "protocols": "flext_tap_ldif.protocols",
-        "r": "flext_ldif",
-        "s": "flext_ldif",
+        "r": ("flext_core.result", "FlextResult"),
+        "s": ("flext_core.service", "FlextService"),
         "settings": "flext_tap_ldif.settings",
         "t": ("flext_tap_ldif.typings", "FlextTapLdifTypes"),
         "tap": "flext_tap_ldif.tap",
         "typings": "flext_tap_ldif.typings",
         "u": ("flext_tap_ldif.utilities", "FlextTapLdifUtilities"),
         "utilities": "flext_tap_ldif.utilities",
-        "x": "flext_ldif",
+        "x": ("flext_core.mixins", "FlextMixins"),
     },
 )
 
