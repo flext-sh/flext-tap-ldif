@@ -12,7 +12,6 @@ from flext_core.lazy import install_lazy_exports
 
 if _TYPE_CHECKING:
     from flext_core import FlextTypes
-
     from flext_tap_ldif._models import base, batch, config, entry, file, record
     from flext_tap_ldif._models.base import FlextTapLdifModelsBase
     from flext_tap_ldif._models.batch import FlextTapLdifModelsBatch
@@ -21,7 +20,7 @@ if _TYPE_CHECKING:
     from flext_tap_ldif._models.file import FlextTapLdifModelsFile
     from flext_tap_ldif._models.record import FlextTapLdifModelsRecord
 
-_LAZY_IMPORTS: Mapping[str, str | Sequence[str]] = {
+_LAZY_IMPORTS: FlextTypes.LazyImportIndex = {
     "FlextTapLdifModelsBase": "flext_tap_ldif._models.base",
     "FlextTapLdifModelsBatch": "flext_tap_ldif._models.batch",
     "FlextTapLdifModelsConfig": "flext_tap_ldif._models.config",

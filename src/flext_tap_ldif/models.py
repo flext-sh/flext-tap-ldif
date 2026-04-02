@@ -7,7 +7,6 @@ from __future__ import annotations
 
 from flext_ldif import FlextLdifModels
 from flext_meltano import FlextMeltanoModels
-
 from flext_tap_ldif import (
     FlextTapLdifModelsBase,
     FlextTapLdifModelsBatch,

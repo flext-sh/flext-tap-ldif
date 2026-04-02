@@ -29,7 +29,6 @@ from flext_meltano import (
     FlextMeltanoSingerTapBase,
     FlextMeltanoUtilities,
 )
-
 from flext_tap_ldif import c, m, t
 
 logger = FlextLogger(__name__)
@@ -182,9 +181,9 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             @staticmethod
             def build_record_from_lines(
                 entry_lines: t.StrSequence,
-            ) -> MutableMapping[str, str | t.StrSequence]:
+            ) -> t.MutableAttributeMapping:
                 """Build record dict from LDIF lines."""
-                record: MutableMapping[str, str | t.StrSequence] = {}
+                record: t.MutableAttributeMapping = {}
                 current_attr: str | None = None
                 current_value: str = ""
                 for line in entry_lines:
@@ -237,24 +236,24 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             @staticmethod
             def convert_ldif_entry_to_record(
                 entry_lines: t.StrSequence,
-            ) -> r[Mapping[str, str | t.StrSequence]]:
+            ) -> r[t.AttributeMapping]:
                 """Convert LDIF entry lines to Singer record.
 
                 Args:
                 entry_lines: List of LDIF lines for single entry
 
                 Returns:
-                r[Mapping[str, str | t.StrSequence]]: Singer record or error
+                r[t.AttributeMapping]: Singer record or error
 
                 """
                 try:
                     record = FlextTapLdifUtilities.TapLdif.LdifDataProcessing.build_record_from_lines(
                         entry_lines,
                     )
-                    out: Mapping[str, str | t.StrSequence] = dict(record)
-                    return r[Mapping[str, str | t.StrSequence]].ok(out)
+                    out: t.AttributeMapping = record
+                    return r[t.AttributeMapping].ok(out)
                 except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
-                    return r[Mapping[str, str | t.StrSequence]].fail(
+                    return r[t.AttributeMapping].fail(
                         f"Error converting LDIF entry: {e}",
                     )
 

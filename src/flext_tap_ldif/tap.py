@@ -12,7 +12,6 @@ from typing import ClassVar, override
 
 from flext_core import FlextConstants, FlextLogger
 from flext_meltano import FlextMeltanoSingerStreamBase, FlextMeltanoSingerTapBase
-
 from flext_tap_ldif import FlextTapLdifSettings, t, u
 
 logger = FlextLogger(__name__)

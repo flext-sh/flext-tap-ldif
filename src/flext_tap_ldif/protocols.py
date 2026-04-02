@@ -18,7 +18,6 @@ from typing import Protocol, runtime_checkable
 
 from flext_ldif import FlextLdifProtocols
 from flext_meltano import FlextMeltanoModels, FlextMeltanoProtocols
-
 from flext_tap_ldif import t
 
 

@@ -6,7 +6,6 @@ from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime
 from typing import Annotated, ClassVar, Self
 
-from flext_core import FlextConstants
 from pydantic import (
     BaseModel,
     ConfigDict,
@@ -15,6 +14,7 @@ from pydantic import (
     model_validator,
 )
 
+from flext_core import FlextConstants
 from flext_tap_ldif import t
 
 

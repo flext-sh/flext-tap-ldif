@@ -12,9 +12,7 @@ from __future__ import annotations
 from typing import override
 
 from flext_meltano import FlextMeltanoSingerTapBase, FlextMeltanoTapServiceBase
-
-from flext_tap_ldif import t
-from flext_tap_ldif.tap import FlextTapLdif
+from flext_tap_ldif import FlextTapLdif, t
 
 
 class FlextTapLdifService(FlextMeltanoTapServiceBase):

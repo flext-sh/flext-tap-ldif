@@ -7,7 +7,6 @@ from collections.abc import Mapping, MutableMapping
 from datetime import UTC, datetime
 from typing import Self
 
-from flext_core import u
 from pydantic import (
     FieldSerializationInfo,
     computed_field,
@@ -15,6 +14,7 @@ from pydantic import (
     model_validator,
 )
 
+from flext_core import u
 from flext_tap_ldif import c, t
 
 
