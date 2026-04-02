@@ -7,7 +7,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from enum import StrEnum, unique
 from typing import TYPE_CHECKING, ClassVar, Final
 
 from flext_ldif import FlextLdifConstants
@@ -87,50 +86,6 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
             DEFAULT_CHANGE_TYPE: Final[str] = "None"
             DEFAULT_LINE_NUMBER: Final[int] = 0
             DEFAULT_ENTRY_SIZE: Final[int] = 0
-
-        @unique
-        class ProjectType(StrEnum):
-            """Project type literals for tap package metadata."""
-
-            SINGER_TAP = "singer-tap"
-            LDIF_EXTRACTOR = "ldif-extractor"
-            DATA_EXTRACTOR = "data-extractor"
-            SINGER_TAP_LDIF = "singer-tap-ldif"
-            TAP_LDIF = "tap-ldif"
-            LDIF_CONNECTOR = "ldif-connector"
-            DATA_CONNECTOR = "data-connector"
-            SINGER_PROTOCOL = "singer-protocol"
-            LDIF_PROCESSOR = "ldif-processor"
-            FILE_EXTRACTOR = "file-extractor"
-            LDIF_PARSER = "ldif-parser"
-            SINGER_STREAM = "singer-stream"
-            ETL_TAP = "etl-tap"
-            DATA_PIPELINE = "data-pipeline"
-            LDIF_INTEGRATION = "ldif-integration"
-            SINGER_INTEGRATION = "singer-integration"
-
-        @unique
-        class TestLdifFilePath(StrEnum):
-            """Test LDIF file path literals."""
-
-            TMP_TEST_LDIF = "test.ldif"
-            TMP_SAMPLE_LDIF = "sample.ldif"
-
-        @unique
-        class TestLdifEncoding(StrEnum):
-            """Test LDIF encoding literals."""
-
-            UTF_8 = "utf-8"
-            ASCII = "ascii"
-            ISO_8859_1 = "iso-8859-1"
-
-        @unique
-        class TestObjectClass(StrEnum):
-            """Test t.NormalizedValue class literals."""
-
-            PERSON = "person"
-            ORGANIZATION = "organization"
-            GROUP_OF_NAMES = "groupOfNames"
 
 
 c = FlextTapLdifConstants

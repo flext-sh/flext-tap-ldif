@@ -11,7 +11,7 @@ from collections.abc import Mapping, Sequence
 
 from flext_tests import FlextTestsTypes
 
-from flext_tap_ldif import FlextTapLdifConstants as _c, FlextTapLdifTypes
+from flext_tap_ldif import FlextTapLdifTypes
 
 
 class FlextTapLdifTestTypes(FlextTestsTypes, FlextTapLdifTypes):
@@ -40,9 +40,6 @@ class FlextTapLdifTestTypes(FlextTestsTypes, FlextTapLdifTypes):
         - Test scenario types
         """
 
-        type TestLdifFilePath = _c.TapLdif.TestLdifFilePath
-        type TestLdifEncoding = _c.TapLdif.TestLdifEncoding
-        type TestObjectClass = _c.TapLdif.TestObjectClass
         type MockLdifEntry = Mapping[str, str | Mapping[str, t.StrSequence]]
         type MockLdifFile = Sequence[Mapping[str, str | Mapping[str, t.StrSequence]]]
         type TestLdifScenario = t.ContainerMapping
