@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import base64
-from collections.abc import Mapping, MutableMapping
 from datetime import UTC, datetime
 from typing import Self
 
@@ -90,12 +89,12 @@ class FlextTapLdifModelsBase:
     ) -> t.ContainerValue:
         """Add Singer LDIF tap metadata to all serialized fields."""
         if u.is_dict_like(value):
-            value_dict: Mapping[str, t.ContainerValue] = {}
+            value_dict: t.ContainerValueMapping = {}
             if isinstance(value, t.ConfigMap):
                 value_dict = {str(k): str(v) for k, v in value.root.items()}
             else:
                 value_dict = {str(k): str(v) for k, v in value.items()}
-            metadata_dict: MutableMapping[str, t.ContainerValue] = dict(value_dict)
+            metadata_dict: t.MutableContainerValueMapping = dict(value_dict)
             metadata_dict["_ldif_tap_metadata"] = {
                 "extraction_timestamp": datetime.now(UTC).isoformat(),
                 "tap_type": "ldif_file_extractor",
@@ -163,7 +162,7 @@ class FlextTapLdifModelsBase:
     @staticmethod
     def parse_dn(dn: str) -> t.StrMapping:
         """Parse Distinguished Name into components."""
-        components: MutableMapping[str, str] = {}
+        components: t.MutableStrMapping = {}
         parts = dn.split(",")
         for part in parts:
             if "=" in part:

@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping, Sequence
+from collections.abc import Sequence
 from typing import ClassVar, override
 
 from flext_core import FlextConstants, FlextLogger
@@ -52,7 +52,7 @@ class FlextTapLdif(FlextMeltanoSingerTapBase):
         """
         return [u.TapLdif.EntriesStream(tap=self)]
 
-    def _get_ldif_entries_schema(self) -> Mapping[str, t.ContainerValue]:
+    def _get_ldif_entries_schema(self) -> t.ContainerValueMapping:
         """Get the schema for LDIF entries stream.
 
         Returns:

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping, Sequence
+from collections.abc import Sequence
 from datetime import datetime
 from typing import Annotated, ClassVar, Self
 
@@ -217,7 +217,7 @@ class FlextTapLdifModelsFile:
 
         # Stream schema
         stream_schema: Annotated[
-            Mapping[str, t.ContainerValue],
+            t.ContainerValueMapping,
             Field(
                 description="JSON schema",
             ),

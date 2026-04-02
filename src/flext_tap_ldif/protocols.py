@@ -88,15 +88,15 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
 
             def extract_entries_by_filter(
                 self,
-                entries: Sequence[Mapping[str, t.ContainerValue]],
-                filter_criteria: Mapping[str, t.ContainerValue],
+                entries: Sequence[t.ContainerValueMapping],
+                filter_criteria: t.ContainerValueMapping,
             ) -> FlextMeltanoProtocols.Result[t.ContainerValueList]:
                 """Extract LDIF entries matching filter criteria."""
                 ...
 
             def extract_entry_attributes(
                 self,
-                entry: Mapping[str, t.ContainerValue],
+                entry: t.ContainerValueMapping,
                 attributes: t.StrSequence | None = None,
             ) -> FlextMeltanoProtocols.Result[t.Container]:
                 """Extract specific attributes from LDIF entry."""
@@ -115,7 +115,7 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
 
             def transform_ldif_to_singer(
                 self,
-                ldif_entry: Mapping[str, t.ContainerValue],
+                ldif_entry: t.ContainerValueMapping,
             ) -> FlextMeltanoProtocols.Result[
                 FlextMeltanoModels.Meltano.SingerRecordMessage
             ]:
@@ -128,8 +128,8 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
 
             def generate_streams_from_ldif(
                 self,
-                ldif_entries: Sequence[Mapping[str, t.ContainerValue]],
-                config: Mapping[str, t.ContainerValue],
+                ldif_entries: Sequence[t.ContainerValueMapping],
+                config: t.ContainerValueMapping,
             ) -> FlextMeltanoProtocols.Result[FlextMeltanoModels.Meltano.SingerCatalog]:
                 """Generate Singer streams from LDIF entries."""
                 ...
@@ -137,8 +137,8 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
             def sync_ldif_stream(
                 self,
                 stream_name: str,
-                ldif_entries: Sequence[Mapping[str, t.ContainerValue]],
-                state: Mapping[str, t.ContainerValue],
+                ldif_entries: Sequence[t.ContainerValueMapping],
+                state: t.ContainerValueMapping,
             ) -> FlextMeltanoProtocols.Result[
                 FlextMeltanoModels.Meltano.SingerStateMessage
             ]:

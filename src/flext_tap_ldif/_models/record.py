@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping, Sequence
+from collections.abc import Sequence
 from datetime import UTC, datetime
 from typing import Annotated, Self
 
@@ -24,7 +24,7 @@ class FlextTapLdifModelsRecord:
 
         stream: Annotated[str, Field(..., description="Source stream name")]
         record: Annotated[
-            Mapping[str, t.ContainerValue],
+            t.ContainerValueMapping,
             Field(
                 ...,
                 description="LDIF record data",

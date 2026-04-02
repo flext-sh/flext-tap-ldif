@@ -12,7 +12,6 @@ from collections.abc import (
     Generator,
     Iterable,
     Mapping,
-    MutableMapping,
     MutableSequence,
     Sequence,
 )
@@ -97,7 +96,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 file_path: Path to LDIF file
 
                 Returns:
-                r[Mapping[str, t.ContainerValue]]: Metadata dictionary or error
+                r[t.ContainerValueMapping]: Metadata dictionary or error
 
                 """
                 try:
@@ -333,7 +332,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 config: Configuration dictionary
 
                 Returns:
-                r[Mapping[str, t.ContainerValue]]: Validated config or error
+                r[t.ContainerValueMapping]: Validated config or error
 
                 """
                 required_fields = ["files"]
@@ -422,7 +421,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 file_path: Path to the file
 
                 Returns:
-                Mapping[str, t.ContainerValue]: File state
+                t.ContainerValueMapping: File state
 
                 """
                 files_raw = state.get("files")
@@ -449,7 +448,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 position: Current position
 
                 Returns:
-                Mapping[str, t.ContainerValue]: Updated state
+                t.ContainerValueMapping: Updated state
 
                 """
                 file_state = (
@@ -458,9 +457,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         file_path,
                     )
                 )
-                file_state_dict: MutableMapping[str, t.NormalizedValue] = dict(
-                    file_state
-                )
+                file_state_dict: t.MutableContainerMapping = dict(file_state)
                 file_state_dict["position"] = position
                 file_state_dict["last_updated"] = datetime.now(UTC).isoformat()
                 return FlextTapLdifUtilities.TapLdif.StateManagement.set_file_state(
@@ -484,17 +481,17 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 file_state: State data for the file
 
                 Returns:
-                Mapping[str, t.ContainerValue]: Updated state
+                t.ContainerValueMapping: Updated state
 
                 """
                 files_raw = state.get("files")
-                files_dict: MutableMapping[str, t.NormalizedValue] = {}
+                files_dict: t.MutableContainerMapping = {}
                 if isinstance(files_raw, Mapping):
                     for k, v in files_raw.items():
                         if isinstance(v, Mapping):
                             files_dict[k] = dict(v)
                 files_dict[file_path] = dict(file_state)
-                updated_state: MutableMapping[str, t.NormalizedValue] = dict(state)
+                updated_state: t.MutableContainerMapping = dict(state)
                 updated_state["files"] = files_dict
                 return updated_state
 
@@ -661,7 +658,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
                 """
                 _ = context
-                config: MutableMapping[str, t.ContainerValue] = dict(self._tap.config)
+                config: t.MutableContainerValueMapping = dict(self._tap.config)
                 dir_path_raw = config.get("directory_path")
                 dir_path = dir_path_raw if isinstance(dir_path_raw, str) else None
                 pattern_raw = config.get("file_pattern", "*.ldif")
