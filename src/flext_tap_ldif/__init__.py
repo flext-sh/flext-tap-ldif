@@ -31,6 +31,7 @@ if _TYPE_CHECKING:
 
     from flext_tap_ldif import (
         _models,
+        api,
         constants,
         models,
         protocols,
@@ -53,6 +54,7 @@ if _TYPE_CHECKING:
         file,
         record,
     )
+    from flext_tap_ldif.api import FlextTapLdifService
     from flext_tap_ldif.constants import (
         FlextTapLdifConstants,
         FlextTapLdifConstants as c,
@@ -77,10 +79,12 @@ _LAZY_IMPORTS: Mapping[str, str | Sequence[str]] = merge_lazy_imports(
         "FlextTapLdifConstants": "flext_tap_ldif.constants",
         "FlextTapLdifModels": "flext_tap_ldif.models",
         "FlextTapLdifProtocols": "flext_tap_ldif.protocols",
+        "FlextTapLdifService": "flext_tap_ldif.api",
         "FlextTapLdifSettings": "flext_tap_ldif.settings",
         "FlextTapLdifTypes": "flext_tap_ldif.typings",
         "FlextTapLdifUtilities": "flext_tap_ldif.utilities",
         "_models": "flext_tap_ldif._models",
+        "api": "flext_tap_ldif.api",
         "c": ("flext_tap_ldif.constants", "FlextTapLdifConstants"),
         "constants": "flext_tap_ldif.constants",
         "d": "flext_ldif",

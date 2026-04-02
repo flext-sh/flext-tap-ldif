@@ -50,82 +50,12 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
     """
 
     class TapLdif:
-        """Utility functions for LDIF data processing."""
+        """Utility functions for LDIF data processing.
 
-        @staticmethod
-        def create_record_message(
-            stream_name: str,
-            record: t.ConfigurationMapping,
-            time_extracted: datetime | None = None,
-        ) -> m.Meltano.SingerRecordMessage:
-            """Create Singer record message.
-
-            Args:
-            stream_name: Name of the stream
-            record: Record data
-            time_extracted: Timestamp when record was extracted
-
-            Returns:
-            Mapping[str, t.ContainerValue]: Singer record message
-
-            """
-            extracted_time = time_extracted or datetime.now(UTC)
-            return m.Meltano.SingerRecordMessage.model_validate({
-                "stream": stream_name,
-                "record": record,
-                "time_extracted": extracted_time.isoformat(),
-            })
-
-        @staticmethod
-        def create_schema_message(
-            stream_name: str,
-            schema: t.FlatContainerMapping,
-            key_properties: t.StrSequence | None = None,
-        ) -> m.Meltano.SingerSchemaMessage:
-            """Create Singer schema message.
-
-            Args:
-            stream_name: Name of the stream
-            schema: JSON schema for the stream
-            key_properties: List of key property names
-
-            Returns:
-            Mapping[str, t.ContainerValue]: Singer schema message
-
-            """
-            return m.Meltano.SingerSchemaMessage.model_validate({
-                "stream": stream_name,
-                "schema": schema,
-                "key_properties": key_properties or [],
-            })
-
-        @staticmethod
-        def create_state_message(
-            state: t.ContainerMapping,
-        ) -> m.Meltano.SingerStateMessage:
-            """Create Singer state message from state data.
-
-            Args:
-            state: State bookmark payload
-
-            Returns:
-            SingerStateMessage model
-
-            """
-            return m.Meltano.SingerStateMessage.model_validate({"value": state})
-
-        @staticmethod
-        def write_message(
-            _message: m.Meltano.SingerSchemaMessage
-            | m.Meltano.SingerRecordMessage
-            | m.Meltano.SingerStateMessage,
-        ) -> None:
-            """Write Singer message to stdout.
-
-            Args:
-            message: Singer message to write
-
-            """
+        Singer protocol utilities (emit_schema, emit_record, emit_state,
+        process_stdin, build_catalog_entry) are in the parent:
+        ``u.Meltano.Singer.*`` — accessed via MRO, never duplicated here.
+        """
 
         class LdifFileProcessing:
             """LDIF file processing utilities."""
@@ -802,76 +732,6 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         c.TapLdif.EntrySchema.ENTRY_SIZE_FIELD: {"type": "integer"},
                     },
                 }
-
-    @classmethod
-    def convert_ldif_entry_to_record(
-        cls,
-        entry_lines: t.StrSequence,
-    ) -> r[Mapping[str, str | t.StrSequence]]:
-        """Proxy method for LdifDataProcessing.convert_ldif_entry_to_record()."""
-        return cls.TapLdif.LdifDataProcessing.convert_ldif_entry_to_record(entry_lines)
-
-    @classmethod
-    def count_ldif_entries(cls, file_path: Path) -> r[int]:
-        """Proxy method for LdifFileProcessing.count_ldif_entries()."""
-        return cls.TapLdif.LdifFileProcessing.count_ldif_entries(file_path)
-
-    @classmethod
-    def create_record_message(
-        cls,
-        stream_name: str,
-        record: t.ConfigurationMapping,
-        time_extracted: datetime | None = None,
-    ) -> m.Meltano.SingerRecordMessage:
-        """Proxy method for SingerUtilities.create_record_message()."""
-        return cls.TapLdif.create_record_message(stream_name, record, time_extracted)
-
-    @classmethod
-    def create_schema_message(
-        cls,
-        stream_name: str,
-        schema: t.FlatContainerMapping,
-        key_properties: t.StrSequence | None = None,
-    ) -> m.Meltano.SingerSchemaMessage:
-        """Proxy method for SingerUtilities.create_schema_message()."""
-        return cls.TapLdif.create_schema_message(stream_name, schema, key_properties)
-
-    @classmethod
-    def get_file_state(
-        cls,
-        state: t.ContainerMapping,
-        file_path: str,
-    ) -> t.ContainerMapping:
-        """Proxy method for StateManagement.get_file_state()."""
-        return cls.TapLdif.StateManagement.get_file_state(state, file_path)
-
-    @classmethod
-    def parse_ldif_line(cls, line: str) -> r[tuple[str, str]]:
-        """Proxy method for LdifDataProcessing.parse_ldif_line()."""
-        return cls.TapLdif.LdifDataProcessing.parse_ldif_line(line)
-
-    @classmethod
-    def set_file_position(
-        cls,
-        state: t.ContainerMapping,
-        file_path: str,
-        position: int,
-    ) -> t.ContainerMapping:
-        """Proxy method for StateManagement.set_file_position()."""
-        return cls.TapLdif.StateManagement.set_file_position(state, file_path, position)
-
-    @classmethod
-    def validate_ldif_config(
-        cls,
-        config: t.ContainerMapping,
-    ) -> r[t.ContainerMapping]:
-        """Proxy method for ConfigValidation.validate_ldif_config()."""
-        return cls.TapLdif.ConfigValidation.validate_ldif_config(config)
-
-    @classmethod
-    def validate_ldif_file(cls, file_path: Path) -> r[bool]:
-        """Proxy method for LdifFileProcessing.validate_ldif_file()."""
-        return cls.TapLdif.LdifFileProcessing.validate_ldif_file(file_path)
 
 
 u = FlextTapLdifUtilities
