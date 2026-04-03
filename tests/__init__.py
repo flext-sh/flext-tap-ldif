@@ -7,117 +7,32 @@ from __future__ import annotations
 
 import typing as _t
 
-from flext_core.decorators import FlextDecorators as d
-from flext_core.exceptions import FlextExceptions as e
-from flext_core.handlers import FlextHandlers as h
 from flext_core.lazy import install_lazy_exports
-from flext_core.mixins import FlextMixins as x
-from flext_core.result import FlextResult as r
-from flext_core.service import FlextService as s
-from tests.conftest import (
-    MockLDIFParser,
-    MockLDIFTap,
-    basic_tap_config,
-    benchmark_config,
-    binary_ldif_content,
-    binary_ldif_file,
-    changes_tap_config,
-    directory_tap_config,
-    docker_control,
-    filtered_tap_config,
-    invalid_ldif_content,
-    invalid_ldif_file,
-    large_ldif_file,
-    ldif_directory,
-    mock_ldif_parser,
-    mock_ldif_tap,
-    performance_tap_config,
-    pytest_configure,
-    sample_ldif_changes,
-    sample_ldif_changes_file,
-    sample_ldif_content,
-    sample_ldif_file,
-    set_test_environment,
-    shared_ldap_container,
-    singer_catalog_config,
-    singer_state,
-    utf16_ldif_file,
-)
-from tests.constants import (
-    FlextTapLdifTestConstants,
-    FlextTapLdifTestConstants as c,
-)
-from tests.models import FlextTapLdifTestModels, FlextTapLdifTestModels as m
-from tests.protocols import (
-    FlextTapLdifTestProtocols,
-    FlextTapLdifTestProtocols as p,
-)
-from tests.test_tap import test_discover_streams
-from tests.typings import FlextTapLdifTestTypes, FlextTapLdifTestTypes as t
-from tests.utilities import (
-    FlextTapLdifTestUtilities,
-    FlextTapLdifTestUtilities as u,
-)
 
 if _t.TYPE_CHECKING:
     import tests.conftest as _tests_conftest
 
     conftest = _tests_conftest
     import tests.constants as _tests_constants
-
-    constants = _tests_constants
-    import tests.models as _tests_models
-
-    models = _tests_models
-    import tests.protocols as _tests_protocols
-
-    protocols = _tests_protocols
-    import tests.test_tap as _tests_test_tap
-
-    test_tap = _tests_test_tap
-    import tests.typings as _tests_typings
-
-    typings = _tests_typings
-    import tests.utilities as _tests_utilities
-
-    utilities = _tests_utilities
-
-    _ = (
-        FlextTapLdifTestConstants,
-        FlextTapLdifTestModels,
-        FlextTapLdifTestProtocols,
-        FlextTapLdifTestTypes,
-        FlextTapLdifTestUtilities,
+    from tests.conftest import (
         MockLDIFParser,
         MockLDIFTap,
         basic_tap_config,
         benchmark_config,
         binary_ldif_content,
         binary_ldif_file,
-        c,
         changes_tap_config,
-        conftest,
-        constants,
-        d,
         directory_tap_config,
         docker_control,
-        e,
         filtered_tap_config,
-        h,
         invalid_ldif_content,
         invalid_ldif_file,
         large_ldif_file,
         ldif_directory,
-        m,
         mock_ldif_parser,
         mock_ldif_tap,
-        models,
-        p,
         performance_tap_config,
-        protocols,
         pytest_configure,
-        r,
-        s,
         sample_ldif_changes,
         sample_ldif_changes_file,
         sample_ldif_content,
@@ -126,14 +41,45 @@ if _t.TYPE_CHECKING:
         shared_ldap_container,
         singer_catalog_config,
         singer_state,
-        t,
-        test_discover_streams,
-        test_tap,
-        typings,
-        u,
         utf16_ldif_file,
-        utilities,
-        x,
+    )
+
+    constants = _tests_constants
+    import tests.models as _tests_models
+    from tests.constants import (
+        FlextTapLdifTestConstants,
+        FlextTapLdifTestConstants as c,
+    )
+
+    models = _tests_models
+    import tests.protocols as _tests_protocols
+    from tests.models import FlextTapLdifTestModels, FlextTapLdifTestModels as m
+
+    protocols = _tests_protocols
+    import tests.test_tap as _tests_test_tap
+    from tests.protocols import (
+        FlextTapLdifTestProtocols,
+        FlextTapLdifTestProtocols as p,
+    )
+
+    test_tap = _tests_test_tap
+    import tests.typings as _tests_typings
+    from tests.test_tap import test_discover_streams
+
+    typings = _tests_typings
+    import tests.utilities as _tests_utilities
+    from tests.typings import FlextTapLdifTestTypes, FlextTapLdifTestTypes as t
+
+    utilities = _tests_utilities
+    from flext_core.decorators import FlextDecorators as d
+    from flext_core.exceptions import FlextExceptions as e
+    from flext_core.handlers import FlextHandlers as h
+    from flext_core.mixins import FlextMixins as x
+    from flext_core.result import FlextResult as r
+    from flext_core.service import FlextService as s
+    from tests.utilities import (
+        FlextTapLdifTestUtilities,
+        FlextTapLdifTestUtilities as u,
     )
 _LAZY_IMPORTS = {
     "FlextTapLdifTestConstants": "tests.constants",

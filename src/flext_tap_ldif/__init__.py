@@ -7,86 +7,12 @@ from __future__ import annotations
 
 import typing as _t
 
-from flext_core.decorators import FlextDecorators as d
-from flext_core.exceptions import FlextExceptions as e
-from flext_core.handlers import FlextHandlers as h
 from flext_core.lazy import install_lazy_exports, merge_lazy_imports
-from flext_core.mixins import FlextMixins as x
-from flext_core.result import FlextResult as r
 from flext_tap_ldif.__version__ import *
-from flext_tap_ldif.__version__ import (
-    __author__,
-    __author_email__,
-    __description__,
-    __license__,
-    __title__,
-    __url__,
-    __version__,
-    __version_info__,
-)
 
 if _t.TYPE_CHECKING:
     import flext_tap_ldif._models as _flext_tap_ldif__models
-
-    _models = _flext_tap_ldif__models
-    import flext_tap_ldif._models.base as _flext_tap_ldif__models_base
-
-    base = _flext_tap_ldif__models_base
-    import flext_tap_ldif._models.batch as _flext_tap_ldif__models_batch
-
-    batch = _flext_tap_ldif__models_batch
-    import flext_tap_ldif._models.config as _flext_tap_ldif__models_config
-
-    config = _flext_tap_ldif__models_config
-    import flext_tap_ldif._models.entry as _flext_tap_ldif__models_entry
-
-    entry = _flext_tap_ldif__models_entry
-    import flext_tap_ldif._models.file as _flext_tap_ldif__models_file
-
-    file = _flext_tap_ldif__models_file
-    import flext_tap_ldif._models.record as _flext_tap_ldif__models_record
-
-    record = _flext_tap_ldif__models_record
-    import flext_tap_ldif.api as _flext_tap_ldif_api
-
-    api = _flext_tap_ldif_api
-    import flext_tap_ldif.constants as _flext_tap_ldif_constants
-
-    constants = _flext_tap_ldif_constants
-    import flext_tap_ldif.models as _flext_tap_ldif_models
-
-    models = _flext_tap_ldif_models
-    import flext_tap_ldif.protocols as _flext_tap_ldif_protocols
-
-    protocols = _flext_tap_ldif_protocols
-    import flext_tap_ldif.settings as _flext_tap_ldif_settings
-
-    settings = _flext_tap_ldif_settings
-    import flext_tap_ldif.tap as _flext_tap_ldif_tap
-
-    tap = _flext_tap_ldif_tap
-    import flext_tap_ldif.typings as _flext_tap_ldif_typings
-
-    typings = _flext_tap_ldif_typings
-    import flext_tap_ldif.utilities as _flext_tap_ldif_utilities
-
-    utilities = _flext_tap_ldif_utilities
-
-    _ = (
-        FlextTapLdif,
-        FlextTapLdifConstants,
-        FlextTapLdifModels,
-        FlextTapLdifModelsBase,
-        FlextTapLdifModelsBatch,
-        FlextTapLdifModelsConfig,
-        FlextTapLdifModelsEntry,
-        FlextTapLdifModelsFile,
-        FlextTapLdifModelsRecord,
-        FlextTapLdifProtocols,
-        FlextTapLdifService,
-        FlextTapLdifSettings,
-        FlextTapLdifTypes,
-        FlextTapLdifUtilities,
+    from flext_tap_ldif.__version__ import (
         __author__,
         __author_email__,
         __description__,
@@ -95,34 +21,78 @@ if _t.TYPE_CHECKING:
         __url__,
         __version__,
         __version_info__,
-        _models,
-        api,
-        base,
-        batch,
-        c,
-        config,
-        constants,
-        d,
-        e,
-        entry,
-        file,
-        h,
-        logger,
-        m,
-        main,
-        models,
-        p,
-        protocols,
-        r,
-        record,
-        s,
-        settings,
-        t,
-        tap,
-        typings,
-        u,
-        utilities,
-        x,
+    )
+
+    _models = _flext_tap_ldif__models
+    import flext_tap_ldif._models.base as _flext_tap_ldif__models_base
+
+    base = _flext_tap_ldif__models_base
+    import flext_tap_ldif._models.batch as _flext_tap_ldif__models_batch
+    from flext_tap_ldif._models.base import FlextTapLdifModelsBase
+
+    batch = _flext_tap_ldif__models_batch
+    import flext_tap_ldif._models.config as _flext_tap_ldif__models_config
+    from flext_tap_ldif._models.batch import FlextTapLdifModelsBatch
+
+    config = _flext_tap_ldif__models_config
+    import flext_tap_ldif._models.entry as _flext_tap_ldif__models_entry
+    from flext_tap_ldif._models.config import FlextTapLdifModelsConfig
+
+    entry = _flext_tap_ldif__models_entry
+    import flext_tap_ldif._models.file as _flext_tap_ldif__models_file
+    from flext_tap_ldif._models.entry import FlextTapLdifModelsEntry
+
+    file = _flext_tap_ldif__models_file
+    import flext_tap_ldif._models.record as _flext_tap_ldif__models_record
+    from flext_tap_ldif._models.file import FlextTapLdifModelsFile
+
+    record = _flext_tap_ldif__models_record
+    import flext_tap_ldif.api as _flext_tap_ldif_api
+    from flext_tap_ldif._models.record import FlextTapLdifModelsRecord
+
+    api = _flext_tap_ldif_api
+    import flext_tap_ldif.constants as _flext_tap_ldif_constants
+    from flext_tap_ldif.api import FlextTapLdifService, FlextTapLdifService as s
+
+    constants = _flext_tap_ldif_constants
+    import flext_tap_ldif.models as _flext_tap_ldif_models
+    from flext_tap_ldif.constants import (
+        FlextTapLdifConstants,
+        FlextTapLdifConstants as c,
+    )
+
+    models = _flext_tap_ldif_models
+    import flext_tap_ldif.protocols as _flext_tap_ldif_protocols
+    from flext_tap_ldif.models import FlextTapLdifModels, FlextTapLdifModels as m
+
+    protocols = _flext_tap_ldif_protocols
+    import flext_tap_ldif.settings as _flext_tap_ldif_settings
+    from flext_tap_ldif.protocols import (
+        FlextTapLdifProtocols,
+        FlextTapLdifProtocols as p,
+    )
+
+    settings = _flext_tap_ldif_settings
+    import flext_tap_ldif.tap as _flext_tap_ldif_tap
+    from flext_tap_ldif.settings import FlextTapLdifSettings
+
+    tap = _flext_tap_ldif_tap
+    import flext_tap_ldif.typings as _flext_tap_ldif_typings
+    from flext_tap_ldif.tap import FlextTapLdif, logger, main
+
+    typings = _flext_tap_ldif_typings
+    import flext_tap_ldif.utilities as _flext_tap_ldif_utilities
+    from flext_tap_ldif.typings import FlextTapLdifTypes, FlextTapLdifTypes as t
+
+    utilities = _flext_tap_ldif_utilities
+    from flext_core.decorators import FlextDecorators as d
+    from flext_core.exceptions import FlextExceptions as e
+    from flext_core.handlers import FlextHandlers as h
+    from flext_core.mixins import FlextMixins as x
+    from flext_core.result import FlextResult as r
+    from flext_tap_ldif.utilities import (
+        FlextTapLdifUtilities,
+        FlextTapLdifUtilities as u,
     )
 _LAZY_IMPORTS = merge_lazy_imports(
     ("flext_tap_ldif._models",),
