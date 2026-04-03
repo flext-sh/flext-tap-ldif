@@ -9,17 +9,7 @@ from collections.abc import Mapping, Sequence
 from typing import TYPE_CHECKING as _TYPE_CHECKING
 
 from flext_core.lazy import install_lazy_exports, merge_lazy_imports
-from flext_tap_ldif.__version__ import (
-    __all__,
-    __author__,
-    __author_email__,
-    __description__,
-    __license__,
-    __title__,
-    __url__,
-    __version__,
-    __version_info__,
-)
+from flext_tap_ldif.__version__ import *
 
 if _TYPE_CHECKING:
     from flext_core import FlextTypes
@@ -32,19 +22,23 @@ if _TYPE_CHECKING:
     from flext_tap_ldif import (
         _models,
         api,
-        base,
-        batch,
-        config,
         constants,
-        entry,
-        file,
         models,
         protocols,
-        record,
         settings,
         tap,
         typings,
         utilities,
+    )
+    from flext_tap_ldif.__version__ import (
+        __author__,
+        __author_email__,
+        __description__,
+        __license__,
+        __title__,
+        __url__,
+        __version__,
+        __version_info__,
     )
     from flext_tap_ldif._models import (
         FlextTapLdifModelsBase,
@@ -53,6 +47,12 @@ if _TYPE_CHECKING:
         FlextTapLdifModelsEntry,
         FlextTapLdifModelsFile,
         FlextTapLdifModelsRecord,
+        base,
+        batch,
+        config,
+        entry,
+        file,
+        record,
     )
     from flext_tap_ldif.api import FlextTapLdifService
     from flext_tap_ldif.constants import (
@@ -65,12 +65,11 @@ if _TYPE_CHECKING:
         FlextTapLdifProtocols as p,
     )
     from flext_tap_ldif.settings import FlextTapLdifSettings
-    from flext_tap_ldif.tap import FlextTapLdif
+    from flext_tap_ldif.tap import FlextTapLdif, logger, main
     from flext_tap_ldif.typings import FlextTapLdifTypes, FlextTapLdifTypes as t
     from flext_tap_ldif.utilities import (
         FlextTapLdifUtilities,
         FlextTapLdifUtilities as u,
-        logger,
     )
 
 _LAZY_IMPORTS: FlextTypes.LazyImportIndex = merge_lazy_imports(
@@ -84,25 +83,28 @@ _LAZY_IMPORTS: FlextTypes.LazyImportIndex = merge_lazy_imports(
         "FlextTapLdifSettings": "flext_tap_ldif.settings",
         "FlextTapLdifTypes": "flext_tap_ldif.typings",
         "FlextTapLdifUtilities": "flext_tap_ldif.utilities",
+        "__author__": "flext_tap_ldif.__version__",
+        "__author_email__": "flext_tap_ldif.__version__",
+        "__description__": "flext_tap_ldif.__version__",
+        "__license__": "flext_tap_ldif.__version__",
+        "__title__": "flext_tap_ldif.__version__",
+        "__url__": "flext_tap_ldif.__version__",
+        "__version__": "flext_tap_ldif.__version__",
+        "__version_info__": "flext_tap_ldif.__version__",
         "_models": "flext_tap_ldif._models",
         "api": "flext_tap_ldif.api",
-        "base": "flext_tap_ldif.base",
-        "batch": "flext_tap_ldif.batch",
         "c": ("flext_tap_ldif.constants", "FlextTapLdifConstants"),
-        "config": "flext_tap_ldif.config",
         "constants": "flext_tap_ldif.constants",
         "d": ("flext_core.decorators", "FlextDecorators"),
         "e": ("flext_core.exceptions", "FlextExceptions"),
-        "entry": "flext_tap_ldif.entry",
-        "file": "flext_tap_ldif.file",
         "h": ("flext_core.handlers", "FlextHandlers"),
-        "logger": "flext_tap_ldif.utilities",
+        "logger": "flext_tap_ldif.tap",
         "m": ("flext_tap_ldif.models", "FlextTapLdifModels"),
+        "main": "flext_tap_ldif.tap",
         "models": "flext_tap_ldif.models",
         "p": ("flext_tap_ldif.protocols", "FlextTapLdifProtocols"),
         "protocols": "flext_tap_ldif.protocols",
         "r": ("flext_core.result", "FlextResult"),
-        "record": "flext_tap_ldif.record",
         "s": ("flext_core.service", "FlextService"),
         "settings": "flext_tap_ldif.settings",
         "t": ("flext_tap_ldif.typings", "FlextTapLdifTypes"),
@@ -115,19 +117,4 @@ _LAZY_IMPORTS: FlextTypes.LazyImportIndex = merge_lazy_imports(
 )
 
 
-install_lazy_exports(
-    __name__,
-    globals(),
-    _LAZY_IMPORTS,
-    [
-        "__all__",
-        "__author__",
-        "__author_email__",
-        "__description__",
-        "__license__",
-        "__title__",
-        "__url__",
-        "__version__",
-        "__version_info__",
-    ],
-)
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS)
