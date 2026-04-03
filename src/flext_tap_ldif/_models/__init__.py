@@ -5,22 +5,45 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping, Sequence
-from typing import TYPE_CHECKING as _TYPE_CHECKING
+import typing as _t
 
 from flext_core.lazy import install_lazy_exports
 
-if _TYPE_CHECKING:
-    from flext_core import FlextTypes
-    from flext_tap_ldif._models import base, batch, config, entry, file, record
-    from flext_tap_ldif._models.base import FlextTapLdifModelsBase
-    from flext_tap_ldif._models.batch import FlextTapLdifModelsBatch
-    from flext_tap_ldif._models.config import FlextTapLdifModelsConfig
-    from flext_tap_ldif._models.entry import FlextTapLdifModelsEntry
-    from flext_tap_ldif._models.file import FlextTapLdifModelsFile
-    from flext_tap_ldif._models.record import FlextTapLdifModelsRecord
+if _t.TYPE_CHECKING:
+    import flext_tap_ldif._models.base as _flext_tap_ldif__models_base
 
-_LAZY_IMPORTS: FlextTypes.LazyImportIndex = {
+    base = _flext_tap_ldif__models_base
+    import flext_tap_ldif._models.batch as _flext_tap_ldif__models_batch
+
+    batch = _flext_tap_ldif__models_batch
+    import flext_tap_ldif._models.config as _flext_tap_ldif__models_config
+
+    config = _flext_tap_ldif__models_config
+    import flext_tap_ldif._models.entry as _flext_tap_ldif__models_entry
+
+    entry = _flext_tap_ldif__models_entry
+    import flext_tap_ldif._models.file as _flext_tap_ldif__models_file
+
+    file = _flext_tap_ldif__models_file
+    import flext_tap_ldif._models.record as _flext_tap_ldif__models_record
+
+    record = _flext_tap_ldif__models_record
+
+    _ = (
+        FlextTapLdifModelsBase,
+        FlextTapLdifModelsBatch,
+        FlextTapLdifModelsConfig,
+        FlextTapLdifModelsEntry,
+        FlextTapLdifModelsFile,
+        FlextTapLdifModelsRecord,
+        base,
+        batch,
+        config,
+        entry,
+        file,
+        record,
+    )
+_LAZY_IMPORTS = {
     "FlextTapLdifModelsBase": "flext_tap_ldif._models.base",
     "FlextTapLdifModelsBatch": "flext_tap_ldif._models.batch",
     "FlextTapLdifModelsConfig": "flext_tap_ldif._models.config",
@@ -34,6 +57,21 @@ _LAZY_IMPORTS: FlextTypes.LazyImportIndex = {
     "file": "flext_tap_ldif._models.file",
     "record": "flext_tap_ldif._models.record",
 }
+
+__all__ = [
+    "FlextTapLdifModelsBase",
+    "FlextTapLdifModelsBatch",
+    "FlextTapLdifModelsConfig",
+    "FlextTapLdifModelsEntry",
+    "FlextTapLdifModelsFile",
+    "FlextTapLdifModelsRecord",
+    "base",
+    "batch",
+    "config",
+    "entry",
+    "file",
+    "record",
+]
 
 
 install_lazy_exports(__name__, globals(), _LAZY_IMPORTS)
