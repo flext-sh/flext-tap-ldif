@@ -1,4 +1,4 @@
-"""Configuration for FLEXT Tap LDIF using flext-core patterns.
+"""Configuration for FLEXT Tap LDIF using FlextSettings patterns.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -10,23 +10,41 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Annotated, ClassVar
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import Field
+from pydantic_settings import SettingsConfigDict
+
+from flext_core import FlextSettings
+from flext_tap_ldif import c
 
 
-class FlextTapLdifSettings(BaseModel):
+@FlextSettings.auto_register("tap-ldif")
+class FlextTapLdifSettings(FlextSettings):
     """Validated runtime settings for tap-ldif execution."""
 
-    model_config: ClassVar[ConfigDict] = ConfigDict(
+    model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(
+        env_prefix="FLEXT_TAP_LDIF_",
         extra="ignore",
         validate_assignment=True,
     )
 
     file_path: Annotated[str | None, Field(default=None)]
     directory_path: Annotated[str | None, Field(default=None)]
-    file_pattern: Annotated[str, Field(default="*.ldif")]
-    encoding: Annotated[str, Field(default="utf-8")]
-    strict_parsing: Annotated[bool, Field(default=True)]
-    max_file_size_mb: Annotated[int, Field(default=100, ge=1)]
+    file_pattern: Annotated[
+        str,
+        Field(default=c.TapLdif.DEFAULT_FILE_PATTERN),
+    ]
+    encoding: Annotated[
+        str,
+        Field(default=c.TapLdif.DEFAULT_LDIF_ENCODING),
+    ]
+    strict_parsing: Annotated[
+        bool,
+        Field(default=c.TapLdif.DEFAULT_STRICT_PARSING),
+    ]
+    max_file_size_mb: Annotated[
+        int,
+        Field(default=c.TapLdif.MAX_FILE_SIZE_MB, ge=1),
+    ]
 
     def normalized_file_path(self) -> Path | None:
         """Return `file_path` as `Path` when configured."""

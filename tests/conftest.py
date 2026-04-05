@@ -9,7 +9,16 @@ from pathlib import Path
 import pytest
 from flext_tests import tk
 
+from flext_tap_ldif import FlextTapLdifSettings
 from tests import t
+
+pytest_plugins = ["flext_tests.conftest_plugin"]
+
+
+@pytest.fixture
+def tap_ldif_settings() -> FlextTapLdifSettings:
+    """Provide clean FlextTapLdifSettings for tap-ldif tests."""
+    return FlextTapLdifSettings(debug=True)
 
 
 @pytest.fixture(scope="session")

@@ -29,6 +29,8 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
         """
 
         DEFAULT_LDIF_ENCODING: Final[str] = FlextLdifConstants.Ldif.Encoding.UTF8
+        DEFAULT_FILE_PATTERN: Final[str] = "*.ldif"
+        DEFAULT_STRICT_PARSING: Final[bool] = True
         SUPPORTED_ENCODINGS: ClassVar[frozenset[str]] = frozenset({
             FlextLdifConstants.Ldif.Encoding.UTF8,
             FlextLdifConstants.Ldif.Encoding.ASCII,
