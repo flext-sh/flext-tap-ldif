@@ -83,7 +83,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     return r[int].ok(entry_count)
                 except UnicodeDecodeError as e:
                     return r[int].fail(f"LDIF file encoding error: {e}")
-                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                     return r[int].fail(f"Error counting LDIF entries: {e}")
 
             @staticmethod
@@ -131,7 +131,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         "object_classes": list(object_classes),
                     }
                     return r[t.ContainerMapping].ok(metadata)
-                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                     return r[t.ContainerMapping].fail(
                         f"Error extracting LDIF metadata: {e}",
                     )
@@ -171,7 +171,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     return r[bool].ok(value=True)
                 except UnicodeDecodeError as e:
                     return r[bool].fail(f"LDIF file encoding error: {e}")
-                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                     return r[bool].fail(f"Error validating LDIF file: {e}")
 
         class LdifDataProcessing:
@@ -251,7 +251,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     )
                     out: t.AttributeMapping = record
                     return r[t.AttributeMapping].ok(out)
-                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                     return r[t.AttributeMapping].fail(
                         f"Error converting LDIF entry: {e}",
                     )
@@ -303,7 +303,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                                 attr_name.strip(),
                                 decoded_value,
                             ))
-                        except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
+                        except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                             return r[tuple[str, str]].fail(f"Base64 decode error: {e}")
                     if ":<" in line:
                         attr_name, url_value = line.split(":<", 1)
@@ -316,7 +316,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         attr_name.strip(),
                         value.strip(),
                     ))
-                except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                     return r[tuple[str, str]].fail(f"Error parsing LDIF line: {e}")
 
         class ConfigValidation:
@@ -614,7 +614,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                                     str(entry).encode("utf-8")
                                 ),
                             }
-                except c.Meltano.Singer.SAFE_EXCEPTIONS:
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS:
                     logger.exception("Failed to process LDIF file: %s", file_path)
                     if self.config.get("strict_parsing", True):
                         raise
@@ -698,7 +698,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     try:
                         for record in self._processor.process_file(file_path):
                             yield FlextMeltanoSingerRecord(record)
-                    except c.Meltano.Singer.SAFE_EXCEPTIONS as e:
+                    except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                         if config.get("strict_parsing", True):
                             logger.exception("Error processing file %s", file_path)
                             raise

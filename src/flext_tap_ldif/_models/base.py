@@ -151,7 +151,7 @@ class FlextTapLdifModelsBase:
         """Decode base64 encoded LDIF value."""
         try:
             return base64.b64decode(value).decode("utf-8")
-        except c.Meltano.Singer.SAFE_EXCEPTIONS:
+        except c.Meltano.SINGER_SAFE_EXCEPTIONS:
             return value
 
     @staticmethod
