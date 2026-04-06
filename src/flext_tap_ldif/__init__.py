@@ -32,7 +32,7 @@ if _t.TYPE_CHECKING:
 
     api = _flext_tap_ldif_api
     import flext_tap_ldif.constants as _flext_tap_ldif_constants
-    from flext_tap_ldif.api import FlextTapLdifService, FlextTapLdifService as s
+    from flext_tap_ldif.api import FlextTapLdifService, FlextTapLdifService as s, main
 
     constants = _flext_tap_ldif_constants
     import flext_tap_ldif.models as _flext_tap_ldif_models
@@ -58,7 +58,7 @@ if _t.TYPE_CHECKING:
 
     tap = _flext_tap_ldif_tap
     import flext_tap_ldif.typings as _flext_tap_ldif_typings
-    from flext_tap_ldif.tap import FlextTapLdif, logger, main
+    from flext_tap_ldif.tap import FlextTapLdif, logger
 
     typings = _flext_tap_ldif_typings
     import flext_tap_ldif.utilities as _flext_tap_ldif_utilities
@@ -102,7 +102,7 @@ _LAZY_IMPORTS = merge_lazy_imports(
         "h": ("flext_core.handlers", "FlextHandlers"),
         "logger": "flext_tap_ldif.tap",
         "m": ("flext_tap_ldif.models", "FlextTapLdifModels"),
-        "main": "flext_tap_ldif.tap",
+        "main": "flext_tap_ldif.api",
         "models": "flext_tap_ldif.models",
         "p": ("flext_tap_ldif.protocols", "FlextTapLdifProtocols"),
         "protocols": "flext_tap_ldif.protocols",

@@ -12,7 +12,7 @@ from typing import ClassVar, override
 
 from flext_core import FlextLogger
 from flext_meltano import FlextMeltanoSingerStreamBase, FlextMeltanoSingerTapBase
-from flext_tap_ldif import FlextTapLdifService, FlextTapLdifSettings, c, t, u
+from flext_tap_ldif import FlextTapLdifSettings, c, t, u
 
 logger = FlextLogger(__name__)
 
@@ -73,10 +73,7 @@ class FlextTapLdif(FlextMeltanoSingerTapBase):
         }
 
 
-def main() -> int:
-    """Run the tap entry point through the FLEXT service facade."""
-    return FlextTapLdifService.get_instance().cli_main()
-
-
 if __name__ == "__main__":
-    raise SystemExit(main())
+    from flext_tap_ldif.api import main as _main
+
+    raise SystemExit(_main())

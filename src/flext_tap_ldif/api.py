@@ -30,4 +30,9 @@ class FlextTapLdifService(FlextMeltanoTapServiceBase):
         return FlextMeltanoSingerTapAdapter(FlextTapLdif(config=raw_config))
 
 
-__all__ = ["FlextTapLdifService"]
+def main() -> int:
+    """Run the tap entry point through the FLEXT service facade."""
+    return FlextTapLdifService.get_instance().cli_main()
+
+
+__all__ = ["FlextTapLdifService", "main"]
