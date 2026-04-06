@@ -35,12 +35,24 @@ if _t.TYPE_CHECKING:
     record = _flext_tap_ldif__models_record
     from flext_tap_ldif._models.record import FlextTapLdifModelsRecord
 _LAZY_IMPORTS = {
-    "FlextTapLdifModelsBase": "flext_tap_ldif._models.base",
-    "FlextTapLdifModelsBatch": "flext_tap_ldif._models.batch",
-    "FlextTapLdifModelsConfig": "flext_tap_ldif._models.config",
-    "FlextTapLdifModelsEntry": "flext_tap_ldif._models.entry",
-    "FlextTapLdifModelsFile": "flext_tap_ldif._models.file",
-    "FlextTapLdifModelsRecord": "flext_tap_ldif._models.record",
+    "FlextTapLdifModelsBase": ("flext_tap_ldif._models.base", "FlextTapLdifModelsBase"),
+    "FlextTapLdifModelsBatch": (
+        "flext_tap_ldif._models.batch",
+        "FlextTapLdifModelsBatch",
+    ),
+    "FlextTapLdifModelsConfig": (
+        "flext_tap_ldif._models.config",
+        "FlextTapLdifModelsConfig",
+    ),
+    "FlextTapLdifModelsEntry": (
+        "flext_tap_ldif._models.entry",
+        "FlextTapLdifModelsEntry",
+    ),
+    "FlextTapLdifModelsFile": ("flext_tap_ldif._models.file", "FlextTapLdifModelsFile"),
+    "FlextTapLdifModelsRecord": (
+        "flext_tap_ldif._models.record",
+        "FlextTapLdifModelsRecord",
+    ),
     "base": "flext_tap_ldif._models.base",
     "batch": "flext_tap_ldif._models.batch",
     "config": "flext_tap_ldif._models.config",
