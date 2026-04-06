@@ -1,0 +1,29 @@
+src/flext_tap_ldif/api.py
+  d3ada1e5d497edb1 14,16,28
+src/flext_tap_ldif/protocols.py
+  d3ada1e5d497edb1 20,119,131,140
+src/flext_tap_ldif/tap.py
+  d3ada1e5d497edb1 40
+src/flext_tap_ldif/utilities.py
+  d3ada1e5d497edb1 648,660
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.5",
+  "base_commit_sha": "d99cea4cdfd41ce31f7afe46ca6c93628deccd86",
+  "prompts": {
+    "d3ada1e5d497edb1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7a3e077c-5cc8-4cbe-b4df-b55506e62047",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "FLEXT Bot",
+      "messages": [],
+      "total_additions": 42,
+      "total_deletions": 41,
+      "accepted_lines": 20,
+      "overriden_lines": 0
+    }
+  }
+}
