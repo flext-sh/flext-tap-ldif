@@ -11,8 +11,9 @@ from __future__ import annotations
 
 from typing import override
 
-from flext_meltano import FlextMeltanoSingerTapBase, FlextMeltanoTapServiceBase
-from flext_tap_ldif import FlextTapLdif, t
+from flext_meltano import FlextMeltanoTapServiceBase
+from flext_meltano.services.singer_sdk import FlextMeltanoSingerTapAdapter
+from flext_tap_ldif import FlextTapLdif, p, t
 
 
 class FlextTapLdifService(FlextMeltanoTapServiceBase):
@@ -24,9 +25,10 @@ class FlextTapLdifService(FlextMeltanoTapServiceBase):
     def create_tap_instance(
         self,
         config: t.ContainerMapping | None = None,
-    ) -> FlextMeltanoSingerTapBase:
-        """Create the FlextTapLdif singer_sdk.Tap instance."""
-        return FlextTapLdif()
+    ) -> p.Meltano.SingerTapInstance:
+        """Create the internal tap runtime backed by Singer SDK."""
+        raw_config = dict(config) if config is not None else None
+        return FlextMeltanoSingerTapAdapter(FlextTapLdif(config=raw_config))
 
 
 __all__ = ["FlextTapLdifService"]

@@ -17,7 +17,7 @@ from collections.abc import Mapping, Sequence
 from typing import Protocol, runtime_checkable
 
 from flext_ldif import FlextLdifProtocols
-from flext_meltano import FlextMeltanoModels, FlextMeltanoProtocols
+from flext_meltano import FlextMeltanoProtocols, m
 from flext_tap_ldif import t
 
 
@@ -116,9 +116,7 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
             def transform_ldif_to_singer(
                 self,
                 ldif_entry: t.ContainerValueMapping,
-            ) -> FlextMeltanoProtocols.Result[
-                FlextMeltanoModels.Meltano.SingerRecordMessage
-            ]:
+            ) -> FlextMeltanoProtocols.Result[m.Meltano.SingerRecordMessage]:
                 """Transform LDIF entry to Singer record format."""
                 ...
 
@@ -130,7 +128,7 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 self,
                 ldif_entries: Sequence[t.ContainerValueMapping],
                 config: t.ContainerValueMapping,
-            ) -> FlextMeltanoProtocols.Result[FlextMeltanoModels.Meltano.SingerCatalog]:
+            ) -> FlextMeltanoProtocols.Result[m.Meltano.SingerCatalog]:
                 """Generate Singer streams from LDIF entries."""
                 ...
 
@@ -139,9 +137,7 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
                 stream_name: str,
                 ldif_entries: Sequence[t.ContainerValueMapping],
                 state: t.ContainerValueMapping,
-            ) -> FlextMeltanoProtocols.Result[
-                FlextMeltanoModels.Meltano.SingerStateMessage
-            ]:
+            ) -> FlextMeltanoProtocols.Result[m.Meltano.SingerStateMessage]:
                 """Sync Singer stream from LDIF entries."""
                 ...
 

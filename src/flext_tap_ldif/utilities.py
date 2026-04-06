@@ -22,7 +22,6 @@ from typing import NoReturn, TypeIs, override
 from flext_core import FlextLogger, r
 from flext_ldif import FlextLdifUtilities, ldif
 from flext_meltano import (
-    FlextMeltanoSingerContext,
     FlextMeltanoSingerRecord,
     FlextMeltanoSingerStreamBase,
     FlextMeltanoSingerTapBase,
@@ -646,7 +645,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             @override
             def get_records(
                 self,
-                context: FlextMeltanoSingerContext | None = None,
+                context: t.ContainerMapping | None = None,
             ) -> Iterable[FlextMeltanoSingerRecord]:
                 """Return a generator of record-type dictionary objects.
 
@@ -658,7 +657,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
                 """
                 _ = context
-                config: t.MutableContainerValueMapping = dict(self._tap.config)
+                config: t.MutableContainerMapping = dict(self._tap.config.items())
                 dir_path_raw = config.get("directory_path")
                 dir_path = dir_path_raw if isinstance(dir_path_raw, str) else None
                 pattern_raw = config.get("file_pattern", "*.ldif")

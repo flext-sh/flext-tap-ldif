@@ -10,9 +10,9 @@ from __future__ import annotations
 from collections.abc import Sequence
 from typing import ClassVar, override
 
-from flext_core import FlextConstants, FlextLogger
+from flext_core import FlextLogger
 from flext_meltano import FlextMeltanoSingerStreamBase, FlextMeltanoSingerTapBase
-from flext_tap_ldif import FlextTapLdifSettings, t, u
+from flext_tap_ldif import FlextTapLdifService, FlextTapLdifSettings, c, t, u
 
 logger = FlextLogger(__name__)
 
@@ -37,7 +37,7 @@ class FlextTapLdif(FlextMeltanoSingerTapBase):
             "strict_parsing": {"type": "boolean", "default": True},
             "max_file_size_mb": {
                 "type": "integer",
-                "default": FlextConstants.MAX_FILE_SIZE // (1024 * 1024),
+                "default": c.MAX_FILE_SIZE // (1024 * 1024),
             },
         },
     }
@@ -73,10 +73,10 @@ class FlextTapLdif(FlextMeltanoSingerTapBase):
         }
 
 
-def main() -> None:
-    """Run the tap entry point."""
-    FlextTapLdif().cli()
+def main() -> int:
+    """Run the tap entry point through the FLEXT service facade."""
+    return FlextTapLdifService.get_instance().cli_main()
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
