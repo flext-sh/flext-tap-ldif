@@ -11,7 +11,7 @@ from collections.abc import Sequence
 from typing import ClassVar, override
 
 from flext_core import FlextLogger
-from flext_meltano.services.singer_sdk import (
+from flext_meltano import (
     Stream as FlextMeltanoSingerStreamBase,
     Tap as FlextMeltanoSingerTapBase,
 )
@@ -77,6 +77,6 @@ class FlextTapLdif(FlextMeltanoSingerTapBase):
 
 
 if __name__ == "__main__":
-    from flext_tap_ldif.api import main as _main
+    from flext_tap_ldif import main as _main
 
     raise SystemExit(_main())

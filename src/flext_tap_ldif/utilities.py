@@ -23,8 +23,6 @@ from flext_core import FlextLogger, r
 from flext_ldif import FlextLdifUtilities, ldif
 from flext_meltano import (
     FlextMeltanoUtilities,
-)
-from flext_meltano.services.singer_sdk import (
     Record as FlextMeltanoSingerRecord,
     Stream as FlextMeltanoSingerStreamBase,
     Tap as FlextMeltanoSingerTapBase,
