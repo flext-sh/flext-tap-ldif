@@ -26,12 +26,6 @@ _LAZY_IMPORTS = {
         "flext_tap_ldif._models.record",
         "FlextTapLdifModelsRecord",
     ),
-    "base": "flext_tap_ldif._models.base",
-    "batch": "flext_tap_ldif._models.batch",
-    "config": "flext_tap_ldif._models.config",
-    "entry": "flext_tap_ldif._models.entry",
-    "file": "flext_tap_ldif._models.file",
-    "record": "flext_tap_ldif._models.record",
 }
 
 

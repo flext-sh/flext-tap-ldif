@@ -16,18 +16,6 @@ if _t.TYPE_CHECKING:
     from flext_core.handlers import FlextHandlers as h
     from flext_core.mixins import FlextMixins as x
     from flext_core.result import FlextResult as r
-    from flext_tap_ldif import (
-        _models,
-        api,
-        cli,
-        constants,
-        models,
-        protocols,
-        settings,
-        tap,
-        typings,
-        utilities,
-    )
     from flext_tap_ldif._models.base import FlextTapLdifModelsBase
     from flext_tap_ldif._models.batch import FlextTapLdifModelsBatch
     from flext_tap_ldif._models.config import FlextTapLdifModelsConfig
@@ -72,26 +60,16 @@ _LAZY_IMPORTS = merge_lazy_imports(
         "__url__": ("flext_tap_ldif.__version__", "__url__"),
         "__version__": ("flext_tap_ldif.__version__", "__version__"),
         "__version_info__": ("flext_tap_ldif.__version__", "__version_info__"),
-        "_models": "flext_tap_ldif._models",
-        "api": "flext_tap_ldif.api",
         "c": ("flext_tap_ldif.constants", "FlextTapLdifConstants"),
-        "cli": "flext_tap_ldif.cli",
-        "constants": "flext_tap_ldif.constants",
         "d": ("flext_core.decorators", "FlextDecorators"),
         "e": ("flext_core.exceptions", "FlextExceptions"),
         "h": ("flext_core.handlers", "FlextHandlers"),
         "m": ("flext_tap_ldif.models", "FlextTapLdifModels"),
-        "models": "flext_tap_ldif.models",
         "p": ("flext_tap_ldif.protocols", "FlextTapLdifProtocols"),
-        "protocols": "flext_tap_ldif.protocols",
         "r": ("flext_core.result", "FlextResult"),
         "s": ("flext_tap_ldif.api", "FlextTapLdifService"),
-        "settings": "flext_tap_ldif.settings",
         "t": ("flext_tap_ldif.typings", "FlextTapLdifTypes"),
-        "tap": "flext_tap_ldif.tap",
-        "typings": "flext_tap_ldif.typings",
         "u": ("flext_tap_ldif.utilities", "FlextTapLdifUtilities"),
-        "utilities": "flext_tap_ldif.utilities",
         "x": ("flext_core.mixins", "FlextMixins"),
     },
 )
@@ -127,26 +105,16 @@ __all__ = [
     "__url__",
     "__version__",
     "__version_info__",
-    "_models",
-    "api",
     "c",
-    "cli",
-    "constants",
     "d",
     "e",
     "h",
     "m",
-    "models",
     "p",
-    "protocols",
     "r",
     "s",
-    "settings",
     "t",
-    "tap",
-    "typings",
     "u",
-    "utilities",
     "x",
 ]
 
