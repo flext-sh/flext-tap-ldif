@@ -9,7 +9,7 @@ _LAZY_IMPORTS = build_lazy_import_map(
     {
         ".base": ("FlextTapLdifModelsBase",),
         ".batch": ("FlextTapLdifModelsBatch",),
-        ".config": ("FlextTapLdifModelsConfig",),
+        ".config": ("FlextTapLdifModelsSettings",),
         ".entry": ("FlextTapLdifModelsEntry",),
         ".file": ("FlextTapLdifModelsFile",),
         ".record": ("FlextTapLdifModelsRecord",),

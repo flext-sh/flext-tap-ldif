@@ -10,7 +10,7 @@ from flext_meltano import FlextMeltanoModels
 from flext_tap_ldif import (
     FlextTapLdifModelsBase,
     FlextTapLdifModelsBatch,
-    FlextTapLdifModelsConfig,
+    FlextTapLdifModelsSettings,
     FlextTapLdifModelsEntry,
     FlextTapLdifModelsFile,
     FlextTapLdifModelsRecord,
@@ -37,7 +37,7 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
         FlextTapLdifModelsEntry,
         FlextTapLdifModelsFile,
         FlextTapLdifModelsBatch,
-        FlextTapLdifModelsConfig,
+        FlextTapLdifModelsSettings,
         FlextTapLdifModelsRecord,
     ):
         """TapLdif domain namespace composed from _models/ submodules."""

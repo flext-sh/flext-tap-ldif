@@ -16,7 +16,7 @@ from flext_core import FlextConstants
 from flext_tap_ldif import t
 
 
-class FlextTapLdifModelsConfig:
+class FlextTapLdifModelsSettings:
     """MRO mixin: LdifTapConfig model."""
 
     class LdifTapConfig(BaseModel):
