@@ -5,7 +5,11 @@ from __future__ import annotations
 
 import typing as _t
 
-from flext_core.lazy import install_lazy_exports, merge_lazy_imports
+from flext_core.lazy import (
+    build_lazy_import_map,
+    install_lazy_exports,
+    merge_lazy_imports,
+)
 from flext_tap_ldif.__version__ import *
 
 if _t.TYPE_CHECKING:
@@ -40,37 +44,45 @@ if _t.TYPE_CHECKING:
     )
 _LAZY_IMPORTS = merge_lazy_imports(
     ("._models",),
-    {
-        "FlextTapLdif": ".tap",
-        "FlextTapLdifCli": ".cli",
-        "FlextTapLdifConstants": ".constants",
-        "FlextTapLdifModels": ".models",
-        "FlextTapLdifProtocols": ".protocols",
-        "FlextTapLdifService": ".api",
-        "FlextTapLdifSettings": ".settings",
-        "FlextTapLdifTypes": ".typings",
-        "FlextTapLdifUtilities": ".utilities",
-        "__author__": ".__version__",
-        "__author_email__": ".__version__",
-        "__description__": ".__version__",
-        "__license__": ".__version__",
-        "__title__": ".__version__",
-        "__url__": ".__version__",
-        "__version__": ".__version__",
-        "__version_info__": ".__version__",
-        "c": (".constants", "FlextTapLdifConstants"),
-        "d": ("flext_core.decorators", "FlextDecorators"),
-        "e": ("flext_core.exceptions", "FlextExceptions"),
-        "h": ("flext_core.handlers", "FlextHandlers"),
-        "m": (".models", "FlextTapLdifModels"),
-        "main": ".cli",
-        "p": (".protocols", "FlextTapLdifProtocols"),
-        "r": ("flext_core.result", "FlextResult"),
-        "s": (".api", "FlextTapLdifService"),
-        "t": (".typings", "FlextTapLdifTypes"),
-        "u": (".utilities", "FlextTapLdifUtilities"),
-        "x": ("flext_core.mixins", "FlextMixins"),
-    },
+    build_lazy_import_map(
+        {
+            ".__version__": (
+                "__author__",
+                "__author_email__",
+                "__description__",
+                "__license__",
+                "__title__",
+                "__url__",
+                "__version__",
+                "__version_info__",
+            ),
+            ".api": ("FlextTapLdifService",),
+            ".cli": (
+                "FlextTapLdifCli",
+                "main",
+            ),
+            ".constants": ("FlextTapLdifConstants",),
+            ".models": ("FlextTapLdifModels",),
+            ".protocols": ("FlextTapLdifProtocols",),
+            ".settings": ("FlextTapLdifSettings",),
+            ".tap": ("FlextTapLdif",),
+            ".typings": ("FlextTapLdifTypes",),
+            ".utilities": ("FlextTapLdifUtilities",),
+        },
+        alias_groups={
+            ".api": (("s", "FlextTapLdifService"),),
+            ".constants": (("c", "FlextTapLdifConstants"),),
+            ".models": (("m", "FlextTapLdifModels"),),
+            ".protocols": (("p", "FlextTapLdifProtocols"),),
+            ".typings": (("t", "FlextTapLdifTypes"),),
+            ".utilities": (("u", "FlextTapLdifUtilities"),),
+            "flext_core.decorators": (("d", "FlextDecorators"),),
+            "flext_core.exceptions": (("e", "FlextExceptions"),),
+            "flext_core.handlers": (("h", "FlextHandlers"),),
+            "flext_core.mixins": (("x", "FlextMixins"),),
+            "flext_core.result": (("r", "FlextResult"),),
+        },
+    ),
     exclude_names=(
         "cleanup_submodule_namespace",
         "install_lazy_exports",

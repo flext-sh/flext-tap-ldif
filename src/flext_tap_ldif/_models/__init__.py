@@ -3,16 +3,18 @@
 
 from __future__ import annotations
 
-from flext_core.lazy import install_lazy_exports
+from flext_core.lazy import build_lazy_import_map, install_lazy_exports
 
-_LAZY_IMPORTS = {
-    "FlextTapLdifModelsBase": ".base",
-    "FlextTapLdifModelsBatch": ".batch",
-    "FlextTapLdifModelsConfig": ".config",
-    "FlextTapLdifModelsEntry": ".entry",
-    "FlextTapLdifModelsFile": ".file",
-    "FlextTapLdifModelsRecord": ".record",
-}
+_LAZY_IMPORTS = build_lazy_import_map(
+    {
+        ".base": ("FlextTapLdifModelsBase",),
+        ".batch": ("FlextTapLdifModelsBatch",),
+        ".config": ("FlextTapLdifModelsConfig",),
+        ".entry": ("FlextTapLdifModelsEntry",),
+        ".file": ("FlextTapLdifModelsFile",),
+        ".record": ("FlextTapLdifModelsRecord",),
+    },
+)
 
 
 install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, publish_all=False)
