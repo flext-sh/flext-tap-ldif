@@ -25,8 +25,12 @@ if _t.TYPE_CHECKING:
     )
 
     api = _flext_tap_ldif_api
+    import flext_tap_ldif.cli as _flext_tap_ldif_cli
+    from flext_tap_ldif.api import FlextTapLdifService, FlextTapLdifService as s
+
+    cli = _flext_tap_ldif_cli
     import flext_tap_ldif.constants as _flext_tap_ldif_constants
-    from flext_tap_ldif.api import FlextTapLdifService, FlextTapLdifService as s, main
+    from flext_tap_ldif.cli import FlextTapLdifCli
 
     constants = _flext_tap_ldif_constants
     import flext_tap_ldif.models as _flext_tap_ldif_models
@@ -52,7 +56,7 @@ if _t.TYPE_CHECKING:
 
     tap = _flext_tap_ldif_tap
     import flext_tap_ldif.typings as _flext_tap_ldif_typings
-    from flext_tap_ldif.tap import FlextTapLdif, logger
+    from flext_tap_ldif.tap import FlextTapLdif
 
     typings = _flext_tap_ldif_typings
     import flext_tap_ldif.utilities as _flext_tap_ldif_utilities
@@ -72,6 +76,7 @@ _LAZY_IMPORTS = merge_lazy_imports(
     ("flext_tap_ldif._models",),
     {
         "FlextTapLdif": ("flext_tap_ldif.tap", "FlextTapLdif"),
+        "FlextTapLdifCli": ("flext_tap_ldif.cli", "FlextTapLdifCli"),
         "FlextTapLdifConstants": ("flext_tap_ldif.constants", "FlextTapLdifConstants"),
         "FlextTapLdifModels": ("flext_tap_ldif.models", "FlextTapLdifModels"),
         "FlextTapLdifProtocols": ("flext_tap_ldif.protocols", "FlextTapLdifProtocols"),
@@ -90,13 +95,12 @@ _LAZY_IMPORTS = merge_lazy_imports(
         "_models": "flext_tap_ldif._models",
         "api": "flext_tap_ldif.api",
         "c": ("flext_tap_ldif.constants", "FlextTapLdifConstants"),
+        "cli": "flext_tap_ldif.cli",
         "constants": "flext_tap_ldif.constants",
         "d": ("flext_core.decorators", "FlextDecorators"),
         "e": ("flext_core.exceptions", "FlextExceptions"),
         "h": ("flext_core.handlers", "FlextHandlers"),
-        "logger": ("flext_tap_ldif.tap", "logger"),
         "m": ("flext_tap_ldif.models", "FlextTapLdifModels"),
-        "main": ("flext_tap_ldif.api", "main"),
         "models": "flext_tap_ldif.models",
         "p": ("flext_tap_ldif.protocols", "FlextTapLdifProtocols"),
         "protocols": "flext_tap_ldif.protocols",
@@ -114,12 +118,14 @@ _LAZY_IMPORTS = merge_lazy_imports(
 _ = _LAZY_IMPORTS.pop("cleanup_submodule_namespace", None)
 _ = _LAZY_IMPORTS.pop("install_lazy_exports", None)
 _ = _LAZY_IMPORTS.pop("lazy_getattr", None)
+_ = _LAZY_IMPORTS.pop("logger", None)
 _ = _LAZY_IMPORTS.pop("merge_lazy_imports", None)
 _ = _LAZY_IMPORTS.pop("output", None)
 _ = _LAZY_IMPORTS.pop("output_reporting", None)
 
 __all__ = [
     "FlextTapLdif",
+    "FlextTapLdifCli",
     "FlextTapLdifConstants",
     "FlextTapLdifModels",
     "FlextTapLdifModelsBase",
@@ -144,13 +150,12 @@ __all__ = [
     "_models",
     "api",
     "c",
+    "cli",
     "constants",
     "d",
     "e",
     "h",
-    "logger",
     "m",
-    "main",
     "models",
     "p",
     "protocols",

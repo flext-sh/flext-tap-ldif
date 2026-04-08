@@ -1,4 +1,4 @@
-"""Types for flext-tap-ldif tests - uses composition with FlextTestsTypes.
+"""Types for flext-tap-ldif tests - uses composition with TestsFlextTypes.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -14,19 +14,19 @@ from flext_tests import FlextTestsTypes
 from flext_tap_ldif import FlextTapLdifTypes
 
 
-class FlextTapLdifTestTypes(FlextTestsTypes, FlextTapLdifTypes):
-    """Types for flext-tap-ldif tests - uses composition with FlextTestsTypes.
+class TestsFlextTapLdifTypes(FlextTestsTypes, FlextTapLdifTypes):
+    """Types for flext-tap-ldif tests - uses composition with TestsFlextTypes.
 
-    Architecture: Uses composition (not inheritance) with FlextTestsTypes and FlextTapLdifTypes
+    Architecture: Uses composition (not inheritance) with TestsFlextTypes and FlextTapLdifTypes
     for flext-tap-ldif-specific type definitions.
 
     Access patterns:
-    - FlextTapLdifTestTypes.Tests.* = flext_tests test types (via composition)
-    - FlextTapLdifTestTypes.TapLdifTest.* = flext-tap-ldif-specific test types
-    - FlextTapLdifTestTypes.* = FlextTestsTypes types (via composition)
+    - TestsFlextTapLdifTypes.Tests.* = flext_tests test types (via composition)
+    - TestsFlextTapLdifTypes.TapLdifTest.* = flext-tap-ldif-specific test types
+    - TestsFlextTapLdifTypes.* = TestsFlextTypes types (via composition)
 
     Rules:
-    - Use composition, not inheritance (FlextTestsTypes deprecates subclassing)
+    - Use composition, not inheritance (TestsFlextTypes deprecates subclassing)
     - flext-tap-ldif-specific types go in TapLdifTest namespace
     - Generic types accessed via Tests namespace
     """
@@ -40,12 +40,22 @@ class FlextTapLdifTestTypes(FlextTestsTypes, FlextTapLdifTypes):
         - Test scenario types
         """
 
-        type MockLdifEntry = Mapping[str, str | Mapping[str, t.StrSequence]]
-        type MockLdifFile = Sequence[Mapping[str, str | Mapping[str, t.StrSequence]]]
-        type TestLdifScenario = t.ContainerMapping
-        type TestLdifValidationResult = Mapping[str, bool | str | t.StrSequence]
-        type TestLdifParsingResult = t.ContainerMapping
+        type MockLdifEntry = Mapping[
+            str,
+            str | Mapping[str, FlextTestsTypes.StrSequence],
+        ]
+        type MockLdifFile = Sequence[
+            Mapping[
+                str,
+                str | Mapping[str, FlextTestsTypes.StrSequence],
+            ]
+        ]
+        type TestLdifScenario = FlextTestsTypes.ContainerMapping
+        type TestLdifValidationResult = Mapping[
+            str, bool | str | FlextTestsTypes.StrSequence
+        ]
+        type TestLdifParsingResult = FlextTestsTypes.ContainerMapping
 
 
-t = FlextTapLdifTestTypes
-__all__ = ["FlextTapLdifTestTypes", "t"]
+t = TestsFlextTapLdifTypes
+__all__ = ["TestsFlextTapLdifTypes", "t"]

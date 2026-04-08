@@ -1,4 +1,4 @@
-"""Protocols for flext-tap-ldif tests - uses composition with FlextTestsProtocols.
+"""Protocols for flext-tap-ldif tests - uses composition with TestsFlextProtocols.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -16,19 +16,19 @@ from flext_tap_ldif import FlextTapLdifProtocols
 from tests import t
 
 
-class FlextTapLdifTestProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
-    """Protocols for flext-tap-ldif tests - combines FlextTestsProtocols with FlextTapLdifProtocols.
+class TestsFlextTapLdifProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
+    """Protocols for flext-tap-ldif tests - combines TestsFlextProtocols with FlextTapLdifProtocols.
 
-    Architecture: Uses composition (not inheritance) with FlextTestsProtocols and FlextTapLdifProtocols
+    Architecture: Uses composition (not inheritance) with TestsFlextProtocols and FlextTapLdifProtocols
     for flext-tap-ldif-specific protocol definitions.
 
     Access patterns:
-    - FlextTapLdifTestProtocols.Tests.* = flext_tests test protocols (via composition)
-    - FlextTapLdifTestProtocols.TapLdif.* = flext-tap-ldif-specific test protocols
-    - FlextTapLdifTestProtocols.* = FlextTestsProtocols protocols (via composition)
+    - TestsFlextTapLdifProtocols.Tests.* = flext_tests test protocols (via composition)
+    - TestsFlextTapLdifProtocols.TapLdif.* = flext-tap-ldif-specific test protocols
+    - TestsFlextTapLdifProtocols.* = TestsFlextProtocols protocols (via composition)
 
     Rules:
-    - Use composition, not inheritance (FlextTestsProtocols deprecates subclassing)
+    - Use composition, not inheritance (TestsFlextProtocols deprecates subclassing)
     - flext-tap-ldif-specific protocols go in TapLdif namespace
     - Generic protocols accessed via Tests namespace
     """
@@ -103,5 +103,5 @@ class FlextTapLdifTestProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
                 ...
 
 
-p = FlextTapLdifTestProtocols
-__all__ = ["FlextTapLdifTestProtocols", "p"]
+p = TestsFlextTapLdifProtocols
+__all__ = ["TestsFlextTapLdifProtocols", "p"]

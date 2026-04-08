@@ -17,7 +17,7 @@ from collections.abc import (
 )
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import NoReturn, TypeIs, override
+from typing import ClassVar, NoReturn, TypeIs, override
 
 from flext_core import FlextLogger, r
 from flext_ldif import FlextLdifUtilities, ldif
@@ -28,8 +28,6 @@ from flext_meltano import (
     Tap as FlextMeltanoSingerTapBase,
 )
 from flext_tap_ldif import c, m, t
-
-logger = FlextLogger(__name__)
 
 
 class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
@@ -45,6 +43,8 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
         c.DEFAULT_LDIF_ENCODING
         c.TapLdif.Format.MAX_LINE_LENGTH
     """
+
+    _logger: ClassVar[FlextLogger] = FlextLogger(__name__)
 
     class TapLdif:
         """Utility functions for LDIF data processing.
@@ -577,7 +577,10 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     Dictionary records representing LDIF entries.
 
                 """
-                logger.info("Processing LDIF file: %s", file_path)
+                FlextTapLdifUtilities._logger.info(
+                    "Processing LDIF file: %s",
+                    file_path,
+                )
                 try:
                     encoding = self.config.get("encoding", "utf-8")
                     match encoding:
@@ -614,7 +617,10 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                                 ),
                             }
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS:
-                    logger.exception("Failed to process LDIF file: %s", file_path)
+                    FlextTapLdifUtilities._logger.exception(
+                        "Failed to process LDIF file: %s",
+                        file_path,
+                    )
                     if self.config.get("strict_parsing", True):
                         raise
 
@@ -682,28 +688,40 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     error_msg = files_result.error or "LDIF file discovery failed"
                     if bool(config.get("strict_parsing", True)):
                         raise RuntimeError(error_msg)
-                    logger.error("File discovery failed: %s", error_msg)
+                    FlextTapLdifUtilities._logger.error(
+                        "File discovery failed: %s",
+                        error_msg,
+                    )
                     return
                 files_to_process = files_result.value or []
-                logger.info("Processing %d LDIF files", len(files_to_process))
+                FlextTapLdifUtilities._logger.info(
+                    "Processing %d LDIF files",
+                    len(files_to_process),
+                )
                 if not files_to_process:
                     error_msg = "No LDIF files discovered"
                     if bool(config.get("strict_parsing", True)):
                         raise RuntimeError(error_msg)
-                    logger.warning(error_msg)
+                    FlextTapLdifUtilities._logger.warning(error_msg)
                     return
                 for file_path in files_to_process:
-                    logger.info("Processing file: %s", file_path)
+                    FlextTapLdifUtilities._logger.info(
+                        "Processing file: %s",
+                        file_path,
+                    )
                     try:
                         for record in self._processor.process_file(file_path):
                             yield FlextMeltanoSingerRecord(record)
                     except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                         if config.get("strict_parsing", True):
-                            logger.exception("Error processing file %s", file_path)
+                            FlextTapLdifUtilities._logger.exception(
+                                "Error processing file %s",
+                                file_path,
+                            )
                             raise
                         else:
                             err_msg = str(e)
-                            logger.warning(
+                            FlextTapLdifUtilities._logger.warning(
                                 "Skipping file %s due to error: %s",
                                 file_path,
                                 err_msg,
@@ -730,8 +748,3 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
 
 u = FlextTapLdifUtilities
-
-__all__ = [
-    "FlextTapLdifUtilities",
-    "u",
-]

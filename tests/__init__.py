@@ -14,29 +14,23 @@ if _t.TYPE_CHECKING:
 
     conftest = _tests_conftest
     import tests.constants as _tests_constants
-    from tests.conftest import (
-        MockLDIFParser,
-        MockLDIFTap,
-        pytest_configure,
-        pytest_plugins,
-    )
 
     constants = _tests_constants
     import tests.models as _tests_models
     from tests.constants import (
-        FlextTapLdifTestConstants,
-        FlextTapLdifTestConstants as c,
+        TestsFlextTapLdifConstants,
+        TestsFlextTapLdifConstants as c,
     )
 
     models = _tests_models
     import tests.protocols as _tests_protocols
-    from tests.models import FlextTapLdifTestModels, FlextTapLdifTestModels as m
+    from tests.models import TestsFlextTapLdifModels, TestsFlextTapLdifModels as m
 
     protocols = _tests_protocols
     import tests.test_tap as _tests_test_tap
     from tests.protocols import (
-        FlextTapLdifTestProtocols,
-        FlextTapLdifTestProtocols as p,
+        TestsFlextTapLdifProtocols,
+        TestsFlextTapLdifProtocols as p,
     )
 
     test_tap = _tests_test_tap
@@ -44,7 +38,7 @@ if _t.TYPE_CHECKING:
 
     typings = _tests_typings
     import tests.utilities as _tests_utilities
-    from tests.typings import FlextTapLdifTestTypes, FlextTapLdifTestTypes as t
+    from tests.typings import TestsFlextTapLdifTypes, TestsFlextTapLdifTypes as t
 
     utilities = _tests_utilities
     from flext_core.decorators import FlextDecorators as d
@@ -54,47 +48,41 @@ if _t.TYPE_CHECKING:
     from flext_core.result import FlextResult as r
     from flext_core.service import FlextService as s
     from tests.utilities import (
-        FlextTapLdifTestUtilities,
-        FlextTapLdifTestUtilities as u,
+        TestsFlextTapLdifUtilities,
+        TestsFlextTapLdifUtilities as u,
     )
 _LAZY_IMPORTS = {
-    "FlextTapLdifTestConstants": ("tests.constants", "FlextTapLdifTestConstants"),
-    "FlextTapLdifTestModels": ("tests.models", "FlextTapLdifTestModels"),
-    "FlextTapLdifTestProtocols": ("tests.protocols", "FlextTapLdifTestProtocols"),
-    "FlextTapLdifTestTypes": ("tests.typings", "FlextTapLdifTestTypes"),
-    "FlextTapLdifTestUtilities": ("tests.utilities", "FlextTapLdifTestUtilities"),
-    "MockLDIFParser": ("tests.conftest", "MockLDIFParser"),
-    "MockLDIFTap": ("tests.conftest", "MockLDIFTap"),
-    "c": ("tests.constants", "FlextTapLdifTestConstants"),
+    "TestsFlextTapLdifConstants": ("tests.constants", "TestsFlextTapLdifConstants"),
+    "TestsFlextTapLdifModels": ("tests.models", "TestsFlextTapLdifModels"),
+    "TestsFlextTapLdifProtocols": ("tests.protocols", "TestsFlextTapLdifProtocols"),
+    "TestsFlextTapLdifTypes": ("tests.typings", "TestsFlextTapLdifTypes"),
+    "TestsFlextTapLdifUtilities": ("tests.utilities", "TestsFlextTapLdifUtilities"),
+    "c": ("tests.constants", "TestsFlextTapLdifConstants"),
     "conftest": "tests.conftest",
     "constants": "tests.constants",
     "d": ("flext_core.decorators", "FlextDecorators"),
     "e": ("flext_core.exceptions", "FlextExceptions"),
     "h": ("flext_core.handlers", "FlextHandlers"),
-    "m": ("tests.models", "FlextTapLdifTestModels"),
+    "m": ("tests.models", "TestsFlextTapLdifModels"),
     "models": "tests.models",
-    "p": ("tests.protocols", "FlextTapLdifTestProtocols"),
+    "p": ("tests.protocols", "TestsFlextTapLdifProtocols"),
     "protocols": "tests.protocols",
-    "pytest_configure": ("tests.conftest", "pytest_configure"),
-    "pytest_plugins": ("tests.conftest", "pytest_plugins"),
     "r": ("flext_core.result", "FlextResult"),
     "s": ("flext_core.service", "FlextService"),
-    "t": ("tests.typings", "FlextTapLdifTestTypes"),
+    "t": ("tests.typings", "TestsFlextTapLdifTypes"),
     "test_tap": "tests.test_tap",
     "typings": "tests.typings",
-    "u": ("tests.utilities", "FlextTapLdifTestUtilities"),
+    "u": ("tests.utilities", "TestsFlextTapLdifUtilities"),
     "utilities": "tests.utilities",
     "x": ("flext_core.mixins", "FlextMixins"),
 }
 
 __all__ = [
-    "FlextTapLdifTestConstants",
-    "FlextTapLdifTestModels",
-    "FlextTapLdifTestProtocols",
-    "FlextTapLdifTestTypes",
-    "FlextTapLdifTestUtilities",
-    "MockLDIFParser",
-    "MockLDIFTap",
+    "TestsFlextTapLdifConstants",
+    "TestsFlextTapLdifModels",
+    "TestsFlextTapLdifProtocols",
+    "TestsFlextTapLdifTypes",
+    "TestsFlextTapLdifUtilities",
     "c",
     "conftest",
     "constants",
@@ -105,8 +93,6 @@ __all__ = [
     "models",
     "p",
     "protocols",
-    "pytest_configure",
-    "pytest_plugins",
     "r",
     "s",
     "t",
