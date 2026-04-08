@@ -10,43 +10,31 @@ import typing as _t
 from flext_core.lazy import install_lazy_exports
 
 if _t.TYPE_CHECKING:
-    import tests.conftest as _tests_conftest
-
-    conftest = _tests_conftest
-    import tests.constants as _tests_constants
-
-    constants = _tests_constants
-    import tests.models as _tests_models
-    from tests.constants import (
-        TestsFlextTapLdifConstants,
-        TestsFlextTapLdifConstants as c,
-    )
-
-    models = _tests_models
-    import tests.protocols as _tests_protocols
-    from tests.models import TestsFlextTapLdifModels, TestsFlextTapLdifModels as m
-
-    protocols = _tests_protocols
-    import tests.test_tap as _tests_test_tap
-    from tests.protocols import (
-        TestsFlextTapLdifProtocols,
-        TestsFlextTapLdifProtocols as p,
-    )
-
-    test_tap = _tests_test_tap
-    import tests.typings as _tests_typings
-
-    typings = _tests_typings
-    import tests.utilities as _tests_utilities
-    from tests.typings import TestsFlextTapLdifTypes, TestsFlextTapLdifTypes as t
-
-    utilities = _tests_utilities
     from flext_core.decorators import FlextDecorators as d
     from flext_core.exceptions import FlextExceptions as e
     from flext_core.handlers import FlextHandlers as h
     from flext_core.mixins import FlextMixins as x
     from flext_core.result import FlextResult as r
     from flext_core.service import FlextService as s
+    from tests import (
+        conftest,
+        constants,
+        models,
+        protocols,
+        test_tap,
+        typings,
+        utilities,
+    )
+    from tests.constants import (
+        TestsFlextTapLdifConstants,
+        TestsFlextTapLdifConstants as c,
+    )
+    from tests.models import TestsFlextTapLdifModels, TestsFlextTapLdifModels as m
+    from tests.protocols import (
+        TestsFlextTapLdifProtocols,
+        TestsFlextTapLdifProtocols as p,
+    )
+    from tests.typings import TestsFlextTapLdifTypes, TestsFlextTapLdifTypes as t
     from tests.utilities import (
         TestsFlextTapLdifUtilities,
         TestsFlextTapLdifUtilities as u,
