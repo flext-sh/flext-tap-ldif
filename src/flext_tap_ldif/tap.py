@@ -11,7 +11,10 @@ from collections.abc import Sequence
 from typing import ClassVar, override
 
 from flext_core import FlextLogger
-from flext_meltano import FlextMeltanoSingerStreamBase, FlextMeltanoSingerTapBase
+from flext_meltano.services.singer_sdk import (
+    Stream as FlextMeltanoSingerStreamBase,
+    Tap as FlextMeltanoSingerTapBase,
+)
 from flext_tap_ldif import FlextTapLdifSettings, c, t, u
 
 logger = FlextLogger(__name__)
