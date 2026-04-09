@@ -10,10 +10,10 @@ from flext_meltano import FlextMeltanoModels
 from flext_tap_ldif import (
     FlextTapLdifModelsBase,
     FlextTapLdifModelsBatch,
-    FlextTapLdifModelsSettings,
     FlextTapLdifModelsEntry,
     FlextTapLdifModelsFile,
     FlextTapLdifModelsRecord,
+    FlextTapLdifModelsSettings,
 )
 
 
