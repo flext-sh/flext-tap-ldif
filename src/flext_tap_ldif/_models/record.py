@@ -89,7 +89,7 @@ class FlextTapLdifModelsRecord:
         """LDIF validation result with detailed error reporting."""
 
         file_path: Annotated[str, Field(..., description="Validated LDIF file path")]
-        is_valid: Annotated[bool, Field(..., description="Overall validation result")]
+        valid: Annotated[bool, Field(..., description="Overall validation result")]
 
         # Validation results
         validation_errors: Annotated[
@@ -141,7 +141,7 @@ class FlextTapLdifModelsRecord:
 
             return {
                 "file_path": self.file_path,
-                "validation_result": "valid" if self.is_valid else "invalid",
+                "validation_result": "valid" if self.valid else "invalid",
                 "statistics": {
                     "total_entries": self.total_entries,
                     "valid_entries": self.valid_entries,
@@ -170,7 +170,7 @@ class FlextTapLdifModelsRecord:
             if self.valid_entries + self.invalid_entries != self.total_entries:
                 msg = "Valid + invalid entries must equal total entries"
                 raise ValueError(msg)
-            if self.is_valid and self.validation_errors:
+            if self.valid and self.validation_errors:
                 msg = "Cannot be valid with validation errors"
                 raise ValueError(msg)
             return self

@@ -207,7 +207,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     parse_result = FlextTapLdifUtilities.TapLdif.LdifDataProcessing.parse_ldif_line(
                         line,
                     )
-                    if parse_result.is_success:
+                    if parse_result.success:
                         a, v = parse_result.value
                         current_attr = a
                         current_value = v
@@ -591,7 +591,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     with file_path.open("r", encoding=file_encoding) as file:
                         content = file.read()
                         parse_result = self._api.parse_ldif(content)
-                        if parse_result.is_failure:
+                        if parse_result.failure:
                             msg: str = f"Failed to parse LDIF: {parse_result.error}"
                             self._raise_parse_error(msg)
                         for raw_entry in parse_result.value.entries:
@@ -684,7 +684,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     file_path=fp_val,
                     max_file_size_mb=max_size,
                 )
-                if files_result.is_failure:
+                if files_result.failure:
                     error_msg = files_result.error or "LDIF file discovery failed"
                     if bool(config.get("strict_parsing", True)):
                         raise RuntimeError(error_msg)

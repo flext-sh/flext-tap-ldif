@@ -139,7 +139,7 @@ class FlextTapLdifModelsFile:
                     "errors": len(self.processing_errors),
                 },
                 "validation": {
-                    "is_valid": self.is_valid_ldif,
+                    "valid": self.is_valid_ldif,
                     "validation_errors": len(self.validation_errors),
                 },
             }

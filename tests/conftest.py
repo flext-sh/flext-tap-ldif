@@ -31,7 +31,7 @@ def docker_control() -> tk:
 def shared_ldap_container(docker_control: tk) -> Generator[str]:
     """Managed LDAP container using tk with auto-start."""
     result = docker_control.start_existing_container("flext-openldap-test")
-    if result.is_failure:
+    if result.failure:
         pytest.skip(f"Failed to start LDAP container: {result.error}")
     yield "flext-openldap-test"
     try:

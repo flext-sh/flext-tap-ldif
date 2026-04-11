@@ -101,7 +101,7 @@ class FlextTapLdifModelsEntry:
                 if self.object_classes
                 else None,
                 "entry_type": self.entry_type,
-                "is_valid": not self.validation_errors,
+                "valid": not self.validation_errors,
                 "source_location": {
                     "file": self.source_file,
                     "line": self.line_number,
