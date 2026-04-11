@@ -13,13 +13,13 @@ from flext_core.lazy import (
 from flext_tap_ldif.__version__ import *
 
 if _t.TYPE_CHECKING:
-    from flext_meltano import d, e, h, r, s, x
+    from flext_ldif import d, e, h, r, s, x
     from flext_tap_ldif._models.base import FlextTapLdifModelsBase
     from flext_tap_ldif._models.batch import FlextTapLdifModelsBatch
-    from flext_tap_ldif._models.config import FlextTapLdifModelsSettings
     from flext_tap_ldif._models.entry import FlextTapLdifModelsEntry
     from flext_tap_ldif._models.file import FlextTapLdifModelsFile
     from flext_tap_ldif._models.record import FlextTapLdifModelsRecord
+    from flext_tap_ldif._models.settings import FlextTapLdifModelsSettings
     from flext_tap_ldif.api import FlextTapLdifService, tap_ldif
     from flext_tap_ldif.cli import FlextTapLdifCli, main
     from flext_tap_ldif.constants import FlextTapLdifConstants, c
@@ -73,7 +73,7 @@ _LAZY_IMPORTS = merge_lazy_imports(
                 "FlextTapLdifUtilities",
                 "u",
             ),
-            "flext_meltano": (
+            "flext_ldif": (
                 "d",
                 "e",
                 "h",

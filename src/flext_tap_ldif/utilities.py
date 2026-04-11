@@ -20,8 +20,7 @@ from pathlib import Path
 from typing import ClassVar, NoReturn, TypeIs, override
 
 from flext_core import r, u
-from flext_ldif import FlextLdifUtilities
-from flext_ldif.ldif import ldif
+from flext_ldif import FlextLdifUtilities, ldif
 from flext_meltano import (
     FlextMeltanoUtilities,
     Record as FlextMeltanoSingerRecord,
@@ -324,26 +323,26 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
             @staticmethod
             def validate_ldif_config(
-                config: t.ContainerMapping,
+                settings: t.ContainerMapping,
             ) -> r[t.ContainerMapping]:
                 """Validate LDIF tap configuration.
 
                 Args:
-                config: Configuration dictionary
+                settings: Configuration dictionary
 
                 Returns:
-                r[t.ContainerValueMapping]: Validated config or error
+                r[t.ContainerValueMapping]: Validated settings or error
 
                 """
                 required_fields = ["files"]
                 missing_fields = [
-                    field for field in required_fields if field not in config
+                    field for field in required_fields if field not in settings
                 ]
                 if missing_fields:
                     return r[t.ContainerMapping].fail(
                         f"Missing required fields: {', '.join(missing_fields)}",
                     )
-                files_raw = config["files"]
+                files_raw = settings["files"]
                 if not FlextMeltanoUtilities.list_value(files_raw):
                     return r[t.ContainerMapping].fail("Files must be a list")
                 if not isinstance(files_raw, Sequence):
@@ -365,7 +364,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         return r[t.ContainerMapping].fail(
                             f"File does not exist: {file_path}",
                         )
-                return r[t.ContainerMapping].ok(config)
+                return r[t.ContainerMapping].ok(settings)
 
         class StateManagement:
             """State management utilities for incremental syncs."""
@@ -503,14 +502,14 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             Previously in ldif_processor.py as FlextLdifProcessor.
             """
 
-            def __init__(self, config: t.ConfigurationMapping) -> None:
+            def __init__(self, settings: t.ConfigurationMapping) -> None:
                 """Initialize the LDIF processor.
 
                 Args:
-                    config: Configuration dictionary from the tap.
+                    settings: Configuration dictionary from the tap.
 
                 """
-                self.config = config
+                self.settings = settings
                 self._api = ldif()
 
             def discover_files(
@@ -584,7 +583,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     file_path,
                 )
                 try:
-                    encoding = self.config.get("encoding", "utf-8")
+                    encoding = self.settings.get("encoding", "utf-8")
                     match encoding:
                         case str() as text_encoding:
                             file_encoding = text_encoding
@@ -623,7 +622,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         "Failed to process LDIF file: %s",
                         file_path,
                     )
-                    if self.config.get("strict_parsing", True):
+                    if self.settings.get("strict_parsing", True):
                         raise
 
             def _raise_parse_error(self, msg: str) -> NoReturn:
@@ -646,7 +645,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 """
                 super().__init__(tap, name="ldif_entries", schema=self._get_schema())
                 self._processor = FlextTapLdifUtilities.TapLdif.Processor(
-                    dict(tap.config),
+                    dict(tap.settings),
                 )
                 self._tap: FlextMeltanoSingerTapBase = tap
 
@@ -665,14 +664,14 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
                 """
                 _ = context
-                config: t.MutableContainerMapping = dict(self._tap.config.items())
-                dir_path_raw = config.get("directory_path")
+                settings: t.MutableContainerMapping = dict(self._tap.settings.items())
+                dir_path_raw = settings.get("directory_path")
                 dir_path = dir_path_raw if isinstance(dir_path_raw, str) else None
-                pattern_raw = config.get("file_pattern", "*.ldif")
+                pattern_raw = settings.get("file_pattern", "*.ldif")
                 pattern = pattern_raw if isinstance(pattern_raw, str) else "*.ldif"
-                fp_raw = config.get("file_path")
+                fp_raw = settings.get("file_path")
                 fp_val = fp_raw if isinstance(fp_raw, str) else None
-                max_size_raw = config.get(
+                max_size_raw = settings.get(
                     "max_file_size_mb", c.TapLdif.MAX_FILE_SIZE_MB
                 )
                 max_size = (
@@ -688,7 +687,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 )
                 if files_result.failure:
                     error_msg = files_result.error or "LDIF file discovery failed"
-                    if bool(config.get("strict_parsing", True)):
+                    if bool(settings.get("strict_parsing", True)):
                         raise RuntimeError(error_msg)
                     FlextTapLdifUtilities._logger.error(
                         "File discovery failed: %s",
@@ -702,7 +701,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 )
                 if not files_to_process:
                     error_msg = "No LDIF files discovered"
-                    if bool(config.get("strict_parsing", True)):
+                    if bool(settings.get("strict_parsing", True)):
                         raise RuntimeError(error_msg)
                     FlextTapLdifUtilities._logger.warning(error_msg)
                     return
@@ -715,7 +714,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         for record in self._processor.process_file(file_path):
                             yield FlextMeltanoSingerRecord(record)
                     except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-                        if config.get("strict_parsing", True):
+                        if settings.get("strict_parsing", True):
                             FlextTapLdifUtilities._logger.exception(
                                 "Error processing file %s",
                                 file_path,

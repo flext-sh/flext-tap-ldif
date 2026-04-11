@@ -305,26 +305,26 @@ def benchmark_config() -> t.ContainerMapping:
     }
 
 
-def pytest_configure(config: pytest.Config) -> None:
+def pytest_configure(settings: pytest.Config) -> None:
     """Configure pytest markers."""
-    config.addinivalue_line("markers", "unit: Unit tests")
-    config.addinivalue_line("markers", "integration: Integration tests")
-    config.addinivalue_line("markers", "e2e: End-to-end tests")
-    config.addinivalue_line("markers", "ldif: LDIF-specific tests")
-    config.addinivalue_line("markers", "singer: Singer protocol tests")
-    config.addinivalue_line("markers", "performance: Performance tests")
-    config.addinivalue_line("markers", "binary: Binary data tests")
-    config.addinivalue_line("markers", "encoding: Encoding tests")
-    config.addinivalue_line("markers", "slow: Slow tests")
+    settings.addinivalue_line("markers", "unit: Unit tests")
+    settings.addinivalue_line("markers", "integration: Integration tests")
+    settings.addinivalue_line("markers", "e2e: End-to-end tests")
+    settings.addinivalue_line("markers", "ldif: LDIF-specific tests")
+    settings.addinivalue_line("markers", "singer: Singer protocol tests")
+    settings.addinivalue_line("markers", "performance: Performance tests")
+    settings.addinivalue_line("markers", "binary: Binary data tests")
+    settings.addinivalue_line("markers", "encoding: Encoding tests")
+    settings.addinivalue_line("markers", "slow: Slow tests")
 
 
 class MockLDIFTap:
     """Mock implementation of the LDIF Tap."""
 
-    def __init__(self, config: t.ContainerMapping) -> None:
+    def __init__(self, settings: t.ContainerMapping) -> None:
         """Initialize the instance."""
         super().__init__()
-        self.config = config
+        self.settings = settings
         self.discovered_streams: Sequence[t.ContainerMapping] = []
 
     def discover_streams(self) -> Sequence[t.ContainerMapping]:
@@ -352,10 +352,10 @@ def mock_ldif_tap() -> type[MockLDIFTap]:
 class MockLDIFParser:
     """Mock implementation of the LDIF Parser."""
 
-    def __init__(self, config: t.ContainerMapping) -> None:
+    def __init__(self, settings: t.ContainerMapping) -> None:
         """Initialize the instance."""
         super().__init__()
-        self.config = config
+        self.settings = settings
         self.parsed_entries: MutableSequence[t.ContainerMapping] = []
 
     def parse_file(self, _file_path: str) -> t.ContainerMapping:

@@ -127,7 +127,7 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
             def generate_streams_from_ldif(
                 self,
                 ldif_entries: Sequence[t.ContainerValueMapping],
-                config: t.ContainerValueMapping,
+                settings: t.ContainerValueMapping,
             ) -> FlextMeltanoProtocols.Result[m.Meltano.SingerCatalog]:
                 """Generate Singer streams from LDIF entries."""
                 ...

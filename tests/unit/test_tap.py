@@ -16,8 +16,8 @@ from flext_tap_ldif import FlextTapLdif
 def test_discover_streams() -> None:
     """Test stream discovery."""
     with tempfile.NamedTemporaryFile(suffix=".ldif", delete=False) as tmp_file:
-        config = {"file_path": tmp_file.name}
-        tap = FlextTapLdif(config=config)
+        settings = {"file_path": tmp_file.name}
+        tap = FlextTapLdif(settings=settings)
         streams = tap.discover_streams()
         if len(streams) != 1:
             msg: str = f"Expected {1}, got {len(streams)}"
