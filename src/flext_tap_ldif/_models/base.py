@@ -88,7 +88,7 @@ class FlextTapLdifModelsBase:
         _info: FieldSerializationInfo,
     ) -> t.ContainerValue:
         """Add Singer LDIF tap metadata to all serialized fields."""
-        if u.is_dict_like(value):
+        if u.dict_like(value):
             value_dict: t.ContainerValueMapping = {}
             if isinstance(value, t.ConfigMap):
                 value_dict = {str(k): str(v) for k, v in value.root.items()}

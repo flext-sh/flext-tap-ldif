@@ -344,7 +344,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         f"Missing required fields: {', '.join(missing_fields)}",
                     )
                 files_raw = config["files"]
-                if not FlextMeltanoUtilities.is_list(files_raw):
+                if not FlextMeltanoUtilities.list_value(files_raw):
                     return r[t.ContainerMapping].fail("Files must be a list")
                 if not isinstance(files_raw, Sequence):
                     return r[t.ContainerMapping].fail("Files must be a list")
