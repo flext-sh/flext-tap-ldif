@@ -20,7 +20,7 @@ if _t.TYPE_CHECKING:
     from flext_tap_ldif._models.entry import FlextTapLdifModelsEntry
     from flext_tap_ldif._models.file import FlextTapLdifModelsFile
     from flext_tap_ldif._models.record import FlextTapLdifModelsRecord
-    from flext_tap_ldif.api import FlextTapLdifService
+    from flext_tap_ldif.api import FlextTapLdifService, tap_ldif
     from flext_tap_ldif.cli import FlextTapLdifCli, main
     from flext_tap_ldif.constants import FlextTapLdifConstants, c
     from flext_tap_ldif.models import FlextTapLdifModels, m
@@ -43,7 +43,10 @@ _LAZY_IMPORTS = merge_lazy_imports(
                 "__version__",
                 "__version_info__",
             ),
-            ".api": ("FlextTapLdifService",),
+            ".api": (
+                "FlextTapLdifService",
+                "tap_ldif",
+            ),
             ".cli": (
                 "FlextTapLdifCli",
                 "main",
@@ -129,6 +132,7 @@ __all__ = [
     "r",
     "s",
     "t",
+    "tap_ldif",
     "u",
     "x",
 ]

@@ -44,7 +44,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
         c.TapLdif.Format.MAX_LINE_LENGTH
     """
 
-    _logger: ClassVar[FlextLogger] = FlextLogger(__name__)
+    _logger: ClassVar[FlextLogger] = u.fetch_logger(__name__)
 
     class TapLdif:
         """Utility functions for LDIF data processing.
