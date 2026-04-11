@@ -65,15 +65,15 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
         class TestLdifDataProvider(Protocol):
             """Protocol for test LDIF data providers."""
 
-            def get_test_entries(self) -> Sequence[t.ContainerMapping]:
+            def test_entries(self) -> Sequence[t.ContainerMapping]:
                 """Get test LDIF entries."""
                 ...
 
-            def get_test_file_content(self) -> str:
+            def test_file_content(self) -> str:
                 """Get test LDIF file content."""
                 ...
 
-            def get_test_config(self) -> t.ContainerMapping:
+            def test_config(self) -> t.ContainerMapping:
                 """Get test LDIF configuration."""
                 ...
 

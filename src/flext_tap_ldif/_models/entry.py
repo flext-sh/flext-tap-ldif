@@ -108,7 +108,7 @@ class FlextTapLdifModelsEntry:
                 },
             }
 
-        def get_attribute_values(self, name: str) -> t.StrSequence:
+        def resolve_attribute_values(self, name: str) -> t.StrSequence:
             """Get attribute values by name (case-insensitive)."""
             normalized_name = name.lower()
             for attr_name, values in self.attributes.items():
@@ -116,9 +116,9 @@ class FlextTapLdifModelsEntry:
                     return values
             return []
 
-        def get_first_attribute_value(self, name: str) -> str | None:
+        def resolve_first_attribute_value(self, name: str) -> str | None:
             """Get first attribute value by name."""
-            values = self.get_attribute_values(name)
+            values = self.resolve_attribute_values(name)
             return values[0] if values else None
 
         @model_validator(mode="after")

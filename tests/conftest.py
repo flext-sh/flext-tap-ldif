@@ -35,7 +35,7 @@ def shared_ldap_container(docker_control: tk) -> Generator[str]:
         pytest.skip(f"Failed to start LDAP container: {result.error}")
     yield "flext-openldap-test"
     try:
-        docker_control.get_client().containers.get("flext-openldap-test").stop()
+        docker_control.client.containers.get("flext-openldap-test").stop()
     except (
         ValueError,
         TypeError,

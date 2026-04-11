@@ -19,15 +19,16 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import ClassVar, NoReturn, TypeIs, override
 
-from flext_core import FlextLogger, r
-from flext_ldif import FlextLdifUtilities, ldif
+from flext_core import r, u
+from flext_ldif import FlextLdifUtilities
+from flext_ldif.ldif import ldif
 from flext_meltano import (
     FlextMeltanoUtilities,
     Record as FlextMeltanoSingerRecord,
     Stream as FlextMeltanoSingerStreamBase,
     Tap as FlextMeltanoSingerTapBase,
 )
-from flext_tap_ldif import c, m, t
+from flext_tap_ldif import c, m, p, t
 
 
 class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
@@ -44,7 +45,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
         c.TapLdif.Format.MAX_LINE_LENGTH
     """
 
-    _logger: ClassVar[FlextLogger] = u.fetch_logger(__name__)
+    _logger: ClassVar[p.Logger] = u.fetch_logger(__name__)
 
     class TapLdif:
         """Utility functions for LDIF data processing.
@@ -342,23 +343,24 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     return r[t.ContainerMapping].fail(
                         f"Missing required fields: {', '.join(missing_fields)}",
                     )
-                files = config["files"]
-                if not FlextMeltanoUtilities.is_list(files):
+                files_raw = config["files"]
+                if not FlextMeltanoUtilities.is_list(files_raw):
                     return r[t.ContainerMapping].fail("Files must be a list")
-                if not files:
-                    return r[t.ContainerMapping].fail(
-                        "At least one file must be specified",
-                    )
-                for file_path in files:
-                    if not FlextMeltanoUtilities.is_type(file_path, str):
+                if not isinstance(files_raw, Sequence):
+                    return r[t.ContainerMapping].fail("Files must be a list")
+                file_paths: list[str] = []
+                for file_path in files_raw:
+                    if not isinstance(file_path, str):
                         return r[t.ContainerMapping].fail(
                             "File paths must be strings",
                         )
-                    path_obj = (
-                        Path(file_path)
-                        if isinstance(file_path, str)
-                        else Path(str(file_path))
+                    file_paths.append(file_path)
+                if not file_paths:
+                    return r[t.ContainerMapping].fail(
+                        "At least one file must be specified",
                     )
+                for file_path in file_paths:
+                    path_obj = Path(file_path)
                     if not path_obj.exists():
                         return r[t.ContainerMapping].fail(
                             f"File does not exist: {file_path}",
@@ -384,7 +386,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 return all(cls._is_str_object_mapping(item) for item in value.values())
 
             @staticmethod
-            def get_file_position(
+            def resolve_file_position(
                 state: t.ContainerMapping,
                 file_path: str,
             ) -> int:
@@ -399,7 +401,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
                 """
                 file_state = (
-                    FlextTapLdifUtilities.TapLdif.StateManagement.get_file_state(
+                    FlextTapLdifUtilities.TapLdif.StateManagement.resolve_file_state(
                         state,
                         file_path,
                     )
@@ -408,7 +410,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 return position if isinstance(position, int) else 0
 
             @classmethod
-            def get_file_state(
+            def resolve_file_state(
                 cls,
                 state: t.ContainerMapping,
                 file_path: str,
@@ -434,7 +436,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 return dict(file_state_raw)
 
             @staticmethod
-            def set_file_position(
+            def update_file_position(
                 state: t.ContainerMapping,
                 file_path: str,
                 position: int,
@@ -451,7 +453,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
                 """
                 file_state = (
-                    FlextTapLdifUtilities.TapLdif.StateManagement.get_file_state(
+                    FlextTapLdifUtilities.TapLdif.StateManagement.resolve_file_state(
                         state,
                         file_path,
                     )
@@ -459,14 +461,14 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 file_state_dict: t.MutableContainerMapping = dict(file_state)
                 file_state_dict["position"] = position
                 file_state_dict["last_updated"] = datetime.now(UTC).isoformat()
-                return FlextTapLdifUtilities.TapLdif.StateManagement.set_file_state(
+                return FlextTapLdifUtilities.TapLdif.StateManagement.update_file_state(
                     state,
                     file_path,
                     file_state_dict,
                 )
 
             @classmethod
-            def set_file_state(
+            def update_file_state(
                 cls,
                 state: t.ContainerMapping,
                 file_path: str,
