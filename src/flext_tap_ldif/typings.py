@@ -23,4 +23,4 @@ class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
 
 
 t = FlextTapLdifTypes
-__all__ = ["FlextTapLdifTypes", "t"]
+__all__: list[str] = ["FlextTapLdifTypes", "t"]

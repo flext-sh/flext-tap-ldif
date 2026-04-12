@@ -20,4 +20,4 @@ def main(args: t.StrSequence | None = None) -> int:
     return FlextTapLdifCli.run(args)
 
 
-__all__ = ["FlextTapLdifCli", "main"]
+__all__: list[str] = ["FlextTapLdifCli", "main"]

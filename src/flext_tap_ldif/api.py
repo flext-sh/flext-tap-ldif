@@ -32,4 +32,4 @@ class FlextTapLdifService(FlextMeltanoTapServiceBase):
 
 tap_ldif = FlextTapLdifService()
 
-__all__ = ["FlextTapLdifService", "tap_ldif"]
+__all__: list[str] = ["FlextTapLdifService", "tap_ldif"]

@@ -91,4 +91,4 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
 
 
 c = FlextTapLdifConstants
-__all__ = ["FlextTapLdifConstants", "c"]
+__all__: list[str] = ["FlextTapLdifConstants", "c"]

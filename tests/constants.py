@@ -18,4 +18,4 @@ class TestsFlextTapLdifConstants(FlextTestsConstants, FlextTapLdifConstants):
 
 
 c = TestsFlextTapLdifConstants
-__all__ = ["TestsFlextTapLdifConstants", "c"]
+__all__: list[str] = ["TestsFlextTapLdifConstants", "c"]

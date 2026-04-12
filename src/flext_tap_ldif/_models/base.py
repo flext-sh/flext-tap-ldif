@@ -6,13 +6,6 @@ import base64
 from datetime import UTC, datetime
 from typing import Self
 
-from pydantic import (
-    FieldSerializationInfo,
-    computed_field,
-    field_serializer,
-    model_validator,
-)
-
 from flext_core import u
 from flext_tap_ldif import c, t
 
@@ -20,7 +13,7 @@ from flext_tap_ldif import c, t
 class FlextTapLdifModelsBase:
     """Base MRO mixin: computed fields, serializers, validators, utility methods."""
 
-    @computed_field
+    @property
     def active_ldif_tap_models_count(self) -> int:
         """Count of active LDIF tap models with file processing capabilities."""
         model_attrs = [
@@ -36,7 +29,7 @@ class FlextTapLdifModelsBase:
         ]
         return sum(1 for attr in model_attrs if getattr(self, attr, None) is not None)
 
-    @computed_field
+    @property
     def ldif_tap_system_summary(self) -> t.ContainerMapping:
         """Complete Singer LDIF tap system summary with file processing capabilities."""
         total_models = sum(
@@ -81,11 +74,11 @@ class FlextTapLdifModelsBase:
             },
         }
 
-    @field_serializer("*", when_used="json")
+    @u.field_serializer("*", when_used="json")
     def serialize_with_ldif_metadata(
         self,
         value: t.NormalizedValue,
-        _info: FieldSerializationInfo,
+        _info: u.FieldSerializationInfo,
     ) -> t.ContainerValue:
         """Add Singer LDIF tap metadata to all serialized fields."""
         if u.dict_like(value):
@@ -120,7 +113,7 @@ class FlextTapLdifModelsBase:
             }
         return str(value)
 
-    @model_validator(mode="after")
+    @u.model_validator(mode="after")
     def validate_ldif_tap_system_consistency(self) -> Self:
         """Validate Singer LDIF tap system consistency and configuration."""
         if (
