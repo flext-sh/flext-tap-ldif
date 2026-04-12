@@ -61,7 +61,7 @@ class FlextTapLdifModelsRecord:
         ]
 
         @computed_field
-        def ldif_record_summary(self) -> t.ContainerMapping:
+        def ldif_record_summary(self) -> t.RecursiveContainerMapping:
             """LDIF record analysis summary."""
             return {
                 "stream": self.stream,
@@ -133,7 +133,7 @@ class FlextTapLdifModelsRecord:
         ]
 
         @computed_field
-        def validation_summary(self) -> t.ContainerMapping:
+        def validation_summary(self) -> t.RecursiveContainerMapping:
             """LDIF validation complete summary."""
             success_rate = 0.0
             if self.total_entries > 0:
@@ -264,7 +264,7 @@ class FlextTapLdifModelsRecord:
         ]
 
         @computed_field
-        def performance_analysis_summary(self) -> t.ContainerMapping:
+        def performance_analysis_summary(self) -> t.RecursiveContainerMapping:
             """LDIF tap performance analysis summary."""
             success_rate = 0.0
             if self.files_processed > 0:

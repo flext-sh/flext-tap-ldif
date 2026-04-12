@@ -57,7 +57,7 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
                 """Close mock LDIF file."""
                 ...
 
-            def read_entries(self) -> Sequence[t.ContainerMapping]:
+            def read_entries(self) -> Sequence[t.RecursiveContainerMapping]:
                 """Read entries from mock LDIF file."""
                 ...
 
@@ -65,7 +65,7 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
         class TestLdifDataProvider(Protocol):
             """Protocol for test LDIF data providers."""
 
-            def test_entries(self) -> Sequence[t.ContainerMapping]:
+            def test_entries(self) -> Sequence[t.RecursiveContainerMapping]:
                 """Get test LDIF entries."""
                 ...
 
@@ -73,7 +73,7 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
                 """Get test LDIF file content."""
                 ...
 
-            def test_config(self) -> t.ContainerMapping:
+            def test_config(self) -> t.RecursiveContainerMapping:
                 """Get test LDIF configuration."""
                 ...
 
@@ -83,21 +83,21 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
 
             def assert_ldif_file_parsed(
                 self,
-                entries: Sequence[t.ContainerMapping],
+                entries: Sequence[t.RecursiveContainerMapping],
             ) -> None:
                 """Assert LDIF file was parsed correctly."""
                 ...
 
             def assert_ldif_entries_valid(
                 self,
-                entries: Sequence[t.ContainerMapping],
+                entries: Sequence[t.RecursiveContainerMapping],
             ) -> None:
                 """Assert LDIF entries are valid."""
                 ...
 
             def assert_ldif_stream_config_valid(
                 self,
-                stream: t.ContainerMapping,
+                stream: t.RecursiveContainerMapping,
             ) -> None:
                 """Assert LDIF stream configuration is valid."""
                 ...

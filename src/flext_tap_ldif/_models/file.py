@@ -119,7 +119,7 @@ class FlextTapLdifModelsFile:
         ] = Field(default_factory=list)
 
         @computed_field
-        def ldif_file_summary(self) -> t.ContainerMapping:
+        def ldif_file_summary(self) -> t.RecursiveContainerMapping:
             """LDIF file processing summary."""
             progress = 0.0
             if self.total_lines > 0:
@@ -204,7 +204,7 @@ class FlextTapLdifModelsFile:
         filter_object_classes: Annotated[
             t.StrSequence,
             Field(
-                description="Filter by t.NormalizedValue classes",
+                description="Filter by t.RecursiveContainer classes",
             ),
         ] = Field(default_factory=list)
         batch_size: Annotated[
@@ -230,7 +230,7 @@ class FlextTapLdifModelsFile:
         ] = Field(default_factory=lambda: list[t.StrMapping]())
 
         @computed_field
-        def ldif_stream_summary(self) -> t.ContainerMapping:
+        def ldif_stream_summary(self) -> t.RecursiveContainerMapping:
             """LDIF stream configuration summary."""
             return {
                 "stream_id": self.tap_stream_id,

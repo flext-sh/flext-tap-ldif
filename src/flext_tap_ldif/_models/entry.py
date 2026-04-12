@@ -91,7 +91,7 @@ class FlextTapLdifModelsEntry:
         ] = Field(default_factory=list)
 
         @computed_field
-        def ldif_entry_summary(self) -> t.ContainerMapping:
+        def ldif_entry_summary(self) -> t.RecursiveContainerMapping:
             """LDIF entry analysis summary."""
             return {
                 "dn": self.dn,
@@ -204,7 +204,7 @@ class FlextTapLdifModelsEntry:
         ] = Field(default_factory=list)
 
         @computed_field
-        def change_record_summary(self) -> t.ContainerMapping:
+        def change_record_summary(self) -> t.RecursiveContainerMapping:
             """LDIF change record summary."""
             return {
                 "dn": self.dn,

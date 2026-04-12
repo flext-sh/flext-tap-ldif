@@ -119,7 +119,7 @@ class FlextTapLdifModelsBatch:
         ] = Field(default_factory=dict)
 
         @computed_field
-        def batch_processing_summary(self) -> t.ContainerMapping:
+        def batch_processing_summary(self) -> t.RecursiveContainerMapping:
             """LDIF batch processing summary."""
             duration = 0.0
             if self.started_at and self.completed_at:
@@ -259,7 +259,7 @@ class FlextTapLdifModelsBatch:
         ]
 
         @computed_field
-        def processing_progress_summary(self) -> t.ContainerMapping:
+        def processing_progress_summary(self) -> t.RecursiveContainerMapping:
             """LDIF processing progress summary."""
             total_errors = self.recoverable_errors + self.fatal_errors
             duration = 0.0
