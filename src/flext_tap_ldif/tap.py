@@ -11,7 +11,7 @@ from collections.abc import Sequence
 from typing import ClassVar, override
 
 from flext_core import u as core_u
-from flext_meltano import (
+from flext_meltano.services.singer_sdk import (
     Stream as FlextMeltanoSingerStreamBase,
     Tap as FlextMeltanoSingerTapBase,
 )

@@ -21,8 +21,8 @@ from typing import ClassVar, NoReturn, TypeIs, override
 
 from flext_core import r, u
 from flext_ldif import FlextLdifUtilities, ldif
-from flext_meltano import (
-    FlextMeltanoUtilities,
+from flext_meltano import FlextMeltanoUtilities
+from flext_meltano.services.singer_sdk import (
     Record as FlextMeltanoSingerRecord,
     Stream as FlextMeltanoSingerStreamBase,
     Tap as FlextMeltanoSingerTapBase,
@@ -645,7 +645,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 """
                 super().__init__(tap, name="ldif_entries", schema=self._get_schema())
                 self._processor = FlextTapLdifUtilities.TapLdif.Processor(
-                    dict(tap.settings),
+                    {str(key): value for key, value in tap.config.items()},
                 )
                 self._tap: FlextMeltanoSingerTapBase = tap
 
@@ -664,7 +664,9 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
                 """
                 _ = context
-                settings: t.MutableContainerMapping = dict(self._tap.settings.items())
+                settings: t.MutableContainerMapping = {
+                    str(key): value for key, value in self._tap.config.items()
+                }
                 dir_path_raw = settings.get("directory_path")
                 dir_path = dir_path_raw if isinstance(dir_path_raw, str) else None
                 pattern_raw = settings.get("file_pattern", "*.ldif")

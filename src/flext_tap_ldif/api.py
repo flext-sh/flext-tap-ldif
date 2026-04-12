@@ -27,7 +27,7 @@ class FlextTapLdifService(FlextMeltanoTapServiceBase):
     ) -> p.Meltano.SingerTapInstance:
         """Create the internal tap runtime backed by Singer SDK."""
         raw_config = dict(settings) if settings is not None else None
-        return FlextMeltanoSingerTapAdapter(FlextTapLdif(settings=raw_config))
+        return FlextMeltanoSingerTapAdapter(FlextTapLdif(config=raw_config))
 
 
 tap_ldif = FlextTapLdifService()
