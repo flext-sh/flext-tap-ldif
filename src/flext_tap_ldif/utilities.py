@@ -19,7 +19,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import ClassVar, NoReturn, TypeIs, override
 
-from flext_core import r, u
+from flext_core import p, r, u
 from flext_ldif import FlextLdifUtilities, ldif
 from flext_meltano import FlextMeltanoUtilities
 from flext_meltano.services.singer_sdk import (
@@ -58,7 +58,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             """LDIF file processing utilities."""
 
             @staticmethod
-            def count_ldif_entries(file_path: Path) -> r[int]:
+            def count_ldif_entries(file_path: Path) -> p.Result[int]:
                 """Count number of entries in LDIF file.
 
                 Args:
@@ -88,7 +88,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             @staticmethod
             def extract_ldif_metadata(
                 file_path: Path,
-            ) -> r[t.RecursiveContainerMapping]:
+            ) -> p.Result[t.RecursiveContainerMapping]:
                 """Extract metadata from LDIF file.
 
                 Args:
@@ -136,7 +136,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                     )
 
             @staticmethod
-            def validate_ldif_file(file_path: Path) -> r[bool]:
+            def validate_ldif_file(file_path: Path) -> p.Result[bool]:
                 """Validate LDIF file format and accessibility.
 
                 Args:
@@ -234,7 +234,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             @staticmethod
             def convert_ldif_entry_to_record(
                 entry_lines: t.StrSequence,
-            ) -> r[t.AttributeMapping]:
+            ) -> p.Result[t.AttributeMapping]:
                 """Convert LDIF entry lines to Singer record.
 
                 Args:
@@ -274,7 +274,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 return normalized
 
             @staticmethod
-            def parse_ldif_line(line: str) -> r[tuple[str, str]]:
+            def parse_ldif_line(line: str) -> p.Result[tuple[str, str]]:
                 """Parse LDIF attribute line.
 
                 Args:
@@ -324,7 +324,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
             @staticmethod
             def validate_ldif_config(
                 settings: t.RecursiveContainerMapping,
-            ) -> r[t.RecursiveContainerMapping]:
+            ) -> p.Result[t.RecursiveContainerMapping]:
                 """Validate LDIF tap configuration.
 
                 Args:
@@ -518,7 +518,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                 file_pattern: str = "*.ldif",
                 file_path: str | Path | None = None,
                 max_file_size_mb: int = 100,
-            ) -> r[Sequence[Path]]:
+            ) -> p.Result[Sequence[Path]]:
                 """Discover LDIF files using local file discovery.
 
                 Args:
