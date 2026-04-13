@@ -19,18 +19,17 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import ClassVar, NoReturn, TypeIs, override
 
-from flext_core import p, r, u
 from flext_ldif import FlextLdifUtilities, ldif
-from flext_meltano import FlextMeltanoUtilities
+from flext_meltano import u
 from flext_meltano.services.singer_sdk import (
     Record as FlextMeltanoSingerRecord,
     Stream as FlextMeltanoSingerStreamBase,
     Tap as FlextMeltanoSingerTapBase,
 )
-from flext_tap_ldif import c, m, p, t
+from flext_tap_ldif import c, m, p, r, t
 
 
-class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
+class FlextTapLdifUtilities(u, FlextLdifUtilities):
     """Single unified utilities class for Singer tap LDIF operations.
 
     Follows FLEXT unified class pattern with nested helper classes for
@@ -343,7 +342,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
                         f"Missing required fields: {', '.join(missing_fields)}",
                     )
                 files_raw = settings["files"]
-                if not FlextMeltanoUtilities.list_value(files_raw):
+                if not u.list_value(files_raw):
                     return r[t.RecursiveContainerMapping].fail("Files must be a list")
                 if not isinstance(files_raw, Sequence):
                     return r[t.RecursiveContainerMapping].fail("Files must be a list")
