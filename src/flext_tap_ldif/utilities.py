@@ -20,11 +20,11 @@ from pathlib import Path
 from typing import ClassVar, NoReturn, TypeIs, override
 
 from flext_ldif import FlextLdifUtilities, ldif
-from flext_meltano import u
-from flext_meltano.services.singer_sdk import (
+from flext_meltano import (
     Record as FlextMeltanoSingerRecord,
     Stream as FlextMeltanoSingerStreamBase,
     Tap as FlextMeltanoSingerTapBase,
+    u,
 )
 from flext_tap_ldif import c, m, p, r, t
 

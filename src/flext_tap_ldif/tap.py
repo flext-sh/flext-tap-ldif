@@ -10,15 +10,14 @@ from __future__ import annotations
 from collections.abc import Sequence
 from typing import ClassVar, override
 
-from flext_core import u as core_u
-from flext_meltano.services.singer_sdk import (
+from flext_core import u
+from flext_meltano import (
     Stream as FlextMeltanoSingerStreamBase,
     Tap as FlextMeltanoSingerTapBase,
 )
-from flext_tap_ldif import FlextTapLdifSettings, c, t
-from flext_tap_ldif.utilities import FlextTapLdifUtilities
+from flext_tap_ldif import FlextTapLdifSettings, FlextTapLdifUtilities, c, t
 
-logger = core_u.fetch_logger(__name__)
+logger = u.fetch_logger(__name__)
 
 
 class FlextTapLdif(FlextMeltanoSingerTapBase):
