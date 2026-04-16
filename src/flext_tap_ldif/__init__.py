@@ -13,7 +13,7 @@ from flext_core.lazy import (
 from flext_tap_ldif.__version__ import *
 
 if _t.TYPE_CHECKING:
-    from flext_ldif import d, e, h, m, r, s, u, x
+    from flext_ldif import d, e, h, r, s, x
     from flext_tap_ldif._models.base import FlextTapLdifModelsBase
     from flext_tap_ldif._models.batch import FlextTapLdifModelsBatch
     from flext_tap_ldif._models.entry import FlextTapLdifModelsEntry
@@ -23,10 +23,12 @@ if _t.TYPE_CHECKING:
     from flext_tap_ldif.api import FlextTapLdifService, tap_ldif
     from flext_tap_ldif.cli import FlextTapLdifCli, main
     from flext_tap_ldif.constants import FlextTapLdifConstants, c
+    from flext_tap_ldif.models import FlextTapLdifModels, m
     from flext_tap_ldif.protocols import FlextTapLdifProtocols, p
     from flext_tap_ldif.settings import FlextTapLdifSettings
     from flext_tap_ldif.tap import FlextTapLdif
     from flext_tap_ldif.typings import FlextTapLdifTypes, t
+    from flext_tap_ldif.utilities import FlextTapLdifUtilities, u
 _LAZY_IMPORTS = merge_lazy_imports(
     ("._models",),
     build_lazy_import_map(
@@ -41,6 +43,12 @@ _LAZY_IMPORTS = merge_lazy_imports(
                 "__version__",
                 "__version_info__",
             ),
+            "._models.base": ("FlextTapLdifModelsBase",),
+            "._models.batch": ("FlextTapLdifModelsBatch",),
+            "._models.entry": ("FlextTapLdifModelsEntry",),
+            "._models.file": ("FlextTapLdifModelsFile",),
+            "._models.record": ("FlextTapLdifModelsRecord",),
+            "._models.settings": ("FlextTapLdifModelsSettings",),
             ".api": (
                 "FlextTapLdifService",
                 "tap_ldif",
@@ -53,6 +61,10 @@ _LAZY_IMPORTS = merge_lazy_imports(
                 "FlextTapLdifConstants",
                 "c",
             ),
+            ".models": (
+                "FlextTapLdifModels",
+                "m",
+            ),
             ".protocols": (
                 "FlextTapLdifProtocols",
                 "p",
@@ -63,14 +75,16 @@ _LAZY_IMPORTS = merge_lazy_imports(
                 "FlextTapLdifTypes",
                 "t",
             ),
+            ".utilities": (
+                "FlextTapLdifUtilities",
+                "u",
+            ),
             "flext_ldif": (
                 "d",
                 "e",
                 "h",
-                "m",
                 "r",
                 "s",
-                "u",
                 "x",
             ),
         },
@@ -94,6 +108,7 @@ __all__: list[str] = [
     "FlextTapLdif",
     "FlextTapLdifCli",
     "FlextTapLdifConstants",
+    "FlextTapLdifModels",
     "FlextTapLdifModelsBase",
     "FlextTapLdifModelsBatch",
     "FlextTapLdifModelsEntry",
@@ -104,6 +119,7 @@ __all__: list[str] = [
     "FlextTapLdifService",
     "FlextTapLdifSettings",
     "FlextTapLdifTypes",
+    "FlextTapLdifUtilities",
     "__author__",
     "__author_email__",
     "__description__",

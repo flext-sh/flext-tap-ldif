@@ -750,3 +750,5 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
 
 
 u = FlextTapLdifUtilities
+
+__all__: list[str] = ["FlextTapLdifUtilities", "u"]

@@ -204,7 +204,7 @@ class FlextTapLdifModelsFile:
         filter_object_classes: Annotated[
             t.StrSequence,
             Field(
-                description="Filter by t.RecursiveContainer classes",
+                description="Filter by object classes",
             ),
         ] = Field(default_factory=list)
         batch_size: Annotated[
