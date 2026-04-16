@@ -11,14 +11,14 @@ from pathlib import Path
 from typing import Annotated, ClassVar
 
 from flext_core import FlextSettings
-from flext_tap_ldif import c, u
+from flext_tap_ldif import c, m, u
 
 
 @FlextSettings.auto_register("tap-ldif")
 class FlextTapLdifSettings(FlextSettings):
     """Validated runtime settings for tap-ldif execution."""
 
-    model_config: ClassVar[c.SettingsConfigDict] = c.SettingsConfigDict(
+    model_config: ClassVar[m.SettingsConfigDict] = m.SettingsConfigDict(
         env_prefix="FLEXT_TAP_LDIF_", extra="ignore", validate_assignment=True
     )
 

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Annotated, ClassVar, Self
 
-from flext_core import FlextConstants, c, m, u
+from flext_core import FlextConstants, m, u
 from flext_tap_ldif import t
 
 
@@ -14,7 +14,7 @@ class FlextTapLdifModelsSettings:
     class LdifTapConfig(m.BaseModel):
         """Configuration for LDIF tap operations."""
 
-        model_config: ClassVar[c.ConfigDict] = c.ConfigDict(
+        model_config: ClassVar[m.ConfigDict] = m.ConfigDict(
             validate_assignment=True,
             extra="forbid",
             frozen=False,

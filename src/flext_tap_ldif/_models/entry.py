@@ -7,20 +7,17 @@ from datetime import UTC, datetime
 from typing import Annotated, ClassVar, Self
 
 from pydantic import (
-    BaseModel,
     ConfigDict,
-    Field,
-    computed_field,
     model_validator,
 )
 
-from flext_tap_ldif import t
+from flext_tap_ldif import m, t, u
 
 
 class FlextTapLdifModelsEntry:
     """MRO mixin: LdifEntry and LdifChangeRecord models."""
 
-    class LdifEntry(BaseModel):
+    class LdifEntry(m.BaseModel):
         """Represents an LDIF entry with complete parsing support."""
 
         model_config: ClassVar[ConfigDict] = ConfigDict(
@@ -38,59 +35,52 @@ class FlextTapLdifModelsEntry:
             },
         )
 
-        dn: Annotated[str, Field(..., description="Distinguished Name")]
+        dn: Annotated[str, m.Field(..., description="Distinguished Name")]
         attributes: Annotated[
             MutableMapping[str, t.StrSequence],
-            Field(
+            m.Field(
                 description="Entry attributes",
             ),
-        ] = Field(default_factory=dict)
+        ] = m.Field(default_factory=dict)
         object_classes: Annotated[
             t.StrSequence,
-            Field(
+            m.Field(
                 description="Object classes",
             ),
-        ] = Field(default_factory=list)
+        ] = m.Field(default_factory=list)
 
         # LDIF metadata
         line_number: Annotated[
             t.NonNegativeInt,
-            Field(
-                default=0,
+            m.Field(
                 description="Source line number in LDIF file",
             ),
-        ]
+        ] = 0
         source_file: Annotated[
             str | None,
-            Field(
-                default=None,
+            m.Field(
                 description="Source LDIF file path",
             ),
-        ]
-        entry_type: Annotated[
-            str,
-            Field(default="entry", description="Type of LDIF entry"),
-        ]
+        ] = None
+        entry_type: Annotated[str, m.Field(description="Type of LDIF entry")] = "entry"
 
         # Processing metadata
         extracted_at: Annotated[
             datetime,
-            Field(
+            m.Field(
                 description="Extraction timestamp",
             ),
-        ] = Field(default_factory=lambda: datetime.now(UTC))
-        processed: Annotated[
-            bool,
-            Field(default=False, description="Processing status"),
-        ]
+        ] = m.Field(default_factory=lambda: datetime.now(UTC))
+        processed: Annotated[bool, m.Field(description="Processing status")] = False
         validation_errors: Annotated[
             t.StrSequence,
-            Field(
+            m.Field(
                 description="Validation errors",
             ),
-        ] = Field(default_factory=list)
+        ] = m.Field(default_factory=list)
 
-        @computed_field
+        @u.computed_field()
+        @property
         def ldif_entry_summary(self) -> t.RecursiveContainerMapping:
             """LDIF entry analysis summary."""
             return {
@@ -134,7 +124,7 @@ class FlextTapLdifModelsEntry:
 
             return self
 
-    class LdifChangeRecord(BaseModel):
+    class LdifChangeRecord(m.BaseModel):
         """Represents an LDIF change record for modify operations."""
 
         model_config: ClassVar[ConfigDict] = ConfigDict(
@@ -153,57 +143,54 @@ class FlextTapLdifModelsEntry:
             },
         )
 
-        dn: Annotated[str, Field(..., description="Distinguished Name")]
+        dn: Annotated[str, m.Field(..., description="Distinguished Name")]
         change_type: Annotated[
             str,
-            Field(
+            m.Field(
                 ...,
                 description="Type of change (add, modify, delete, modrdn)",
             ),
         ]
         changes: Annotated[
             list[t.StrMapping],
-            Field(
+            m.Field(
                 description="List of changes",
             ),
-        ] = Field(default_factory=lambda: list[t.StrMapping]())
+        ] = m.Field(default_factory=lambda: list[t.StrMapping]())
 
         # Change metadata
         changetype: Annotated[
             str | None,
-            Field(
-                default=None,
+            m.Field(
                 description="LDIF changetype directive",
             ),
-        ]
+        ] = None
         line_number: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Source line number"),
-        ]
-        source_file: Annotated[
-            str | None,
-            Field(default=None, description="Source LDIF file"),
-        ]
+            t.NonNegativeInt, m.Field(description="Source line number")
+        ] = 0
+        source_file: Annotated[str | None, m.Field(description="Source LDIF file")] = (
+            None
+        )
 
         # Processing metadata
         extracted_at: Annotated[
             datetime,
-            Field(
+            m.Field(
                 description="Extraction timestamp",
             ),
-        ] = Field(default_factory=lambda: datetime.now(UTC))
-        applied: Annotated[
-            bool,
-            Field(default=False, description="Change application status"),
-        ]
+        ] = m.Field(default_factory=lambda: datetime.now(UTC))
+        applied: Annotated[bool, m.Field(description="Change application status")] = (
+            False
+        )
         application_errors: Annotated[
             t.StrSequence,
-            Field(
+            m.Field(
                 description="Application errors",
             ),
-        ] = Field(default_factory=list)
+        ] = m.Field(default_factory=list)
 
-        @computed_field
+        @u.computed_field()
+        @property
         def change_record_summary(self) -> t.RecursiveContainerMapping:
             """LDIF change record summary."""
             return {

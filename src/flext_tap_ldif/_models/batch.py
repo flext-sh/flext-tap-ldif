@@ -7,21 +7,18 @@ from datetime import UTC, datetime
 from typing import Annotated, ClassVar, Self
 
 from pydantic import (
-    BaseModel,
     ConfigDict,
-    Field,
-    computed_field,
     model_validator,
 )
 
 from flext_core import FlextConstants
-from flext_tap_ldif import t
+from flext_tap_ldif import m, t, u
 
 
 class FlextTapLdifModelsBatch:
     """MRO mixin: LdifBatch and LdifProcessingState models."""
 
-    class LdifBatch(BaseModel):
+    class LdifBatch(m.BaseModel):
         """LDIF batch processing configuration and state."""
 
         model_config: ClassVar[ConfigDict] = ConfigDict(
@@ -40,85 +37,76 @@ class FlextTapLdifModelsBatch:
             },
         )
 
-        batch_id: Annotated[str, Field(..., description="Unique batch identifier")]
+        batch_id: Annotated[str, m.Field(..., description="Unique batch identifier")]
         file_paths: Annotated[
             t.StrSequence,
-            Field(..., description="List of LDIF files to process"),
+            m.Field(..., description="List of LDIF files to process"),
         ]
         batch_size: Annotated[
             int,
-            Field(
-                default=FlextConstants.DEFAULT_SIZE,
+            m.Field(
                 description="Processing batch size",
             ),
-        ]
+        ] = FlextConstants.DEFAULT_SIZE
 
         # Processing configuration
         parallel_processing: Annotated[
             bool,
-            Field(
-                default=False,
+            m.Field(
                 description="Enable parallel processing",
             ),
-        ]
+        ] = False
         max_workers: Annotated[
-            t.WorkerCount,
-            Field(default=4, description="Maximum worker threads"),
-        ]
+            t.WorkerCount, m.Field(description="Maximum worker threads")
+        ] = 4
         error_threshold: Annotated[
             t.PositiveInt,
-            Field(
-                default=FlextConstants.DEFAULT_SIZE // 10,
+            m.Field(
                 description="Maximum errors before stopping",
             ),
-        ]
+        ] = FlextConstants.DEFAULT_SIZE // 10
 
         # Batch state
-        status: Annotated[
-            str,
-            Field(default="pending", description="Batch processing status"),
-        ]
+        status: Annotated[str, m.Field(description="Batch processing status")] = (
+            "pending"
+        )
         started_at: Annotated[
             datetime | None,
-            Field(
-                default=None,
+            m.Field(
                 description="Batch start time",
             ),
-        ]
+        ] = None
         completed_at: Annotated[
             datetime | None,
-            Field(
-                default=None,
+            m.Field(
                 description="Batch completion time",
             ),
-        ]
+        ] = None
 
         # Processing metrics
         files_processed: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Number of files processed"),
-        ]
+            t.NonNegativeInt, m.Field(description="Number of files processed")
+        ] = 0
         entries_processed: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Total entries processed"),
-        ]
+            t.NonNegativeInt, m.Field(description="Total entries processed")
+        ] = 0
         errors_encountered: Annotated[
             t.NonNegativeInt,
-            Field(
-                default=0,
+            m.Field(
                 description="Total errors encountered",
             ),
-        ]
+        ] = 0
 
         # Error tracking
         file_errors: Annotated[
             Mapping[str, t.StrSequence],
-            Field(
+            m.Field(
                 description="Errors by file",
             ),
-        ] = Field(default_factory=dict)
+        ] = m.Field(default_factory=dict)
 
-        @computed_field
+        @u.computed_field()
+        @property
         def batch_processing_summary(self) -> t.RecursiveContainerMapping:
             """LDIF batch processing summary."""
             duration = 0.0
@@ -162,7 +150,7 @@ class FlextTapLdifModelsBatch:
                 raise ValueError(msg)
             return self
 
-    class LdifProcessingState(BaseModel):
+    class LdifProcessingState(m.BaseModel):
         """LDIF processing state and progress tracking."""
 
         model_config: ClassVar[ConfigDict] = ConfigDict(
@@ -181,84 +169,75 @@ class FlextTapLdifModelsBatch:
             },
         )
 
-        file_path: Annotated[str, Field(..., description="LDIF file being processed")]
+        file_path: Annotated[str, m.Field(..., description="LDIF file being processed")]
         processing_status: Annotated[
             str,
-            Field(
-                default="pending",
+            m.Field(
                 description="Processing status",
             ),
-        ]
+        ] = "pending"
 
         # Progress tracking
         current_line: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Current line being processed"),
-        ]
+            t.NonNegativeInt, m.Field(description="Current line being processed")
+        ] = 0
         entries_processed: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Entries processed"),
-        ]
+            t.NonNegativeInt, m.Field(description="Entries processed")
+        ] = 0
         change_records_processed: Annotated[
             t.NonNegativeInt,
-            Field(
-                default=0,
+            m.Field(
                 description="Change records processed",
             ),
-        ]
+        ] = 0
 
         # Timing information
         started_at: Annotated[
             datetime | None,
-            Field(
-                default=None,
+            m.Field(
                 description="Processing start time",
             ),
-        ]
+        ] = None
         last_update: Annotated[
             datetime,
-            Field(
+            m.Field(
                 description="Last state update",
             ),
-        ] = Field(default_factory=lambda: datetime.now(UTC))
+        ] = m.Field(default_factory=lambda: datetime.now(UTC))
         estimated_completion: Annotated[
             datetime | None,
-            Field(
-                default=None,
+            m.Field(
                 description="Estimated completion time",
             ),
-        ]
+        ] = None
 
         # Error tracking
         processing_errors: Annotated[
             Sequence[t.StrMapping],
-            Field(
+            m.Field(
                 description="Processing errors with context",
             ),
-        ] = Field(default_factory=lambda: list[t.StrMapping]())
+        ] = m.Field(default_factory=lambda: list[t.StrMapping]())
         recoverable_errors: Annotated[
             t.NonNegativeInt,
-            Field(
-                default=0,
+            m.Field(
                 description="Recoverable error count",
             ),
-        ]
+        ] = 0
         fatal_errors: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Fatal error count"),
-        ]
+            t.NonNegativeInt, m.Field(description="Fatal error count")
+        ] = 0
 
         # Performance metrics
         processing_rate: Annotated[
-            t.NonNegativeFloat,
-            Field(default=0.0, description="Entries per second"),
-        ]
+            t.NonNegativeFloat, m.Field(description="Entries per second")
+        ] = 0.0
         memory_usage: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Memory usage in bytes"),
-        ]
+            t.NonNegativeInt, m.Field(description="Memory usage in bytes")
+        ] = 0
 
-        @computed_field
+        @u.computed_field()
+        @property
         def processing_progress_summary(self) -> t.RecursiveContainerMapping:
             """LDIF processing progress summary."""
             total_errors = self.recoverable_errors + self.fatal_errors

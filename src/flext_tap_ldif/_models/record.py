@@ -7,60 +7,54 @@ from datetime import UTC, datetime
 from typing import Annotated, Self
 
 from pydantic import (
-    BaseModel,
-    Field,
-    computed_field,
     model_validator,
 )
 
-from flext_tap_ldif import t
+from flext_tap_ldif import m, t, u
 
 
 class FlextTapLdifModelsRecord:
     """MRO mixin: LdifRecord, LdifValidationResult, LdifPerformanceMetrics."""
 
-    class LdifRecord(BaseModel):
+    class LdifRecord(m.BaseModel):
         """Individual LDIF record for Singer output."""
 
-        stream: Annotated[str, Field(..., description="Source stream name")]
+        stream: Annotated[str, m.Field(..., description="Source stream name")]
         record: Annotated[
             t.ContainerValueMapping,
-            Field(
+            m.Field(
                 ...,
                 description="LDIF record data",
             ),
         ]
-        record_type: Annotated[
-            str,
-            Field(default="entry", description="Type of LDIF record"),
-        ]
+        record_type: Annotated[str, m.Field(description="Type of LDIF record")] = (
+            "entry"
+        )
 
         # Source metadata
-        source_file: Annotated[
-            str | None,
-            Field(default=None, description="Source LDIF file"),
-        ]
+        source_file: Annotated[str | None, m.Field(description="Source LDIF file")] = (
+            None
+        )
         line_number: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Source line number"),
-        ]
+            t.NonNegativeInt, m.Field(description="Source line number")
+        ] = 0
 
         # Extraction metadata
         time_extracted: Annotated[
             datetime,
-            Field(
+            m.Field(
                 description="Extraction timestamp",
             ),
-        ] = Field(default_factory=lambda: datetime.now(UTC))
+        ] = m.Field(default_factory=lambda: datetime.now(UTC))
         processing_time: Annotated[
             t.NonNegativeFloat,
-            Field(
-                default=0.0,
+            m.Field(
                 description="Processing time in seconds",
             ),
-        ]
+        ] = 0.0
 
-        @computed_field
+        @u.computed_field()
+        @property
         def ldif_record_summary(self) -> t.RecursiveContainerMapping:
             """LDIF record analysis summary."""
             return {
@@ -85,54 +79,50 @@ class FlextTapLdifModelsRecord:
                 raise ValueError(msg)
             return self
 
-    class LdifValidationResult(BaseModel):
+    class LdifValidationResult(m.BaseModel):
         """LDIF validation result with detailed error reporting."""
 
-        file_path: Annotated[str, Field(..., description="Validated LDIF file path")]
-        valid: Annotated[bool, Field(..., description="Overall validation result")]
+        file_path: Annotated[str, m.Field(..., description="Validated LDIF file path")]
+        valid: Annotated[bool, m.Field(..., description="Overall validation result")]
 
         # Validation results
         validation_errors: Annotated[
             Sequence[t.StrMapping],
-            Field(
+            m.Field(
                 description="Validation errors with details",
             ),
-        ] = Field(default_factory=lambda: list[t.StrMapping]())
+        ] = m.Field(default_factory=lambda: list[t.StrMapping]())
         warnings: Annotated[
             Sequence[t.StrMapping],
-            Field(
+            m.Field(
                 description="Validation warnings",
             ),
-        ] = Field(default_factory=lambda: list[t.StrMapping]())
+        ] = m.Field(default_factory=lambda: list[t.StrMapping]())
 
         # Statistics
         total_entries: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Total entries validated"),
-        ]
+            t.NonNegativeInt, m.Field(description="Total entries validated")
+        ] = 0
         valid_entries: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Valid entries count"),
-        ]
+            t.NonNegativeInt, m.Field(description="Valid entries count")
+        ] = 0
         invalid_entries: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Invalid entries count"),
-        ]
+            t.NonNegativeInt, m.Field(description="Invalid entries count")
+        ] = 0
 
         # Validation metadata
         validation_time: Annotated[
             t.NonNegativeFloat,
-            Field(
-                default=0.0,
+            m.Field(
                 description="Validation time in seconds",
             ),
-        ]
-        validator_version: Annotated[
-            str,
-            Field(default="1.0", description="Validator version"),
-        ]
+        ] = 0.0
+        validator_version: Annotated[str, m.Field(description="Validator version")] = (
+            "1.0"
+        )
 
-        @computed_field
+        @u.computed_field()
+        @property
         def validation_summary(self) -> t.RecursiveContainerMapping:
             """LDIF validation complete summary."""
             success_rate = 0.0
@@ -175,95 +165,75 @@ class FlextTapLdifModelsRecord:
                 raise ValueError(msg)
             return self
 
-    class LdifPerformanceMetrics(BaseModel):
+    class LdifPerformanceMetrics(m.BaseModel):
         """Performance metrics for LDIF tap operations."""
 
         # File processing metrics
         files_processed: Annotated[
-            int,
-            Field(default=0, description="Number of files processed"),
-        ]
+            int, m.Field(description="Number of files processed")
+        ] = 0
         total_file_size: Annotated[
-            int,
-            Field(default=0, description="Total file size in bytes"),
-        ]
+            int, m.Field(description="Total file size in bytes")
+        ] = 0
         average_file_size: Annotated[
-            float,
-            Field(default=0.0, description="Average file size"),
-        ]
+            float, m.Field(description="Average file size")
+        ] = 0.0
 
         # Entry processing metrics
         total_entries: Annotated[
-            int,
-            Field(default=0, description="Total entries processed"),
-        ]
+            int, m.Field(description="Total entries processed")
+        ] = 0
         entries_per_file: Annotated[
             float,
-            Field(
-                default=0.0,
+            m.Field(
                 description="Average entries per file",
             ),
-        ]
-        processing_rate: Annotated[
-            float,
-            Field(default=0.0, description="Entries per second"),
-        ]
+        ] = 0.0
+        processing_rate: Annotated[float, m.Field(description="Entries per second")] = (
+            0.0
+        )
 
         # Time metrics
         total_processing_time: Annotated[
             float,
-            Field(
-                default=0.0,
+            m.Field(
                 description="Total processing time",
             ),
-        ]
+        ] = 0.0
         average_processing_time: Annotated[
             float,
-            Field(
-                default=0.0,
+            m.Field(
                 description="Average time per file",
             ),
-        ]
-        parsing_time: Annotated[
-            float,
-            Field(default=0.0, description="Time spent parsing"),
-        ]
+        ] = 0.0
+        parsing_time: Annotated[float, m.Field(description="Time spent parsing")] = 0.0
         validation_time: Annotated[
-            float,
-            Field(default=0.0, description="Time spent validating"),
-        ]
+            float, m.Field(description="Time spent validating")
+        ] = 0.0
 
         # Quality metrics
         successful_files: Annotated[
             int,
-            Field(
-                default=0,
+            m.Field(
                 description="Successfully processed files",
             ),
-        ]
-        failed_files: Annotated[
-            int,
-            Field(default=0, description="Failed file processing"),
-        ]
-        total_errors: Annotated[
-            int,
-            Field(default=0, description="Total processing errors"),
-        ]
+        ] = 0
+        failed_files: Annotated[int, m.Field(description="Failed file processing")] = 0
+        total_errors: Annotated[int, m.Field(description="Total processing errors")] = 0
 
         # Resource metrics
         peak_memory_usage: Annotated[
             int,
-            Field(
-                default=0,
+            m.Field(
                 description="Peak memory usage in bytes",
             ),
-        ]
+        ] = 0
         average_memory_usage: Annotated[
-            int,
-            Field(default=0, description="Average memory usage"),
-        ]
+            int, m.Field(description="Average memory usage")
+        ] = 0
 
-        @computed_field
+        @u.computed_field()
+        @property
         def performance_analysis_summary(self) -> t.RecursiveContainerMapping:
             """LDIF tap performance analysis summary."""
             success_rate = 0.0

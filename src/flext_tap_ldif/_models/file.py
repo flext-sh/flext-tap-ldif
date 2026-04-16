@@ -7,21 +7,18 @@ from datetime import datetime
 from typing import Annotated, ClassVar, Self
 
 from pydantic import (
-    BaseModel,
     ConfigDict,
-    Field,
-    computed_field,
     model_validator,
 )
 
 from flext_core import FlextConstants
-from flext_tap_ldif import t
+from flext_tap_ldif import m, t, u
 
 
 class FlextTapLdifModelsFile:
     """MRO mixin: LdifFile and LdifStream models."""
 
-    class LdifFile(BaseModel):
+    class LdifFile(m.BaseModel):
         """Represents an LDIF file with processing metadata."""
 
         model_config: ClassVar[ConfigDict] = ConfigDict(
@@ -40,85 +37,76 @@ class FlextTapLdifModelsFile:
             },
         )
 
-        file_path: Annotated[str, Field(..., description="Path to LDIF file")]
+        file_path: Annotated[str, m.Field(..., description="Path to LDIF file")]
         file_size: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="File size in bytes"),
-        ]
-        encoding: Annotated[str, Field(default="utf-8", description="File encoding")]
+            t.NonNegativeInt, m.Field(description="File size in bytes")
+        ] = 0
+        encoding: Annotated[str, m.Field(description="File encoding")] = "utf-8"
 
         # File metadata
         created_at: Annotated[
             datetime | None,
-            Field(
-                default=None,
+            m.Field(
                 description="File creation time",
             ),
-        ]
+        ] = None
         modified_at: Annotated[
             datetime | None,
-            Field(
-                default=None,
+            m.Field(
                 description="File modification time",
             ),
-        ]
+        ] = None
 
         # Processing statistics
         total_lines: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Total lines in file"),
-        ]
+            t.NonNegativeInt, m.Field(description="Total lines in file")
+        ] = 0
         entry_count: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Number of entries"),
-        ]
+            t.NonNegativeInt, m.Field(description="Number of entries")
+        ] = 0
         change_record_count: Annotated[
             t.NonNegativeInt,
-            Field(
-                default=0,
+            m.Field(
                 description="Number of change records",
             ),
-        ]
+        ] = 0
         comment_lines: Annotated[
-            t.NonNegativeInt,
-            Field(default=0, description="Number of comment lines"),
-        ]
+            t.NonNegativeInt, m.Field(description="Number of comment lines")
+        ] = 0
 
         # Processing state
         processing_status: Annotated[
             str,
-            Field(
-                default="pending",
+            m.Field(
                 description="Processing status",
             ),
-        ]
+        ] = "pending"
         last_processed_line: Annotated[
             t.NonNegativeInt,
-            Field(
-                default=0,
+            m.Field(
                 description="Last processed line number",
             ),
-        ]
+        ] = 0
         processing_errors: Annotated[
             t.StrSequence,
-            Field(
+            m.Field(
                 description="Processing errors",
             ),
-        ] = Field(default_factory=list)
+        ] = m.Field(default_factory=list)
 
         # Validation results
-        is_valid_ldif: Annotated[
-            bool,
-            Field(default=True, description="LDIF format validity"),
-        ]
+        is_valid_ldif: Annotated[bool, m.Field(description="LDIF format validity")] = (
+            True
+        )
         validation_errors: Annotated[
             t.StrSequence,
-            Field(
+            m.Field(
                 description="Format validation errors",
             ),
-        ] = Field(default_factory=list)
+        ] = m.Field(default_factory=list)
 
-        @computed_field
+        @u.computed_field()
+        @property
         def ldif_file_summary(self) -> t.RecursiveContainerMapping:
             """LDIF file processing summary."""
             progress = 0.0
@@ -155,7 +143,7 @@ class FlextTapLdifModelsFile:
                 raise ValueError(msg)
             return self
 
-    class LdifStream(BaseModel):
+    class LdifStream(m.BaseModel):
         """Singer stream configuration for LDIF file processing."""
 
         model_config: ClassVar[ConfigDict] = ConfigDict(
@@ -174,62 +162,60 @@ class FlextTapLdifModelsFile:
             },
         )
 
-        stream_name: Annotated[str, Field(..., description="Singer stream name")]
-        file_path: Annotated[str, Field(..., description="LDIF file path")]
+        stream_name: Annotated[str, m.Field(..., description="Singer stream name")]
+        file_path: Annotated[str, m.Field(..., description="LDIF file path")]
 
         # Singer stream configuration
-        tap_stream_id: Annotated[str, Field(..., description="Singer tap stream ID")]
+        tap_stream_id: Annotated[str, m.Field(..., description="Singer tap stream ID")]
         replication_method: Annotated[
             str,
-            Field(
-                default="FULL_TABLE",
+            m.Field(
                 description="Replication method",
             ),
-        ]
+        ] = "FULL_TABLE"
         key_properties: Annotated[
             t.StrSequence,
-            Field(
+            m.Field(
                 description="Key properties",
             ),
-        ] = Field(default_factory=lambda: ["dn"])
+        ] = m.Field(default_factory=lambda: ["dn"])
 
         # LDIF-specific settings
         include_change_records: Annotated[
             bool,
-            Field(
-                default=True,
+            m.Field(
                 description="Include LDIF change records",
             ),
-        ]
+        ] = True
         filter_object_classes: Annotated[
             t.StrSequence,
-            Field(
+            m.Field(
                 description="Filter by object classes",
             ),
-        ] = Field(default_factory=list)
+        ] = m.Field(default_factory=list)
         batch_size: Annotated[
             int,
-            Field(
-                default=FlextConstants.DEFAULT_SIZE,
+            m.Field(
                 description="Processing batch size",
             ),
-        ]
+        ] = FlextConstants.DEFAULT_SIZE
 
         # Stream schema
         stream_schema: Annotated[
             t.ContainerValueMapping,
-            Field(
+            m.Field(
                 description="JSON schema",
             ),
-        ] = Field(default_factory=dict)
+        ] = m.Field(default_factory=dict)
         stream_metadata: Annotated[
             Sequence[t.StrMapping],
-            Field(
+            m.Field(
                 description="Stream metadata",
             ),
-        ] = Field(default_factory=lambda: list[t.StrMapping]())
+        ] = m.Field(default_factory=lambda: list[t.StrMapping]())
 
-        @computed_field
+        @u.computed_field()
+        @property
         def ldif_stream_summary(self) -> t.RecursiveContainerMapping:
             """LDIF stream configuration summary."""
             return {
