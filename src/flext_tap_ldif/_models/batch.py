@@ -8,7 +8,6 @@ from typing import Annotated, ClassVar, Self
 
 from pydantic import (
     ConfigDict,
-    model_validator,
 )
 
 from flext_core import FlextConstants
@@ -21,7 +20,7 @@ class FlextTapLdifModelsBatch:
     class LdifBatch(m.BaseModel):
         """LDIF batch processing configuration and state."""
 
-        model_config: ClassVar[ConfigDict] = ConfigDict(
+        model_config: ClassVar[m.ConfigDict] = ConfigDict(
             validate_assignment=True,
             extra="forbid",
             frozen=False,
@@ -37,14 +36,14 @@ class FlextTapLdifModelsBatch:
             },
         )
 
-        batch_id: Annotated[str, m.Field(..., description="Unique batch identifier")]
+        batch_id: Annotated[str, u.Field(..., description="Unique batch identifier")]
         file_paths: Annotated[
             t.StrSequence,
-            m.Field(..., description="List of LDIF files to process"),
+            u.Field(..., description="List of LDIF files to process"),
         ]
         batch_size: Annotated[
             int,
-            m.Field(
+            u.Field(
                 description="Processing batch size",
             ),
         ] = FlextConstants.DEFAULT_SIZE
@@ -52,47 +51,47 @@ class FlextTapLdifModelsBatch:
         # Processing configuration
         parallel_processing: Annotated[
             bool,
-            m.Field(
+            u.Field(
                 description="Enable parallel processing",
             ),
         ] = False
         max_workers: Annotated[
-            t.WorkerCount, m.Field(description="Maximum worker threads")
+            t.WorkerCount, u.Field(description="Maximum worker threads")
         ] = 4
         error_threshold: Annotated[
             t.PositiveInt,
-            m.Field(
+            u.Field(
                 description="Maximum errors before stopping",
             ),
         ] = FlextConstants.DEFAULT_SIZE // 10
 
         # Batch state
-        status: Annotated[str, m.Field(description="Batch processing status")] = (
+        status: Annotated[str, u.Field(description="Batch processing status")] = (
             "pending"
         )
         started_at: Annotated[
             datetime | None,
-            m.Field(
+            u.Field(
                 description="Batch start time",
             ),
         ] = None
         completed_at: Annotated[
             datetime | None,
-            m.Field(
+            u.Field(
                 description="Batch completion time",
             ),
         ] = None
 
         # Processing metrics
         files_processed: Annotated[
-            t.NonNegativeInt, m.Field(description="Number of files processed")
+            t.NonNegativeInt, u.Field(description="Number of files processed")
         ] = 0
         entries_processed: Annotated[
-            t.NonNegativeInt, m.Field(description="Total entries processed")
+            t.NonNegativeInt, u.Field(description="Total entries processed")
         ] = 0
         errors_encountered: Annotated[
             t.NonNegativeInt,
-            m.Field(
+            u.Field(
                 description="Total errors encountered",
             ),
         ] = 0
@@ -100,10 +99,10 @@ class FlextTapLdifModelsBatch:
         # Error tracking
         file_errors: Annotated[
             Mapping[str, t.StrSequence],
-            m.Field(
+            u.Field(
                 description="Errors by file",
             ),
-        ] = m.Field(default_factory=dict)
+        ] = u.Field(default_factory=dict)
 
         @u.computed_field()
         @property
@@ -136,7 +135,7 @@ class FlextTapLdifModelsBatch:
                 },
             }
 
-        @model_validator(mode="after")
+        @u.model_validator(mode="after")
         def validate_batch_config(self) -> Self:
             """Validate LDIF batch configuration."""
             if not self.batch_id:
@@ -153,7 +152,7 @@ class FlextTapLdifModelsBatch:
     class LdifProcessingState(m.BaseModel):
         """LDIF processing state and progress tracking."""
 
-        model_config: ClassVar[ConfigDict] = ConfigDict(
+        model_config: ClassVar[m.ConfigDict] = ConfigDict(
             validate_assignment=True,
             extra="forbid",
             frozen=False,
@@ -169,24 +168,24 @@ class FlextTapLdifModelsBatch:
             },
         )
 
-        file_path: Annotated[str, m.Field(..., description="LDIF file being processed")]
+        file_path: Annotated[str, u.Field(..., description="LDIF file being processed")]
         processing_status: Annotated[
             str,
-            m.Field(
+            u.Field(
                 description="Processing status",
             ),
         ] = "pending"
 
         # Progress tracking
         current_line: Annotated[
-            t.NonNegativeInt, m.Field(description="Current line being processed")
+            t.NonNegativeInt, u.Field(description="Current line being processed")
         ] = 0
         entries_processed: Annotated[
-            t.NonNegativeInt, m.Field(description="Entries processed")
+            t.NonNegativeInt, u.Field(description="Entries processed")
         ] = 0
         change_records_processed: Annotated[
             t.NonNegativeInt,
-            m.Field(
+            u.Field(
                 description="Change records processed",
             ),
         ] = 0
@@ -194,19 +193,19 @@ class FlextTapLdifModelsBatch:
         # Timing information
         started_at: Annotated[
             datetime | None,
-            m.Field(
+            u.Field(
                 description="Processing start time",
             ),
         ] = None
         last_update: Annotated[
             datetime,
-            m.Field(
+            u.Field(
                 description="Last state update",
             ),
-        ] = m.Field(default_factory=lambda: datetime.now(UTC))
+        ] = u.Field(default_factory=lambda: datetime.now(UTC))
         estimated_completion: Annotated[
             datetime | None,
-            m.Field(
+            u.Field(
                 description="Estimated completion time",
             ),
         ] = None
@@ -214,26 +213,26 @@ class FlextTapLdifModelsBatch:
         # Error tracking
         processing_errors: Annotated[
             Sequence[t.StrMapping],
-            m.Field(
+            u.Field(
                 description="Processing errors with context",
             ),
-        ] = m.Field(default_factory=lambda: list[t.StrMapping]())
+        ] = u.Field(default_factory=lambda: list[t.StrMapping]())
         recoverable_errors: Annotated[
             t.NonNegativeInt,
-            m.Field(
+            u.Field(
                 description="Recoverable error count",
             ),
         ] = 0
         fatal_errors: Annotated[
-            t.NonNegativeInt, m.Field(description="Fatal error count")
+            t.NonNegativeInt, u.Field(description="Fatal error count")
         ] = 0
 
         # Performance metrics
         processing_rate: Annotated[
-            t.NonNegativeFloat, m.Field(description="Entries per second")
+            t.NonNegativeFloat, u.Field(description="Entries per second")
         ] = 0.0
         memory_usage: Annotated[
-            t.NonNegativeInt, m.Field(description="Memory usage in bytes")
+            t.NonNegativeInt, u.Field(description="Memory usage in bytes")
         ] = 0
 
         @u.computed_field()
@@ -271,7 +270,7 @@ class FlextTapLdifModelsBatch:
                 "resources": {"memory_usage_mb": self.memory_usage / (1024 * 1024)},
             }
 
-        @model_validator(mode="after")
+        @u.model_validator(mode="after")
         def validate_processing_state(self) -> Self:
             """Validate LDIF processing state."""
             if not self.file_path:

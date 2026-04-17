@@ -8,7 +8,6 @@ from typing import Annotated, ClassVar, Self
 
 from pydantic import (
     ConfigDict,
-    model_validator,
 )
 
 from flext_core import FlextConstants
@@ -21,7 +20,7 @@ class FlextTapLdifModelsFile:
     class LdifFile(m.BaseModel):
         """Represents an LDIF file with processing metadata."""
 
-        model_config: ClassVar[ConfigDict] = ConfigDict(
+        model_config: ClassVar[m.ConfigDict] = ConfigDict(
             validate_assignment=True,
             extra="forbid",
             frozen=False,
@@ -37,73 +36,73 @@ class FlextTapLdifModelsFile:
             },
         )
 
-        file_path: Annotated[str, m.Field(..., description="Path to LDIF file")]
+        file_path: Annotated[str, u.Field(..., description="Path to LDIF file")]
         file_size: Annotated[
-            t.NonNegativeInt, m.Field(description="File size in bytes")
+            t.NonNegativeInt, u.Field(description="File size in bytes")
         ] = 0
-        encoding: Annotated[str, m.Field(description="File encoding")] = "utf-8"
+        encoding: Annotated[str, u.Field(description="File encoding")] = "utf-8"
 
         # File metadata
         created_at: Annotated[
             datetime | None,
-            m.Field(
+            u.Field(
                 description="File creation time",
             ),
         ] = None
         modified_at: Annotated[
             datetime | None,
-            m.Field(
+            u.Field(
                 description="File modification time",
             ),
         ] = None
 
         # Processing statistics
         total_lines: Annotated[
-            t.NonNegativeInt, m.Field(description="Total lines in file")
+            t.NonNegativeInt, u.Field(description="Total lines in file")
         ] = 0
         entry_count: Annotated[
-            t.NonNegativeInt, m.Field(description="Number of entries")
+            t.NonNegativeInt, u.Field(description="Number of entries")
         ] = 0
         change_record_count: Annotated[
             t.NonNegativeInt,
-            m.Field(
+            u.Field(
                 description="Number of change records",
             ),
         ] = 0
         comment_lines: Annotated[
-            t.NonNegativeInt, m.Field(description="Number of comment lines")
+            t.NonNegativeInt, u.Field(description="Number of comment lines")
         ] = 0
 
         # Processing state
         processing_status: Annotated[
             str,
-            m.Field(
+            u.Field(
                 description="Processing status",
             ),
         ] = "pending"
         last_processed_line: Annotated[
             t.NonNegativeInt,
-            m.Field(
+            u.Field(
                 description="Last processed line number",
             ),
         ] = 0
         processing_errors: Annotated[
             t.StrSequence,
-            m.Field(
+            u.Field(
                 description="Processing errors",
             ),
-        ] = m.Field(default_factory=list)
+        ] = u.Field(default_factory=list)
 
         # Validation results
-        is_valid_ldif: Annotated[bool, m.Field(description="LDIF format validity")] = (
+        is_valid_ldif: Annotated[bool, u.Field(description="LDIF format validity")] = (
             True
         )
         validation_errors: Annotated[
             t.StrSequence,
-            m.Field(
+            u.Field(
                 description="Format validation errors",
             ),
-        ] = m.Field(default_factory=list)
+        ] = u.Field(default_factory=list)
 
         @u.computed_field()
         @property
@@ -132,7 +131,7 @@ class FlextTapLdifModelsFile:
                 },
             }
 
-        @model_validator(mode="after")
+        @u.model_validator(mode="after")
         def validate_ldif_file(self) -> Self:
             """Validate LDIF file configuration."""
             if not self.file_path:
@@ -146,7 +145,7 @@ class FlextTapLdifModelsFile:
     class LdifStream(m.BaseModel):
         """Singer stream configuration for LDIF file processing."""
 
-        model_config: ClassVar[ConfigDict] = ConfigDict(
+        model_config: ClassVar[m.ConfigDict] = ConfigDict(
             validate_assignment=True,
             extra="forbid",
             frozen=False,
@@ -162,40 +161,40 @@ class FlextTapLdifModelsFile:
             },
         )
 
-        stream_name: Annotated[str, m.Field(..., description="Singer stream name")]
-        file_path: Annotated[str, m.Field(..., description="LDIF file path")]
+        stream_name: Annotated[str, u.Field(..., description="Singer stream name")]
+        file_path: Annotated[str, u.Field(..., description="LDIF file path")]
 
         # Singer stream configuration
-        tap_stream_id: Annotated[str, m.Field(..., description="Singer tap stream ID")]
+        tap_stream_id: Annotated[str, u.Field(..., description="Singer tap stream ID")]
         replication_method: Annotated[
             str,
-            m.Field(
+            u.Field(
                 description="Replication method",
             ),
         ] = "FULL_TABLE"
         key_properties: Annotated[
             t.StrSequence,
-            m.Field(
+            u.Field(
                 description="Key properties",
             ),
-        ] = m.Field(default_factory=lambda: ["dn"])
+        ] = u.Field(default_factory=lambda: ["dn"])
 
         # LDIF-specific settings
         include_change_records: Annotated[
             bool,
-            m.Field(
+            u.Field(
                 description="Include LDIF change records",
             ),
         ] = True
         filter_object_classes: Annotated[
             t.StrSequence,
-            m.Field(
+            u.Field(
                 description="Filter by object classes",
             ),
-        ] = m.Field(default_factory=list)
+        ] = u.Field(default_factory=list)
         batch_size: Annotated[
             int,
-            m.Field(
+            u.Field(
                 description="Processing batch size",
             ),
         ] = FlextConstants.DEFAULT_SIZE
@@ -203,16 +202,16 @@ class FlextTapLdifModelsFile:
         # Stream schema
         stream_schema: Annotated[
             t.ContainerValueMapping,
-            m.Field(
+            u.Field(
                 description="JSON schema",
             ),
-        ] = m.Field(default_factory=dict)
+        ] = u.Field(default_factory=dict)
         stream_metadata: Annotated[
             Sequence[t.StrMapping],
-            m.Field(
+            u.Field(
                 description="Stream metadata",
             ),
-        ] = m.Field(default_factory=lambda: list[t.StrMapping]())
+        ] = u.Field(default_factory=lambda: list[t.StrMapping]())
 
         @u.computed_field()
         @property
@@ -233,7 +232,7 @@ class FlextTapLdifModelsFile:
                 "has_schema": bool(self.stream_schema),
             }
 
-        @model_validator(mode="after")
+        @u.model_validator(mode="after")
         def validate_ldif_stream(self) -> Self:
             """Validate LDIF stream configuration."""
             if not self.stream_name:

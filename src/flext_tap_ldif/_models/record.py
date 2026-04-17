@@ -6,10 +6,6 @@ from collections.abc import Sequence
 from datetime import UTC, datetime
 from typing import Annotated, Self
 
-from pydantic import (
-    model_validator,
-)
-
 from flext_tap_ldif import m, t, u
 
 
@@ -19,36 +15,36 @@ class FlextTapLdifModelsRecord:
     class LdifRecord(m.BaseModel):
         """Individual LDIF record for Singer output."""
 
-        stream: Annotated[str, m.Field(..., description="Source stream name")]
+        stream: Annotated[str, u.Field(..., description="Source stream name")]
         record: Annotated[
             t.ContainerValueMapping,
-            m.Field(
+            u.Field(
                 ...,
                 description="LDIF record data",
             ),
         ]
-        record_type: Annotated[str, m.Field(description="Type of LDIF record")] = (
+        record_type: Annotated[str, u.Field(description="Type of LDIF record")] = (
             "entry"
         )
 
         # Source metadata
-        source_file: Annotated[str | None, m.Field(description="Source LDIF file")] = (
+        source_file: Annotated[str | None, u.Field(description="Source LDIF file")] = (
             None
         )
         line_number: Annotated[
-            t.NonNegativeInt, m.Field(description="Source line number")
+            t.NonNegativeInt, u.Field(description="Source line number")
         ] = 0
 
         # Extraction metadata
         time_extracted: Annotated[
             datetime,
-            m.Field(
+            u.Field(
                 description="Extraction timestamp",
             ),
-        ] = m.Field(default_factory=lambda: datetime.now(UTC))
+        ] = u.Field(default_factory=lambda: datetime.now(UTC))
         processing_time: Annotated[
             t.NonNegativeFloat,
-            m.Field(
+            u.Field(
                 description="Processing time in seconds",
             ),
         ] = 0.0
@@ -68,7 +64,7 @@ class FlextTapLdifModelsRecord:
                 "record_size_bytes": len(str(self.record).encode("utf-8")),
             }
 
-        @model_validator(mode="after")
+        @u.model_validator(mode="after")
         def validate_ldif_record(self) -> Self:
             """Validate LDIF record structure."""
             if not self.stream:
@@ -82,42 +78,42 @@ class FlextTapLdifModelsRecord:
     class LdifValidationResult(m.BaseModel):
         """LDIF validation result with detailed error reporting."""
 
-        file_path: Annotated[str, m.Field(..., description="Validated LDIF file path")]
-        valid: Annotated[bool, m.Field(..., description="Overall validation result")]
+        file_path: Annotated[str, u.Field(..., description="Validated LDIF file path")]
+        valid: Annotated[bool, u.Field(..., description="Overall validation result")]
 
         # Validation results
         validation_errors: Annotated[
             Sequence[t.StrMapping],
-            m.Field(
+            u.Field(
                 description="Validation errors with details",
             ),
-        ] = m.Field(default_factory=lambda: list[t.StrMapping]())
+        ] = u.Field(default_factory=lambda: list[t.StrMapping]())
         warnings: Annotated[
             Sequence[t.StrMapping],
-            m.Field(
+            u.Field(
                 description="Validation warnings",
             ),
-        ] = m.Field(default_factory=lambda: list[t.StrMapping]())
+        ] = u.Field(default_factory=lambda: list[t.StrMapping]())
 
         # Statistics
         total_entries: Annotated[
-            t.NonNegativeInt, m.Field(description="Total entries validated")
+            t.NonNegativeInt, u.Field(description="Total entries validated")
         ] = 0
         valid_entries: Annotated[
-            t.NonNegativeInt, m.Field(description="Valid entries count")
+            t.NonNegativeInt, u.Field(description="Valid entries count")
         ] = 0
         invalid_entries: Annotated[
-            t.NonNegativeInt, m.Field(description="Invalid entries count")
+            t.NonNegativeInt, u.Field(description="Invalid entries count")
         ] = 0
 
         # Validation metadata
         validation_time: Annotated[
             t.NonNegativeFloat,
-            m.Field(
+            u.Field(
                 description="Validation time in seconds",
             ),
         ] = 0.0
-        validator_version: Annotated[str, m.Field(description="Validator version")] = (
+        validator_version: Annotated[str, u.Field(description="Validator version")] = (
             "1.0"
         )
 
@@ -154,7 +150,7 @@ class FlextTapLdifModelsRecord:
                 },
             }
 
-        @model_validator(mode="after")
+        @u.model_validator(mode="after")
         def validate_result_consistency(self) -> Self:
             """Validate result consistency."""
             if self.valid_entries + self.invalid_entries != self.total_entries:
@@ -170,66 +166,66 @@ class FlextTapLdifModelsRecord:
 
         # File processing metrics
         files_processed: Annotated[
-            int, m.Field(description="Number of files processed")
+            int, u.Field(description="Number of files processed")
         ] = 0
         total_file_size: Annotated[
-            int, m.Field(description="Total file size in bytes")
+            int, u.Field(description="Total file size in bytes")
         ] = 0
         average_file_size: Annotated[
-            float, m.Field(description="Average file size")
+            float, u.Field(description="Average file size")
         ] = 0.0
 
         # Entry processing metrics
         total_entries: Annotated[
-            int, m.Field(description="Total entries processed")
+            int, u.Field(description="Total entries processed")
         ] = 0
         entries_per_file: Annotated[
             float,
-            m.Field(
+            u.Field(
                 description="Average entries per file",
             ),
         ] = 0.0
-        processing_rate: Annotated[float, m.Field(description="Entries per second")] = (
+        processing_rate: Annotated[float, u.Field(description="Entries per second")] = (
             0.0
         )
 
         # Time metrics
         total_processing_time: Annotated[
             float,
-            m.Field(
+            u.Field(
                 description="Total processing time",
             ),
         ] = 0.0
         average_processing_time: Annotated[
             float,
-            m.Field(
+            u.Field(
                 description="Average time per file",
             ),
         ] = 0.0
-        parsing_time: Annotated[float, m.Field(description="Time spent parsing")] = 0.0
+        parsing_time: Annotated[float, u.Field(description="Time spent parsing")] = 0.0
         validation_time: Annotated[
-            float, m.Field(description="Time spent validating")
+            float, u.Field(description="Time spent validating")
         ] = 0.0
 
         # Quality metrics
         successful_files: Annotated[
             int,
-            m.Field(
+            u.Field(
                 description="Successfully processed files",
             ),
         ] = 0
-        failed_files: Annotated[int, m.Field(description="Failed file processing")] = 0
-        total_errors: Annotated[int, m.Field(description="Total processing errors")] = 0
+        failed_files: Annotated[int, u.Field(description="Failed file processing")] = 0
+        total_errors: Annotated[int, u.Field(description="Total processing errors")] = 0
 
         # Resource metrics
         peak_memory_usage: Annotated[
             int,
-            m.Field(
+            u.Field(
                 description="Peak memory usage in bytes",
             ),
         ] = 0
         average_memory_usage: Annotated[
-            int, m.Field(description="Average memory usage")
+            int, u.Field(description="Average memory usage")
         ] = 0
 
         @u.computed_field()
@@ -272,7 +268,7 @@ class FlextTapLdifModelsRecord:
                 },
             }
 
-        @model_validator(mode="after")
+        @u.model_validator(mode="after")
         def validate_performance_metrics(self) -> Self:
             """Validate performance metrics consistency."""
             if self.files_processed < 0:
