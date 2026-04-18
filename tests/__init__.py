@@ -15,6 +15,7 @@ if _t.TYPE_CHECKING:
     from flext_tests import td, tf, tk, tm, tv
 
     from flext_tap_ldif import d, e, h, r, s, x
+    from tests.conftest import MockLDIFParser, MockLDIFTap
     from tests.constants import TestsFlextTapLdifConstants, c
     from tests.models import TestsFlextTapLdifModels, m
     from tests.protocols import TestsFlextTapLdifProtocols, p
@@ -24,6 +25,10 @@ _LAZY_IMPORTS = merge_lazy_imports(
     (".unit",),
     build_lazy_import_map(
         {
+            ".conftest": (
+                "MockLDIFParser",
+                "MockLDIFTap",
+            ),
             ".constants": (
                 "TestsFlextTapLdifConstants",
                 "c",
@@ -77,6 +82,8 @@ _LAZY_IMPORTS = merge_lazy_imports(
 install_lazy_exports(__name__, globals(), _LAZY_IMPORTS)
 
 __all__: list[str] = [
+    "MockLDIFParser",
+    "MockLDIFTap",
     "TestsFlextTapLdifConstants",
     "TestsFlextTapLdifModels",
     "TestsFlextTapLdifProtocols",
