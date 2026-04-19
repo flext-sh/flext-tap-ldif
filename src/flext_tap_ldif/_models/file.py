@@ -91,7 +91,7 @@ class FlextTapLdifModelsFile:
             u.Field(
                 description="Processing errors",
             ),
-        ] = u.Field(default_factory=list)
+        ] = u.Field(default_factory=tuple)
 
         # Validation results
         is_valid_ldif: Annotated[bool, u.Field(description="LDIF format validity")] = (
@@ -102,7 +102,7 @@ class FlextTapLdifModelsFile:
             u.Field(
                 description="Format validation errors",
             ),
-        ] = u.Field(default_factory=list)
+        ] = u.Field(default_factory=tuple)
 
         @u.computed_field()
         @property
@@ -191,7 +191,7 @@ class FlextTapLdifModelsFile:
             u.Field(
                 description="Filter by object classes",
             ),
-        ] = u.Field(default_factory=list)
+        ] = u.Field(default_factory=tuple)
         batch_size: Annotated[
             int,
             u.Field(

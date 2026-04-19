@@ -12,7 +12,7 @@ class FlextTapLdifCli:
     def run(cls, args: t.StrSequence | None = None) -> int:
         """Run the tap entry point through the FLEXT service facade."""
         _ = cls
-        return FlextTapLdifService.get_instance().cli_main(args)
+        return FlextTapLdifService().cli_main(args)
 
 
 def main(args: t.StrSequence | None = None) -> int:

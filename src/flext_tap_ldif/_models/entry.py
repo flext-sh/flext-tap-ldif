@@ -46,7 +46,7 @@ class FlextTapLdifModelsEntry:
             u.Field(
                 description="Object classes",
             ),
-        ] = u.Field(default_factory=list)
+        ] = u.Field(default_factory=tuple)
 
         # LDIF metadata
         line_number: Annotated[
@@ -76,7 +76,7 @@ class FlextTapLdifModelsEntry:
             u.Field(
                 description="Validation errors",
             ),
-        ] = u.Field(default_factory=list)
+        ] = u.Field(default_factory=tuple)
 
         @u.computed_field()
         @property
@@ -186,7 +186,7 @@ class FlextTapLdifModelsEntry:
             u.Field(
                 description="Application errors",
             ),
-        ] = u.Field(default_factory=list)
+        ] = u.Field(default_factory=tuple)
 
         @u.computed_field()
         @property
