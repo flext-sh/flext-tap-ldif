@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import MutableMapping
+from collections.abc import Mapping, MutableMapping
 from datetime import UTC, datetime
 from typing import Annotated, ClassVar, Self
 
@@ -76,7 +76,7 @@ class FlextTapLdifModelsEntry:
 
         @u.computed_field()
         @property
-        def ldif_entry_summary(self) -> t.RecursiveContainerMapping:
+        def ldif_entry_summary(self) -> Mapping[str, t.Container]:
             """LDIF entry analysis summary."""
             return {
                 "dn": self.dn,
@@ -186,7 +186,7 @@ class FlextTapLdifModelsEntry:
 
         @u.computed_field()
         @property
-        def change_record_summary(self) -> t.RecursiveContainerMapping:
+        def change_record_summary(self) -> Mapping[str, t.Container]:
             """LDIF change record summary."""
             return {
                 "dn": self.dn,

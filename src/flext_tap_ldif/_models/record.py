@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime
 from typing import Annotated, Self
 
@@ -51,7 +51,7 @@ class FlextTapLdifModelsRecord:
 
         @u.computed_field()
         @property
-        def ldif_record_summary(self) -> t.RecursiveContainerMapping:
+        def ldif_record_summary(self) -> Mapping[str, t.Container]:
             """LDIF record analysis summary."""
             return {
                 "stream": self.stream,
@@ -119,7 +119,7 @@ class FlextTapLdifModelsRecord:
 
         @u.computed_field()
         @property
-        def validation_summary(self) -> t.RecursiveContainerMapping:
+        def validation_summary(self) -> Mapping[str, t.Container]:
             """LDIF validation complete summary."""
             success_rate = 0.0
             if self.total_entries > 0:
@@ -230,7 +230,7 @@ class FlextTapLdifModelsRecord:
 
         @u.computed_field()
         @property
-        def performance_analysis_summary(self) -> t.RecursiveContainerMapping:
+        def performance_analysis_summary(self) -> Mapping[str, t.Container]:
             """LDIF tap performance analysis summary."""
             success_rate = 0.0
             if self.files_processed > 0:

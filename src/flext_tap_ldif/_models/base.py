@@ -30,7 +30,7 @@ class FlextTapLdifModelsBase:
         return sum(1 for attr in model_attrs if getattr(self, attr, None) is not None)
 
     @property
-    def ldif_tap_system_summary(self) -> t.RecursiveContainerMapping:
+    def ldif_tap_system_summary(self) -> Mapping[str, t.Container]:
         """Complete Singer LDIF tap system summary with file processing capabilities."""
         total_models = sum(
             1
@@ -77,13 +77,13 @@ class FlextTapLdifModelsBase:
     @u.field_serializer("*", when_used="json")
     def serialize_with_ldif_metadata(
         self,
-        value: t.RecursiveContainer,
+        value: t.Container,
         _info: u.FieldSerializationInfo,
     ) -> t.ContainerValue:
         """Add Singer LDIF tap metadata to all serialized fields."""
         if u.dict_like(value):
             value_dict: t.ContainerValueMapping = {}
-            if isinstance(value, t.ConfigMap):
+            if isinstance(value, m.ConfigMap):
                 value_dict = {str(k): str(v) for k, v in value.root.items()}
             else:
                 value_dict = {str(k): str(v) for k, v in value.items()}

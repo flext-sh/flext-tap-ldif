@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from datetime import datetime
 from typing import Annotated, ClassVar, Self
 
@@ -102,7 +102,7 @@ class FlextTapLdifModelsFile:
 
         @u.computed_field()
         @property
-        def ldif_file_summary(self) -> t.RecursiveContainerMapping:
+        def ldif_file_summary(self) -> Mapping[str, t.Container]:
             """LDIF file processing summary."""
             progress = 0.0
             if self.total_lines > 0:
@@ -211,7 +211,7 @@ class FlextTapLdifModelsFile:
 
         @u.computed_field()
         @property
-        def ldif_stream_summary(self) -> t.RecursiveContainerMapping:
+        def ldif_stream_summary(self) -> Mapping[str, t.Container]:
             """LDIF stream configuration summary."""
             return {
                 "stream_id": self.tap_stream_id,

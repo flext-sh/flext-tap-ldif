@@ -83,7 +83,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
             @staticmethod
             def extract_ldif_metadata(
                 file_path: Path,
-            ) -> p.Result[t.RecursiveContainerMapping]:
+            ) -> p.Result[Mapping[str, t.Container]]:
                 """Extract metadata from LDIF file.
 
                 Args:
@@ -116,7 +116,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                             elif line.startswith("objectClass:"):
                                 obj_class = line.split(":", 1)[1].strip()
                                 object_classes.add(obj_class)
-                    metadata: t.RecursiveContainerMapping = {
+                    metadata: Mapping[str, t.Container] = {
                         "file_path": str(file_path),
                         "file_size": file_path.stat().st_size,
                         "version": version,
@@ -124,9 +124,9 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                         "base_dns": list(base_dns),
                         "object_classes": list(object_classes),
                     }
-                    return r[t.RecursiveContainerMapping].ok(metadata)
+                    return r[Mapping[str, t.Container]].ok(metadata)
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-                    return r[t.RecursiveContainerMapping].fail(
+                    return r[Mapping[str, t.Container]].fail(
                         f"Error extracting LDIF metadata: {e}",
                     )
 
@@ -318,8 +318,8 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
 
             @staticmethod
             def validate_ldif_config(
-                settings: t.RecursiveContainerMapping,
-            ) -> p.Result[t.RecursiveContainerMapping]:
+                settings: Mapping[str, t.Container],
+            ) -> p.Result[Mapping[str, t.Container]]:
                 """Validate LDIF tap configuration.
 
                 Args:
@@ -334,54 +334,54 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                     field for field in required_fields if field not in settings
                 ]
                 if missing_fields:
-                    return r[t.RecursiveContainerMapping].fail(
+                    return r[Mapping[str, t.Container]].fail(
                         f"Missing required fields: {', '.join(missing_fields)}",
                     )
                 files_raw = settings["files"]
                 if not u.list_value(files_raw):
-                    return r[t.RecursiveContainerMapping].fail("Files must be a list")
+                    return r[Mapping[str, t.Container]].fail("Files must be a list")
                 if not isinstance(files_raw, Sequence):
-                    return r[t.RecursiveContainerMapping].fail("Files must be a list")
+                    return r[Mapping[str, t.Container]].fail("Files must be a list")
                 file_paths: list[str] = []
                 for file_path in files_raw:
                     if not isinstance(file_path, str):
-                        return r[t.RecursiveContainerMapping].fail(
+                        return r[Mapping[str, t.Container]].fail(
                             "File paths must be strings",
                         )
                     file_paths.append(file_path)
                 if not file_paths:
-                    return r[t.RecursiveContainerMapping].fail(
+                    return r[Mapping[str, t.Container]].fail(
                         "At least one file must be specified",
                     )
                 for file_path in file_paths:
                     path_obj = Path(file_path)
                     if not path_obj.exists():
-                        return r[t.RecursiveContainerMapping].fail(
+                        return r[Mapping[str, t.Container]].fail(
                             f"File does not exist: {file_path}",
                         )
-                return r[t.RecursiveContainerMapping].ok(settings)
+                return r[Mapping[str, t.Container]].ok(settings)
 
         class StateManagement:
             """State management utilities for incremental syncs."""
 
             @staticmethod
             def _is_str_object_mapping(
-                value: t.RecursiveContainer,
-            ) -> TypeIs[t.RecursiveContainerMapping]:
+                value: t.Container,
+            ) -> TypeIs[Mapping[str, t.Container]]:
                 return isinstance(value, Mapping)
 
             @classmethod
             def _is_nested_state_mapping(
                 cls,
-                value: t.RecursiveContainer,
-            ) -> TypeIs[Mapping[str, t.RecursiveContainerMapping]]:
+                value: t.Container,
+            ) -> TypeIs[Mapping[str, Mapping[str, t.Container]]]:
                 if not cls._is_str_object_mapping(value):
                     return False
                 return all(cls._is_str_object_mapping(item) for item in value.values())
 
             @staticmethod
             def resolve_file_position(
-                state: t.RecursiveContainerMapping,
+                state: Mapping[str, t.Container],
                 file_path: str,
             ) -> int:
                 """Get current position in file.
@@ -406,9 +406,9 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
             @classmethod
             def resolve_file_state(
                 cls,
-                state: t.RecursiveContainerMapping,
+                state: Mapping[str, t.Container],
                 file_path: str,
-            ) -> t.RecursiveContainerMapping:
+            ) -> Mapping[str, t.Container]:
                 """Get state for a specific file.
 
                 Args:
@@ -421,20 +421,20 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                 """
                 files_raw = state.get("files")
                 if not cls._is_str_object_mapping(files_raw):
-                    empty: t.RecursiveContainerMapping = {}
+                    empty: Mapping[str, t.Container] = {}
                     return empty
                 file_state_raw = files_raw.get(file_path)
                 if not cls._is_str_object_mapping(file_state_raw):
-                    empty_state: t.RecursiveContainerMapping = {}
+                    empty_state: Mapping[str, t.Container] = {}
                     return empty_state
                 return dict(file_state_raw)
 
             @staticmethod
             def update_file_position(
-                state: t.RecursiveContainerMapping,
+                state: Mapping[str, t.Container],
                 file_path: str,
                 position: int,
-            ) -> t.RecursiveContainerMapping:
+            ) -> Mapping[str, t.Container]:
                 """Set current position in file.
 
                 Args:
@@ -464,10 +464,10 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
             @classmethod
             def update_file_state(
                 cls,
-                state: t.RecursiveContainerMapping,
+                state: Mapping[str, t.Container],
                 file_path: str,
-                file_state: t.RecursiveContainerMapping,
-            ) -> t.RecursiveContainerMapping:
+                file_state: Mapping[str, t.Container],
+            ) -> Mapping[str, t.Container]:
                 """Set state for a specific file.
 
                 Args:
@@ -647,7 +647,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
             @override
             def get_records(
                 self,
-                context: t.RecursiveContainerMapping | None = None,
+                context: Mapping[str, t.Container] | None = None,
             ) -> Iterable[m.Meltano.SingerRecord]:
                 """Return a generator of record-type dictionary objects.
 

@@ -113,30 +113,30 @@ class FlextTapLdifModelsSettings:
         ]
 
         @property
-        def tap_config_summary(self) -> t.RecursiveContainerMapping:
+        def tap_config_summary(self) -> Mapping[str, t.Container]:
             """LDIF tap configuration summary."""
             patterns: t.RecursiveContainerList = list(self.file_patterns)
-            source: t.RecursiveContainerMapping = {
+            source: Mapping[str, t.Container] = {
                 "directory": self.ldif_directory,
                 "patterns": patterns,
                 "recursive": self.recursive_search,
             }
-            processing: t.RecursiveContainerMapping = {
+            processing: Mapping[str, t.Container] = {
                 "batch_size": self.batch_size,
                 "parallel": self.parallel_processing,
                 "max_workers": self.max_workers,
             }
-            error_handling: t.RecursiveContainerMapping = {
+            error_handling: Mapping[str, t.Container] = {
                 "continue_on_error": self.continue_on_error,
                 "max_errors": self.max_errors,
                 "has_error_file": bool(self.error_file),
             }
-            output: t.RecursiveContainerMapping = {
+            output: Mapping[str, t.Container] = {
                 "format": self.output_format,
                 "include_metadata": self.include_metadata,
                 "compressed": self.compress_output,
             }
-            result: t.RecursiveContainerMapping = {
+            result: Mapping[str, t.Container] = {
                 "source": source,
                 "processing": processing,
                 "error_handling": error_handling,
