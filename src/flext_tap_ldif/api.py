@@ -9,8 +9,9 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import override
+from typing import Annotated, override
 
+from flext_core import u
 from flext_meltano import FlextMeltanoSingerTapAdapter, FlextMeltanoTapServiceBase
 from flext_tap_ldif import FlextTapLdif, p, t
 
@@ -18,7 +19,10 @@ from flext_tap_ldif import FlextTapLdif, p, t
 class FlextTapLdifService(FlextMeltanoTapServiceBase):
     """Orchestrator for tap-ldif. All behavior from base via MRO."""
 
-    tap_name: t.NonEmptyStr = "tap-ldif"
+    tap_name: Annotated[
+        t.NonEmptyStr,
+        u.Field(description="Canonical Singer tap identifier."),
+    ] = "tap-ldif"
 
     @override
     def create_tap_instance(

@@ -6,10 +6,6 @@ from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime
 from typing import Annotated, ClassVar, Self
 
-from pydantic import (
-    ConfigDict,
-)
-
 from flext_core import FlextConstants
 from flext_tap_ldif import m, t, u
 
@@ -20,7 +16,7 @@ class FlextTapLdifModelsBatch:
     class LdifBatch(m.BaseModel):
         """LDIF batch processing configuration and state."""
 
-        model_config: ClassVar[m.ConfigDict] = ConfigDict(
+        model_config: ClassVar[m.ConfigDict] = m.ConfigDict(
             validate_assignment=True,
             extra="forbid",
             frozen=False,
@@ -152,7 +148,7 @@ class FlextTapLdifModelsBatch:
     class LdifProcessingState(m.BaseModel):
         """LDIF processing state and progress tracking."""
 
-        model_config: ClassVar[m.ConfigDict] = ConfigDict(
+        model_config: ClassVar[m.ConfigDict] = m.ConfigDict(
             validate_assignment=True,
             extra="forbid",
             frozen=False,

@@ -19,13 +19,9 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import ClassVar, NoReturn, TypeIs, override
 
-from flext_ldif import FlextLdifUtilities, ldif
-from flext_meltano import (
-    Record as FlextMeltanoSingerRecord,
-    Stream as FlextMeltanoSingerStreamBase,
-    Tap as FlextMeltanoSingerTapBase,
-    u,
-)
+from flext_ldif.api import ldif
+from flext_ldif.utilities import FlextLdifUtilities
+from flext_meltano import u
 from flext_tap_ldif import c, m, p, r, t
 
 
@@ -628,14 +624,14 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                 """Raise parse error with message."""
                 raise ValueError(msg)
 
-        class EntriesStream(FlextMeltanoSingerStreamBase):
+        class EntriesStream(m.Meltano.SingerStreamBase):
             """LDIF entries stream using flext-ldif for ALL processing.
 
             Previously in streams.py as FlextTapLdifEntriesStream.
             """
 
             @override
-            def __init__(self, tap: FlextMeltanoSingerTapBase) -> None:
+            def __init__(self, tap: m.Meltano.SingerTapBase) -> None:
                 """Initialize LDIF entries stream.
 
                 Args:
@@ -646,13 +642,13 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                 self._processor = FlextTapLdifUtilities.TapLdif.Processor(
                     {str(key): value for key, value in tap.config.items()},
                 )
-                self._tap: FlextMeltanoSingerTapBase = tap
+                self._tap: m.Meltano.SingerTapBase = tap
 
             @override
             def get_records(
                 self,
                 context: t.RecursiveContainerMapping | None = None,
-            ) -> Iterable[FlextMeltanoSingerRecord]:
+            ) -> Iterable[m.Meltano.SingerRecord]:
                 """Return a generator of record-type dictionary objects.
 
                 Args:
@@ -713,7 +709,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                     )
                     try:
                         for record in self._processor.process_file(file_path):
-                            yield FlextMeltanoSingerRecord(record)
+                            yield m.Meltano.SingerRecord(record)
                     except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                         if settings.get("strict_parsing", True):
                             FlextTapLdifUtilities._logger.exception(

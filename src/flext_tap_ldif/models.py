@@ -5,7 +5,7 @@ This module provides data models for LDIF tap operations.
 
 from __future__ import annotations
 
-from flext_ldif import FlextLdifModels
+from flext_ldif.models import FlextLdifModels
 from flext_meltano import FlextMeltanoModels
 from flext_tap_ldif import (
     FlextTapLdifModelsBase,

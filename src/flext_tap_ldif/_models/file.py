@@ -6,10 +6,6 @@ from collections.abc import Sequence
 from datetime import datetime
 from typing import Annotated, ClassVar, Self
 
-from pydantic import (
-    ConfigDict,
-)
-
 from flext_core import FlextConstants
 from flext_tap_ldif import m, t, u
 
@@ -20,7 +16,7 @@ class FlextTapLdifModelsFile:
     class LdifFile(m.BaseModel):
         """Represents an LDIF file with processing metadata."""
 
-        model_config: ClassVar[m.ConfigDict] = ConfigDict(
+        model_config: ClassVar[m.ConfigDict] = m.ConfigDict(
             validate_assignment=True,
             extra="forbid",
             frozen=False,
@@ -145,7 +141,7 @@ class FlextTapLdifModelsFile:
     class LdifStream(m.BaseModel):
         """Singer stream configuration for LDIF file processing."""
 
-        model_config: ClassVar[m.ConfigDict] = ConfigDict(
+        model_config: ClassVar[m.ConfigDict] = m.ConfigDict(
             validate_assignment=True,
             extra="forbid",
             frozen=False,

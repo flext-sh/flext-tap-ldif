@@ -11,16 +11,12 @@ from collections.abc import Sequence
 from typing import ClassVar, override
 
 from flext_core import u
-from flext_meltano import (
-    Stream as FlextMeltanoSingerStreamBase,
-    Tap as FlextMeltanoSingerTapBase,
-)
-from flext_tap_ldif import FlextTapLdifSettings, FlextTapLdifUtilities, c, t
+from flext_tap_ldif import FlextTapLdifSettings, FlextTapLdifUtilities, c, m, t
 
 logger = u.fetch_logger(__name__)
 
 
-class FlextTapLdif(FlextMeltanoSingerTapBase):
+class FlextTapLdif(m.Meltano.SingerTapBase):
     """Singer tap for LDIF file format data extraction."""
 
     name: str = "tap-ldif"
@@ -46,7 +42,7 @@ class FlextTapLdif(FlextMeltanoSingerTapBase):
     }
 
     @override
-    def discover_streams(self) -> Sequence[FlextMeltanoSingerStreamBase]:
+    def discover_streams(self) -> Sequence[m.Meltano.SingerStreamBase]:
         """Return a list of discovered streams.
 
         Returns:

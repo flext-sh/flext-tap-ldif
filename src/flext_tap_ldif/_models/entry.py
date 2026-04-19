@@ -6,10 +6,6 @@ from collections.abc import MutableMapping
 from datetime import UTC, datetime
 from typing import Annotated, ClassVar, Self
 
-from pydantic import (
-    ConfigDict,
-)
-
 from flext_tap_ldif import m, t, u
 
 
@@ -19,7 +15,7 @@ class FlextTapLdifModelsEntry:
     class LdifEntry(m.BaseModel):
         """Represents an LDIF entry with complete parsing support."""
 
-        model_config: ClassVar[m.ConfigDict] = ConfigDict(
+        model_config: ClassVar[m.ConfigDict] = m.ConfigDict(
             validate_assignment=True,
             extra="forbid",
             frozen=False,
@@ -126,7 +122,7 @@ class FlextTapLdifModelsEntry:
     class LdifChangeRecord(m.BaseModel):
         """Represents an LDIF change record for modify operations."""
 
-        model_config: ClassVar[m.ConfigDict] = ConfigDict(
+        model_config: ClassVar[m.ConfigDict] = m.ConfigDict(
             validate_assignment=True,
             extra="forbid",
             frozen=False,
