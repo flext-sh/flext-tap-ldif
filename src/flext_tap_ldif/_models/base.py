@@ -3,10 +3,13 @@
 from __future__ import annotations
 
 import base64
+from collections.abc import (
+    Mapping,
+)
 from datetime import UTC, datetime
 from typing import Self
 
-from flext_core import u
+from flext_meltano import m, u
 from flext_tap_ldif import c, t
 
 

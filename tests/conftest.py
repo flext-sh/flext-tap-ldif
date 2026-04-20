@@ -3,7 +3,12 @@
 from __future__ import annotations
 
 import os
-from collections.abc import Generator, MutableSequence, Sequence
+from collections.abc import (
+    Generator,
+    Mapping,
+    MutableSequence,
+    Sequence,
+)
 from pathlib import Path
 
 import pytest
