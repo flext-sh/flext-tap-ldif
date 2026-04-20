@@ -2,13 +2,10 @@
 
 from __future__ import annotations
 
-from collections.abc import (
-    Mapping,
-)
 from typing import Annotated, ClassVar, Self
 
-from flext_core import FlextConstants, m, u
-from flext_tap_ldif import t
+from flext_core import FlextConstants, m
+from flext_tap_ldif import FlextTapLdifUtilities, t, u
 
 
 class FlextTapLdifModelsSettings:
@@ -116,36 +113,33 @@ class FlextTapLdifModelsSettings:
         ]
 
         @property
-        def tap_config_summary(self) -> Mapping[str, t.Container]:
+        def tap_config_summary(self) -> t.ContainerValueMapping:
             """LDIF tap configuration summary."""
             patterns: t.FlatContainerList = list(self.file_patterns)
-            source: Mapping[str, t.Container] = {
-                "directory": self.ldif_directory,
-                "patterns": patterns,
-                "recursive": self.recursive_search,
-            }
-            processing: Mapping[str, t.Container] = {
-                "batch_size": self.batch_size,
-                "parallel": self.parallel_processing,
-                "max_workers": self.max_workers,
-            }
-            error_handling: Mapping[str, t.Container] = {
-                "continue_on_error": self.continue_on_error,
-                "max_errors": self.max_errors,
-                "has_error_file": bool(self.error_file),
-            }
-            output: Mapping[str, t.Container] = {
-                "format": self.output_format,
-                "include_metadata": self.include_metadata,
-                "compressed": self.compress_output,
-            }
-            result: Mapping[str, t.Container] = {
-                "source": source,
-                "processing": processing,
-                "error_handling": error_handling,
-                "output": output,
-            }
-            return result
+            return t.Cli.JSON_MAPPING_ADAPTER.validate_python(
+                FlextTapLdifUtilities.Cli.normalize_json_value({
+                    "source": {
+                        "directory": self.ldif_directory,
+                        "patterns": patterns,
+                        "recursive": self.recursive_search,
+                    },
+                    "processing": {
+                        "batch_size": self.batch_size,
+                        "parallel": self.parallel_processing,
+                        "max_workers": self.max_workers,
+                    },
+                    "error_handling": {
+                        "continue_on_error": self.continue_on_error,
+                        "max_errors": self.max_errors,
+                        "has_error_file": bool(self.error_file),
+                    },
+                    "output": {
+                        "format": self.output_format,
+                        "include_metadata": self.include_metadata,
+                        "compressed": self.compress_output,
+                    },
+                })
+            )
 
         @u.model_validator(mode="after")
         def validate_tap_config(self) -> Self:

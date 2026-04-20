@@ -54,18 +54,20 @@ class FlextTapLdifModelsRecord:
 
         @u.computed_field()
         @property
-        def ldif_record_summary(self) -> Mapping[str, t.Container]:
+        def ldif_record_summary(self) -> t.ContainerValueMapping:
             """LDIF record analysis summary."""
-            return {
-                "stream": self.stream,
-                "record_type": self.record_type,
-                "field_count": len(self.record),
-                "has_dn": "dn" in self.record,
-                "source": {"file": self.source_file, "line": self.line_number},
-                "extraction_time": self.time_extracted.isoformat(),
-                "processing_time_ms": self.processing_time * 1000,
-                "record_size_bytes": len(str(self.record).encode("utf-8")),
-            }
+            return t.Cli.JSON_MAPPING_ADAPTER.validate_python(
+                u.Cli.normalize_json_value({
+                    "stream": self.stream,
+                    "record_type": self.record_type,
+                    "field_count": len(self.record),
+                    "has_dn": "dn" in self.record,
+                    "source": {"file": self.source_file, "line": self.line_number},
+                    "extraction_time": self.time_extracted.isoformat(),
+                    "processing_time_ms": self.processing_time * 1000,
+                    "record_size_bytes": len(str(self.record).encode("utf-8")),
+                })
+            )
 
         @u.model_validator(mode="after")
         def validate_ldif_record(self) -> Self:

@@ -82,7 +82,7 @@ class FlextTapLdifModelsBase:
         self,
         value: t.Container,
         _info: u.FieldSerializationInfo,
-    ) -> t.Container:
+    ) -> t.JsonValue:
         """Add Singer LDIF tap metadata to all serialized fields."""
         if u.dict_like(value):
             value_dict: t.ContainerValueMapping = {}
@@ -91,13 +91,13 @@ class FlextTapLdifModelsBase:
             else:
                 value_dict = {str(k): str(v) for k, v in value.items()}
             metadata_dict: t.MutableContainerValueMapping = dict(value_dict)
-            metadata_dict["_ldif_tap_metadata"] = {
+            metadata_dict["_ldif_tap_metadata"] = u.Cli.normalize_json_value({
                 "extraction_timestamp": datetime.now(UTC).isoformat(),
                 "tap_type": "ldif_file_extractor",
                 "singer_protocol": "v1.0",
                 "data_source": "ldif_files",
-            }
-            return metadata_dict
+            })
+            return u.Cli.normalize_json_value(metadata_dict)
         if (
             isinstance(value, (str, int, float, bool))
             and getattr(
@@ -107,13 +107,13 @@ class FlextTapLdifModelsBase:
             )
             is not None
         ):
-            return {
+            return u.Cli.normalize_json_value({
                 "value": value,
                 "_ldif_context": {
                     "extracted_at": datetime.now(UTC).isoformat(),
                     "tap_name": "flext-tap-ldif",
                 },
-            }
+            })
         return str(value)
 
     @u.model_validator(mode="after")

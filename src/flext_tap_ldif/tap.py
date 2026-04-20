@@ -12,8 +12,7 @@ from collections.abc import (
 )
 from typing import ClassVar, override
 
-from flext_core import u
-from flext_tap_ldif import FlextTapLdifSettings, FlextTapLdifUtilities, c, m, t
+from flext_tap_ldif import FlextTapLdifSettings, FlextTapLdifUtilities, c, m, t, u
 
 logger = u.fetch_logger(__name__)
 
@@ -23,7 +22,7 @@ class FlextTapLdif(m.Meltano.SingerTapBase):
 
     name: str = "tap-ldif"
     config_class = FlextTapLdifSettings
-    config_jsonschema: ClassVar[dict[str, t.Container]] = {
+    config_jsonschema: ClassVar[dict[str, t.JsonValue]] = {
         "type": "object",
         "properties": {
             "file_path": {"type": "string"},
@@ -60,18 +59,20 @@ class FlextTapLdif(m.Meltano.SingerTapBase):
         Schema definition for LDIF entries.
 
         """
-        return {
-            "type": "object",
-            "properties": {
-                "dn": {"type": "string"},
-                "object_class": {"type": "array", "items": {"type": "string"}},
-                "attributes": {"type": "object"},
-                "change_type": {"type": "string"},
-                "source_file": {"type": "string"},
-                "line_number": {"type": "integer"},
-                "entry_size": {"type": "integer"},
-            },
-        }
+        return t.Cli.JSON_MAPPING_ADAPTER.validate_python(
+            FlextTapLdifUtilities.Cli.normalize_json_value({
+                "type": "object",
+                "properties": {
+                    "dn": {"type": "string"},
+                    "object_class": {"type": "array", "items": {"type": "string"}},
+                    "attributes": {"type": "object"},
+                    "change_type": {"type": "string"},
+                    "source_file": {"type": "string"},
+                    "line_number": {"type": "integer"},
+                    "entry_size": {"type": "integer"},
+                },
+            })
+        )
 
 
 if __name__ == "__main__":

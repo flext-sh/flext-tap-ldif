@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from collections.abc import (
-    Mapping,
     MutableMapping,
 )
 from datetime import UTC, datetime
@@ -79,22 +78,24 @@ class FlextTapLdifModelsEntry:
 
         @u.computed_field()
         @property
-        def ldif_entry_summary(self) -> Mapping[str, t.Container]:
+        def ldif_entry_summary(self) -> t.ContainerValueMapping:
             """LDIF entry analysis summary."""
-            return {
-                "dn": self.dn,
-                "attribute_count": len(self.attributes),
-                "object_class_count": len(self.object_classes),
-                "primary_object_class": self.object_classes[0]
-                if self.object_classes
-                else None,
-                "entry_type": self.entry_type,
-                "valid": not self.validation_errors,
-                "source_location": {
-                    "file": self.source_file,
-                    "line": self.line_number,
-                },
-            }
+            return t.Cli.JSON_MAPPING_ADAPTER.validate_python(
+                u.Cli.normalize_json_value({
+                    "dn": self.dn,
+                    "attribute_count": len(self.attributes),
+                    "object_class_count": len(self.object_classes),
+                    "primary_object_class": self.object_classes[0]
+                    if self.object_classes
+                    else None,
+                    "entry_type": self.entry_type,
+                    "valid": not self.validation_errors,
+                    "source_location": {
+                        "file": self.source_file,
+                        "line": self.line_number,
+                    },
+                })
+            )
 
         def resolve_attribute_values(self, name: str) -> t.StrSequence:
             """Get attribute values by name (case-insensitive)."""
@@ -189,19 +190,21 @@ class FlextTapLdifModelsEntry:
 
         @u.computed_field()
         @property
-        def change_record_summary(self) -> Mapping[str, t.Container]:
+        def change_record_summary(self) -> t.ContainerValueMapping:
             """LDIF change record summary."""
-            return {
-                "dn": self.dn,
-                "change_type": self.change_type,
-                "change_count": len(self.changes),
-                "has_errors": self.application_errors,
-                "applied": self.applied,
-                "source_location": {
-                    "file": self.source_file,
-                    "line": self.line_number,
-                },
-            }
+            return t.Cli.JSON_MAPPING_ADAPTER.validate_python(
+                u.Cli.normalize_json_value({
+                    "dn": self.dn,
+                    "change_type": self.change_type,
+                    "change_count": len(self.changes),
+                    "has_errors": self.application_errors,
+                    "applied": self.applied,
+                    "source_location": {
+                        "file": self.source_file,
+                        "line": self.line_number,
+                    },
+                })
+            )
 
         @u.model_validator(mode="after")
         def validate_change_record(self) -> Self:

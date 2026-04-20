@@ -236,38 +236,40 @@ class FlextTapLdifModelsBatch:
 
         @u.computed_field()
         @property
-        def processing_progress_summary(self) -> Mapping[str, t.Container]:
+        def processing_progress_summary(self) -> t.ContainerValueMapping:
             """LDIF processing progress summary."""
             total_errors = self.recoverable_errors + self.fatal_errors
             duration = 0.0
             if self.started_at:
                 duration = (datetime.now(UTC) - self.started_at).total_seconds()
 
-            return {
-                "file_path": self.file_path,
-                "status": self.processing_status,
-                "progress": {
-                    "current_line": self.current_line,
-                    "entries_processed": self.entries_processed,
-                    "change_records": self.change_records_processed,
-                    "processing_rate": self.processing_rate,
-                },
-                "timing": {
-                    "duration_seconds": duration,
-                    "estimated_completion": self.estimated_completion.isoformat()
-                    if self.estimated_completion
-                    else None,
-                },
-                "quality": {
-                    "total_errors": total_errors,
-                    "recoverable_errors": self.recoverable_errors,
-                    "fatal_errors": self.fatal_errors,
-                    "error_rate": total_errors / self.entries_processed
-                    if self.entries_processed > 0
-                    else 0,
-                },
-                "resources": {"memory_usage_mb": self.memory_usage / (1024 * 1024)},
-            }
+            return t.Cli.JSON_MAPPING_ADAPTER.validate_python(
+                u.Cli.normalize_json_value({
+                    "file_path": self.file_path,
+                    "status": self.processing_status,
+                    "progress": {
+                        "current_line": self.current_line,
+                        "entries_processed": self.entries_processed,
+                        "change_records": self.change_records_processed,
+                        "processing_rate": self.processing_rate,
+                    },
+                    "timing": {
+                        "duration_seconds": duration,
+                        "estimated_completion": self.estimated_completion.isoformat()
+                        if self.estimated_completion
+                        else None,
+                    },
+                    "quality": {
+                        "total_errors": total_errors,
+                        "recoverable_errors": self.recoverable_errors,
+                        "fatal_errors": self.fatal_errors,
+                        "error_rate": total_errors / self.entries_processed
+                        if self.entries_processed > 0
+                        else 0,
+                    },
+                    "resources": {"memory_usage_mb": self.memory_usage / (1024 * 1024)},
+                })
+            )
 
         @u.model_validator(mode="after")
         def validate_processing_state(self) -> Self:

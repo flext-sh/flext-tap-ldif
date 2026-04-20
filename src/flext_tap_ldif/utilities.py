@@ -17,7 +17,7 @@ from collections.abc import (
 )
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import ClassVar, NoReturn, TypeIs, override
+from typing import ClassVar, NoReturn, override
 
 from flext_ldif.api import ldif
 from flext_ldif.utilities import FlextLdifUtilities
@@ -365,21 +365,6 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
             """State management utilities for incremental syncs."""
 
             @staticmethod
-            def _is_str_object_mapping(
-                value: t.Container,
-            ) -> TypeIs[Mapping[str, t.Container]]:
-                return isinstance(value, Mapping)
-
-            @classmethod
-            def _is_nested_state_mapping(
-                cls,
-                value: t.Container,
-            ) -> TypeIs[Mapping[str, Mapping[str, t.Container]]]:
-                if not cls._is_str_object_mapping(value):
-                    return False
-                return all(cls._is_str_object_mapping(item) for item in value.values())
-
-            @staticmethod
             def resolve_file_position(
                 state: Mapping[str, t.Container],
                 file_path: str,
@@ -420,14 +405,14 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
 
                 """
                 files_raw = state.get("files")
-                if not cls._is_str_object_mapping(files_raw):
+                if not u.mapping(files_raw):
                     empty: Mapping[str, t.Container] = {}
                     return empty
                 file_state_raw = files_raw.get(file_path)
-                if not cls._is_str_object_mapping(file_state_raw):
+                if not u.mapping(file_state_raw):
                     empty_state: Mapping[str, t.Container] = {}
                     return empty_state
-                return dict(file_state_raw)
+                return u.Cli.json_as_mapping(file_state_raw)
 
             @staticmethod
             def update_file_position(
@@ -452,7 +437,9 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                         file_path,
                     )
                 )
-                file_state_dict: t.MutableFlatContainerMapping = dict(file_state)
+                file_state_dict: t.MutableFlatContainerMapping = dict(
+                    u.Cli.json_as_mapping(file_state)
+                )
                 file_state_dict["position"] = position
                 file_state_dict["last_updated"] = datetime.now(UTC).isoformat()
                 return FlextTapLdifUtilities.TapLdif.StateManagement.update_file_state(
@@ -481,13 +468,16 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                 """
                 files_raw = state.get("files")
                 files_dict: t.MutableFlatContainerMapping = {}
-                if isinstance(files_raw, Mapping):
+                if u.mapping(files_raw):
                     for k, v in files_raw.items():
-                        if isinstance(v, Mapping):
-                            files_dict[k] = dict(v)
-                files_dict[file_path] = dict(file_state)
-                updated_state: t.MutableFlatContainerMapping = dict(state)
-                updated_state["files"] = files_dict
+                        if u.mapping(v):
+                            files_dict[k] = u.Cli.normalize_json_value(v)
+                files_dict[file_path] = u.Cli.normalize_json_value(file_state)
+                updated_state: t.MutableFlatContainerMapping = {
+                    str(key): u.Cli.normalize_json_value(value)
+                    for key, value in state.items()
+                }
+                updated_state["files"] = u.Cli.normalize_json_value(files_dict)
                 return updated_state
 
         class Processor:
@@ -726,7 +716,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                             )
                             continue
 
-            def _get_schema(self) -> dict[str, t.Container]:
+            def _get_schema(self) -> dict[str, t.JsonValue]:
                 """Get schema for LDIF entries."""
                 return {
                     "type": "object",
