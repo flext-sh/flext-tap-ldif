@@ -10,6 +10,7 @@ from datetime import UTC, datetime
 from typing import Annotated, ClassVar, Self
 
 from flext_core import FlextConstants
+
 from flext_tap_ldif import m, t, u
 
 

@@ -10,10 +10,12 @@ from flext_core.lazy import (
     install_lazy_exports,
     merge_lazy_imports,
 )
+
 from flext_tap_ldif.__version__ import *
 
 if _t.TYPE_CHECKING:
     from flext_ldif import d, e, h, r, s, x
+
     from flext_tap_ldif._models.base import FlextTapLdifModelsBase
     from flext_tap_ldif._models.batch import FlextTapLdifModelsBatch
     from flext_tap_ldif._models.entry import FlextTapLdifModelsEntry

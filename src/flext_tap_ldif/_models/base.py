@@ -10,6 +10,7 @@ from datetime import UTC, datetime
 from typing import Self
 
 from flext_meltano import m, u
+
 from flext_tap_ldif import c, t
 
 
