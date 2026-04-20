@@ -111,7 +111,7 @@ class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
 
             def normalize_ldif_attributes(
                 self,
-                attributes: Mapping[str, Sequence[t.ContainerValue]],
+                attributes: Mapping[str, Sequence[t.Container]],
             ) -> FlextMeltanoProtocols.Result[t.Container]:
                 """Normalize LDIF attribute values."""
                 ...

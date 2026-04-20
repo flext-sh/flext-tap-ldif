@@ -118,7 +118,7 @@ class FlextTapLdifModelsSettings:
         @property
         def tap_config_summary(self) -> Mapping[str, t.Container]:
             """LDIF tap configuration summary."""
-            patterns: t.RecursiveContainerList = list(self.file_patterns)
+            patterns: t.FlatContainerList = list(self.file_patterns)
             source: Mapping[str, t.Container] = {
                 "directory": self.ldif_directory,
                 "patterns": patterns,

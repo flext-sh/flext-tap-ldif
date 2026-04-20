@@ -23,7 +23,7 @@ class FlextTapLdif(m.Meltano.SingerTapBase):
 
     name: str = "tap-ldif"
     config_class = FlextTapLdifSettings
-    config_jsonschema: ClassVar[dict[str, t.ContainerValue]] = {
+    config_jsonschema: ClassVar[dict[str, t.Container]] = {
         "type": "object",
         "properties": {
             "file_path": {"type": "string"},

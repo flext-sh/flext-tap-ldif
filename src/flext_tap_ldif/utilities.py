@@ -452,7 +452,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                         file_path,
                     )
                 )
-                file_state_dict: t.MutableRecursiveContainerMapping = dict(file_state)
+                file_state_dict: t.MutableFlatContainerMapping = dict(file_state)
                 file_state_dict["position"] = position
                 file_state_dict["last_updated"] = datetime.now(UTC).isoformat()
                 return FlextTapLdifUtilities.TapLdif.StateManagement.update_file_state(
@@ -480,13 +480,13 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
 
                 """
                 files_raw = state.get("files")
-                files_dict: t.MutableRecursiveContainerMapping = {}
+                files_dict: t.MutableFlatContainerMapping = {}
                 if isinstance(files_raw, Mapping):
                     for k, v in files_raw.items():
                         if isinstance(v, Mapping):
                             files_dict[k] = dict(v)
                 files_dict[file_path] = dict(file_state)
-                updated_state: t.MutableRecursiveContainerMapping = dict(state)
+                updated_state: t.MutableFlatContainerMapping = dict(state)
                 updated_state["files"] = files_dict
                 return updated_state
 
@@ -659,7 +659,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
 
                 """
                 _ = context
-                settings: t.MutableRecursiveContainerMapping = {
+                settings: t.MutableFlatContainerMapping = {
                     str(key): value for key, value in self._tap.config.items()
                 }
                 dir_path_raw = settings.get("directory_path")
@@ -726,7 +726,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                             )
                             continue
 
-            def _get_schema(self) -> dict[str, t.ContainerValue]:
+            def _get_schema(self) -> dict[str, t.Container]:
                 """Get schema for LDIF entries."""
                 return {
                     "type": "object",
