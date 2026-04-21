@@ -10,13 +10,13 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, ClassVar, Final
 
 from flext_ldif import FlextLdifConstants
-from flext_meltano import FlextMeltanoConstants
+from flext_meltano import c
 
 if TYPE_CHECKING:
     from flext_tap_ldif import t
 
 
-class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
+class FlextTapLdifConstants(c, FlextLdifConstants):
     """LDIF tap extraction-specific constants following flext-core patterns.
 
     Composes with FlextTapLdifConstants to avoid duplication and ensure consistency.
@@ -63,7 +63,7 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
         class TapLdifPerformance:
             """Tap LDIF performance constants."""
 
-            DEFAULT_BATCH_SIZE: Final[int] = FlextMeltanoConstants.DEFAULT_BATCH_SIZE
+            DEFAULT_BATCH_SIZE: Final[int] = c.DEFAULT_BATCH_SIZE
 
         class TapLdifValidation:
             """LDIF tap validation constants.

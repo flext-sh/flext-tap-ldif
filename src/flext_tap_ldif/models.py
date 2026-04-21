@@ -5,8 +5,8 @@ This module provides data models for LDIF tap operations.
 
 from __future__ import annotations
 
-from flext_ldif.models import FlextLdifModels
-from flext_meltano import FlextMeltanoModels
+from flext_ldif import FlextLdifModels
+from flext_meltano import m
 
 from flext_tap_ldif import (
     FlextTapLdifModelsBase,
@@ -18,7 +18,7 @@ from flext_tap_ldif import (
 )
 
 
-class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
+class FlextTapLdifModels(m, FlextLdifModels):
     """Complete models for LDIF tap operations using Pydantic BaseModel.
 
     Provides standardized models for all LDIF tap domain entities including:

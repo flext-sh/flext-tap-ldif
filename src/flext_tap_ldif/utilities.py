@@ -19,8 +19,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import ClassVar, NoReturn, override
 
-from flext_ldif.api import ldif
-from flext_ldif.utilities import FlextLdifUtilities
+from flext_ldif import FlextLdifUtilities, ldif
 from flext_meltano import u
 
 from flext_tap_ldif import c, m, p, r, t

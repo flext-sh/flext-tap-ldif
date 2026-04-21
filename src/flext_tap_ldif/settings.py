@@ -12,8 +12,7 @@ from typing import Annotated, ClassVar
 
 from flext_core import FlextSettings
 
-from flext_tap_ldif import c, u
-from flext_tap_ldif.models import m
+from flext_tap_ldif import c, m, u
 
 
 @FlextSettings.auto_register("tap-ldif")
