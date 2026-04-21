@@ -1,0 +1,14 @@
+src/flext_tap_ldif/typings.py
+  h_9db9d35f50cf33 3-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.2",
+  "base_commit_sha": "51296bf4267f3bb229960ab9033ebe4a5e12a85f",
+  "prompts": {},
+  "humans": {
+    "h_9db9d35f50cf33": {
+      "author": "FLEXT Bot"
+    }
+  }
+}
