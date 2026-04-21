@@ -1,7 +1,7 @@
 """FLEXT Tap LDIF Types — MRO composition of parent type namespaces.
 
-All Singer protocol types are in ``FlextMeltanoTypes.Meltano.*``.
-All LDIF domain types are in ``FlextLdifTypes.Ldif.*``.
+Singer protocol types come from the inherited ``t.Meltano.*`` namespace.
+LDIF domain types come from the inherited ``t.Ldif.*`` namespace.
 This facade composes both via MRO — access as ``t.Meltano.*`` and ``t.Ldif.*``.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
