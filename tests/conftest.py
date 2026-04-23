@@ -361,7 +361,13 @@ class MockLDIFParser:
         self.parsed_entries: MutableSequence[t.JsonMapping] = []
 
     def parse_file(self, _file_path: str) -> t.JsonMapping:
-        return {"success": True, "entries": self.parsed_entries, "errors": []}
+        entries_payload: list[t.JsonValue] = [dict(e) for e in self.parsed_entries]
+        result: dict[str, t.JsonValue] = {
+            "success": True,
+            "entries": entries_payload,
+            "errors": [],
+        }
+        return result
 
     def add_mock_entry(self, entry: t.JsonMapping) -> None:
         self.parsed_entries.append(entry)

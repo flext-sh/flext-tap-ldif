@@ -116,30 +116,35 @@ class FlextTapLdifModelsSettings:
         @property
         def tap_config_summary(self) -> t.JsonMapping:
             """LDIF tap configuration summary."""
-            patterns: t.JsonList = list(self.file_patterns)
+            patterns: list[t.JsonValue] = list(self.file_patterns)
+            source_payload: dict[str, t.JsonValue] = {
+                "directory": self.ldif_directory,
+                "patterns": patterns,
+                "recursive": self.recursive_search,
+            }
+            processing_payload: dict[str, t.JsonValue] = {
+                "batch_size": self.batch_size,
+                "parallel": self.parallel_processing,
+                "max_workers": self.max_workers,
+            }
+            error_payload: dict[str, t.JsonValue] = {
+                "continue_on_error": self.continue_on_error,
+                "max_errors": self.max_errors,
+                "has_error_file": bool(self.error_file),
+            }
+            output_payload: dict[str, t.JsonValue] = {
+                "format": self.output_format,
+                "include_metadata": self.include_metadata,
+                "compressed": self.compress_output,
+            }
+            summary_payload: dict[str, t.JsonValue] = {
+                "source": source_payload,
+                "processing": processing_payload,
+                "error_handling": error_payload,
+                "output": output_payload,
+            }
             return t.Cli.JSON_MAPPING_ADAPTER.validate_python(
-                FlextTapLdifUtilities.Cli.normalize_json_value({
-                    "source": {
-                        "directory": self.ldif_directory,
-                        "patterns": patterns,
-                        "recursive": self.recursive_search,
-                    },
-                    "processing": {
-                        "batch_size": self.batch_size,
-                        "parallel": self.parallel_processing,
-                        "max_workers": self.max_workers,
-                    },
-                    "error_handling": {
-                        "continue_on_error": self.continue_on_error,
-                        "max_errors": self.max_errors,
-                        "has_error_file": bool(self.error_file),
-                    },
-                    "output": {
-                        "format": self.output_format,
-                        "include_metadata": self.include_metadata,
-                        "compressed": self.compress_output,
-                    },
-                })
+                FlextTapLdifUtilities.Cli.normalize_json_value(summary_payload)
             )
 
         @u.model_validator(mode="after")
