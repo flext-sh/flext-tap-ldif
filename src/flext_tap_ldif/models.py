@@ -41,7 +41,7 @@ class FlextTapLdifModels(m, FlextLdifModels):
         FlextTapLdifModelsSettings,
         FlextTapLdifModelsRecord,
     ):
-        """TapLdif domain namespace composed from _models/ submodules."""
+        """TapLdif domain namespace composed from models/ submodules."""
 
 
 # Short aliases
