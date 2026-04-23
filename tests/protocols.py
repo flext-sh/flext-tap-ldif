@@ -8,7 +8,6 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from collections.abc import (
-    Mapping,
     Sequence,
 )
 from typing import Protocol, runtime_checkable
@@ -60,7 +59,7 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
                 """Close mock LDIF file."""
                 ...
 
-            def read_entries(self) -> Sequence[Mapping[str, t.Container]]:
+            def read_entries(self) -> Sequence[t.JsonMapping]:
                 """Read entries from mock LDIF file."""
                 ...
 
@@ -68,7 +67,7 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
         class TestLdifDataProvider(Protocol):
             """Protocol for test LDIF data providers."""
 
-            def test_entries(self) -> Sequence[Mapping[str, t.Container]]:
+            def test_entries(self) -> Sequence[t.JsonMapping]:
                 """Get test LDIF entries."""
                 ...
 
@@ -76,7 +75,7 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
                 """Get test LDIF file content."""
                 ...
 
-            def test_config(self) -> Mapping[str, t.Container]:
+            def test_config(self) -> t.JsonMapping:
                 """Get test LDIF configuration."""
                 ...
 
@@ -86,21 +85,21 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
 
             def assert_ldif_file_parsed(
                 self,
-                entries: Sequence[Mapping[str, t.Container]],
+                entries: Sequence[t.JsonMapping],
             ) -> None:
                 """Assert LDIF file was parsed correctly."""
                 ...
 
             def assert_ldif_entries_valid(
                 self,
-                entries: Sequence[Mapping[str, t.Container]],
+                entries: Sequence[t.JsonMapping],
             ) -> None:
                 """Assert LDIF entries are valid."""
                 ...
 
             def assert_ldif_stream_config_valid(
                 self,
-                stream: Mapping[str, t.Container],
+                stream: t.JsonMapping,
             ) -> None:
                 """Assert LDIF stream configuration is valid."""
                 ...

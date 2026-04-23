@@ -53,11 +53,11 @@ class TestsFlextTapLdifTypes(FlextTestsTypes, FlextTapLdifTypes):
                 str | Mapping[str, FlextTestsTypes.StrSequence],
             ]
         ]
-        type TestLdifScenario = FlextTestsTypes.ContainerValueMapping
+        type TestLdifScenario = FlextTestsTypes.JsonMapping
         type TestLdifValidationResult = Mapping[
             str, bool | str | FlextTestsTypes.StrSequence
         ]
-        type TestLdifParsingResult = FlextTestsTypes.ContainerValueMapping
+        type TestLdifParsingResult = FlextTestsTypes.JsonMapping
 
 
 t = TestsFlextTapLdifTypes

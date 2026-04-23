@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from collections.abc import (
-    Mapping,
     Sequence,
 )
 from datetime import UTC, datetime
@@ -20,7 +19,7 @@ class FlextTapLdifModelsRecord:
 
         stream: Annotated[str, u.Field(..., description="Source stream name")]
         record: Annotated[
-            t.ContainerValueMapping,
+            t.JsonMapping,
             u.Field(
                 ...,
                 description="LDIF record data",
@@ -54,7 +53,7 @@ class FlextTapLdifModelsRecord:
 
         @u.computed_field()
         @property
-        def ldif_record_summary(self) -> t.ContainerValueMapping:
+        def ldif_record_summary(self) -> t.JsonMapping:
             """LDIF record analysis summary."""
             return t.Cli.JSON_MAPPING_ADAPTER.validate_python(
                 u.Cli.normalize_json_value({
@@ -124,7 +123,7 @@ class FlextTapLdifModelsRecord:
 
         @u.computed_field()
         @property
-        def validation_summary(self) -> Mapping[str, t.Container]:
+        def validation_summary(self) -> t.JsonMapping:
             """LDIF validation complete summary."""
             success_rate = 0.0
             if self.total_entries > 0:
@@ -235,7 +234,7 @@ class FlextTapLdifModelsRecord:
 
         @u.computed_field()
         @property
-        def performance_analysis_summary(self) -> Mapping[str, t.Container]:
+        def performance_analysis_summary(self) -> t.JsonMapping:
             """LDIF tap performance analysis summary."""
             success_rate = 0.0
             if self.files_processed > 0:

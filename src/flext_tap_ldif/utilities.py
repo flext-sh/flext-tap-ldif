@@ -83,14 +83,14 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
             @staticmethod
             def extract_ldif_metadata(
                 file_path: Path,
-            ) -> p.Result[Mapping[str, t.Container]]:
+            ) -> p.Result[t.JsonMapping]:
                 """Extract metadata from LDIF file.
 
                 Args:
                 file_path: Path to LDIF file
 
                 Returns:
-                r[t.ContainerValueMapping]: Metadata dictionary or error
+                r[t.JsonMapping]: Metadata dictionary or error
 
                 """
                 try:
@@ -116,7 +116,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                             elif line.startswith("objectClass:"):
                                 obj_class = line.split(":", 1)[1].strip()
                                 object_classes.add(obj_class)
-                    metadata: Mapping[str, t.Container] = {
+                    metadata = {
                         "file_path": str(file_path),
                         "file_size": file_path.stat().st_size,
                         "version": version,
@@ -124,9 +124,9 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                         "base_dns": list(base_dns),
                         "object_classes": list(object_classes),
                     }
-                    return r[Mapping[str, t.Container]].ok(metadata)
+                    return r[t.JsonMapping].ok(metadata)
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-                    return r[Mapping[str, t.Container]].fail(
+                    return r[t.JsonMapping].fail(
                         f"Error extracting LDIF metadata: {e}",
                     )
 
@@ -318,15 +318,15 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
 
             @staticmethod
             def validate_ldif_config(
-                settings: Mapping[str, t.Container],
-            ) -> p.Result[Mapping[str, t.Container]]:
+                settings: t.JsonMapping,
+            ) -> p.Result[t.JsonMapping]:
                 """Validate LDIF tap configuration.
 
                 Args:
                 settings: Configuration dictionary
 
                 Returns:
-                r[t.ContainerValueMapping]: Validated settings or error
+                r[t.JsonMapping]: Validated settings or error
 
                 """
                 required_fields = ["files"]
@@ -334,39 +334,39 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                     field for field in required_fields if field not in settings
                 ]
                 if missing_fields:
-                    return r[Mapping[str, t.Container]].fail(
+                    return r[t.JsonMapping].fail(
                         f"Missing required fields: {', '.join(missing_fields)}",
                     )
                 files_raw = settings["files"]
                 if not u.list_value(files_raw):
-                    return r[Mapping[str, t.Container]].fail("Files must be a list")
+                    return r[t.JsonMapping].fail("Files must be a list")
                 if not isinstance(files_raw, Sequence):
-                    return r[Mapping[str, t.Container]].fail("Files must be a list")
+                    return r[t.JsonMapping].fail("Files must be a list")
                 file_paths: list[str] = []
                 for file_path in files_raw:
                     if not isinstance(file_path, str):
-                        return r[Mapping[str, t.Container]].fail(
+                        return r[t.JsonMapping].fail(
                             "File paths must be strings",
                         )
                     file_paths.append(file_path)
                 if not file_paths:
-                    return r[Mapping[str, t.Container]].fail(
+                    return r[t.JsonMapping].fail(
                         "At least one file must be specified",
                     )
                 for file_path in file_paths:
                     path_obj = Path(file_path)
                     if not path_obj.exists():
-                        return r[Mapping[str, t.Container]].fail(
+                        return r[t.JsonMapping].fail(
                             f"File does not exist: {file_path}",
                         )
-                return r[Mapping[str, t.Container]].ok(settings)
+                return r[t.JsonMapping].ok(settings)
 
         class StateManagement:
             """State management utilities for incremental syncs."""
 
             @staticmethod
             def resolve_file_position(
-                state: Mapping[str, t.Container],
+                state: t.JsonMapping,
                 file_path: str,
             ) -> int:
                 """Get current position in file.
@@ -391,9 +391,9 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
             @classmethod
             def resolve_file_state(
                 cls,
-                state: Mapping[str, t.Container],
+                state: t.JsonMapping,
                 file_path: str,
-            ) -> Mapping[str, t.Container]:
+            ) -> t.JsonMapping:
                 """Get state for a specific file.
 
                 Args:
@@ -401,25 +401,23 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                 file_path: Path to the file
 
                 Returns:
-                t.ContainerValueMapping: File state
+                t.JsonMapping: File state
 
                 """
                 files_raw = state.get("files")
                 if not u.mapping(files_raw):
-                    empty: Mapping[str, t.Container] = {}
-                    return empty
+                    return {}
                 file_state_raw = files_raw.get(file_path)
                 if not u.mapping(file_state_raw):
-                    empty_state: Mapping[str, t.Container] = {}
-                    return empty_state
+                    return {}
                 return u.Cli.json_as_mapping(file_state_raw)
 
             @staticmethod
             def update_file_position(
-                state: Mapping[str, t.Container],
+                state: t.JsonMapping,
                 file_path: str,
                 position: int,
-            ) -> Mapping[str, t.Container]:
+            ) -> t.JsonMapping:
                 """Set current position in file.
 
                 Args:
@@ -428,7 +426,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                 position: Current position
 
                 Returns:
-                t.ContainerValueMapping: Updated state
+                t.JsonMapping: Updated state
 
                 """
                 file_state = (
@@ -437,7 +435,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                         file_path,
                     )
                 )
-                file_state_dict: t.MutableFlatContainerMapping = dict(
+                file_state_dict: t.MutableJsonMapping = dict(
                     u.Cli.json_as_mapping(file_state)
                 )
                 file_state_dict["position"] = position
@@ -451,10 +449,10 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
             @classmethod
             def update_file_state(
                 cls,
-                state: Mapping[str, t.Container],
+                state: t.JsonMapping,
                 file_path: str,
-                file_state: Mapping[str, t.Container],
-            ) -> Mapping[str, t.Container]:
+                file_state: t.JsonMapping,
+            ) -> t.JsonMapping:
                 """Set state for a specific file.
 
                 Args:
@@ -463,17 +461,17 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                 file_state: State data for the file
 
                 Returns:
-                t.ContainerValueMapping: Updated state
+                t.JsonMapping: Updated state
 
                 """
                 files_raw = state.get("files")
-                files_dict: t.MutableFlatContainerMapping = {}
+                files_dict: t.MutableJsonMapping = {}
                 if u.mapping(files_raw):
                     for k, v in files_raw.items():
                         if u.mapping(v):
                             files_dict[k] = u.Cli.normalize_json_value(v)
                 files_dict[file_path] = u.Cli.normalize_json_value(file_state)
-                updated_state: t.MutableFlatContainerMapping = {
+                updated_state: t.MutableJsonMapping = {
                     str(key): u.Cli.normalize_json_value(value)
                     for key, value in state.items()
                 }
@@ -637,7 +635,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
             @override
             def get_records(
                 self,
-                context: Mapping[str, t.Container] | None = None,
+                context: t.JsonMapping | None = None,
             ) -> Iterable[m.Meltano.SingerRecord]:
                 """Return a generator of record-type dictionary objects.
 
@@ -649,7 +647,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
 
                 """
                 _ = context
-                settings: t.MutableFlatContainerMapping = {
+                settings: t.MutableJsonMapping = {
                     str(key): value for key, value in self._tap.config.items()
                 }
                 dir_path_raw = settings.get("directory_path")

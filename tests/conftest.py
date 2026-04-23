@@ -5,7 +5,6 @@ from __future__ import annotations
 import os
 from collections.abc import (
     Generator,
-    Mapping,
     MutableSequence,
     Sequence,
 )
@@ -113,7 +112,7 @@ def ldif_directory(
 
 
 @pytest.fixture
-def basic_tap_config(sample_ldif_file: Path) -> Mapping[str, t.Container]:
+def basic_tap_config(sample_ldif_file: Path) -> t.JsonMapping:
     """Basic LDIF tap configuration."""
     return {
         "ldif_file_path": str(sample_ldif_file),
@@ -130,7 +129,7 @@ def basic_tap_config(sample_ldif_file: Path) -> Mapping[str, t.Container]:
 @pytest.fixture
 def changes_tap_config(
     sample_ldif_changes_file: Path,
-) -> Mapping[str, t.Container]:
+) -> t.JsonMapping:
     """LDIF tap configuration for changes processing."""
     return {
         "ldif_file_path": str(sample_ldif_changes_file),
@@ -145,7 +144,7 @@ def changes_tap_config(
 
 
 @pytest.fixture
-def directory_tap_config(ldif_directory: Path) -> Mapping[str, t.Container]:
+def directory_tap_config(ldif_directory: Path) -> t.JsonMapping:
     """LDIF tap configuration for directory processing."""
     return {
         "ldif_file_path": str(ldif_directory),
@@ -161,7 +160,7 @@ def directory_tap_config(ldif_directory: Path) -> Mapping[str, t.Container]:
 
 
 @pytest.fixture
-def filtered_tap_config(sample_ldif_file: Path) -> Mapping[str, t.Container]:
+def filtered_tap_config(sample_ldif_file: Path) -> t.JsonMapping:
     """LDIF tap configuration with filters."""
     return {
         "ldif_file_path": str(sample_ldif_file),
@@ -196,7 +195,7 @@ def large_ldif_file(tmp_path: Path) -> Path:
 
 
 @pytest.fixture
-def performance_tap_config(large_ldif_file: Path) -> Mapping[str, t.Container]:
+def performance_tap_config(large_ldif_file: Path) -> t.JsonMapping:
     """LDIF tap configuration for performance testing."""
     return {
         "ldif_file_path": str(large_ldif_file),
@@ -236,7 +235,7 @@ def utf16_ldif_file(tmp_path: Path) -> Path:
 
 
 @pytest.fixture
-def singer_catalog_config() -> Mapping[str, t.Container]:
+def singer_catalog_config() -> t.JsonMapping:
     """Singer catalog configuration."""
     return {
         "streams": [
@@ -269,7 +268,7 @@ def singer_catalog_config() -> Mapping[str, t.Container]:
 
 
 @pytest.fixture
-def singer_state() -> Mapping[str, t.Container]:
+def singer_state() -> t.JsonMapping:
     """Singer state for incremental sync."""
     return {
         "currently_syncing": None,
@@ -298,7 +297,7 @@ def invalid_ldif_file(tmp_path: Path, invalid_ldif_content: str) -> Path:
 
 
 @pytest.fixture
-def benchmark_config() -> Mapping[str, t.Container]:
+def benchmark_config() -> t.JsonMapping:
     """Configuration for performance benchmarking."""
     return {
         "max_entries_to_process": 1000,
@@ -324,16 +323,16 @@ def pytest_configure(config: pytest.Config) -> None:
 class MockLDIFTap:
     """Mock implementation of the LDIF Tap."""
 
-    def __init__(self, settings: Mapping[str, t.Container]) -> None:
+    def __init__(self, settings: t.JsonMapping) -> None:
         """Initialize the instance."""
         super().__init__()
         self.settings = settings
-        self.discovered_streams: Sequence[Mapping[str, t.Container]] = []
+        self.discovered_streams: Sequence[t.JsonMapping] = []
 
-    def discover_streams(self) -> Sequence[Mapping[str, t.Container]]:
+    def discover_streams(self) -> Sequence[t.JsonMapping]:
         return self.discovered_streams
 
-    def sync_records(self) -> Sequence[Mapping[str, t.Container]]:
+    def sync_records(self) -> Sequence[t.JsonMapping]:
         return [
             {
                 "dn": "cn=test,ou=users,dc=example,dc=com",
@@ -355,16 +354,16 @@ def mock_ldif_tap() -> type[MockLDIFTap]:
 class MockLDIFParser:
     """Mock implementation of the LDIF Parser."""
 
-    def __init__(self, settings: Mapping[str, t.Container]) -> None:
+    def __init__(self, settings: t.JsonMapping) -> None:
         """Initialize the instance."""
         super().__init__()
         self.settings = settings
-        self.parsed_entries: MutableSequence[Mapping[str, t.Container]] = []
+        self.parsed_entries: MutableSequence[t.JsonMapping] = []
 
-    def parse_file(self, _file_path: str) -> Mapping[str, t.Container]:
+    def parse_file(self, _file_path: str) -> t.JsonMapping:
         return {"success": True, "entries": self.parsed_entries, "errors": []}
 
-    def add_mock_entry(self, entry: Mapping[str, t.Container]) -> None:
+    def add_mock_entry(self, entry: t.JsonMapping) -> None:
         self.parsed_entries.append(entry)
 
 

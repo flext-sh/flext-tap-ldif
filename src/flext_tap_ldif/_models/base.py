@@ -3,9 +3,6 @@
 from __future__ import annotations
 
 import base64
-from collections.abc import (
-    Mapping,
-)
 from datetime import UTC, datetime
 from typing import Self
 
@@ -34,7 +31,7 @@ class FlextTapLdifModelsBase:
         return sum(1 for attr in model_attrs if getattr(self, attr, None) is not None)
 
     @property
-    def ldif_tap_system_summary(self) -> Mapping[str, t.Container]:
+    def ldif_tap_system_summary(self) -> t.JsonMapping:
         """Complete Singer LDIF tap system summary with file processing capabilities."""
         total_models = sum(
             1
@@ -81,17 +78,17 @@ class FlextTapLdifModelsBase:
     @u.field_serializer("*", when_used="json")
     def serialize_with_ldif_metadata(
         self,
-        value: t.Container,
+        value: t.JsonValue,
         _info: u.FieldSerializationInfo,
     ) -> t.JsonValue:
         """Add Singer LDIF tap metadata to all serialized fields."""
         if u.dict_like(value):
-            value_dict: t.ContainerValueMapping = {}
+            value_dict: t.JsonMapping = {}
             if isinstance(value, m.ConfigMap):
                 value_dict = {str(k): str(v) for k, v in value.root.items()}
             else:
                 value_dict = {str(k): str(v) for k, v in value.items()}
-            metadata_dict: t.MutableContainerValueMapping = dict(value_dict)
+            metadata_dict: t.MutableJsonMapping = dict(value_dict)
             metadata_dict["_ldif_tap_metadata"] = u.Cli.normalize_json_value({
                 "extraction_timestamp": datetime.now(UTC).isoformat(),
                 "tap_type": "ldif_file_extractor",

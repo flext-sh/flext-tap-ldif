@@ -114,9 +114,9 @@ class FlextTapLdifModelsSettings:
         ]
 
         @property
-        def tap_config_summary(self) -> t.ContainerValueMapping:
+        def tap_config_summary(self) -> t.JsonMapping:
             """LDIF tap configuration summary."""
-            patterns: t.FlatContainerList = list(self.file_patterns)
+            patterns: t.JsonList = list(self.file_patterns)
             return t.Cli.JSON_MAPPING_ADAPTER.validate_python(
                 FlextTapLdifUtilities.Cli.normalize_json_value({
                     "source": {

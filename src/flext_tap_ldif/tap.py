@@ -22,7 +22,7 @@ class FlextTapLdif(m.Meltano.SingerTapBase):
 
     name: str = "tap-ldif"
     config_class = FlextTapLdifSettings
-    config_jsonschema: ClassVar[dict[str, t.JsonValue]] = {
+    config_jsonschema: ClassVar[t.JsonMapping] = {
         "type": "object",
         "properties": {
             "file_path": {"type": "string"},
@@ -52,7 +52,7 @@ class FlextTapLdif(m.Meltano.SingerTapBase):
         """
         return [FlextTapLdifUtilities.TapLdif.EntriesStream(tap=self)]
 
-    def _get_ldif_entries_schema(self) -> t.ContainerValueMapping:
+    def _get_ldif_entries_schema(self) -> t.JsonMapping:
         """Get the schema for LDIF entries stream.
 
         Returns:

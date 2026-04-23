@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from collections.abc import (
-    Mapping,
     Sequence,
 )
 from datetime import datetime
@@ -106,7 +105,7 @@ class FlextTapLdifModelsFile:
 
         @u.computed_field()
         @property
-        def ldif_file_summary(self) -> Mapping[str, t.Container]:
+        def ldif_file_summary(self) -> t.JsonMapping:
             """LDIF file processing summary."""
             progress = 0.0
             if self.total_lines > 0:
@@ -201,7 +200,7 @@ class FlextTapLdifModelsFile:
 
         # Stream schema
         stream_schema: Annotated[
-            t.ContainerValueMapping,
+            t.JsonMapping,
             u.Field(
                 description="JSON schema",
             ),
@@ -215,7 +214,7 @@ class FlextTapLdifModelsFile:
 
         @u.computed_field()
         @property
-        def ldif_stream_summary(self) -> Mapping[str, t.Container]:
+        def ldif_stream_summary(self) -> t.JsonMapping:
             """LDIF stream configuration summary."""
             return {
                 "stream_id": self.tap_stream_id,

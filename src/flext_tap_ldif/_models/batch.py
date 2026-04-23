@@ -106,7 +106,7 @@ class FlextTapLdifModelsBatch:
 
         @u.computed_field()
         @property
-        def batch_processing_summary(self) -> Mapping[str, t.Container]:
+        def batch_processing_summary(self) -> t.JsonMapping:
             """LDIF batch processing summary."""
             duration = 0.0
             if self.started_at and self.completed_at:
@@ -237,7 +237,7 @@ class FlextTapLdifModelsBatch:
 
         @u.computed_field()
         @property
-        def processing_progress_summary(self) -> t.ContainerValueMapping:
+        def processing_progress_summary(self) -> t.JsonMapping:
             """LDIF processing progress summary."""
             total_errors = self.recoverable_errors + self.fatal_errors
             duration = 0.0

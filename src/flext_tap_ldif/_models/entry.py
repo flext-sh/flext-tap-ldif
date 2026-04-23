@@ -78,7 +78,7 @@ class FlextTapLdifModelsEntry:
 
         @u.computed_field()
         @property
-        def ldif_entry_summary(self) -> t.ContainerValueMapping:
+        def ldif_entry_summary(self) -> t.JsonMapping:
             """LDIF entry analysis summary."""
             return t.Cli.JSON_MAPPING_ADAPTER.validate_python(
                 u.Cli.normalize_json_value({
@@ -190,7 +190,7 @@ class FlextTapLdifModelsEntry:
 
         @u.computed_field()
         @property
-        def change_record_summary(self) -> t.ContainerValueMapping:
+        def change_record_summary(self) -> t.JsonMapping:
             """LDIF change record summary."""
             return t.Cli.JSON_MAPPING_ADAPTER.validate_python(
                 u.Cli.normalize_json_value({
