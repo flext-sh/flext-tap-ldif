@@ -116,14 +116,16 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                             elif line.startswith("objectClass:"):
                                 obj_class = line.split(":", 1)[1].strip()
                                 object_classes.add(obj_class)
-                    metadata = {
-                        "file_path": str(file_path),
-                        "file_size": file_path.stat().st_size,
-                        "version": version,
-                        "entry_count": entry_count,
-                        "base_dns": list(base_dns),
-                        "object_classes": list(object_classes),
-                    }
+                    metadata: t.JsonMapping = (
+                        t.Cli.JSON_MAPPING_ADAPTER.validate_python({
+                            "file_path": str(file_path),
+                            "file_size": file_path.stat().st_size,
+                            "version": version,
+                            "entry_count": entry_count,
+                            "base_dns": list(base_dns),
+                            "object_classes": list(object_classes),
+                        })
+                    )
                     return r[t.JsonMapping].ok(metadata)
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                     return r[t.JsonMapping].fail(
@@ -563,7 +565,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                 """
                 FlextTapLdifUtilities._logger.info(
                     "Processing LDIF file: %s",
-                    file_path,
+                    str(file_path),
                 )
                 try:
                     encoding = self.settings.get("encoding", "utf-8")
@@ -603,7 +605,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS:
                     FlextTapLdifUtilities._logger.exception(
                         "Failed to process LDIF file: %s",
-                        file_path,
+                        str(file_path),
                     )
                     if self.settings.get("strict_parsing", True):
                         raise
@@ -693,7 +695,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                 for file_path in files_to_process:
                     FlextTapLdifUtilities._logger.info(
                         "Processing file: %s",
-                        file_path,
+                        str(file_path),
                     )
                     try:
                         for record in self._processor.process_file(file_path):
@@ -702,14 +704,14 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                         if settings.get("strict_parsing", True):
                             FlextTapLdifUtilities._logger.exception(
                                 "Error processing file %s",
-                                file_path,
+                                str(file_path),
                             )
                             raise
                         else:
                             err_msg = str(e)
                             FlextTapLdifUtilities._logger.warning(
                                 "Skipping file %s due to error: %s",
-                                file_path,
+                                str(file_path),
                                 err_msg,
                             )
                             continue
