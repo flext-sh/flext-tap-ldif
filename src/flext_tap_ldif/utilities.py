@@ -342,8 +342,6 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                 files_raw = settings["files"]
                 if not u.list_value(files_raw):
                     return r[t.JsonMapping].fail("Files must be a list")
-                if not isinstance(files_raw, Sequence):
-                    return r[t.JsonMapping].fail("Files must be a list")
                 file_paths: list[str] = []
                 for file_path in files_raw:
                     if not isinstance(file_path, str):
