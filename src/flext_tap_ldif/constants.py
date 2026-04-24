@@ -63,7 +63,7 @@ class FlextTapLdifConstants(c, FlextLdifConstants):
         class TapLdifPerformance:
             """Tap LDIF performance constants."""
 
-            DEFAULT_BATCH_SIZE: Final[int] = c.DEFAULT_BATCH_SIZE
+            DEFAULT_BATCH_SIZE: Final[int] = 1000
 
         class TapLdifValidation:
             """LDIF tap validation constants.
