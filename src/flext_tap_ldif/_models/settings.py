@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from typing import Annotated, ClassVar, Self
 
-from flext_core import FlextConstants, m
+from flext_core import m
 
-from flext_tap_ldif import FlextTapLdifUtilities, t, u
+from flext_tap_ldif import FlextTapLdifUtilities, c, t, u
 
 
 class FlextTapLdifModelsSettings:
@@ -57,7 +57,7 @@ class FlextTapLdifModelsSettings:
         batch_size: Annotated[
             int,
             u.Field(
-                default=FlextConstants.DEFAULT_SIZE,
+                default=c.DEFAULT_SIZE,
                 description="Processing batch size",
             ),
         ]
@@ -84,7 +84,7 @@ class FlextTapLdifModelsSettings:
         max_errors: Annotated[
             int,
             u.Field(
-                default=FlextConstants.DEFAULT_SIZE,
+                default=c.DEFAULT_SIZE,
                 description="Maximum errors before stopping",
             ),
         ]

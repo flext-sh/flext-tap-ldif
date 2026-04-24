@@ -8,9 +8,7 @@ from collections.abc import (
 from datetime import datetime
 from typing import Annotated, ClassVar, Self
 
-from flext_core import FlextConstants
-
-from flext_tap_ldif import m, t, u
+from flext_tap_ldif import c, m, t, u
 
 
 class FlextTapLdifModelsFile:
@@ -196,7 +194,7 @@ class FlextTapLdifModelsFile:
             u.Field(
                 description="Processing batch size",
             ),
-        ] = FlextConstants.DEFAULT_SIZE
+        ] = c.DEFAULT_SIZE
 
         # Stream schema
         stream_schema: Annotated[

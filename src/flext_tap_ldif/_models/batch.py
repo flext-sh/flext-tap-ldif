@@ -9,9 +9,7 @@ from collections.abc import (
 from datetime import UTC, datetime
 from typing import Annotated, ClassVar, Self
 
-from flext_core import FlextConstants
-
-from flext_tap_ldif import m, t, u
+from flext_tap_ldif import c, m, t, u
 
 
 class FlextTapLdifModelsBatch:
@@ -46,7 +44,7 @@ class FlextTapLdifModelsBatch:
             u.Field(
                 description="Processing batch size",
             ),
-        ] = FlextConstants.DEFAULT_SIZE
+        ] = c.DEFAULT_SIZE
 
         # Processing configuration
         parallel_processing: Annotated[
@@ -63,7 +61,7 @@ class FlextTapLdifModelsBatch:
             u.Field(
                 description="Maximum errors before stopping",
             ),
-        ] = FlextConstants.DEFAULT_SIZE // 10
+        ] = c.DEFAULT_SIZE // 10
 
         # Batch state
         status: Annotated[str, u.Field(description="Batch processing status")] = (

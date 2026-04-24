@@ -579,7 +579,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                             msg: str = f"Failed to parse LDIF: {parse_result.error}"
                             self._raise_parse_error(msg)
                         for raw_entry in parse_result.value.entries:
-                            entry = m.Ldif.Entry.model_validate(raw_entry)
+                            entry = m.Entry.model_validate(raw_entry)
                             dn_val = entry.dn.value if entry.dn is not None else ""
                             attrs_dict: dict[str, MutableSequence[str]] = (
                                 dict(entry.attributes.attributes)
