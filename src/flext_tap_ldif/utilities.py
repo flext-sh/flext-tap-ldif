@@ -293,7 +293,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                             decoded_value = base64.b64decode(
                                 encoded_value.strip()
                             ).decode(
-                                "utf-8",
+                                c.DEFAULT_ENCODING,
                             )
                             return r[tuple[str, str]].ok((
                                 attr_name.strip(),
@@ -566,12 +566,12 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                     str(file_path),
                 )
                 try:
-                    encoding = self.settings.get("encoding", "utf-8")
+                    encoding = self.settings.get("encoding", c.DEFAULT_ENCODING)
                     match encoding:
                         case str() as text_encoding:
                             file_encoding = text_encoding
                         case _:
-                            file_encoding = "utf-8"
+                            file_encoding = c.DEFAULT_ENCODING
                     with file_path.open("r", encoding=file_encoding) as file:
                         content = file.read()
                         parse_result = self._api.parse_ldif(content)
@@ -597,7 +597,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                                 c.TapLdif.EntrySchema.SOURCE_FILE_FIELD: str(file_path),
                                 c.TapLdif.EntrySchema.LINE_NUMBER_FIELD: c.TapLdif.EntrySchema.DEFAULT_LINE_NUMBER,
                                 c.TapLdif.EntrySchema.ENTRY_SIZE_FIELD: len(
-                                    str(entry).encode("utf-8")
+                                    str(entry).encode(c.DEFAULT_ENCODING)
                                 ),
                             }
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS:

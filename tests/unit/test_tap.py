@@ -1,26 +1,22 @@
-"""Tests for FlextTapLdif.
-
-Copyright (c) 2025 FLEXT Team. All rights reserved.
-SPDX-License-Identifier: MIT
-
-"""
+"""Behavior contract for FlextTapLdif — public API only."""
 
 from __future__ import annotations
 
 import tempfile
 from pathlib import Path
 
+from flext_tests import tm
+
 from flext_tap_ldif import FlextTapLdif
 
 
-def test_discover_streams() -> None:
-    """Test stream discovery."""
-    with tempfile.NamedTemporaryFile(suffix=".ldif", delete=False) as tmp_file:
-        settings = {"file_path": tmp_file.name}
-        tap = FlextTapLdif(config=settings)
-        streams = tap.discover_streams()
-        if len(streams) != 1:
-            msg: str = f"Expected {1}, got {len(streams)}"
-            raise AssertionError(msg)
-        assert streams[0].name == "ldif_entries"
-        Path(tmp_file.name).unlink(missing_ok=True)
+class TestsFlextTapLdifTap:
+    """Behavior contract for FlextTapLdif.discover_streams."""
+
+    def test_discover_streams_returns_ldif_entries_stream(self) -> None:
+        with tempfile.NamedTemporaryFile(suffix=".ldif", delete=False) as tmp_file:
+            tap = FlextTapLdif(config={"file_path": tmp_file.name})
+            streams = tap.discover_streams()
+            tm.that(len(streams), eq=1)
+            tm.that(streams[0].name, eq="ldif_entries")
+            Path(tmp_file.name).unlink(missing_ok=True)

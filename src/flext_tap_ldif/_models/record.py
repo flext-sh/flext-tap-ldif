@@ -8,6 +8,8 @@ from collections.abc import (
 from datetime import UTC, datetime
 from typing import Annotated, Self
 
+from flext_core import c
+
 from flext_tap_ldif import m, t, u
 
 
@@ -64,7 +66,9 @@ class FlextTapLdifModelsRecord:
                     "source": {"file": self.source_file, "line": self.line_number},
                     "extraction_time": self.time_extracted.isoformat(),
                     "processing_time_ms": self.processing_time * 1000,
-                    "record_size_bytes": len(str(self.record).encode("utf-8")),
+                    "record_size_bytes": len(
+                        str(self.record).encode(c.DEFAULT_ENCODING)
+                    ),
                 })
             )
 

@@ -28,7 +28,7 @@ class FlextTapLdif(m.Meltano.SingerTapBase):
             "file_path": {"type": "string"},
             "directory_path": {"type": "string"},
             "file_pattern": {"type": "string", "default": "*.ldif"},
-            "encoding": {"type": "string", "default": "utf-8"},
+            "encoding": {"type": "string", "default": c.DEFAULT_ENCODING},
             "base_dn_filter": {"type": "string"},
             "object_class_filter": {"type": "array", "items": {"type": "string"}},
             "attribute_filter": {"type": "array", "items": {"type": "string"}},

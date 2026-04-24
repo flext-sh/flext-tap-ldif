@@ -27,7 +27,7 @@ class FlextTapLdifModelsFile:
                     {
                         "file_path": "/data/directory-export.ldif",
                         "file_size": 1048576,
-                        "encoding": "utf-8",
+                        "encoding": c.DEFAULT_ENCODING,
                     },
                 ],
             },
@@ -37,7 +37,9 @@ class FlextTapLdifModelsFile:
         file_size: Annotated[
             t.NonNegativeInt, u.Field(description="File size in bytes")
         ] = 0
-        encoding: Annotated[str, u.Field(description="File encoding")] = "utf-8"
+        encoding: Annotated[str, u.Field(description="File encoding")] = (
+            c.DEFAULT_ENCODING
+        )
 
         # File metadata
         created_at: Annotated[
