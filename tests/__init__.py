@@ -20,6 +20,7 @@ if _t.TYPE_CHECKING:
     from tests.models import TestsFlextTapLdifModels, m
     from tests.protocols import TestsFlextTapLdifProtocols, p
     from tests.typings import TestsFlextTapLdifTypes, t
+    from tests.unit.test_tap import TestsFlextTapLdifTap
     from tests.utilities import TestsFlextTapLdifUtilities, u
 _LAZY_IMPORTS = merge_lazy_imports(
     (".unit",),
@@ -45,6 +46,7 @@ _LAZY_IMPORTS = merge_lazy_imports(
                 "TestsFlextTapLdifTypes",
                 "t",
             ),
+            ".unit.test_tap": ("TestsFlextTapLdifTap",),
             ".utilities": (
                 "TestsFlextTapLdifUtilities",
                 "u",
@@ -87,6 +89,7 @@ __all__: list[str] = [
     "TestsFlextTapLdifConstants",
     "TestsFlextTapLdifModels",
     "TestsFlextTapLdifProtocols",
+    "TestsFlextTapLdifTap",
     "TestsFlextTapLdifTypes",
     "TestsFlextTapLdifUtilities",
     "c",
