@@ -12,7 +12,7 @@ from collections.abc import (
 )
 from typing import ClassVar, override
 
-from flext_tap_ldif import FlextTapLdifSettings, FlextTapLdifUtilities, c, m, t, u
+from flext_tap_ldif import FlextTapLdifSettings, c, m, t, u
 
 logger = u.fetch_logger(__name__)
 
@@ -50,7 +50,7 @@ class FlextTapLdif(m.Meltano.SingerTapBase):
         A list of discovered streams.
 
         """
-        return [FlextTapLdifUtilities.TapLdif.EntriesStream(tap=self)]
+        return [u.TapLdif.EntriesStream(tap=self)]
 
     def _get_ldif_entries_schema(self) -> t.JsonMapping:
         """Get the schema for LDIF entries stream.
@@ -60,7 +60,7 @@ class FlextTapLdif(m.Meltano.SingerTapBase):
 
         """
         return t.Cli.JSON_MAPPING_ADAPTER.validate_python(
-            FlextTapLdifUtilities.Cli.normalize_json_value({
+            u.Cli.normalize_json_value({
                 "type": "object",
                 "properties": {
                     "dn": {"type": "string"},
