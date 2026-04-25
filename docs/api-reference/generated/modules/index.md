@@ -4,7 +4,9 @@
 
 These pages are generated from public modules and their docstrings.
 
+- [flext_tap_ldif](flext_tap_ldif.md)
 - [flext_tap_ldif.api](api.md)
+- [flext_tap_ldif.cli](cli.md)
 - [flext_tap_ldif.constants](constants.md)
 - [flext_tap_ldif.models](models.md)
 - [flext_tap_ldif.protocols](protocols.md)
