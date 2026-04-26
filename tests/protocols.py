@@ -38,13 +38,13 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
     class Tests(FlextTestsProtocols.Tests):
         """Project-specific test protocols."""
 
-    class TapLdif(FlextTapLdifProtocols.TapLdif):
-        """Tap LDIF test protocols - domain-specific for LDIF tap testing.
+    class TapLdif:
+        """Tap LDIF test protocols — domain-specific for LDIF tap testing.
 
-        Contains test protocols specific to LDIF tap functionality including:
-        - Mock LDIF file protocols for testing
-        - Test data provider protocols
-        - Test assertion protocols
+        Hosts test-only protocols (``MockLdifFile``, ``TestLdifDataProvider``,
+        ``TestLdifAssertion``). The parent ``FlextTapLdifProtocols.TapLdif``
+        namespace was deleted as dead code (no workspace consumers); these
+        test-only entries now live directly under the test facade.
         """
 
         @runtime_checkable
