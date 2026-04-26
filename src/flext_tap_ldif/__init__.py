@@ -10,13 +10,10 @@ from flext_core.lazy import (
     install_lazy_exports,
     merge_lazy_imports,
 )
-
 from flext_tap_ldif.__version__ import *
 
 if _t.TYPE_CHECKING:
     from flext_meltano import d, e, h, r, s, x
-
-    from flext_tap_ldif._models.base import FlextTapLdifModelsBase
     from flext_tap_ldif._models.batch import FlextTapLdifModelsBatch
     from flext_tap_ldif._models.entry import FlextTapLdifModelsEntry
     from flext_tap_ldif._models.file import FlextTapLdifModelsFile
@@ -45,7 +42,6 @@ _LAZY_IMPORTS = merge_lazy_imports(
                 "__version__",
                 "__version_info__",
             ),
-            "._models.base": ("FlextTapLdifModelsBase",),
             "._models.batch": ("FlextTapLdifModelsBatch",),
             "._models.entry": ("FlextTapLdifModelsEntry",),
             "._models.file": ("FlextTapLdifModelsFile",),
@@ -121,7 +117,6 @@ __all__: list[str] = [
     "FlextTapLdifCli",
     "FlextTapLdifConstants",
     "FlextTapLdifModels",
-    "FlextTapLdifModelsBase",
     "FlextTapLdifModelsBatch",
     "FlextTapLdifModelsEntry",
     "FlextTapLdifModelsFile",

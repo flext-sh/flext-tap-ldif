@@ -9,7 +9,6 @@ from datetime import UTC, datetime
 from typing import Annotated, Self
 
 from flext_core import c
-
 from flext_tap_ldif import m, t, u
 
 

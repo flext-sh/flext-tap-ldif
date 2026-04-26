@@ -21,7 +21,6 @@ from typing import Protocol, runtime_checkable
 
 from flext_ldif import FlextLdifProtocols
 from flext_meltano import m, p
-
 from flext_tap_ldif import t
 
 

@@ -11,7 +11,6 @@ from pathlib import Path
 from typing import Annotated, ClassVar
 
 from flext_core import FlextSettings
-
 from flext_tap_ldif import c, m, u
 
 
