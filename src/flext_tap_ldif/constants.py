@@ -96,4 +96,4 @@ class FlextTapLdifConstants(c, FlextLdifConstants):
 
 
 c = FlextTapLdifConstants
-__all__: list[str] = ["FlextTapLdifConstants", "c"]
+__all__: tuple[str, ...] = ("FlextTapLdifConstants", "c")
