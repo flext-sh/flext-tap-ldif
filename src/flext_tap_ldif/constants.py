@@ -7,13 +7,11 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, ClassVar, Final
+from enum import StrEnum, unique
+from typing import ClassVar, Final
 
 from flext_ldif import FlextLdifConstants
 from flext_meltano import c
-
-if TYPE_CHECKING:
-    from flext_tap_ldif import t
 
 
 class FlextTapLdifConstants(c, FlextLdifConstants):
@@ -38,12 +36,19 @@ class FlextTapLdifConstants(c, FlextLdifConstants):
             FlextLdifConstants.Ldif.Encoding.UTF16,
         })
         MAX_FILE_SIZE_MB: Final[int] = 100
-        LDIF_CHANGE_TYPES: ClassVar[t.StrSequence] = [
-            "add",
-            "modify",
-            "delete",
-            "modrdn",
-        ]
+
+        @unique
+        class LdifChangeType(StrEnum):
+            """Supported LDIF changetype tokens for tap processing."""
+
+            ADD = "add"
+            MODIFY = "modify"
+            DELETE = "delete"
+            MODRDN = "modrdn"
+
+        LDIF_CHANGE_TYPES: ClassVar[tuple[str, ...]] = tuple(
+            member.value for member in LdifChangeType.__members__.values()
+        )
 
         MIN_WORKERS_FOR_PARALLEL: Final[int] = 2
         MAX_WORKERS_LIMIT: Final[int] = 8
