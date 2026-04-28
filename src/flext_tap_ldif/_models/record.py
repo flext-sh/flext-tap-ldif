@@ -57,7 +57,7 @@ class FlextTapLdifModelsRecord:
         def ldif_record_summary(self) -> t.JsonMapping:
             """LDIF record analysis summary."""
             return t.Cli.JSON_MAPPING_ADAPTER.validate_python(
-                u.Cli.normalize_json_value({
+                u.normalize_to_json_value({
                     "stream": self.stream,
                     "record_type": self.record_type,
                     "field_count": len(self.record),

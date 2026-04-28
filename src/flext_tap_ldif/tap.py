@@ -60,7 +60,7 @@ class FlextTapLdif(m.Meltano.SingerTapBase):
 
         """
         return t.Cli.JSON_MAPPING_ADAPTER.validate_python(
-            u.Cli.normalize_json_value({
+            u.normalize_to_json_value({
                 "type": "object",
                 "properties": {
                     "dn": {"type": "string"},

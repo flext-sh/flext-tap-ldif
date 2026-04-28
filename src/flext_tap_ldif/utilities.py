@@ -180,7 +180,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                 record: t.MutableAttributeMapping = {}
                 current_attr: str | None = None
                 current_value: str = ""
-                for line in entry_lines:
+                for line in (*entry_lines, ""):
                     if line.startswith(c.TapLdif.Format.LINE_CONTINUATION):
                         if current_attr is not None:
                             current_value += line[1:]
@@ -210,21 +210,6 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                     else:
                         current_attr = None
                         current_value = ""
-                if current_attr is not None and current_value:
-                    normalized_attr = FlextTapLdifUtilities.TapLdif.LdifDataProcessing.normalize_ldif_attribute_name(
-                        current_attr,
-                    )
-                    if normalized_attr in record:
-                        existing_value = record[normalized_attr]
-                        if isinstance(existing_value, list):
-                            existing_value.append(current_value)
-                        else:
-                            record[normalized_attr] = [
-                                str(existing_value),
-                                current_value,
-                            ]
-                    else:
-                        record[normalized_attr] = current_value
                 return record
 
             @staticmethod
@@ -468,13 +453,13 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                 if u.mapping(files_raw):
                     for k, v in files_raw.items():
                         if u.mapping(v):
-                            files_dict[k] = u.Cli.normalize_json_value(v)
-                files_dict[file_path] = u.Cli.normalize_json_value(file_state)
+                            files_dict[k] = u.normalize_to_json_value(v)
+                files_dict[file_path] = u.normalize_to_json_value(file_state)
                 updated_state: t.MutableJsonMapping = {
-                    str(key): u.Cli.normalize_json_value(value)
+                    key: u.normalize_to_json_value(value)
                     for key, value in state.items()
                 }
-                updated_state["files"] = u.Cli.normalize_json_value(files_dict)
+                updated_state["files"] = u.normalize_to_json_value(files_dict)
                 return updated_state
 
         class Processor:
@@ -627,7 +612,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                 """
                 super().__init__(tap, name="ldif_entries", schema=self._get_schema())
                 self._processor = FlextTapLdifUtilities.TapLdif.Processor(
-                    {str(key): value for key, value in tap.config.items()},
+                    dict(tap.config.items()),
                 )
                 self._tap: m.Meltano.SingerTapBase = tap
 

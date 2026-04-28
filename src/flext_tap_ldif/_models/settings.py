@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Annotated, ClassVar, Self
 
 from flext_core import m
-from flext_tap_ldif import FlextTapLdifUtilities, c, t, u
+from flext_tap_ldif import c, t, u
 
 
 class FlextTapLdifModelsSettings:
@@ -143,7 +143,7 @@ class FlextTapLdifModelsSettings:
                 "output": output_payload,
             }
             return t.Cli.JSON_MAPPING_ADAPTER.validate_python(
-                FlextTapLdifUtilities.Cli.normalize_json_value(summary_payload)
+                u.normalize_to_json_value(summary_payload)
             )
 
         @u.model_validator(mode="after")

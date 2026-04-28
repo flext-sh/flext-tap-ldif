@@ -81,7 +81,7 @@ class FlextTapLdifModelsEntry:
         def ldif_entry_summary(self) -> t.JsonMapping:
             """LDIF entry analysis summary."""
             return t.Cli.JSON_MAPPING_ADAPTER.validate_python(
-                u.Cli.normalize_json_value({
+                u.normalize_to_json_value({
                     "dn": self.dn,
                     "attribute_count": len(self.attributes),
                     "object_class_count": len(self.object_classes),
@@ -193,7 +193,7 @@ class FlextTapLdifModelsEntry:
         def change_record_summary(self) -> t.JsonMapping:
             """LDIF change record summary."""
             return t.Cli.JSON_MAPPING_ADAPTER.validate_python(
-                u.Cli.normalize_json_value({
+                u.normalize_to_json_value({
                     "dn": self.dn,
                     "change_type": self.change_type,
                     "change_count": len(self.changes),

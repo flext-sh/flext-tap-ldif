@@ -243,7 +243,7 @@ class FlextTapLdifModelsBatch:
                 duration = (datetime.now(UTC) - self.started_at).total_seconds()
 
             return t.Cli.JSON_MAPPING_ADAPTER.validate_python(
-                u.Cli.normalize_json_value({
+                u.normalize_to_json_value({
                     "file_path": self.file_path,
                     "status": self.processing_status,
                     "progress": {
