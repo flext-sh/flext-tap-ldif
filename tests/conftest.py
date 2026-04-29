@@ -26,28 +26,20 @@ def tap_ldif_settings() -> FlextTapLdifSettings:
 @pytest.fixture(scope="session")
 def docker_control() -> tk:
     """Provide Docker control instance for tests."""
-    return tk()
+    return tk.shared(
+        "flext-openldap-test",
+        workspace_root=Path(__file__).resolve().parents[2],
+    )
 
 
 @pytest.fixture(scope="session")
 def shared_ldap_container(docker_control: tk) -> Generator[str]:
     """Managed LDAP container using tk with auto-start."""
-    result = docker_control.start_existing_container("flext-openldap-test")
+    result = docker_control.execute()
     if result.failure:
         pytest.skip(f"Failed to start LDAP container: {result.error}")
     yield "flext-openldap-test"
-    try:
-        docker_control.client.containers.get("flext-openldap-test").stop()
-    except (
-        ValueError,
-        TypeError,
-        KeyError,
-        AttributeError,
-        OSError,
-        RuntimeError,
-        ImportError,
-    ):
-        pass
+    _ = docker_control.down()
 
 
 @pytest.fixture(autouse=True)

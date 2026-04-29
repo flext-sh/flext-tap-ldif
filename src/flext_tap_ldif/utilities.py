@@ -17,7 +17,7 @@ from collections.abc import (
 )
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import ClassVar, NoReturn, override
+from typing import NoReturn, override
 
 from flext_ldif import FlextLdifUtilities, ldif
 from flext_meltano import u
@@ -37,8 +37,6 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
         c.DEFAULT_LDIF_ENCODING
         c.TapLdif.Format.MAX_LINE_LENGTH
     """
-
-    logger: ClassVar[p.Logger] = u.fetch_logger(__name__)
 
     class TapLdif:
         """Utility functions for LDIF data processing.
@@ -571,7 +569,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                                 else {}
                             )
                             yield {
-                                c.TapLdif.EntrySchema.DN_FIELD: str(dn_val),
+                                c.TapLdif.EntrySchema.DN_FIELD: dn_val,
                                 c.TapLdif.EntrySchema.ATTRIBUTES_FIELD: attrs_dict,
                                 c.TapLdif.EntrySchema.OBJECT_CLASS_FIELD: attrs_dict.get(
                                     "objectClass",
@@ -631,9 +629,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
 
                 """
                 _ = context
-                settings: t.MutableJsonMapping = {
-                    str(key): value for key, value in self._tap.config.items()
-                }
+                settings: t.MutableJsonMapping = dict(self._tap.config.items())
                 dir_path_raw = settings.get("directory_path")
                 dir_path = dir_path_raw if isinstance(dir_path_raw, str) else None
                 pattern_raw = settings.get("file_pattern", "*.ldif")
