@@ -1,0 +1,16 @@
+tests/conftest.py
+  h_9db9d35f50cf33 29-31,38,42
+pyproject.toml
+  h_9db9d35f50cf33 319
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.4",
+  "base_commit_sha": "f09c556960913eedbbd1c1db691ffa5a66dff319",
+  "prompts": {},
+  "humans": {
+    "h_9db9d35f50cf33": {
+      "author": "FLEXT Bot"
+    }
+  }
+}
