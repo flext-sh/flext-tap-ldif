@@ -90,8 +90,8 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                 try:
                     version: str | None = None
                     entry_count = 0
-                    base_dns: set[str] = set()
-                    object_classes: set[str] = set()
+                    base_dns = set()
+                    object_classes = set()
                     with file_path.open(
                         "r", encoding=c.TapLdif.DEFAULT_LDIF_ENCODING
                     ) as f:
@@ -321,7 +321,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                 files_raw = settings["files"]
                 if not u.list_value(files_raw):
                     return r[t.JsonMapping].fail("Files must be a list")
-                file_paths: list[str] = []
+                file_paths: t.MutableSequenceOf[str] = []
                 for file_path in files_raw:
                     if not isinstance(file_path, str):
                         return r[t.JsonMapping].fail(
@@ -480,7 +480,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                 file_pattern: str = "*.ldif",
                 file_path: str | Path | None = None,
                 max_file_size_mb: int = 100,
-            ) -> p.Result[list[Path]]:
+            ) -> p.Result[t.SequenceOf[Path]]:
                 """Discover LDIF files using local file discovery.
 
                 Args:
@@ -494,7 +494,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
 
                 """
                 max_size_bytes = max_file_size_mb * 1024 * 1024
-                discovered: list[Path] = []
+                discovered: t.MutableSequenceOf[Path] = []
                 if file_path is not None:
                     match file_path:
                         case str() as file_path_text:
@@ -502,11 +502,11 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                         case _:
                             p = file_path
                     if not p.exists():
-                        return r[list[Path]].fail(f"File not found: {p}")
+                        return r[t.SequenceOf[Path]].fail(f"File not found: {p}")
                     if p.stat().st_size > max_size_bytes:
-                        return r[list[Path]].fail(f"File exceeds max size: {p}")
+                        return r[t.SequenceOf[Path]].fail(f"File exceeds max size: {p}")
                     discovered.append(p)
-                    return r[list[Path]].ok(discovered)
+                    return r[t.SequenceOf[Path]].ok(discovered)
                 if directory_path is not None:
                     match directory_path:
                         case str() as directory_path_text:
@@ -514,23 +514,21 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                         case _:
                             d = directory_path
                     if not d.exists() or not d.is_dir():
-                        return r[list[Path]].fail(f"Directory not found: {d}")
+                        return r[t.SequenceOf[Path]].fail(f"Directory not found: {d}")
                     discovered.extend(
                         f
                         for f in sorted(d.glob(file_pattern))
                         if f.is_file() and f.stat().st_size <= max_size_bytes
                     )
-                    return r[list[Path]].ok(discovered)
-                return r[list[Path]].fail("No file_path or directory_path specified")
+                    return r[t.SequenceOf[Path]].ok(discovered)
+                return r[t.SequenceOf[Path]].fail(
+                    "No file_path or directory_path specified"
+                )
 
             def process_file(
                 self,
                 file_path: Path,
-            ) -> Generator[
-                t.MappingKV[
-                    str, str | int | t.MappingKV[str, t.StrSequence] | t.StrSequence
-                ]
-            ]:
+            ) -> Generator[t.JsonMapping]:
                 """Process a single LDIF file and yield records using flext-ldif.
 
                 Args:
@@ -560,28 +558,34 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                         for raw_entry in parse_result.value.entries:
                             entry = m.Ldif.Entry.model_validate(raw_entry)
                             dn_val = entry.dn.value if entry.dn is not None else ""
-                            attrs_dict: dict[str, list[str]] = (
-                                {
-                                    k: list(v)
-                                    for k, v in entry.attributes.attributes.items()
-                                }
-                                if entry.attributes is not None
-                                else {}
+                            attrs_dict: t.JsonMapping = (
+                                t.Cli.JSON_MAPPING_ADAPTER.validate_python(
+                                    {
+                                        k: list(v)
+                                        for k, v in entry.attributes.attributes.items()
+                                    }
+                                    if entry.attributes is not None
+                                    else {},
+                                )
                             )
-                            yield {
-                                c.TapLdif.EntrySchema.DN_FIELD: dn_val,
-                                c.TapLdif.EntrySchema.ATTRIBUTES_FIELD: attrs_dict,
-                                c.TapLdif.EntrySchema.OBJECT_CLASS_FIELD: attrs_dict.get(
-                                    "objectClass",
-                                    [],
-                                ),
-                                c.TapLdif.EntrySchema.CHANGE_TYPE_FIELD: c.TapLdif.EntrySchema.DEFAULT_CHANGE_TYPE,
-                                c.TapLdif.EntrySchema.SOURCE_FILE_FIELD: str(file_path),
-                                c.TapLdif.EntrySchema.LINE_NUMBER_FIELD: c.TapLdif.EntrySchema.DEFAULT_LINE_NUMBER,
-                                c.TapLdif.EntrySchema.ENTRY_SIZE_FIELD: len(
-                                    str(entry).encode(c.DEFAULT_ENCODING)
-                                ),
-                            }
+                            yield t.Cli.JSON_MAPPING_ADAPTER.validate_python(
+                                {
+                                    c.TapLdif.EntrySchema.DN_FIELD: dn_val,
+                                    c.TapLdif.EntrySchema.ATTRIBUTES_FIELD: attrs_dict,
+                                    c.TapLdif.EntrySchema.OBJECT_CLASS_FIELD: attrs_dict.get(
+                                        "objectClass",
+                                        [],
+                                    ),
+                                    c.TapLdif.EntrySchema.CHANGE_TYPE_FIELD: c.TapLdif.EntrySchema.DEFAULT_CHANGE_TYPE,
+                                    c.TapLdif.EntrySchema.SOURCE_FILE_FIELD: str(
+                                        file_path
+                                    ),
+                                    c.TapLdif.EntrySchema.LINE_NUMBER_FIELD: c.TapLdif.EntrySchema.DEFAULT_LINE_NUMBER,
+                                    c.TapLdif.EntrySchema.ENTRY_SIZE_FIELD: len(
+                                        str(entry).encode(c.DEFAULT_ENCODING)
+                                    ),
+                                },
+                            )
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS:
                     FlextTapLdifUtilities.logger.exception(
                         "Failed to process LDIF file: %s",
