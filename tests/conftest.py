@@ -6,7 +6,6 @@ import os
 from collections.abc import (
     Generator,
     MutableSequence,
-    Sequence,
 )
 from pathlib import Path
 
@@ -319,12 +318,12 @@ class MockLDIFTap:
         """Initialize the instance."""
         super().__init__()
         self.settings = settings
-        self.discovered_streams: Sequence[t.JsonMapping] = []
+        self.discovered_streams: t.SequenceOf[t.JsonMapping] = []
 
-    def discover_streams(self) -> Sequence[t.JsonMapping]:
+    def discover_streams(self) -> t.SequenceOf[t.JsonMapping]:
         return self.discovered_streams
 
-    def sync_records(self) -> Sequence[t.JsonMapping]:
+    def sync_records(self) -> t.SequenceOf[t.JsonMapping]:
         return [
             {
                 "dn": "cn=test,ou=users,dc=example,dc=com",

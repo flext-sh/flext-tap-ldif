@@ -2,10 +2,6 @@
 
 from __future__ import annotations
 
-from collections.abc import (
-    Mapping,
-    Sequence,
-)
 from datetime import UTC, datetime
 from typing import Annotated, ClassVar, Self
 
@@ -96,7 +92,7 @@ class FlextTapLdifModelsBatch:
 
         # Error tracking
         file_errors: Annotated[
-            Mapping[str, t.StrSequence],
+            t.MappingKV[str, t.StrSequence],
             u.Field(
                 description="Errors by file",
             ),
@@ -210,7 +206,7 @@ class FlextTapLdifModelsBatch:
 
         # Error tracking
         processing_errors: Annotated[
-            Sequence[t.StrMapping],
+            t.SequenceOf[t.StrMapping],
             u.Field(
                 description="Processing errors with context",
             ),

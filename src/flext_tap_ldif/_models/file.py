@@ -2,9 +2,6 @@
 
 from __future__ import annotations
 
-from collections.abc import (
-    Sequence,
-)
 from datetime import datetime
 from typing import Annotated, ClassVar, Self
 
@@ -206,7 +203,7 @@ class FlextTapLdifModelsFile:
             ),
         ] = u.Field(default_factory=dict)
         stream_metadata: Annotated[
-            Sequence[t.StrMapping],
+            t.SequenceOf[t.StrMapping],
             u.Field(
                 description="Stream metadata",
             ),

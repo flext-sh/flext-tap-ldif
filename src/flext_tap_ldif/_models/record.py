@@ -2,9 +2,6 @@
 
 from __future__ import annotations
 
-from collections.abc import (
-    Sequence,
-)
 from datetime import UTC, datetime
 from typing import Annotated, Self
 
@@ -90,13 +87,13 @@ class FlextTapLdifModelsRecord:
 
         # Validation results
         validation_errors: Annotated[
-            Sequence[t.StrMapping],
+            t.SequenceOf[t.StrMapping],
             u.Field(
                 description="Validation errors with details",
             ),
         ] = u.Field(default_factory=lambda: list[t.StrMapping]())
         warnings: Annotated[
-            Sequence[t.StrMapping],
+            t.SequenceOf[t.StrMapping],
             u.Field(
                 description="Validation warnings",
             ),

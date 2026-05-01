@@ -11,9 +11,6 @@ import re
 from collections.abc import (
     Generator,
     Iterable,
-    Mapping,
-    MutableSequence,
-    Sequence,
 )
 from datetime import UTC, datetime
 from pathlib import Path
@@ -483,7 +480,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                 file_pattern: str = "*.ldif",
                 file_path: str | Path | None = None,
                 max_file_size_mb: int = 100,
-            ) -> p.Result[Sequence[Path]]:
+            ) -> p.Result[list[Path]]:
                 """Discover LDIF files using local file discovery.
 
                 Args:
@@ -493,11 +490,11 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                     max_file_size_mb: Maximum file size in MB
 
                 Returns:
-                    r[Sequence[Path]]: Success with discovered files or failure with error
+                    r[list[Path]]: Success with discovered files or failure with error
 
                 """
                 max_size_bytes = max_file_size_mb * 1024 * 1024
-                discovered: MutableSequence[Path] = []
+                discovered: list[Path] = []
                 if file_path is not None:
                     match file_path:
                         case str() as file_path_text:
@@ -505,11 +502,11 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                         case _:
                             p = file_path
                     if not p.exists():
-                        return r[Sequence[Path]].fail(f"File not found: {p}")
+                        return r[list[Path]].fail(f"File not found: {p}")
                     if p.stat().st_size > max_size_bytes:
-                        return r[Sequence[Path]].fail(f"File exceeds max size: {p}")
+                        return r[list[Path]].fail(f"File exceeds max size: {p}")
                     discovered.append(p)
-                    return r[Sequence[Path]].ok(discovered)
+                    return r[list[Path]].ok(discovered)
                 if directory_path is not None:
                     match directory_path:
                         case str() as directory_path_text:
@@ -517,22 +514,22 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                         case _:
                             d = directory_path
                     if not d.exists() or not d.is_dir():
-                        return r[Sequence[Path]].fail(f"Directory not found: {d}")
+                        return r[list[Path]].fail(f"Directory not found: {d}")
                     discovered.extend(
                         f
                         for f in sorted(d.glob(file_pattern))
                         if f.is_file() and f.stat().st_size <= max_size_bytes
                     )
-                    return r[Sequence[Path]].ok(discovered)
-                return r[Sequence[Path]].fail(
-                    "No file_path or directory_path specified"
-                )
+                    return r[list[Path]].ok(discovered)
+                return r[list[Path]].fail("No file_path or directory_path specified")
 
             def process_file(
                 self,
                 file_path: Path,
             ) -> Generator[
-                Mapping[str, str | int | Mapping[str, t.StrSequence] | t.StrSequence]
+                t.MappingKV[
+                    str, str | int | t.MappingKV[str, t.StrSequence] | t.StrSequence
+                ]
             ]:
                 """Process a single LDIF file and yield records using flext-ldif.
 
@@ -563,8 +560,11 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                         for raw_entry in parse_result.value.entries:
                             entry = m.Ldif.Entry.model_validate(raw_entry)
                             dn_val = entry.dn.value if entry.dn is not None else ""
-                            attrs_dict: dict[str, MutableSequence[str]] = (
-                                dict(entry.attributes.attributes)
+                            attrs_dict: dict[str, list[str]] = (
+                                {
+                                    k: list(v)
+                                    for k, v in entry.attributes.attributes.items()
+                                }
                                 if entry.attributes is not None
                                 else {}
                             )

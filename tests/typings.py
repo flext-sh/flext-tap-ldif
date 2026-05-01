@@ -7,11 +7,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import (
-    Mapping,
-    Sequence,
-)
-
 from flext_tests import FlextTestsTypes
 
 from flext_tap_ldif import FlextTapLdifTypes
@@ -43,18 +38,18 @@ class TestsFlextTapLdifTypes(FlextTestsTypes, FlextTapLdifTypes):
         - Test scenario types
         """
 
-        type MockLdifEntry = Mapping[
+        type MockLdifEntry = t.MappingKV[
             str,
-            str | Mapping[str, FlextTestsTypes.StrSequence],
+            str | t.MappingKV[str, FlextTestsTypes.StrSequence],
         ]
-        type MockLdifFile = Sequence[
-            Mapping[
+        type MockLdifFile = t.SequenceOf[
+            t.MappingKV[
                 str,
-                str | Mapping[str, FlextTestsTypes.StrSequence],
+                str | t.MappingKV[str, FlextTestsTypes.StrSequence],
             ]
         ]
         type TestLdifScenario = FlextTestsTypes.JsonMapping
-        type TestLdifValidationResult = Mapping[
+        type TestLdifValidationResult = t.MappingKV[
             str, bool | str | FlextTestsTypes.StrSequence
         ]
         type TestLdifParsingResult = FlextTestsTypes.JsonMapping

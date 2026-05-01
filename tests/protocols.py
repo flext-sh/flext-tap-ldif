@@ -7,9 +7,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import (
-    Sequence,
-)
 from typing import Protocol, runtime_checkable
 
 from flext_tests import FlextTestsProtocols
@@ -59,7 +56,7 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
                 """Close mock LDIF file."""
                 ...
 
-            def read_entries(self) -> Sequence[t.JsonMapping]:
+            def read_entries(self) -> t.SequenceOf[t.JsonMapping]:
                 """Read entries from mock LDIF file."""
                 ...
 
@@ -67,7 +64,7 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
         class TestLdifDataProvider(Protocol):
             """Protocol for test LDIF data providers."""
 
-            def test_entries(self) -> Sequence[t.JsonMapping]:
+            def test_entries(self) -> t.SequenceOf[t.JsonMapping]:
                 """Get test LDIF entries."""
                 ...
 
@@ -85,14 +82,14 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
 
             def assert_ldif_file_parsed(
                 self,
-                entries: Sequence[t.JsonMapping],
+                entries: t.SequenceOf[t.JsonMapping],
             ) -> None:
                 """Assert LDIF file was parsed correctly."""
                 ...
 
             def assert_ldif_entries_valid(
                 self,
-                entries: Sequence[t.JsonMapping],
+                entries: t.SequenceOf[t.JsonMapping],
             ) -> None:
                 """Assert LDIF entries are valid."""
                 ...

@@ -2,9 +2,6 @@
 
 from __future__ import annotations
 
-from collections.abc import (
-    MutableMapping,
-)
 from datetime import UTC, datetime
 from typing import Annotated, ClassVar, Self
 
@@ -34,7 +31,7 @@ class FlextTapLdifModelsEntry:
 
         dn: Annotated[str, u.Field(..., description="Distinguished Name")]
         attributes: Annotated[
-            MutableMapping[str, t.StrSequence],
+            dict[str, t.StrSequence],
             u.Field(
                 description="Entry attributes",
             ),
