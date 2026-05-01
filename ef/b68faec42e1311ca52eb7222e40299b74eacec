@@ -1,0 +1,16 @@
+tests/typings.py
+  h_9db9d35f50cf33 46,48
+docs/guides/troubleshooting.md
+  h_9db9d35f50cf33 797
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.4",
+  "base_commit_sha": "efb68faec42e1311ca52eb7222e40299b74eacec",
+  "prompts": {},
+  "humans": {
+    "h_9db9d35f50cf33": {
+      "author": "FLEXT Bot"
+    }
+  }
+}
