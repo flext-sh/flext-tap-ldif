@@ -1,0 +1,14 @@
+src/flext_tap_ldif/tap.py
+  h_9db9d35f50cf33 59,70
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.4",
+  "base_commit_sha": "21f5621838d5eaad7ba14903a816003460ca6a3c",
+  "prompts": {},
+  "humans": {
+    "h_9db9d35f50cf33": {
+      "author": "FLEXT Bot"
+    }
+  }
+}
