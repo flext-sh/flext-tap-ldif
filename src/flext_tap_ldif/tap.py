@@ -56,20 +56,18 @@ class FlextTapLdif(m.Meltano.SingerTapBase):
         Schema definition for LDIF entries.
 
         """
-        return t.Cli.JSON_MAPPING_ADAPTER.validate_python(
-            u.normalize_to_json_value({
-                "type": "object",
-                "properties": {
-                    "dn": {"type": "string"},
-                    "object_class": {"type": "array", "items": {"type": "string"}},
-                    "attributes": {"type": "object"},
-                    "change_type": {"type": "string"},
-                    "source_file": {"type": "string"},
-                    "line_number": {"type": "integer"},
-                    "entry_size": {"type": "integer"},
-                },
-            })
-        )
+        return t.Cli.JSON_MAPPING_ADAPTER.validate_python({
+            "type": "object",
+            "properties": {
+                "dn": {"type": "string"},
+                "object_class": {"type": "array", "items": {"type": "string"}},
+                "attributes": {"type": "object"},
+                "change_type": {"type": "string"},
+                "source_file": {"type": "string"},
+                "line_number": {"type": "integer"},
+                "entry_size": {"type": "integer"},
+            },
+        })
 
 
 if __name__ == "__main__":
