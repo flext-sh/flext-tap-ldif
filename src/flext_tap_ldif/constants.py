@@ -70,16 +70,6 @@ class FlextTapLdifConstants(c, FlextLdifConstants):
 
             DEFAULT_BATCH_SIZE: Final[int] = 1000
 
-        class TapLdifValidation:
-            """LDIF tap validation constants.
-
-            Note: Does not override parent Validation class to avoid inheritance conflicts.
-            """
-
-            MIN_DN_COMPONENTS: Final[int] = 2
-            MAX_DN_LENGTH: Final[int] = 2048
-            MAX_ATTRIBUTES_PER_ENTRY: Final[int] = 500
-
         class EntrySchema:
             """LDIF entry schema field names."""
 
