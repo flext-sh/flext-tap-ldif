@@ -7,8 +7,9 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+import re
 from enum import StrEnum, unique
-from typing import Final
+from typing import ClassVar, Final
 
 from flext_ldif import FlextLdifConstants
 from flext_meltano import c
@@ -25,6 +26,11 @@ class FlextTapLdifConstants(c, FlextLdifConstants):
 
         Note: Does not override parent Processing class to avoid inheritance conflicts.
         """
+
+        # === Regex authority for the TapLdif domain ===
+        ATTRIBUTE_NORMALIZE_RE: ClassVar[re.Pattern[str]] = re.compile(
+            r"[^a-zA-Z0-9]"
+        )
 
         DEFAULT_LDIF_ENCODING: Final[str] = FlextLdifConstants.Ldif.Encoding.UTF8
         DEFAULT_FILE_PATTERN: Final[str] = "*.ldif"

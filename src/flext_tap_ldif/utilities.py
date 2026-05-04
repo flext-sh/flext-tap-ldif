@@ -7,7 +7,6 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 import base64
-import re
 from collections.abc import (
     Generator,
     Iterable,
@@ -123,7 +122,9 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                 """
                 if not attr_name:
                     return ""
-                normalized = re.sub(r"[^a-zA-Z0-9]", "_", attr_name.lower())
+                normalized = c.TapLdif.ATTRIBUTE_NORMALIZE_RE.sub(
+                    "_", attr_name.lower()
+                )
                 if normalized and normalized[0].isdigit():
                     normalized = f"attr_{normalized}"
                 return normalized
