@@ -28,9 +28,7 @@ class FlextTapLdifConstants(c, FlextLdifConstants):
         """
 
         # === Regex authority for the TapLdif domain ===
-        ATTRIBUTE_NORMALIZE_RE: ClassVar[re.Pattern[str]] = re.compile(
-            r"[^a-zA-Z0-9]"
-        )
+        ATTRIBUTE_NORMALIZE_RE: ClassVar[re.Pattern[str]] = re.compile(r"[^a-zA-Z0-9]")
 
         DEFAULT_LDIF_ENCODING: Final[str] = FlextLdifConstants.Ldif.Encoding.UTF8
         DEFAULT_FILE_PATTERN: Final[str] = "*.ldif"
