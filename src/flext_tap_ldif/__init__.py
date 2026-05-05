@@ -10,19 +10,19 @@ from flext_core.lazy import (
     install_lazy_exports,
     merge_lazy_imports,
 )
+from flext_tap_ldif.__version__ import (
+    __author__,
+    __author_email__,
+    __description__,
+    __license__,
+    __title__,
+    __url__,
+    __version__,
+    __version_info__,
+)
 
 if _t.TYPE_CHECKING:
     from flext_meltano import d, e, h, r, s, x
-    from flext_tap_ldif.__version__ import (
-        __author__,
-        __author_email__,
-        __description__,
-        __license__,
-        __title__,
-        __url__,
-        __version__,
-        __version_info__,
-    )
     from flext_tap_ldif._models.batch import FlextTapLdifModelsBatch
     from flext_tap_ldif._models.entry import FlextTapLdifModelsEntry
     from flext_tap_ldif._models.file import FlextTapLdifModelsFile
@@ -41,16 +41,6 @@ _LAZY_IMPORTS = merge_lazy_imports(
     ("._models",),
     build_lazy_import_map(
         {
-            ".__version__": (
-                "__author__",
-                "__author_email__",
-                "__description__",
-                "__license__",
-                "__title__",
-                "__url__",
-                "__version__",
-                "__version_info__",
-            ),
             "._models.batch": ("FlextTapLdifModelsBatch",),
             "._models.entry": ("FlextTapLdifModelsEntry",),
             "._models.file": ("FlextTapLdifModelsFile",),
@@ -119,7 +109,21 @@ _LAZY_IMPORTS = merge_lazy_imports(
 )
 
 
-install_lazy_exports(__name__, globals(), _LAZY_IMPORTS)
+install_lazy_exports(
+    __name__,
+    globals(),
+    _LAZY_IMPORTS,
+    [
+        "__author__",
+        "__author_email__",
+        "__description__",
+        "__license__",
+        "__title__",
+        "__url__",
+        "__version__",
+        "__version_info__",
+    ],
+)
 
 __all__: list[str] = [
     "FlextTapLdif",
