@@ -9,10 +9,13 @@ from __future__ import annotations
 
 import re
 from enum import StrEnum, unique
-from typing import ClassVar, Final
+from typing import TYPE_CHECKING, ClassVar, Final
 
 from flext_ldif import FlextLdifConstants
 from flext_meltano import c
+
+if TYPE_CHECKING:
+    from flext_tap_ldif import t
 
 
 class FlextTapLdifConstants(c, FlextLdifConstants):
@@ -28,7 +31,7 @@ class FlextTapLdifConstants(c, FlextLdifConstants):
         """
 
         # === Regex authority for the TapLdif domain ===
-        ATTRIBUTE_NORMALIZE_RE: ClassVar[re.Pattern[str]] = re.compile(r"[^a-zA-Z0-9]")
+        ATTRIBUTE_NORMALIZE_RE: ClassVar[t.RegexPattern] = re.compile(r"[^a-zA-Z0-9]")
 
         DEFAULT_LDIF_ENCODING: Final[str] = FlextLdifConstants.Ldif.Encoding.UTF8
         DEFAULT_FILE_PATTERN: Final[str] = "*.ldif"
