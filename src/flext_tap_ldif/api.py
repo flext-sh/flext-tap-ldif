@@ -34,6 +34,6 @@ class FlextTapLdifService(FlextMeltanoTapServiceBase):
         return FlextMeltanoSingerTapAdapter(FlextTapLdif(config=raw_config))
 
 
-tap_ldif = FlextTapLdifService()
+tap_ldif = FlextTapLdifService.fetch_global()
 
 __all__: list[str] = ["FlextTapLdifService", "tap_ldif"]
