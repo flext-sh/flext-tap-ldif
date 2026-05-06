@@ -1,0 +1,19 @@
+src/flext_tap_ldif/utilities.py
+  h_5cf852cc46bf92 451,470
+src/flext_tap_ldif/constants.py
+  h_5cf852cc46bf92 76
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.1",
+  "base_commit_sha": "97cc4ab7e7404ee619c6ce3dc88a8fe715275ed2",
+  "prompts": {},
+  "humans": {
+    "h_5cf852cc46bf92": {
+      "author": "FLEXT Bot <team@flext.sh>"
+    },
+    "h_9db9d35f50cf33": {
+      "author": "FLEXT Bot"
+    }
+  }
+}
