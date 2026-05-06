@@ -532,7 +532,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                             )
                             continue
 
-            def _get_schema(self) -> dict[str, t.JsonValue]:
+            def _get_schema(self) -> t.JsonDict:
                 """Get schema for LDIF entries."""
                 return {
                     "type": "object",
