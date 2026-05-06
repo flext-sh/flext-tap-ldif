@@ -73,4 +73,4 @@ class FlextTapLdifConstants(c, FlextLdifConstants):
 
 
 c = FlextTapLdifConstants
-__all__: tuple[str, ...] = ("FlextTapLdifConstants", "c")
+__all__: t.StrSequence = ("FlextTapLdifConstants", "c")

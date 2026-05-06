@@ -448,7 +448,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                 """
                 super().__init__(tap, name="ldif_entries", schema=self._get_schema())
                 self._processor = FlextTapLdifUtilities.TapLdif.Processor(
-                    dict(tap.config.items()),
+                    t.scalar_mapping_adapter().validate_python(tap.config),
                 )
                 self._tap: m.Meltano.SingerTapBase = tap
 
@@ -467,7 +467,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
 
                 """
                 _ = context
-                settings: t.MutableJsonMapping = dict(self._tap.config.items())
+                settings = t.json_dict_adapter().validate_python(self._tap.config)
                 dir_path_raw = settings.get("directory_path")
                 dir_path = dir_path_raw if isinstance(dir_path_raw, str) else None
                 pattern_raw = settings.get("file_pattern", "*.ldif")
