@@ -130,22 +130,22 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                 return normalized
 
             @staticmethod
-            def parse_ldif_line(line: str) -> p.Result[tuple[str, str]]:
+            def parse_ldif_line(line: str) -> p.Result[t.StrPair]:
                 """Parse LDIF attribute line.
 
                 Args:
                 line: LDIF line to parse
 
                 Returns:
-                r[tuple[str, str]]: (attribute_name, value) or error
+                r[t.StrPair]: (attribute_name, value) or error
 
                 """
                 try:
                     line = line.strip()
                     if not line or line.startswith("#"):
-                        return r[tuple[str, str]].fail("Empty or comment line")
+                        return r[t.StrPair].fail("Empty or comment line")
                     if ":" not in line:
-                        return r[tuple[str, str]].fail("Invalid LDIF line format")
+                        return r[t.StrPair].fail("Invalid LDIF line format")
                     if "::" in line:
                         attr_name, encoded_value = line.split("::", 1)
                         try:
@@ -154,25 +154,25 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                             ).decode(
                                 c.DEFAULT_ENCODING,
                             )
-                            return r[tuple[str, str]].ok((
+                            return r[t.StrPair].ok((
                                 attr_name.strip(),
                                 decoded_value,
                             ))
                         except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-                            return r[tuple[str, str]].fail(f"Base64 decode error: {e}")
+                            return r[t.StrPair].fail(f"Base64 decode error: {e}")
                     if ":<" in line:
                         attr_name, url_value = line.split(":<", 1)
-                        return r[tuple[str, str]].ok((
+                        return r[t.StrPair].ok((
                             attr_name.strip(),
                             f"URL:{url_value.strip()}",
                         ))
                     attr_name, value = line.split(":", 1)
-                    return r[tuple[str, str]].ok((
+                    return r[t.StrPair].ok((
                         attr_name.strip(),
                         value.strip(),
                     ))
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-                    return r[tuple[str, str]].fail(f"Error parsing LDIF line: {e}")
+                    return r[t.StrPair].fail(f"Error parsing LDIF line: {e}")
 
         class StateManagement:
             """State management utilities for incremental syncs."""
@@ -221,8 +221,6 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                 if not u.mapping(files_raw):
                     return {}
                 file_state_raw = files_raw.get(file_path)
-                if not u.mapping(file_state_raw):
-                    return {}
                 return u.Cli.json_as_mapping(file_state_raw)
 
             @staticmethod

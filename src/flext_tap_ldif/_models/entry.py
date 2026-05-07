@@ -77,18 +77,18 @@ class FlextTapLdifModelsEntry:
         @property
         def ldif_entry_summary(self) -> t.JsonMapping:
             """LDIF entry analysis summary."""
+            primary_object_class = self.object_classes[0] if self.object_classes else ""
+            source_file = self.source_file or ""
             return t.Cli.JSON_MAPPING_ADAPTER.validate_python(
                 u.normalize_to_json_value({
                     "dn": self.dn,
                     "attribute_count": len(self.attributes),
                     "object_class_count": len(self.object_classes),
-                    "primary_object_class": self.object_classes[0]
-                    if self.object_classes
-                    else None,
+                    "primary_object_class": primary_object_class,
                     "entry_type": self.entry_type,
                     "valid": not self.validation_errors,
                     "source_location": {
-                        "file": self.source_file,
+                        "file": source_file,
                         "line": self.line_number,
                     },
                 })
