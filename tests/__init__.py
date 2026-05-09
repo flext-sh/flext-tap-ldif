@@ -14,10 +14,12 @@ from flext_core.lazy import (
 if _t.TYPE_CHECKING:
     from flext_tests import td, tf, tk, tm, tv
 
-    from flext_tap_ldif import d, e, h, r, s, x
+    from flext_tap_ldif import d, e, h, r, x
+    from tests.base import TestsFlextTapLdifServiceBase, s
     from tests.constants import TestsFlextTapLdifConstants, c
     from tests.models import TestsFlextTapLdifModels, m
     from tests.protocols import TestsFlextTapLdifProtocols, p
+    from tests.settings import TestsFlextTapLdifSettings
     from tests.typings import TestsFlextTapLdifTypes, t
     from tests.unit.test_tap import TestsFlextTapLdifTap
     from tests.utilities import TestsFlextTapLdifUtilities, u
@@ -25,6 +27,10 @@ _LAZY_IMPORTS = merge_lazy_imports(
     (".unit",),
     build_lazy_import_map(
         {
+            ".base": (
+                "TestsFlextTapLdifServiceBase",
+                "s",
+            ),
             ".constants": (
                 "TestsFlextTapLdifConstants",
                 "c",
@@ -37,6 +43,7 @@ _LAZY_IMPORTS = merge_lazy_imports(
                 "TestsFlextTapLdifProtocols",
                 "p",
             ),
+            ".settings": ("TestsFlextTapLdifSettings",),
             ".typings": (
                 "TestsFlextTapLdifTypes",
                 "t",
@@ -51,7 +58,6 @@ _LAZY_IMPORTS = merge_lazy_imports(
                 "e",
                 "h",
                 "r",
-                "s",
                 "x",
             ),
             "flext_tests": (
@@ -92,6 +98,8 @@ __all__: list[str] = [
     "TestsFlextTapLdifConstants",
     "TestsFlextTapLdifModels",
     "TestsFlextTapLdifProtocols",
+    "TestsFlextTapLdifServiceBase",
+    "TestsFlextTapLdifSettings",
     "TestsFlextTapLdifTap",
     "TestsFlextTapLdifTypes",
     "TestsFlextTapLdifUtilities",
