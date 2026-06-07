@@ -1,0 +1,20 @@
+src/flext_tap_ldif/tap.py
+  s_73cbfc60e45e37::t_d5c2b068ecb938 13
+  s_73cbfc60e45e37::t_6718cc84009536 51
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.3",
+  "base_commit_sha": "016f0941ae36dbc8eae1dfed73848ee60550109e",
+  "prompts": {},
+  "sessions": {
+    "s_73cbfc60e45e37": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "80f2c44c-f1f2-49a0-8035-ccac60ac602b",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Zed <hi@zed.dev>"
+    }
+  }
+}
