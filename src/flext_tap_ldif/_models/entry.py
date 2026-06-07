@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import UTC, datetime
+from datetime import datetime
 from typing import Annotated, ClassVar, Self
 
 from flext_tap_ldif import m, t, u
@@ -64,7 +64,7 @@ class FlextTapLdifModelsEntry:
             u.Field(
                 description="Extraction timestamp",
             ),
-        ] = u.Field(default_factory=lambda: datetime.now(UTC))
+        ] = u.Field(default_factory=lambda: u.now())
         processed: Annotated[bool, u.Field(description="Processing status")] = False
         validation_errors: Annotated[
             t.StrSequence,
