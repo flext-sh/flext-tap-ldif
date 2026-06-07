@@ -10,6 +10,7 @@ from __future__ import annotations
 from typing import ClassVar, override
 
 from flext_tap_ldif import FlextTapLdifSettings, c, m, t, u
+from flext_tap_ldif.utilities import FlextTapLdifUtilities
 
 logger = u.fetch_logger(__name__)
 
@@ -47,7 +48,7 @@ class FlextTapLdif(m.Meltano.SingerTapBase):
         A list of discovered streams.
 
         """
-        return [u.TapLdif.EntriesStream(tap=self)]
+        return [FlextTapLdifUtilities.TapLdif.EntriesStream(tap=self)]
 
     def _get_ldif_entries_schema(self) -> t.JsonMapping:
         """Get the schema for LDIF entries stream.
