@@ -11,7 +11,6 @@ from collections.abc import (
     Generator,
     Iterable,
 )
-from datetime import UTC, datetime
 from pathlib import Path
 from typing import NoReturn, override
 
@@ -250,7 +249,7 @@ class FlextTapLdifUtilities(u, FlextLdifUtilities):
                     u.Cli.json_as_mapping(file_state)
                 )
                 file_state_dict["position"] = position
-                file_state_dict["last_updated"] = datetime.now(UTC).isoformat()
+                file_state_dict["last_updated"] = u.generate_datetime_utc().isoformat()
                 return FlextTapLdifUtilities.TapLdif.StateManagement.update_file_state(
                     state,
                     file_path,
