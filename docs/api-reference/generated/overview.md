@@ -9,7 +9,7 @@
 - Keywords: `data-extraction`, `enterprise`, `etl`, `flext`, `singer`, `tap`, `typed`
 - Main facades: _none_
 - Alias exports: `c`, `d`, `e`, `h`, `m`, `p`, `r`, `s`, `t`, `u`, `x`
-- Public symbol exports: `FlextTapLdifSettings`, `FlextTapLdifProtocols`, `main`, `FlextTapLdifModelsRecord`, `FlextTapLdifUtilities`, `FlextTapLdifService`, `FlextTapLdifConstants`, `FlextTapLdifModels`, `FlextTapLdifModelsEntry`, `FlextTapLdifModelsBatch` (+6 more)
+- Public symbol exports: `FlextTapLdifTypes`, `FlextTapLdifModelsEntry`, `FlextTapLdifModelsSettings`, `FlextTapLdifModelsBatch`, `FlextTapLdifModelsRecord`, `FlextTapLdifSettings`, `FlextTapLdifCli`, `FlextTapLdifProtocols`, `tap_ldif`, `main` (+6 more)
 - Exported module shortcuts: _none_
 - Generated module pages: `9`
 
