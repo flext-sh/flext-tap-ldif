@@ -3,15 +3,15 @@
 # flext-tap-ldif API Overview
 
 - Package: `flext_tap_ldif`
-- Version: ``
+- Version: `0.12.0-dev`
 - Description: FLEXT Tap LDIF - Singer Tap for LDIF file format data extraction
 - Project class: `integration`
 - Keywords: `data-extraction`, `enterprise`, `etl`, `flext`, `singer`, `tap`, `typed`
-- Main facades: `FlextTapLdif`, `FlextTapLdifModelsBase`, `FlextTapLdifUtilities`, `FlextTapLdifModelsEntry`, `FlextTapLdifModels`, `FlextTapLdifService`, `FlextTapLdifTypes`, `FlextTapLdifModelsSettings` (+7 more)
+- Main facades: _none_
 - Alias exports: `c`, `d`, `e`, `h`, `m`, `p`, `r`, `s`, `t`, `u`, `x`
-- Public symbol exports: `FlextTapLdif`, `FlextTapLdifModelsBase`, `main`, `FlextTapLdifUtilities`, `FlextTapLdifModelsEntry`, `FlextTapLdifModels`, `FlextTapLdifService`, `FlextTapLdifTypes`, `FlextTapLdifModelsSettings`, `FlextTapLdifCli` (+7 more)
+- Public symbol exports: `FlextTapLdifSettings`, `FlextTapLdifProtocols`, `main`, `FlextTapLdifModelsRecord`, `FlextTapLdifUtilities`, `FlextTapLdifService`, `FlextTapLdifConstants`, `FlextTapLdifModels`, `FlextTapLdifModelsEntry`, `FlextTapLdifModelsBatch` (+6 more)
 - Exported module shortcuts: _none_
-- Generated module pages: `10`
+- Generated module pages: `9`
 
 ## Next Pages
 

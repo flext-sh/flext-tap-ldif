@@ -2,7 +2,7 @@
 
 # flext-tap-ldif Documentation
 
-- Version: `unknown`
+- Version: `0.12.0-dev`
 - Project class: `integration`
 - Package: `flext_tap_ldif`
 - Description: FLEXT Tap LDIF - Singer Tap for LDIF file format data extraction
