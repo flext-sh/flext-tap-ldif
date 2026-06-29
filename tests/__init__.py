@@ -3,38 +3,12 @@
 
 from __future__ import annotations
 
-import typing as _t
-
 from flext_core.lazy import (
     build_lazy_import_map,
     install_lazy_exports,
     merge_lazy_imports,
 )
 
-if _t.TYPE_CHECKING:
-    from flext_tests import td as td, tf as tf, tk as tk, tm as tm, tv as tv
-
-    from flext_tap_ldif import d as d, e as e, h as h, r as r, x as x
-    from tests.base import (
-        TestsFlextTapLdifServiceBase as TestsFlextTapLdifServiceBase,
-        s as s,
-    )
-    from tests.constants import (
-        TestsFlextTapLdifConstants as TestsFlextTapLdifConstants,
-        c as c,
-    )
-    from tests.models import TestsFlextTapLdifModels as TestsFlextTapLdifModels, m as m
-    from tests.protocols import (
-        TestsFlextTapLdifProtocols as TestsFlextTapLdifProtocols,
-        p as p,
-    )
-    from tests.settings import TestsFlextTapLdifSettings as TestsFlextTapLdifSettings
-    from tests.typings import TestsFlextTapLdifTypes as TestsFlextTapLdifTypes, t as t
-    from tests.unit.test_tap import TestsFlextTapLdifTap as TestsFlextTapLdifTap
-    from tests.utilities import (
-        TestsFlextTapLdifUtilities as TestsFlextTapLdifUtilities,
-        u as u,
-    )
 _LAZY_IMPORTS = merge_lazy_imports(
     (".unit",),
     build_lazy_import_map(
@@ -43,6 +17,7 @@ _LAZY_IMPORTS = merge_lazy_imports(
                 "TestsFlextTapLdifServiceBase",
                 "s",
             ),
+            ".conftest": ("conftest",),
             ".constants": (
                 "TestsFlextTapLdifConstants",
                 "c",
@@ -60,24 +35,23 @@ _LAZY_IMPORTS = merge_lazy_imports(
                 "TestsFlextTapLdifTypes",
                 "t",
             ),
+            ".unit": ("unit",),
             ".unit.test_tap": ("TestsFlextTapLdifTap",),
             ".utilities": (
                 "TestsFlextTapLdifUtilities",
                 "u",
             ),
-            "flext_tap_ldif": (
+            "flext_tests": (
                 "d",
                 "e",
                 "h",
                 "r",
-                "x",
-            ),
-            "flext_tests": (
                 "td",
                 "tf",
                 "tk",
                 "tm",
                 "tv",
+                "x",
             ),
         },
     ),
@@ -104,31 +78,9 @@ _LAZY_IMPORTS = merge_lazy_imports(
 )
 
 
-install_lazy_exports(__name__, globals(), _LAZY_IMPORTS)
-
-__all__: list[str] = [
-    "TestsFlextTapLdifConstants",
-    "TestsFlextTapLdifModels",
-    "TestsFlextTapLdifProtocols",
-    "TestsFlextTapLdifServiceBase",
-    "TestsFlextTapLdifSettings",
-    "TestsFlextTapLdifTap",
-    "TestsFlextTapLdifTypes",
-    "TestsFlextTapLdifUtilities",
-    "c",
-    "d",
-    "e",
-    "h",
-    "m",
-    "p",
-    "r",
-    "s",
-    "t",
-    "td",
-    "tf",
-    "tk",
-    "tm",
-    "tv",
-    "u",
-    "x",
-]
+install_lazy_exports(
+    __name__,
+    globals(),
+    _LAZY_IMPORTS,
+    publish_all=False,
+)

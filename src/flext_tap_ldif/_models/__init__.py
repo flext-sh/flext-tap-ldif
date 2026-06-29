@@ -10,10 +10,17 @@ _LAZY_IMPORTS = build_lazy_import_map(
         ".batch": ("FlextTapLdifModelsBatch",),
         ".entry": ("FlextTapLdifModelsEntry",),
         ".file": ("FlextTapLdifModelsFile",),
+        ".file_metadata": ("FlextTapLdifModelsLdifFile",),
+        ".file_stream": ("FlextTapLdifModelsLdifStream",),
         ".record": ("FlextTapLdifModelsRecord",),
         ".settings": ("FlextTapLdifModelsSettings",),
     },
 )
 
 
-install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, publish_all=False)
+install_lazy_exports(
+    __name__,
+    globals(),
+    _LAZY_IMPORTS,
+    publish_all=False,
+)
