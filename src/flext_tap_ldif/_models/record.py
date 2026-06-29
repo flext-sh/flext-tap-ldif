@@ -2,16 +2,23 @@
 
 from __future__ import annotations
 
-from typing import Annotated, Self
+from typing import Annotated, ClassVar, Self
 
-from flext_tap_ldif import m, t, u
+from flext_core import m
+from flext_tap_ldif import t, u
 
 
 class FlextTapLdifModelsRecord:
     """MRO mixin: LdifRecord, LdifValidationResult, LdifPerformanceMetrics."""
 
-    class LdifValidationResult(m.BaseModel):
+    class LdifValidationResult(m.EnforcedModel):
         """LDIF validation result with detailed error reporting."""
+
+        model_config: ClassVar[m.ConfigDict] = m.ConfigDict(
+            validate_assignment=True,
+            extra="forbid",
+            frozen=False,
+        )
 
         file_path: Annotated[str, u.Field(..., description="Validated LDIF file path")]
         valid: Annotated[bool, u.Field(..., description="Overall validation result")]

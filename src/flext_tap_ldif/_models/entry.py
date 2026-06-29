@@ -3,15 +3,17 @@
 from __future__ import annotations
 
 from datetime import datetime
+from types import MappingProxyType
 from typing import Annotated, ClassVar, Self
 
-from flext_tap_ldif import m, t, u
+from flext_core import m
+from flext_tap_ldif import t, u
 
 
 class FlextTapLdifModelsEntry:
     """MRO mixin: LdifEntry and LdifChangeRecord models."""
 
-    class LdifEntry(m.BaseModel):
+    class LdifEntry(m.EnforcedModel):
         """Represents an LDIF entry with complete parsing support."""
 
         model_config: ClassVar[m.ConfigDict] = m.ConfigDict(
@@ -31,11 +33,11 @@ class FlextTapLdifModelsEntry:
 
         dn: Annotated[str, u.Field(..., description="Distinguished Name")]
         attributes: Annotated[
-            dict[str, t.StrSequence],
+            t.MappingKV[str, t.StrSequence],
             u.Field(
                 description="Entry attributes",
             ),
-        ] = u.Field(default_factory=dict)
+        ] = u.Field(default_factory=lambda: MappingProxyType({}))
         object_classes: Annotated[
             t.StrSequence,
             u.Field(
@@ -100,7 +102,7 @@ class FlextTapLdifModelsEntry:
             for attr_name, values in self.attributes.items():
                 if attr_name.lower() == normalized_name:
                     return values
-            return []
+            return ()
 
         def resolve_first_attribute_value(self, name: str) -> str | None:
             """Get first attribute value by name."""
@@ -116,6 +118,8 @@ class FlextTapLdifModelsEntry:
 
             # Validate object classes are in attributes
             if self.object_classes and "objectClass" not in self.attributes:
-                self.attributes["objectClass"] = self.object_classes
+                attributes = dict(self.attributes)
+                attributes["objectClass"] = self.object_classes
+                self.attributes = MappingProxyType(attributes)
 
             return self
