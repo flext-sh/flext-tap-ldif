@@ -75,3 +75,6 @@ if __name__ == "__main__":
     from flext_tap_ldif import main as _main
 
     raise SystemExit(_main())
+
+
+__all__: list[str] = ["FlextTapLdif"]
