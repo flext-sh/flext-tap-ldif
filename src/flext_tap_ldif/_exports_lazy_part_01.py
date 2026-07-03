@@ -39,6 +39,14 @@ FLEXT_TAP_LDIF_LAZY_IMPORTS_PART_01 = build_lazy_import_map(
             "FlextTapLdifUtilities",
             "u",
         ),
+        "flext_core": (
+            "d",
+            "e",
+            "h",
+            "r",
+            "s",
+            "x",
+        ),
     },
 )
 

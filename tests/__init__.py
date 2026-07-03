@@ -25,33 +25,23 @@ if TYPE_CHECKING:
         x as x,
     )
 
-    from flext_tap_ldif.tests.base import (
+    from tests.base import (
         TestsFlextTapLdifServiceBase as TestsFlextTapLdifServiceBase,
         s as s,
     )
-    from flext_tap_ldif.tests.constants import (
+    from tests.constants import (
         TestsFlextTapLdifConstants as TestsFlextTapLdifConstants,
         c as c,
     )
-    from flext_tap_ldif.tests.models import (
-        TestsFlextTapLdifModels as TestsFlextTapLdifModels,
-        m as m,
-    )
-    from flext_tap_ldif.tests.protocols import (
+    from tests.models import TestsFlextTapLdifModels as TestsFlextTapLdifModels, m as m
+    from tests.protocols import (
         TestsFlextTapLdifProtocols as TestsFlextTapLdifProtocols,
         p as p,
     )
-    from flext_tap_ldif.tests.settings import (
-        TestsFlextTapLdifSettings as TestsFlextTapLdifSettings,
-    )
-    from flext_tap_ldif.tests.typings import (
-        TestsFlextTapLdifTypes as TestsFlextTapLdifTypes,
-        t as t,
-    )
-    from flext_tap_ldif.tests.unit.test_tap import (
-        TestsFlextTapLdifTap as TestsFlextTapLdifTap,
-    )
-    from flext_tap_ldif.tests.utilities import (
+    from tests.settings import TestsFlextTapLdifSettings as TestsFlextTapLdifSettings
+    from tests.typings import TestsFlextTapLdifTypes as TestsFlextTapLdifTypes, t as t
+    from tests.unit.test_tap import TestsFlextTapLdifTap as TestsFlextTapLdifTap
+    from tests.utilities import (
         TestsFlextTapLdifUtilities as TestsFlextTapLdifUtilities,
         u as u,
     )
