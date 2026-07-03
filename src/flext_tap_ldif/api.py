@@ -1,5 +1,6 @@
 """FLEXT service orchestrator for tap-ldif.
 
+from flext_tap_ldif.utilities import u
 Thin facade — all infrastructure from ``FlextMeltanoTapServiceBase`` via MRO.
 Only domain-specific tap creation defined here.
 
@@ -11,10 +12,9 @@ from __future__ import annotations
 
 from typing import Annotated, override
 
-from flext_core import u
 from flext_meltano import FlextMeltanoTapServiceBase
 from flext_meltano.services.singer_sdk import FlextMeltanoSingerTapAdapter
-from flext_tap_ldif import FlextTapLdif, p, t
+from flext_tap_ldif import FlextTapLdif, p, t, u
 
 
 class FlextTapLdifService(FlextMeltanoTapServiceBase):

@@ -5,8 +5,8 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Annotated, ClassVar, Self
 
-from flext_core import m
 from flext_tap_ldif import c, t, u
+from flext_tap_ldif.models import m
 
 
 class FlextTapLdifModelsLdifFile:
