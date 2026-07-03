@@ -1,4 +1,4 @@
-"""Protocols for flext-tap-ldif tests - uses composition with FlextTestsProtocols.
+"""Protocols for flext-tap-ldif tests - uses composition with TestsFlextProtocols.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -11,20 +11,23 @@ from typing import Protocol, runtime_checkable
 
 from flext_tests import FlextTestsProtocols
 
+from flext_tap_ldif import FlextTapLdifProtocols
+from tests.typings import t
 
-class TestsFlextTapLdifProtocols(FlextTestsProtocols):
-    """Protocols for flext-tap-ldif tests - uses composition with FlextTestsProtocols.
 
-    Architecture: Uses composition (not inheritance) with FlextTestsProtocols and FlextTapLdifProtocols
+class TestsFlextTapLdifProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
+    """Protocols for flext-tap-ldif tests - combines TestsFlextProtocols with FlextTapLdifProtocols.
+
+    Architecture: Uses composition (not inheritance) with TestsFlextProtocols and FlextTapLdifProtocols
     for flext-tap-ldif-specific protocol definitions.
 
     Access patterns:
     - TestsFlextTapLdifProtocols.Tests.* = flext_tests test protocols (via composition)
     - TestsFlextTapLdifProtocols.TapLdif.* = flext-tap-ldif-specific test protocols
-    - TestsFlextTapLdifProtocols.* = FlextTestsProtocols protocols (via composition)
+    - TestsFlextTapLdifProtocols.* = TestsFlextProtocols protocols (via composition)
 
     Rules:
-    - Use composition, not inheritance (FlextTestsProtocols deprecates subclassing)
+    - Use composition, not inheritance (TestsFlextProtocols deprecates subclassing)
     - flext-tap-ldif-specific protocols go in TapLdif namespace
     - Generic protocols accessed via Tests namespace
     """
@@ -33,12 +36,12 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols):
         """Project-specific test protocols."""
 
     class TapLdif:
-        """Tap LDIF test protocols - domain-specific for LDIF tap testing.
+        """Tap LDIF test protocols — domain-specific for LDIF tap testing.
 
-        Contains test protocols specific to LDIF tap functionality including:
-        - Mock LDIF file protocols for testing
-        - Test data provider protocols
-        - Test assertion protocols
+        Hosts test-only protocols (``MockLdifFile``, ``TestLdifDataProvider``,
+        ``TestLdifAssertion``). The parent ``FlextTapLdifProtocols.TapLdif``
+        namespace was deleted as dead code (no workspace consumers); these
+        test-only entries now live directly under the test facade.
         """
 
         @runtime_checkable
@@ -53,7 +56,7 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols):
                 """Close mock LDIF file."""
                 ...
 
-            def read_entries(self) -> list[dict[str, object]]:
+            def read_entries(self) -> t.SequenceOf[t.JsonMapping]:
                 """Read entries from mock LDIF file."""
                 ...
 
@@ -61,15 +64,15 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols):
         class TestLdifDataProvider(Protocol):
             """Protocol for test LDIF data providers."""
 
-            def get_test_entries(self) -> list[dict[str, object]]:
+            def test_entries(self) -> t.SequenceOf[t.JsonMapping]:
                 """Get test LDIF entries."""
                 ...
 
-            def get_test_file_content(self) -> str:
+            def test_file_content(self) -> str:
                 """Get test LDIF file content."""
                 ...
 
-            def get_test_config(self) -> dict[str, object]:
+            def test_config(self) -> t.JsonMapping:
                 """Get test LDIF configuration."""
                 ...
 
@@ -77,22 +80,27 @@ class TestsFlextTapLdifProtocols(FlextTestsProtocols):
         class TestLdifAssertion(Protocol):
             """Protocol for test LDIF assertions."""
 
-            def assert_ldif_file_parsed(self, entries: list[dict[str, object]]) -> None:
+            def assert_ldif_file_parsed(
+                self,
+                entries: t.SequenceOf[t.JsonMapping],
+            ) -> None:
                 """Assert LDIF file was parsed correctly."""
                 ...
 
             def assert_ldif_entries_valid(
-                self, entries: list[dict[str, object]]
+                self,
+                entries: t.SequenceOf[t.JsonMapping],
             ) -> None:
                 """Assert LDIF entries are valid."""
                 ...
 
             def assert_ldif_stream_config_valid(
-                self, stream: dict[str, object]
+                self,
+                stream: t.JsonMapping,
             ) -> None:
                 """Assert LDIF stream configuration is valid."""
                 ...
 
 
 p = TestsFlextTapLdifProtocols
-__all__ = ["TestsFlextTapLdifProtocols", "p"]
+__all__: list[str] = ["TestsFlextTapLdifProtocols", "p"]

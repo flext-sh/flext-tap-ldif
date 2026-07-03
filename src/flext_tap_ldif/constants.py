@@ -7,34 +7,22 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import ClassVar, Final
+import re
+from enum import StrEnum, unique
+from typing import TYPE_CHECKING, ClassVar, Final
 
-from flext_core import FlextConstants
 from flext_ldif import FlextLdifConstants
-from flext_meltano import FlextMeltanoConstants
+from flext_meltano import c
+
+if TYPE_CHECKING:
+    from flext_tap_ldif import t
 
 
-class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
+class FlextTapLdifConstants(c, FlextLdifConstants):
     """LDIF tap extraction-specific constants following flext-core patterns.
 
     Composes with FlextTapLdifConstants to avoid duplication and ensure consistency.
     """
-
-    DEFAULT_LDIF_ENCODING: Final[str] = FlextLdifConstants.Ldif.DEFAULT_ENCODING
-    SUPPORTED_ENCODINGS: ClassVar[frozenset[str]] = frozenset({
-        FlextLdifConstants.Ldif.Encoding.UTF8,
-        FlextLdifConstants.Ldif.Encoding.ASCII,
-        FlextLdifConstants.Ldif.Encoding.LATIN1,
-        FlextLdifConstants.Ldif.Encoding.UTF16,
-    })
-    MAX_BATCH_SIZE: Final[int] = FlextConstants.Performance.BatchProcessing.MAX_ITEMS
-    MAX_FILE_SIZE_MB: Final[int] = 100
-    LDIF_CHANGE_TYPES: ClassVar[list[str]] = [
-        FlextLdifConstants.Ldif.EntryModification.ADD,
-        FlextLdifConstants.Ldif.EntryModification.MODIFY,
-        FlextLdifConstants.Ldif.EntryModification.DELETE,
-        FlextLdifConstants.Ldif.EntryModification.MODRDN,
-    ]
 
     class TapLdif:
         """LDIF tap processing configuration.
@@ -42,70 +30,47 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
         Note: Does not override parent Processing class to avoid inheritance conflicts.
         """
 
-        MIN_WORKERS_FOR_PARALLEL: Final[int] = (
-            FlextLdifConstants.Ldif.LdifProcessing.MIN_WORKERS_FOR_PARALLEL
-        )
-        MAX_WORKERS_LIMIT: Final[int] = (
-            FlextLdifConstants.Ldif.LdifProcessing.MAX_WORKERS_LIMIT
-        )
-        PERFORMANCE_MIN_CHUNK_SIZE: Final[int] = (
-            FlextLdifConstants.Ldif.LdifProcessing.PERFORMANCE_MIN_CHUNK_SIZE
-        )
-        MIN_ENTRIES: Final[int] = FlextLdifConstants.Ldif.LdifProcessing.MIN_ENTRIES
+        # === Regex authority for the TapLdif domain ===
+        ATTRIBUTE_NORMALIZE_RE: ClassVar[t.RegexPattern] = re.compile(r"[^a-zA-Z0-9]")
 
-    class Format:
-        """LDIF format specifications."""
+        DEFAULT_LDIF_ENCODING: Final[str] = FlextLdifConstants.Ldif.Encoding.UTF8
+        DEFAULT_FILE_PATTERN: Final[str] = "*.ldif"
+        DEFAULT_STRICT_PARSING: Final[bool] = True
+        MAX_FILE_SIZE_MB: Final[int] = 100
 
-        DN_ATTRIBUTE: Final[str] = FlextLdifConstants.Ldif.Format.DN_ATTRIBUTE
-        ATTRIBUTE_SEPARATOR: Final[str] = (
-            FlextLdifConstants.Ldif.Format.ATTRIBUTE_SEPARATOR
-        )
-        MAX_LINE_LENGTH: Final[int] = FlextLdifConstants.Ldif.Format.MAX_LINE_LENGTH
-        BASE64_PREFIX: Final[str] = FlextLdifConstants.Ldif.Format.BASE64_PREFIX
-        COMMENT_PREFIX: Final[str] = FlextLdifConstants.Ldif.Format.COMMENT_PREFIX
-        LINE_CONTINUATION: Final[str] = " "
+        @unique
+        class LdifChangeType(StrEnum):
+            """Supported LDIF changetype tokens for tap processing."""
 
-    class TapLdifPerformance:
-        """Tap LDIF performance constants."""
+            ADD = "add"
+            MODIFY = "modify"
+            DELETE = "delete"
+            MODRDN = "modrdn"
 
-        DEFAULT_BATCH_SIZE: Final[int] = 1000
+        class Format:
+            """LDIF format specifications."""
 
-    class TapLdifValidation:
-        """LDIF tap validation constants.
+            MAX_LINE_LENGTH: Final[int] = FlextLdifConstants.Ldif.DEFAULT_LINE_WIDTH
+            LINE_CONTINUATION: Final[str] = " "
 
-        Note: Does not override parent Validation class to avoid inheritance conflicts.
-        """
+        class TapLdifPerformance:
+            """Tap LDIF performance constants."""
 
-        MIN_DN_COMPONENTS: Final[int] = (
-            FlextLdifConstants.Ldif.LdifValidation.MIN_DN_COMPONENTS
-        )
-        MAX_DN_LENGTH: Final[int] = FlextLdifConstants.Ldif.LdifValidation.MAX_DN_LENGTH
-        MAX_ATTRIBUTES_PER_ENTRY: Final[int] = (
-            FlextLdifConstants.Ldif.LdifValidation.MAX_ATTRIBUTES_PER_ENTRY
-        )
+            DEFAULT_BATCH_SIZE: Final[int] = 1000
 
-    class EntrySchema:
-        """LDIF entry schema field names."""
+        class EntrySchema:
+            """LDIF entry schema field names."""
 
-        DN_FIELD: Final[str] = "dn"
-        ATTRIBUTES_FIELD: Final[str] = "attributes"
-        OBJECT_CLASS_FIELD: Final[str] = "object_class"
-        CHANGE_TYPE_FIELD: Final[str] = "change_type"
-        SOURCE_FILE_FIELD: Final[str] = "source_file"
-        LINE_NUMBER_FIELD: Final[str] = "line_number"
-        ENTRY_SIZE_FIELD: Final[str] = "entry_size"
-        DEFAULT_CHANGE_TYPE: Final[str] = "None"
-        DEFAULT_LINE_NUMBER: Final[int] = 0
-        DEFAULT_ENTRY_SIZE: Final[int] = 0
-
-    class SampleEntry:
-        """Sample LDIF entry for fallback/testing."""
-
-        DN: Final[str] = "cn=sample,dc=example,dc=com"
-        ATTRIBUTES: Final[dict[str, list[str]]] = {"cn": ["sample"]}
-        OBJECT_CLASS: Final[list[str]] = ["top"]
-        SOURCE_FILE: Final[str] = "fp"
+            DN_FIELD: Final[str] = "dn"
+            ATTRIBUTES_FIELD: Final[str] = "attributes"
+            OBJECT_CLASS_FIELD: Final[str] = "object_class"
+            CHANGE_TYPE_FIELD: Final[str] = "change_type"
+            SOURCE_FILE_FIELD: Final[str] = "source_file"
+            LINE_NUMBER_FIELD: Final[str] = "line_number"
+            ENTRY_SIZE_FIELD: Final[str] = "entry_size"
+            DEFAULT_CHANGE_TYPE: Final[str] = "None"
+            DEFAULT_LINE_NUMBER: Final[int] = 0
 
 
 c = FlextTapLdifConstants
-__all__ = ["FlextTapLdifConstants", "c"]
+__all__: t.StrSequence = ("FlextTapLdifConstants", "c")

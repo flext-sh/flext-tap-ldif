@@ -7,32 +7,26 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import Mapping
 from typing import ClassVar, override
 
-from flext_core import FlextConstants, FlextLogger
-from singer_sdk.streams import Stream
-from singer_sdk.tap_base import Tap
+from flext_tap_ldif import FlextTapLdifSettings, c, m, t, u
+from flext_tap_ldif.utilities import FlextTapLdifUtilities
 
-from flext_tap_ldif.settings import FlextTapLdifSettings
-from flext_tap_ldif.streams import LDIFEntriesStream
-from flext_tap_ldif.typings import t
-
-logger = FlextLogger(__name__)
+logger = u.fetch_logger(__name__)
 
 
-class TapLDIF(Tap):
+class FlextTapLdif(m.Meltano.SingerTapBase):
     """Singer tap for LDIF file format data extraction."""
 
     name: str = "tap-ldif"
     config_class = FlextTapLdifSettings
-    config_jsonschema: ClassVar[dict[str, t.ContainerValue]] = {
+    config_jsonschema: ClassVar[t.JsonMapping] = {
         "type": "object",
         "properties": {
             "file_path": {"type": "string"},
             "directory_path": {"type": "string"},
             "file_pattern": {"type": "string", "default": "*.ldif"},
-            "encoding": {"type": "string", "default": "utf-8"},
+            "encoding": {"type": "string", "default": c.DEFAULT_ENCODING},
             "base_dn_filter": {"type": "string"},
             "object_class_filter": {"type": "array", "items": {"type": "string"}},
             "attribute_filter": {"type": "array", "items": {"type": "string"}},
@@ -41,29 +35,29 @@ class TapLDIF(Tap):
             "strict_parsing": {"type": "boolean", "default": True},
             "max_file_size_mb": {
                 "type": "integer",
-                "default": FlextConstants.Logging.MAX_FILE_SIZE // (1024 * 1024),
+                "default": c.MAX_FILE_SIZE // (1024 * 1024),
             },
         },
     }
 
     @override
-    def discover_streams(self) -> list[Stream]:
+    def discover_streams(self) -> t.SequenceOf[m.Meltano.SingerStreamBase]:
         """Return a list of discovered streams.
 
         Returns:
         A list of discovered streams.
 
         """
-        return [LDIFEntriesStream(tap=self)]
+        return [FlextTapLdifUtilities.TapLdif.EntriesStream(tap=self)]
 
-    def _get_ldif_entries_schema(self) -> Mapping[str, t.ContainerValue]:
+    def _get_ldif_entries_schema(self) -> t.JsonMapping:
         """Get the schema for LDIF entries stream.
 
         Returns:
         Schema definition for LDIF entries.
 
         """
-        return {
+        return t.Cli.JSON_MAPPING_ADAPTER.validate_python({
             "type": "object",
             "properties": {
                 "dn": {"type": "string"},
@@ -74,13 +68,13 @@ class TapLDIF(Tap):
                 "line_number": {"type": "integer"},
                 "entry_size": {"type": "integer"},
             },
-        }
-
-
-def main() -> None:
-    """Run the tap entry point."""
-    TapLDIF().cli()
+        })
 
 
 if __name__ == "__main__":
-    main()
+    from flext_tap_ldif import main as _main
+
+    raise SystemExit(_main())
+
+
+__all__: list[str] = ["FlextTapLdif"]

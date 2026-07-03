@@ -1,4 +1,4 @@
-"""Configuration for FLEXT Tap LDIF using flext-core patterns.
+"""Configuration for FLEXT Tap LDIF using FlextSettings patterns.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -8,22 +8,37 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, ClassVar
 
-from pydantic import BaseModel, ConfigDict, Field
+from flext_core import FlextSettingsBase
+from flext_tap_ldif import c, m, u
 
 
-class FlextTapLdifSettings(BaseModel):
+class FlextTapLdifSettings(FlextSettingsBase):
     """Validated runtime settings for tap-ldif execution."""
 
-    model_config = ConfigDict(extra="ignore", validate_assignment=True)
+    model_config: ClassVar[m.SettingsConfigDict] = m.SettingsConfigDict(
+        env_prefix="FLEXT_TAP_LDIF_", extra="ignore", validate_assignment=True
+    )
 
-    file_path: Annotated[str | None, Field(default=None)]
-    directory_path: Annotated[str | None, Field(default=None)]
-    file_pattern: Annotated[str, Field(default="*.ldif")]
-    encoding: Annotated[str, Field(default="utf-8")]
-    strict_parsing: Annotated[bool, Field(default=True)]
-    max_file_size_mb: Annotated[int, Field(default=100, ge=1)]
+    file_path: Annotated[str | None, u.Field(default=None)]
+    directory_path: Annotated[str | None, u.Field(default=None)]
+    file_pattern: Annotated[
+        str,
+        u.Field(default=c.TapLdif.DEFAULT_FILE_PATTERN),
+    ]
+    encoding: Annotated[
+        str,
+        u.Field(default=c.TapLdif.DEFAULT_LDIF_ENCODING),
+    ]
+    strict_parsing: Annotated[
+        bool,
+        u.Field(default=c.TapLdif.DEFAULT_STRICT_PARSING),
+    ]
+    max_file_size_mb: Annotated[
+        int,
+        u.Field(default=c.TapLdif.MAX_FILE_SIZE_MB, ge=1),
+    ]
 
     def normalized_file_path(self) -> Path | None:
         """Return `file_path` as `Path` when configured."""
@@ -32,4 +47,4 @@ class FlextTapLdifSettings(BaseModel):
         return Path(self.file_path)
 
 
-__all__ = ["FlextTapLdifSettings"]
+__all__: list[str] = ["FlextTapLdifSettings"]
