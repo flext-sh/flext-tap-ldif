@@ -2,8 +2,12 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from flext_meltano import u
-from flext_tap_ldif import t
+
+if TYPE_CHECKING:
+    from flext_tap_ldif import t
 
 
 class FlextTapLdifUtilitiesStateManagement:
@@ -55,7 +59,7 @@ class FlextTapLdifUtilitiesStateManagement:
                 )
             )
             file_state_dict: t.MutableJsonMapping = dict(
-                u.Cli.json_as_mapping(file_state)
+                u.Cli.json_as_mapping(file_state),
             )
             file_state_dict["position"] = position
             file_state_dict["last_updated"] = u.generate_datetime_utc().isoformat()

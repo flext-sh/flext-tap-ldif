@@ -50,7 +50,8 @@ class TestsFlextTapLdifTypes(FlextTestsTypes, FlextTapLdifTypes):
         ]
         type TestLdifScenario = FlextTestsTypes.JsonMapping
         type TestLdifValidationResult = t.MappingKV[
-            str, bool | str | FlextTestsTypes.StrSequence
+            str,
+            bool | str | FlextTestsTypes.StrSequence,
         ]
         type TestLdifParsingResult = FlextTestsTypes.JsonMapping
 

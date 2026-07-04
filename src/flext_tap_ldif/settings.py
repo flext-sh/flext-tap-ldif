@@ -18,7 +18,9 @@ class FlextTapLdifSettings(FlextSettingsBase):
     """Validated runtime settings for tap-ldif execution."""
 
     model_config: ClassVar[m.SettingsConfigDict] = m.SettingsConfigDict(
-        env_prefix="FLEXT_TAP_LDIF_", extra="ignore", validate_assignment=True
+        env_prefix="FLEXT_TAP_LDIF_",
+        extra="ignore",
+        validate_assignment=True,
     )
 
     file_path: Annotated[str | None, u.Field(default=None)]

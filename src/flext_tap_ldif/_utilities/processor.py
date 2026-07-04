@@ -2,13 +2,15 @@
 
 from __future__ import annotations
 
-from collections.abc import Generator
 from pathlib import Path
-from typing import NoReturn
+from typing import TYPE_CHECKING, NoReturn
 
 from flext_ldif import ldif
 from flext_meltano import u
 from flext_tap_ldif import c, m, p, r, t
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
 
 
 class FlextTapLdifUtilitiesProcessor:
@@ -61,7 +63,7 @@ class FlextTapLdifUtilitiesProcessor:
                 )
                 return r[t.SequenceOf[Path]].ok(discovered)
             return r[t.SequenceOf[Path]].fail(
-                "No file_path or directory_path specified"
+                "No file_path or directory_path specified",
             )
 
         def process_file(
@@ -120,7 +122,7 @@ class FlextTapLdifUtilitiesProcessor:
                         c.TapLdif.EntrySchema.SOURCE_FILE_FIELD: str(file_path),
                         c.TapLdif.EntrySchema.LINE_NUMBER_FIELD: c.TapLdif.EntrySchema.DEFAULT_LINE_NUMBER,
                         c.TapLdif.EntrySchema.ENTRY_SIZE_FIELD: len(
-                            str(entry).encode(c.DEFAULT_ENCODING)
+                            str(entry).encode(c.DEFAULT_ENCODING),
                         ),
                     },
                 )

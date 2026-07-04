@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
-from datetime import datetime
 from types import MappingProxyType
-from typing import Annotated, ClassVar, Self
+from typing import TYPE_CHECKING, Annotated, ClassVar, Self
 
 from flext_tap_ldif import t, u
 from flext_tap_ldif.models import m
+
+if TYPE_CHECKING:
+    from datetime import datetime
 
 
 class FlextTapLdifModelsEntry:
@@ -66,7 +68,7 @@ class FlextTapLdifModelsEntry:
             u.Field(
                 description="Extraction timestamp",
             ),
-        ] = u.Field(default_factory=lambda: u.now())
+        ] = u.Field(default_factory=u.now)
         processed: Annotated[bool, u.Field(description="Processing status")] = False
         validation_errors: Annotated[
             t.StrSequence,
@@ -93,7 +95,7 @@ class FlextTapLdifModelsEntry:
                         "file": source_file,
                         "line": self.line_number,
                     },
-                })
+                }),
             )
 
         def resolve_attribute_values(self, name: str) -> t.StrSequence:

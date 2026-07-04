@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
-from datetime import datetime
-from typing import Annotated, ClassVar, Self
+from typing import TYPE_CHECKING, Annotated, ClassVar, Self
 
 from flext_tap_ldif import c, t, u
 from flext_tap_ldif.models import m
+
+if TYPE_CHECKING:
+    from datetime import datetime
 
 
 class FlextTapLdifModelsLdifFile:
@@ -33,7 +35,8 @@ class FlextTapLdifModelsLdifFile:
 
         file_path: Annotated[str, u.Field(..., description="Path to LDIF file")]
         file_size: Annotated[
-            t.NonNegativeInt, u.Field(description="File size in bytes")
+            t.NonNegativeInt,
+            u.Field(description="File size in bytes"),
         ] = 0
         encoding: Annotated[str, u.Field(description="File encoding")] = (
             c.DEFAULT_ENCODING
@@ -49,17 +52,20 @@ class FlextTapLdifModelsLdifFile:
         ] = None
 
         total_lines: Annotated[
-            t.NonNegativeInt, u.Field(description="Total lines in file")
+            t.NonNegativeInt,
+            u.Field(description="Total lines in file"),
         ] = 0
         entry_count: Annotated[
-            t.NonNegativeInt, u.Field(description="Number of entries")
+            t.NonNegativeInt,
+            u.Field(description="Number of entries"),
         ] = 0
         change_record_count: Annotated[
             t.NonNegativeInt,
             u.Field(description="Number of change records"),
         ] = 0
         comment_lines: Annotated[
-            t.NonNegativeInt, u.Field(description="Number of comment lines")
+            t.NonNegativeInt,
+            u.Field(description="Number of comment lines"),
         ] = 0
 
         processing_status: Annotated[

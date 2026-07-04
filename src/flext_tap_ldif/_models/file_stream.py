@@ -64,7 +64,7 @@ class FlextTapLdifModelsLdifStream:
         stream_metadata: Annotated[
             t.SequenceOf[t.StrMapping],
             u.Field(description="Stream metadata"),
-        ] = u.Field(default_factory=lambda: list[t.StrMapping]())
+        ] = u.Field(default_factory=list[t.StrMapping])
 
         @u.computed_field()
         @property

@@ -73,7 +73,8 @@ class FlextTapLdifUtilitiesLdifDataProcessing:
             if not attr_name:
                 return ""
             normalized: str = c.TapLdif.ATTRIBUTE_NORMALIZE_RE.sub(
-                "_", attr_name.lower()
+                "_",
+                attr_name.lower(),
             )
             if normalized and normalized[0].isdigit():
                 normalized = f"attr_{normalized}"

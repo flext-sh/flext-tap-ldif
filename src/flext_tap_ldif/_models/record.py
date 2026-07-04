@@ -29,23 +29,26 @@ class FlextTapLdifModelsRecord:
             u.Field(
                 description="Validation errors with details",
             ),
-        ] = u.Field(default_factory=lambda: list[t.StrMapping]())
+        ] = u.Field(default_factory=list[t.StrMapping])
         warnings: Annotated[
             t.SequenceOf[t.StrMapping],
             u.Field(
                 description="Validation warnings",
             ),
-        ] = u.Field(default_factory=lambda: list[t.StrMapping]())
+        ] = u.Field(default_factory=list[t.StrMapping])
 
         # Statistics
         total_entries: Annotated[
-            t.NonNegativeInt, u.Field(description="Total entries validated")
+            t.NonNegativeInt,
+            u.Field(description="Total entries validated"),
         ] = 0
         valid_entries: Annotated[
-            t.NonNegativeInt, u.Field(description="Valid entries count")
+            t.NonNegativeInt,
+            u.Field(description="Valid entries count"),
         ] = 0
         invalid_entries: Annotated[
-            t.NonNegativeInt, u.Field(description="Invalid entries count")
+            t.NonNegativeInt,
+            u.Field(description="Invalid entries count"),
         ] = 0
 
         # Validation metadata
