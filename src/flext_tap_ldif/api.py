@@ -40,5 +40,6 @@ class FlextTapLdifService(FlextMeltanoTapServiceBase):
 
 
 tap_ldif = FlextTapLdifService.fetch_global()
+"""Shared FlextTapLdifService facade instance."""
 
 __all__: list[str] = ["FlextTapLdifService", "tap_ldif"]
