@@ -42,7 +42,7 @@ class FlextTapLdifModelsLdifStream:
         key_properties: Annotated[
             t.StrSequence,
             u.Field(description="Key properties"),
-        ] = u.Field(default_factory=lambda: ["dn"])
+        ] = u.Field(default_factory=lambda: ("dn",))
 
         include_change_records: Annotated[
             bool,
@@ -64,7 +64,7 @@ class FlextTapLdifModelsLdifStream:
         stream_metadata: Annotated[
             t.SequenceOf[t.StrMapping],
             u.Field(description="Stream metadata"),
-        ] = u.Field(default_factory=list[t.StrMapping])
+        ] = u.Field(default_factory=tuple)
 
         @u.computed_field()
         @property

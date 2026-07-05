@@ -29,13 +29,13 @@ class FlextTapLdifModelsRecord:
             u.Field(
                 description="Validation errors with details",
             ),
-        ] = u.Field(default_factory=list[t.StrMapping])
+        ] = u.Field(default_factory=tuple)
         warnings: Annotated[
             t.SequenceOf[t.StrMapping],
             u.Field(
                 description="Validation warnings",
             ),
-        ] = u.Field(default_factory=list[t.StrMapping])
+        ] = u.Field(default_factory=tuple)
 
         # Statistics
         total_entries: Annotated[
