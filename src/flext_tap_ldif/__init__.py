@@ -19,7 +19,7 @@ from flext_tap_ldif.__version__ import (
 from flext_tap_ldif._exports import FLEXT_TAP_LDIF_LAZY_IMPORTS
 
 if TYPE_CHECKING:
-    from flext_core._root_typing_parts import (
+    from flext_core._root_typing_parts.facades import (
         d as d,
         e as e,
         h as h,
