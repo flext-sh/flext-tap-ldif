@@ -9,16 +9,14 @@ from flext_core.lazy import build_lazy_import_map, install_lazy_exports
 
 if TYPE_CHECKING:
     from flext_tap_ldif._utilities.data_processing import (
-        FlextTapLdifUtilitiesLdifDataProcessing as FlextTapLdifUtilitiesLdifDataProcessing,
+        FlextTapLdifUtilitiesLdifDataProcessing,
     )
     from flext_tap_ldif._utilities.entries_stream import (
-        FlextTapLdifUtilitiesEntriesStream as FlextTapLdifUtilitiesEntriesStream,
+        FlextTapLdifUtilitiesEntriesStream,
     )
-    from flext_tap_ldif._utilities.processor import (
-        FlextTapLdifUtilitiesProcessor as FlextTapLdifUtilitiesProcessor,
-    )
+    from flext_tap_ldif._utilities.processor import FlextTapLdifUtilitiesProcessor
     from flext_tap_ldif._utilities.state_management import (
-        FlextTapLdifUtilitiesStateManagement as FlextTapLdifUtilitiesStateManagement,
+        FlextTapLdifUtilitiesStateManagement,
     )
 _LAZY_IMPORTS = build_lazy_import_map(
     {
