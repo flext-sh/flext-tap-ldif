@@ -19,7 +19,7 @@ from flext_tap_ldif.__version__ import (
 
 if TYPE_CHECKING:
     from flext_ldif import d, e, h, r, s, x
-    from flext_tap_ldif.api import FlextTapLdifService
+    from flext_tap_ldif.api import FlextTapLdifService, tap_ldif
     from flext_tap_ldif.cli import FlextTapLdifCli, main
     from flext_tap_ldif.constants import FlextTapLdifConstants, c
     from flext_tap_ldif.models import FlextTapLdifModels, m
