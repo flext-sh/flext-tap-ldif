@@ -19,14 +19,7 @@ from flext_tap_ldif.__version__ import (
 from flext_tap_ldif._exports import FLEXT_TAP_LDIF_LAZY_IMPORTS
 
 if TYPE_CHECKING:
-    from flext_core._root_typing_parts.facades import (
-        d as d,
-        e as e,
-        h as h,
-        r as r,
-        s as s,
-        x as x,
-    )
+    from flext_ldif import d as d, e as e, h as h, r as r, s as s, x as x
     from flext_tap_ldif.api import (
         FlextTapLdifService as FlextTapLdifService,
         tap_ldif as tap_ldif,
