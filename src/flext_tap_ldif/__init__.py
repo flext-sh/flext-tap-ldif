@@ -18,16 +18,28 @@ from flext_tap_ldif.__version__ import (
 )
 
 if TYPE_CHECKING:
-    from flext_ldif import d, e, h, r, s, x
-    from flext_tap_ldif.api import FlextTapLdifService, tap_ldif
-    from flext_tap_ldif.cli import FlextTapLdifCli, main
-    from flext_tap_ldif.constants import FlextTapLdifConstants, c
-    from flext_tap_ldif.models import FlextTapLdifModels, m
-    from flext_tap_ldif.protocols import FlextTapLdifProtocols, p
-    from flext_tap_ldif.settings import FlextTapLdifSettings
-    from flext_tap_ldif.tap import FlextTapLdif
-    from flext_tap_ldif.typings import FlextTapLdifTypes, t
-    from flext_tap_ldif.utilities import FlextTapLdifUtilities, u
+    from flext_ldif import d as d, e as e, h as h, r as r, s as s, x as x
+    from flext_tap_ldif.api import (
+        FlextTapLdifService as FlextTapLdifService,
+        tap_ldif as tap_ldif,
+    )
+    from flext_tap_ldif.cli import FlextTapLdifCli as FlextTapLdifCli, main as main
+    from flext_tap_ldif.constants import (
+        FlextTapLdifConstants as FlextTapLdifConstants,
+        c as c,
+    )
+    from flext_tap_ldif.models import FlextTapLdifModels as FlextTapLdifModels, m as m
+    from flext_tap_ldif.protocols import (
+        FlextTapLdifProtocols as FlextTapLdifProtocols,
+        p as p,
+    )
+    from flext_tap_ldif.settings import FlextTapLdifSettings as FlextTapLdifSettings
+    from flext_tap_ldif.tap import FlextTapLdif as FlextTapLdif
+    from flext_tap_ldif.typings import FlextTapLdifTypes as FlextTapLdifTypes, t as t
+    from flext_tap_ldif.utilities import (
+        FlextTapLdifUtilities as FlextTapLdifUtilities,
+        u as u,
+    )
 _LAZY_IMPORTS = build_lazy_import_map(
     {
         ".api": (
