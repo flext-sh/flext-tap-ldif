@@ -23,7 +23,6 @@ class FlextTapLdifUtilitiesProcessor:
 
         def __init__(self, settings: t.ConfigurationMapping) -> None:
             """Initialize the LDIF processor."""
-            self.settings = settings
             self._api = ldif()
 
         def discover_files(
@@ -82,7 +81,7 @@ class FlextTapLdifUtilitiesProcessor:
                     "Failed to process LDIF file: %s",
                     str(file_path),
                 )
-                if self.settings.get("strict_parsing", True):
+                if settings.get("strict_parsing", True):
                     raise
 
         def _yield_records(
@@ -90,7 +89,7 @@ class FlextTapLdifUtilitiesProcessor:
             file_path: Path,
         ) -> Generator[t.JsonMapping]:
             """Yield parsed Singer records from a file."""
-            encoding = self.settings.get("encoding", c.DEFAULT_ENCODING)
+            encoding = settings.get("encoding", c.DEFAULT_ENCODING)
             match encoding:
                 case str() as text_encoding:
                     file_encoding = text_encoding

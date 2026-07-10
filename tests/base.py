@@ -17,7 +17,6 @@ class TestsFlextTapLdifServiceBase(tests_s):
     @override
     def fetch_settings(cls) -> TestsFlextTapLdifSettings:
         """Return the typed Tap LDIF+Tests settings singleton."""
-        return TestsFlextTapLdifSettings.fetch_global()
 
     @classmethod
     @override

@@ -10,36 +10,38 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Annotated, ClassVar
 
-from flext_core import FlextSettingsBase
-from flext_tap_ldif import c, m, u
+from pydantic import Field
+from pydantic_settings import SettingsConfigDict
+
+from flext_core import FlextSettings
 
 
-class FlextTapLdifSettings(FlextSettingsBase):
+class FlextTapLdifSettings(FlextSettings):
     """Validated runtime settings for tap-ldif execution."""
 
-    model_config: ClassVar[m.SettingsConfigDict] = m.SettingsConfigDict(
+    model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(
         env_prefix="FLEXT_TAP_LDIF_",
         extra="ignore",
         validate_assignment=True,
     )
 
-    file_path: Annotated[str | None, u.Field(default=None)]
-    directory_path: Annotated[str | None, u.Field(default=None)]
+    file_path: Annotated[str | None, Field(default=None)]
+    directory_path: Annotated[str | None, Field(default=None)]
     file_pattern: Annotated[
         str,
-        u.Field(default=c.TapLdif.DEFAULT_FILE_PATTERN),
+        Field(default="*.ldif"),
     ]
     encoding: Annotated[
         str,
-        u.Field(default=c.TapLdif.DEFAULT_LDIF_ENCODING),
+        Field(default="utf-8"),
     ]
     strict_parsing: Annotated[
         bool,
-        u.Field(default=c.TapLdif.DEFAULT_STRICT_PARSING),
+        Field(default=True),
     ]
     max_file_size_mb: Annotated[
         int,
-        u.Field(default=c.TapLdif.MAX_FILE_SIZE_MB, ge=1),
+        Field(default=100, ge=1),
     ]
 
     def normalized_file_path(self) -> Path | None:
@@ -49,4 +51,8 @@ class FlextTapLdifSettings(FlextSettingsBase):
         return Path(self.file_path)
 
 
-__all__: list[str] = ["FlextTapLdifSettings"]
+
+settings: FlextTapLdifSettings = FlextTapLdifSettings.fetch_global()
+"""Pre-instantiated project settings singleton — ``from flext_tap_ldif import settings``."""
+
+__all__: list[str] = ["FlextTapLdifSettings", "settings"]
