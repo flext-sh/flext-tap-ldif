@@ -1,6 +1,6 @@
 """FLEXT service orchestrator for tap-ldif.
 
-from flext_tap_ldif.utilities import u
+from flext_tap_ldif import u
 Thin facade — all infrastructure from ``FlextMeltanoTapServiceBase`` via MRO.
 Only domain-specific tap creation defined here.
 

@@ -14,7 +14,7 @@ from flext_tests import FlextTestsProtocols
 from flext_tap_ldif import FlextTapLdifProtocols
 
 if TYPE_CHECKING:
-    from tests.typings import t
+    from tests import t
 
 
 class TestsFlextTapLdifProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
