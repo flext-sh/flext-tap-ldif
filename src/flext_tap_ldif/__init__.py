@@ -35,13 +35,13 @@ if TYPE_CHECKING:
     from flext_tap_ldif.models import FlextTapLdifModels as FlextTapLdifModels, m as m
     from flext_tap_ldif.protocols import (
         FlextTapLdifProtocols as FlextTapLdifProtocols,
-        p as p,
+        p,
     )
     from flext_tap_ldif.tap import FlextTapLdif as FlextTapLdif
     from flext_tap_ldif.typings import FlextTapLdifTypes as FlextTapLdifTypes, t as t
     from flext_tap_ldif.utilities import (
         FlextTapLdifUtilities as FlextTapLdifUtilities,
-        u as u,
+        u,
     )
 _LAZY_IMPORTS = build_lazy_import_map(
     {
