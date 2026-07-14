@@ -9,13 +9,11 @@ from __future__ import annotations
 
 import re
 from enum import StrEnum, unique
-from typing import TYPE_CHECKING, ClassVar, Final
+from typing import ClassVar, Final
 
 from flext_ldif import FlextLdifConstants
 from flext_meltano import c
-
-if TYPE_CHECKING:
-    from flext_tap_ldif import t
+from flext_tap_ldif import t
 
 
 class FlextTapLdifConstants(c, FlextLdifConstants):

@@ -2,14 +2,12 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, override
+from collections.abc import Iterable
+from typing import override
 
 from flext_meltano import u
 from flext_tap_ldif import c, m, t
 from flext_tap_ldif._utilities.processor import FlextTapLdifUtilitiesProcessor
-
-if TYPE_CHECKING:
-    from collections.abc import Iterable
 
 
 class FlextTapLdifUtilitiesEntriesStream:
