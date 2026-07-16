@@ -14,7 +14,7 @@ class FlextTapLdifModelsLdifFile:
     class LdifFile(m.EnforcedModel):
         """Represents an LDIF file with processing metadata."""
 
-        model_config: ClassVar[m.ConfigDict] = m.ConfigDict(
+        model_config: ClassVar[p.ConfigDict] = m.ConfigDict(
             validate_assignment=True,
             extra="forbid",
             frozen=False,

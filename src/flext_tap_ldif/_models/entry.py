@@ -15,7 +15,7 @@ class FlextTapLdifModelsEntry:
     class LdifEntry(m.EnforcedModel):
         """Represents an LDIF entry with complete parsing support."""
 
-        model_config: ClassVar[m.ConfigDict] = m.ConfigDict(
+        model_config: ClassVar[p.ConfigDict] = m.ConfigDict(
             validate_assignment=True,
             extra="forbid",
             frozen=False,

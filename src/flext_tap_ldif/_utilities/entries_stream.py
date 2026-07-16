@@ -31,7 +31,7 @@ class FlextTapLdifUtilitiesEntriesStream:
         def get_records(
             self,
             context: t.JsonMapping | None = None,
-        ) -> Iterable[m.Meltano.SingerRecord]:
+        ) -> Iterable[p.Meltano.SingerRecord]:
             """Return a generator of record-type dictionary objects."""
             _ = context
             settings = t.json_dict_adapter().validate_python(self._tap.config)

@@ -14,7 +14,7 @@ class FlextTapLdifModelsLdifStream:
     class LdifStream(m.EnforcedModel):
         """Singer stream configuration for LDIF file processing."""
 
-        model_config: ClassVar[m.ConfigDict] = m.ConfigDict(
+        model_config: ClassVar[p.ConfigDict] = m.ConfigDict(
             validate_assignment=True,
             extra="forbid",
             frozen=False,

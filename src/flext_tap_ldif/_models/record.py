@@ -13,7 +13,7 @@ class FlextTapLdifModelsRecord:
     class LdifValidationResult(m.EnforcedModel):
         """LDIF validation result with detailed error reporting."""
 
-        model_config: ClassVar[m.ConfigDict] = m.ConfigDict(
+        model_config: ClassVar[p.ConfigDict] = m.ConfigDict(
             validate_assignment=True,
             extra="forbid",
             frozen=False,
