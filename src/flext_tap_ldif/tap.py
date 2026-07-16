@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import ClassVar, override
 
-from flext_tap_ldif import FlextTapLdifSettings, FlextTapLdifUtilities, c, m, t, u
+from flext_tap_ldif import FlextTapLdifSettings, FlextTapLdifUtilities, c, m, p, t, u
 
 logger = u.fetch_logger(__name__)
 

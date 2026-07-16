@@ -12,7 +12,7 @@ from typing import Protocol, runtime_checkable
 from flext_tests import FlextTestsProtocols
 
 from flext_tap_ldif import FlextTapLdifProtocols
-from tests import t
+from tests import p, t
 
 
 class TestsFlextTapLdifProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
