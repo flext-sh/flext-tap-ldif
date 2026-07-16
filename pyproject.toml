@@ -121,8 +121,8 @@ dev = [
 ]
 
 [project.scripts]
-flext-tap-ldif = "flext_tap_ldif.main:main"
-tap-ldif = "flext_tap_ldif.main:main"
+flext-tap-ldif = "flext_tap_ldif.cli:main"
+tap-ldif = "flext_tap_ldif.cli:main"
 tap-ldif-legacy = "flext_tap_ldif.tap:main"
 
 [project.urls]
