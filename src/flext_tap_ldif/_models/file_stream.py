@@ -5,7 +5,7 @@ from __future__ import annotations
 from types import MappingProxyType
 from typing import Annotated, ClassVar, Self
 
-from flext_tap_ldif import c, m, p, t, u
+from flext_tap_ldif import c, m, t, u
 
 
 class FlextTapLdifModelsLdifStream:
@@ -14,7 +14,7 @@ class FlextTapLdifModelsLdifStream:
     class LdifStream(m.EnforcedModel):
         """Singer stream configuration for LDIF file processing."""
 
-        model_config: ClassVar[p.ConfigDict] = m.ConfigDict(
+        model_config: ClassVar[t.ConfigDict] = m.ConfigDict(
             validate_assignment=True,
             extra="forbid",
             frozen=False,

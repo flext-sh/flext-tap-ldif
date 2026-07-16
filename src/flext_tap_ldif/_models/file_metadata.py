@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Annotated, ClassVar, Self
 
-from flext_tap_ldif import c, m, p, t, u
+from flext_tap_ldif import c, m, t, u
 
 
 class FlextTapLdifModelsLdifFile:
@@ -14,7 +14,7 @@ class FlextTapLdifModelsLdifFile:
     class LdifFile(m.EnforcedModel):
         """Represents an LDIF file with processing metadata."""
 
-        model_config: ClassVar[p.ConfigDict] = m.ConfigDict(
+        model_config: ClassVar[t.ConfigDict] = m.ConfigDict(
             validate_assignment=True,
             extra="forbid",
             frozen=False,
