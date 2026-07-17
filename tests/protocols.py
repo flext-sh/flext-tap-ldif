@@ -7,12 +7,15 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import Protocol, runtime_checkable
+from typing import TYPE_CHECKING, Protocol, runtime_checkable
 
 from flext_tests import FlextTestsProtocols
 
 from flext_tap_ldif import FlextTapLdifProtocols
-from tests import p, t
+from tests import p
+
+if TYPE_CHECKING:
+    from tests import t
 
 
 class TestsFlextTapLdifProtocols(FlextTestsProtocols, FlextTapLdifProtocols):

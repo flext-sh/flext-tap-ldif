@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
 from flext_tests import tm
 
 from flext_tap_ldif import FlextTapLdif
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 __all__: list[str] = ["TestsFlextTapLdifTap"]
 

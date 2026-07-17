@@ -2,13 +2,15 @@
 
 from __future__ import annotations
 
-from collections.abc import Generator
 from pathlib import Path
-from typing import NoReturn
+from typing import TYPE_CHECKING, NoReturn
 
 from flext_ldif import ldif
 from flext_meltano import u
 from flext_tap_ldif import c, m, p, r, t
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
 
 
 class FlextTapLdifUtilitiesProcessor:

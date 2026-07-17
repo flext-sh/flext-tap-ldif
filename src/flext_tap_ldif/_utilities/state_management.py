@@ -2,8 +2,12 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from flext_meltano import u
-from flext_tap_ldif import t
+
+if TYPE_CHECKING:
+    from flext_tap_ldif import t
 
 
 class FlextTapLdifUtilitiesStateManagement:
