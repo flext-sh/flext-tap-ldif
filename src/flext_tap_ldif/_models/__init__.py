@@ -3,4 +3,6 @@
 
 from __future__ import annotations
 
-__all__: tuple[str, ...] = ()
+from .config import FlextTapLdifConfigModels
+
+__all__: tuple[str, ...] = ("FlextTapLdifConfigModels",)

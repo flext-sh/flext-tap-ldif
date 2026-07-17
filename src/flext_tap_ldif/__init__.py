@@ -20,6 +20,7 @@ from flext_tap_ldif.__version__ import (
 if TYPE_CHECKING:
     from flext_ldif import d, e, h, r, s, x
 
+    from ._config import FlextTapLdifConfig, config
     from ._settings import FlextTapLdifSettings, settings
     from .api import FlextTapLdifService, tap_ldif
     from .cli import FlextTapLdifCli, main
@@ -49,6 +50,8 @@ if TYPE_CHECKING:
         x,
         main,
         FlextTapLdifCli,
+        FlextTapLdifConfig,
+        config,
         FlextTapLdifSettings,
         settings,
         FlextTapLdifService,
@@ -58,6 +61,10 @@ if TYPE_CHECKING:
 
 
 _LAZY_MODULES: dict[str, tuple[str, ...]] = {
+    "._config": (
+        "FlextTapLdifConfig",
+        "config",
+    ),
     "._settings": (
         "FlextTapLdifSettings",
         "settings",
@@ -114,6 +121,7 @@ _LAZY_IMPORTS = build_lazy_import_map(
 _DIRECT_IMPORTS: tuple[str, ...] = (
     "FlextTapLdif",
     "FlextTapLdifCli",
+    "FlextTapLdifConfig",
     "FlextTapLdifConstants",
     "FlextTapLdifModels",
     "FlextTapLdifProtocols",
@@ -131,6 +139,7 @@ _DIRECT_IMPORTS: tuple[str, ...] = (
     "__version_info__",
     "build_lazy_import_map",
     "c",
+    "config",
     "d",
     "e",
     "h",
@@ -166,6 +175,7 @@ __all__: tuple[str, ...] = (
     "__version__",
     "__version_info__",
     "c",
+    "config",
     "d",
     "e",
     "h",
