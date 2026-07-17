@@ -3,7 +3,7 @@
 # flext-tap-ldif API Overview
 
 - Package: `flext_tap_ldif`
-- Version: `0.12.0`
+- Version: `0.20.0`
 - Description: FLEXT Tap LDIF - Singer Tap for LDIF file format data extraction
 - Doc summary: Flext Tap Ldif package.
 - Classifiers: `Development Status :: 3 - Alpha`, `Intended Audience :: Developers`, `Operating System :: OS Independent`, `Programming Language :: Python :: 3 :: Only`, `Programming Language :: Python :: 3.13`, `Topic :: Database` (+3 more)
