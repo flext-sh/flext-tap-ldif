@@ -37,7 +37,7 @@ class FlextTapLdifConstants(c, FlextLdifConstants):
         MAX_FILE_SIZE_MB: Final[int] = 100
 
         @unique
-        class LdifChangeType(StrEnum):
+        class ChangeType(StrEnum):
             """Supported LDIF changetype tokens for tap processing."""
 
             ADD = "add"
