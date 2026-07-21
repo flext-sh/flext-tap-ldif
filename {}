@@ -1,0 +1,1310 @@
+"""Base utilities and computed fields for LDIF tap models."""
+
+from __future__ import annotations
+
+import base64
+from collections.abc import (
+    Mapping,
+)
+from datetime import UTC, datetime
+from typing import Self
+
+from flext_meltano import m, u
+from flext_tap_ldif import c, t
+
+
+class FlextTapLdifModelsBase:
+    """Base MRO mixin: computed fields, serializers, validators, utility methods."""
+
+    @property
+    def active_ldif_tap_models_count(self) -> int:
+        """Count of active LDIF tap models with file processing capabilities."""
+        model_attrs = [
+            "LdifEntry",
+            "LdifChangeRecord",
+            "LdifFile",
+            "LdifStream",
+            "LdifBatch",
+            "LdifProcessingState",
+            "LdifTapConfig",
+            "LdifRecord",
+            "LdifValidationResult",
+        ]
+        return sum(1 for attr in model_attrs if getattr(self, attr, None) is not None)
+
+    @property
+    def ldif_tap_system_summary(self) -> Mapping[str, t.Container]:
+        """Complete Singer LDIF tap system summary with file processing capabilities."""
+        total_models = sum(
+            1
+            for attr in [
+                "LdifEntry",
+                "LdifChangeRecord",
+                "LdifFile",
+                "LdifStream",
+                "LdifBatch",
+                "LdifProcessingState",
+                "LdifTapConfig",
+                "LdifRecord",
+                "LdifValidationResult",
+            ]
+            if getattr(self, attr, None) is not None
+        )
+        return {
+            "total_models": total_models,
+            "tap_type": "singer_ldif_file_extractor",
+            "extraction_features": [
+                "ldif_file_parsing",
+                "change_record_processing",
+                "entry_validation",
+                "batch_file_processing",
+                "format_compliance_checking",
+                "performance_monitoring",
+            ],
+            "singer_compliance": {
+                "protocol_version": "singer_v1",
+                "stream_discovery": True,
+                "catalog_generation": True,
+                "state_management": True,
+                "file_bookmarking": True,
+            },
+            "ldif_capabilities": {
+                "format_validation": True,
+                "change_record_support": True,
+                "batch_processing": True,
+                "error_recovery": True,
+                "schema_inference": True,
+            },
+        }
+
+    @u.field_serializer("*", when_used="json")
+    def serialize_with_ldif_metadata(
+        self,
+        value: t.Container,
+        _info: u.FieldSerializationInfo,
+    ) -> t.ContainerValue:
+        """Add Singer LDIF tap metadata to all serialized fields."""
+        if u.dict_like(value):
+            value_dict: t.ContainerValueMapping = {}
+            if isinstance(value, m.ConfigMap):
+                value_dict = {str(k): str(v) for k, v in value.root.items()}
+            else:
+                value_dict = {str(k): str(v) for k, v in value.items()}
+            metadata_dict: t.MutableContainerValueMapping = dict(value_dict)
+            metadata_dict["_ldif_tap_metadata"] = {
+                "extraction_timestamp": datetime.now(UTC).isoformat(),
+                "tap_type": "ldif_file_extractor",
+                "singer_protocol": "v1.0",
+                "data_source": "ldif_files",
+            }
+            return metadata_dict
+        if (
+            isinstance(value, (str, int, float, bool))
+            and getattr(
+                self,
+                "_include_ldif_metadata",
+                None,
+            )
+            is not None
+        ):
+            return {
+                "value": value,
+                "_ldif_context": {
+                    "extracted_at": datetime.now(UTC).isoformat(),
+                    "tap_name": "flext-tap-ldif",
+                },
+            }
+        return str(value)
+
+    @u.model_validator(mode="after")
+    def validate_ldif_tap_system_consistency(self) -> Self:
+        """Validate Singer LDIF tap system consistency and configuration."""
+        if (
+            getattr(self, "_ldif_files", None)
+            and getattr(self, "LdifFile", None) is None
+        ):
+            msg = "LdifFile model required when LDIF files configured"
+            raise ValueError(msg)
+
+        if (
+            getattr(self, "_batch_processing", None)
+            and getattr(self, "LdifBatch", None) is None
+        ):
+            msg = "LdifBatch model required for batch processing"
+            raise ValueError(msg)
+
+        if getattr(self, "_singer_mode", None):
+            required_models = ["LdifStream", "LdifRecord", "LdifProcessingState"]
+            for model in required_models:
+                if getattr(self, model, None) is None:
+                    msg = f"{model} required for Singer protocol compliance"
+                    raise ValueError(msg)
+
+        return self
+
+    @staticmethod
+    def decode_base64_value(value: str) -> str:
+        """Decode base64 encoded LDIF value."""
+        try:
+            return base64.b64decode(value).decode("utf-8")
+        except c.Meltano.SINGER_SAFE_EXCEPTIONS:
+            return value
+
+    @staticmethod
+    def normalize_attribute_name(name: str) -> str:
+        """Normalize LDIF attribute name."""
+        return name.lower().strip()
+
+    @staticmethod
+    def parse_dn(dn: str) -> t.StrMapping:
+        """Parse Distinguished Name into components."""
+        components: t.MutableStrMapping = {}
+        parts = dn.split(",")
+        for part in parts:
+            if "=" in part:
+                key, value = part.strip().split("=", 1)
+                components[key.strip()] = value.strip()
+        return components
+
+    @staticmethod
+    def validate_ldif_line(line: str) -> bool:
+        """Validate LDIF line format."""
+        return not line or line.startswith("#")
+"""Configuration models for LDIF tap."""
+
+from __future__ import annotations
+
+from collections.abc import (
+    Mapping,
+)
+from typing import Annotated, ClassVar, Self
+
+from flext_core import FlextConstants, m, u
+from flext_tap_ldif import t
+
+
+class FlextTapLdifModelsSettings:
+    """MRO mixin: LdifTapConfig model."""
+
+    class LdifTapConfig(m.BaseModel):
+        """Configuration for LDIF tap operations."""
+
+        model_config: ClassVar[m.ConfigDict] = m.ConfigDict(
+            validate_assignment=True,
+            extra="forbid",
+            frozen=False,
+            json_schema_extra={
+                "description": "LDIF tap configuration with complete settings",
+                "examples": [
+                    {
+                        "ldif_directory": "/data/ldif",
+                        "file_patterns": ["*.ldif"],
+                        "batch_size": 1000,
+                    },
+                ],
+            },
+        )
+
+        # File configuration
+        ldif_directory: Annotated[
+            str | None,
+            u.Field(
+                default=None,
+                description="LDIF files directory",
+            ),
+        ]
+        file_patterns: Annotated[
+            t.StrSequence,
+            u.Field(
+                description="LDIF file patterns",
+            ),
+        ] = u.Field(default_factory=lambda: ["*.ldif"])
+        recursive_search: Annotated[
+            bool,
+            u.Field(
+                default=False,
+                description="Recursive directory search",
+            ),
+        ]
+
+        # Processing configuration
+        batch_size: Annotated[
+            int,
+            u.Field(
+                default=FlextConstants.DEFAULT_SIZE,
+                description="Processing batch size",
+            ),
+        ]
+        parallel_processing: Annotated[
+            bool,
+            u.Field(
+                default=False,
+                description="Enable parallel processing",
+            ),
+        ]
+        max_workers: Annotated[
+            t.WorkerCount,
+            u.Field(default=4, description="Maximum worker threads"),
+        ]
+
+        # Error handling
+        continue_on_error: Annotated[
+            bool,
+            u.Field(
+                default=True,
+                description="Continue processing on errors",
+            ),
+        ]
+        max_errors: Annotated[
+            int,
+            u.Field(
+                default=FlextConstants.DEFAULT_SIZE,
+                description="Maximum errors before stopping",
+            ),
+        ]
+        error_file: Annotated[
+            str | None,
+            u.Field(default=None, description="Error output file"),
+        ]
+
+        # Output configuration
+        output_format: Annotated[
+            str,
+            u.Field(default="jsonl", description="Output format"),
+        ]
+        include_metadata: Annotated[
+            bool,
+            u.Field(
+                default=True,
+                description="Include processing metadata",
+            ),
+        ]
+        compress_output: Annotated[
+            bool,
+            u.Field(
+                default=False,
+                description="Compress output files",
+            ),
+        ]
+
+        @property
+        def tap_config_summary(self) -> Mapping[str, t.Container]:
+            """LDIF tap configuration summary."""
+            patterns: t.RecursiveContainerList = list(self.file_patterns)
+            source: Mapping[str, t.Container] = {
+                "directory": self.ldif_directory,
+                "patterns": patterns,
+                "recursive": self.recursive_search,
+            }
+            processing: Mapping[str, t.Container] = {
+                "batch_size": self.batch_size,
+                "parallel": self.parallel_processing,
+                "max_workers": self.max_workers,
+            }
+            error_handling: Mapping[str, t.Container] = {
+                "continue_on_error": self.continue_on_error,
+                "max_errors": self.max_errors,
+                "has_error_file": bool(self.error_file),
+            }
+            output: Mapping[str, t.Container] = {
+                "format": self.output_format,
+                "include_metadata": self.include_metadata,
+                "compressed": self.compress_output,
+            }
+            result: Mapping[str, t.Container] = {
+                "source": source,
+                "processing": processing,
+                "error_handling": error_handling,
+                "output": output,
+            }
+            return result
+
+        @u.model_validator(mode="after")
+        def validate_tap_config(self) -> Self:
+            """Validate LDIF tap configuration."""
+            if self.batch_size <= 0:
+                msg = "Batch size must be positive"
+                raise ValueError(msg)
+            if self.max_workers <= 0:
+                msg = "Max workers must be positive"
+                raise ValueError(msg)
+            return self
+"""FLEXT Tap LDIF Protocols - Domain-specific LDIF tap protocol definitions.
+
+This module provides LDIF tap-specific protocol definitions extending p.
+Follows FLEXT standards:
+- Domain-specific protocols extending parent protocols
+- Protocol composition with multiple inheritance
+- Runtime-checkable protocols where applicable
+
+Copyright (c) 2025 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
+
+"""
+
+from __future__ import annotations
+
+from collections.abc import (
+    Mapping,
+    Sequence,
+)
+from typing import Protocol, runtime_checkable
+
+from flext_ldif import FlextLdifProtocols
+from flext_meltano import FlextMeltanoProtocols, m
+from flext_tap_ldif import t
+
+
+class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
+    """LDIF tap-specific protocol definitions extending p.
+
+    Domain-specific protocol system for LDIF data extraction operations.
+    Contains ONLY complex LDIF tap-specific protocols extending parent protocols.
+    """
+
+    class TapLdif:
+        """Tap LDIF namespace for protocol definitions.
+
+        Contains all LDIF tap-specific protocol definitions
+        organized by functional domains.
+        """
+
+        @runtime_checkable
+        class LdifConnection(FlextLdifProtocols.Service[t.Container], Protocol):
+            """Protocol for LDIF file connection management."""
+
+            def close_ldif_file(self) -> FlextMeltanoProtocols.Result[bool]:
+                """Close LDIF file."""
+                ...
+
+            def open_ldif_file(
+                self,
+                file_path: str,
+            ) -> FlextMeltanoProtocols.Result[t.Container]:
+                """Open LDIF file for reading."""
+                ...
+
+            def validate_ldif_format(
+                self,
+                content: str,
+            ) -> FlextMeltanoProtocols.Result[bool]:
+                """Validate LDIF file format."""
+                ...
+
+        @runtime_checkable
+        class LdifParsing(FlextLdifProtocols.Service[t.Container], Protocol):
+            """Protocol for LDIF parsing operations."""
+
+            def extract_entry_dn(
+                self,
+                entry_lines: t.StrSequence,
+            ) -> FlextMeltanoProtocols.Result[str]:
+                """Extract DN from LDIF entry lines."""
+                ...
+
+            def parse_ldif_entry(
+                self,
+                entry_text: str,
+            ) -> FlextMeltanoProtocols.Result[t.Container]:
+                """Parse single LDIF entry."""
+                ...
+
+            def parse_ldif_file(
+                self,
+                file_path: str,
+            ) -> FlextMeltanoProtocols.Result[t.ContainerValueList]:
+                """Parse entire LDIF file."""
+                ...
+
+        @runtime_checkable
+        class LdifExtraction(FlextLdifProtocols.Service[t.Container], Protocol):
+            """Protocol for LDIF data extraction."""
+
+            def extract_entries_by_filter(
+                self,
+                entries: Sequence[t.ContainerValueMapping],
+                filter_criteria: t.ContainerValueMapping,
+            ) -> FlextMeltanoProtocols.Result[t.ContainerValueList]:
+                """Extract LDIF entries matching filter criteria."""
+                ...
+
+            def extract_entry_attributes(
+                self,
+                entry: t.ContainerValueMapping,
+                attributes: t.StrSequence | None = None,
+            ) -> FlextMeltanoProtocols.Result[t.Container]:
+                """Extract specific attributes from LDIF entry."""
+                ...
+
+        @runtime_checkable
+        class LdifTransformation(FlextLdifProtocols.Service[t.Container], Protocol):
+            """Protocol for LDIF data transformation."""
+
+            def normalize_ldif_attributes(
+                self,
+                attributes: Mapping[str, Sequence[t.ContainerValue]],
+            ) -> FlextMeltanoProtocols.Result[t.Container]:
+                """Normalize LDIF attribute values."""
+                ...
+
+            def transform_ldif_to_singer(
+                self,
+                ldif_entry: t.ContainerValueMapping,
+            ) -> FlextMeltanoProtocols.Result[m.Meltano.SingerRecordMessage]:
+                """Transform LDIF entry to Singer record format."""
+                ...
+
+        @runtime_checkable
+        class StreamGeneration(FlextLdifProtocols.Service[t.Container], Protocol):
+            """Protocol for Singer stream generation from LDIF."""
+
+            def generate_streams_from_ldif(
+                self,
+                ldif_entries: Sequence[t.ContainerValueMapping],
+                settings: t.ContainerValueMapping,
+            ) -> FlextMeltanoProtocols.Result[m.Meltano.SingerCatalog]:
+                """Generate Singer streams from LDIF entries."""
+                ...
+
+            def sync_ldif_stream(
+                self,
+                stream_name: str,
+                ldif_entries: Sequence[t.ContainerValueMapping],
+                state: t.ContainerValueMapping,
+            ) -> FlextMeltanoProtocols.Result[m.Meltano.SingerStateMessage]:
+                """Sync Singer stream from LDIF entries."""
+                ...
+
+
+p = FlextTapLdifProtocols
+__all__: list[str] = ["FlextTapLdifProtocols", "p"]
+"""Singer LDIF tap implementation using FLEXT ecosystem patterns.
+
+Copyright (c) 2025 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
+
+"""
+
+from __future__ import annotations
+
+from collections.abc import (
+    Sequence,
+)
+from typing import ClassVar, override
+
+from flext_core import u
+from flext_tap_ldif import FlextTapLdifSettings, FlextTapLdifUtilities, c, m, t
+
+logger = u.fetch_logger(__name__)
+
+
+class FlextTapLdif(m.Meltano.SingerTapBase):
+    """Singer tap for LDIF file format data extraction."""
+
+    name: str = "tap-ldif"
+    config_class = FlextTapLdifSettings
+    config_jsonschema: ClassVar[dict[str, t.ContainerValue]] = {
+        "type": "object",
+        "properties": {
+            "file_path": {"type": "string"},
+            "directory_path": {"type": "string"},
+            "file_pattern": {"type": "string", "default": "*.ldif"},
+            "encoding": {"type": "string", "default": "utf-8"},
+            "base_dn_filter": {"type": "string"},
+            "object_class_filter": {"type": "array", "items": {"type": "string"}},
+            "attribute_filter": {"type": "array", "items": {"type": "string"}},
+            "exclude_attributes": {"type": "array", "items": {"type": "string"}},
+            "include_operational_attributes": {"type": "boolean", "default": False},
+            "strict_parsing": {"type": "boolean", "default": True},
+            "max_file_size_mb": {
+                "type": "integer",
+                "default": c.MAX_FILE_SIZE // (1024 * 1024),
+            },
+        },
+    }
+
+    @override
+    def discover_streams(self) -> Sequence[m.Meltano.SingerStreamBase]:
+        """Return a list of discovered streams.
+
+        Returns:
+        A list of discovered streams.
+
+        """
+        return [FlextTapLdifUtilities.TapLdif.EntriesStream(tap=self)]
+
+    def _get_ldif_entries_schema(self) -> t.ContainerValueMapping:
+        """Get the schema for LDIF entries stream.
+
+        Returns:
+        Schema definition for LDIF entries.
+
+        """
+        return {
+            "type": "object",
+            "properties": {
+                "dn": {"type": "string"},
+                "object_class": {"type": "array", "items": {"type": "string"}},
+                "attributes": {"type": "object"},
+                "change_type": {"type": "string"},
+                "source_file": {"type": "string"},
+                "line_number": {"type": "integer"},
+                "entry_size": {"type": "integer"},
+            },
+        }
+
+
+if __name__ == "__main__":
+    from flext_tap_ldif import main as _main
+
+    raise SystemExit(_main())
+"""Singer tap utilities for LDIF domain operations.
+
+Copyright (c) 2025 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
+"""
+
+from __future__ import annotations
+
+import base64
+import re
+from collections.abc import (
+    Generator,
+    Iterable,
+    Mapping,
+    MutableSequence,
+    Sequence,
+)
+from datetime import UTC, datetime
+from pathlib import Path
+from typing import ClassVar, NoReturn, TypeIs, override
+
+from flext_ldif.api import ldif
+from flext_ldif.utilities import FlextLdifUtilities
+from flext_meltano import u
+from flext_tap_ldif import c, m, p, r, t
+
+
+class FlextTapLdifUtilities(u, FlextLdifUtilities):
+    """Single unified utilities class for Singer tap LDIF operations.
+
+    Follows FLEXT unified class pattern with nested helper classes for
+    domain-specific Singer tap functionality with LDIF data sources.
+    Extends up-specific operations.
+
+    Constants are accessed via constants module:
+        c.TapLdif.Format.LINE_CONTINUATION
+        c.TapLdif.TapLdifPerformance.DEFAULT_BATCH_SIZE
+        c.DEFAULT_LDIF_ENCODING
+        c.TapLdif.Format.MAX_LINE_LENGTH
+    """
+
+    _logger: ClassVar[p.Logger] = u.fetch_logger(__name__)
+
+    class TapLdif:
+        """Utility functions for LDIF data processing.
+
+        Singer protocol utilities (emit_schema, emit_record, emit_state,
+        process_stdin, build_catalog_entry) are in the parent:
+        ``u.Meltano.Singer.*`` — accessed via MRO, never duplicated here.
+        """
+
+        class LdifFileProcessing:
+            """LDIF file processing utilities."""
+
+            @staticmethod
+            def count_ldif_entries(file_path: Path) -> p.Result[int]:
+                """Count number of entries in LDIF file.
+
+                Args:
+                file_path: Path to LDIF file
+
+                Returns:
+                r[int]: Number of entries or error
+
+                """
+                try:
+                    if not file_path.exists():
+                        return r[int].fail(f"LDIF file does not exist: {file_path}")
+                    entry_count = 0
+                    with file_path.open(
+                        "r", encoding=c.TapLdif.DEFAULT_LDIF_ENCODING
+                    ) as f:
+                        for line_str in f:
+                            line = line_str.strip()
+                            if line.startswith("dn:"):
+                                entry_count += 1
+                    return r[int].ok(entry_count)
+                except UnicodeDecodeError as e:
+                    return r[int].fail(f"LDIF file encoding error: {e}")
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
+                    return r[int].fail(f"Error counting LDIF entries: {e}")
+
+            @staticmethod
+            def extract_ldif_metadata(
+                file_path: Path,
+            ) -> p.Result[Mapping[str, t.Container]]:
+                """Extract metadata from LDIF file.
+
+                Args:
+                file_path: Path to LDIF file
+
+                Returns:
+                r[t.ContainerValueMapping]: Metadata dictionary or error
+
+                """
+                try:
+                    version: str | None = None
+                    entry_count = 0
+                    base_dns: set[str] = set()
+                    object_classes: set[str] = set()
+                    with file_path.open(
+                        "r", encoding=c.TapLdif.DEFAULT_LDIF_ENCODING
+                    ) as f:
+                        for line_str in f:
+                            line = line_str.strip()
+                            if line.startswith("version:"):
+                                version = line.split(":", 1)[1].strip()
+                            elif line.startswith("dn:"):
+                                entry_count += 1
+                                dn = line.split(":", 1)[1].strip()
+                                min_dn_components_for_base = 2
+                                dn_parts = [part.strip() for part in dn.split(",")]
+                                if len(dn_parts) >= min_dn_components_for_base:
+                                    base_dn = ",".join(dn_parts[-2:])
+                                    base_dns.add(base_dn)
+                            elif line.startswith("objectClass:"):
+                                obj_class = line.split(":", 1)[1].strip()
+                                object_classes.add(obj_class)
+                    metadata: Mapping[str, t.Container] = {
+                        "file_path": str(file_path),
+                        "file_size": file_path.stat().st_size,
+                        "version": version,
+                        "entry_count": entry_count,
+                        "base_dns": list(base_dns),
+                        "object_classes": list(object_classes),
+                    }
+                    return r[Mapping[str, t.Container]].ok(metadata)
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
+                    return r[Mapping[str, t.Container]].fail(
+                        f"Error extracting LDIF metadata: {e}",
+                    )
+
+            @staticmethod
+            def validate_ldif_file(file_path: Path) -> p.Result[bool]:
+                """Validate LDIF file format and accessibility.
+
+                Args:
+                file_path: Path to LDIF file
+
+                Returns:
+                r[bool]: True if valid, error if invalid
+
+                """
+                try:
+                    if not file_path.exists():
+                        return r[bool].fail(f"LDIF file does not exist: {file_path}")
+                    if not file_path.is_file():
+                        return r[bool].fail(f"Path is not a file: {file_path}")
+                    if file_path.suffix.lower() not in {".ldif", ".ldif3", ".ldi"}:
+                        return r[bool].fail(
+                            f"File does not have LDIF extension: {file_path}",
+                        )
+                    with file_path.open(
+                        "r", encoding=c.TapLdif.DEFAULT_LDIF_ENCODING
+                    ) as f:
+                        first_lines = [f.readline().strip() for _ in range(10)]
+                    has_version = any(
+                        line.startswith("version:") for line in first_lines
+                    )
+                    has_dn = any(line.startswith("dn:") for line in first_lines)
+                    if not (has_version or has_dn):
+                        return r[bool].fail(
+                            f"File does not appear to be valid LDIF format: {file_path}",
+                        )
+                    return r[bool].ok(value=True)
+                except UnicodeDecodeError as e:
+                    return r[bool].fail(f"LDIF file encoding error: {e}")
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
+                    return r[bool].fail(f"Error validating LDIF file: {e}")
+
+        class LdifDataProcessing:
+            """LDIF data processing utilities."""
+
+            @staticmethod
+            def build_record_from_lines(
+                entry_lines: t.StrSequence,
+            ) -> t.MutableAttributeMapping:
+                """Build record dict from LDIF lines."""
+                record: t.MutableAttributeMapping = {}
+                current_attr: str | None = None
+                current_value: str = ""
+                for line in entry_lines:
+                    if line.startswith(c.TapLdif.Format.LINE_CONTINUATION):
+                        if current_attr is not None:
+                            current_value += line[1:]
+                        continue
+                    if current_attr is not None and current_value:
+                        normalized_attr = FlextTapLdifUtilities.TapLdif.LdifDataProcessing.normalize_ldif_attribute_name(
+                            current_attr,
+                        )
+                        if normalized_attr in record:
+                            existing_value = record[normalized_attr]
+                            if isinstance(existing_value, list):
+                                existing_value.append(current_value)
+                            else:
+                                record[normalized_attr] = [
+                                    str(existing_value),
+                                    current_value,
+                                ]
+                        else:
+                            record[normalized_attr] = current_value
+                    parse_result = FlextTapLdifUtilities.TapLdif.LdifDataProcessing.parse_ldif_line(
+                        line,
+                    )
+                    if parse_result.success:
+                        a, v = parse_result.value
+                        current_attr = a
+                        current_value = v
+                    else:
+                        current_attr = None
+                        current_value = ""
+                if current_attr is not None and current_value:
+                    normalized_attr = FlextTapLdifUtilities.TapLdif.LdifDataProcessing.normalize_ldif_attribute_name(
+                        current_attr,
+                    )
+                    if normalized_attr in record:
+                        existing_value = record[normalized_attr]
+                        if isinstance(existing_value, list):
+                            existing_value.append(current_value)
+                        else:
+                            record[normalized_attr] = [
+                                str(existing_value),
+                                current_value,
+                            ]
+                    else:
+                        record[normalized_attr] = current_value
+                return record
+
+            @staticmethod
+            def convert_ldif_entry_to_record(
+                entry_lines: t.StrSequence,
+            ) -> p.Result[t.AttributeMapping]:
+                """Convert LDIF entry lines to Singer record.
+
+                Args:
+                entry_lines: List of LDIF lines for single entry
+
+                Returns:
+                r[t.AttributeMapping]: Singer record or error
+
+                """
+                try:
+                    record = FlextTapLdifUtilities.TapLdif.LdifDataProcessing.build_record_from_lines(
+                        entry_lines,
+                    )
+                    out: t.AttributeMapping = record
+                    return r[t.AttributeMapping].ok(out)
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
+                    return r[t.AttributeMapping].fail(
+                        f"Error converting LDIF entry: {e}",
+                    )
+
+            @staticmethod
+            def normalize_ldif_attribute_name(attr_name: str) -> str:
+                """Normalize LDIF attribute name for JSON schema.
+
+                Args:
+                attr_name: LDIF attribute name
+
+                Returns:
+                str: Normalized attribute name
+
+                """
+                if not attr_name:
+                    return ""
+                normalized = re.sub(r"[^a-zA-Z0-9]", "_", attr_name.lower())
+                if normalized and normalized[0].isdigit():
+                    normalized = f"attr_{normalized}"
+                return normalized
+
+            @staticmethod
+            def parse_ldif_line(line: str) -> p.Result[tuple[str, str]]:
+                """Parse LDIF attribute line.
+
+                Args:
+                line: LDIF line to parse
+
+                Returns:
+                r[tuple[str, str]]: (attribute_name, value) or error
+
+                """
+                try:
+                    line = line.strip()
+                    if not line or line.startswith("#"):
+                        return r[tuple[str, str]].fail("Empty or comment line")
+                    if ":" not in line:
+                        return r[tuple[str, str]].fail("Invalid LDIF line format")
+                    if "::" in line:
+                        attr_name, encoded_value = line.split("::", 1)
+                        try:
+                            decoded_value = base64.b64decode(
+                                encoded_value.strip()
+                            ).decode(
+                                "utf-8",
+                            )
+                            return r[tuple[str, str]].ok((
+                                attr_name.strip(),
+                                decoded_value,
+                            ))
+                        except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
+                            return r[tuple[str, str]].fail(f"Base64 decode error: {e}")
+                    if ":<" in line:
+                        attr_name, url_value = line.split(":<", 1)
+                        return r[tuple[str, str]].ok((
+                            attr_name.strip(),
+                            f"URL:{url_value.strip()}",
+                        ))
+                    attr_name, value = line.split(":", 1)
+                    return r[tuple[str, str]].ok((
+                        attr_name.strip(),
+                        value.strip(),
+                    ))
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
+                    return r[tuple[str, str]].fail(f"Error parsing LDIF line: {e}")
+
+        class ConfigValidation:
+            """Configuration validation utilities."""
+
+            @staticmethod
+            def validate_ldif_config(
+                settings: Mapping[str, t.Container],
+            ) -> p.Result[Mapping[str, t.Container]]:
+                """Validate LDIF tap configuration.
+
+                Args:
+                settings: Configuration dictionary
+
+                Returns:
+                r[t.ContainerValueMapping]: Validated settings or error
+
+                """
+                required_fields = ["files"]
+                missing_fields = [
+                    field for field in required_fields if field not in settings
+                ]
+                if missing_fields:
+                    return r[Mapping[str, t.Container]].fail(
+                        f"Missing required fields: {', '.join(missing_fields)}",
+                    )
+                files_raw = settings["files"]
+                if not u.list_value(files_raw):
+                    return r[Mapping[str, t.Container]].fail("Files must be a list")
+                if not isinstance(files_raw, Sequence):
+                    return r[Mapping[str, t.Container]].fail("Files must be a list")
+                file_paths: list[str] = []
+                for file_path in files_raw:
+                    if not isinstance(file_path, str):
+                        return r[Mapping[str, t.Container]].fail(
+                            "File paths must be strings",
+                        )
+                    file_paths.append(file_path)
+                if not file_paths:
+                    return r[Mapping[str, t.Container]].fail(
+                        "At least one file must be specified",
+                    )
+                for file_path in file_paths:
+                    path_obj = Path(file_path)
+                    if not path_obj.exists():
+                        return r[Mapping[str, t.Container]].fail(
+                            f"File does not exist: {file_path}",
+                        )
+                return r[Mapping[str, t.Container]].ok(settings)
+
+        class StateManagement:
+            """State management utilities for incremental syncs."""
+
+            @staticmethod
+            def _is_str_object_mapping(
+                value: t.Container,
+            ) -> TypeIs[Mapping[str, t.Container]]:
+                return isinstance(value, Mapping)
+
+            @classmethod
+            def _is_nested_state_mapping(
+                cls,
+                value: t.Container,
+            ) -> TypeIs[Mapping[str, Mapping[str, t.Container]]]:
+                if not cls._is_str_object_mapping(value):
+                    return False
+                return all(cls._is_str_object_mapping(item) for item in value.values())
+
+            @staticmethod
+            def resolve_file_position(
+                state: Mapping[str, t.Container],
+                file_path: str,
+            ) -> int:
+                """Get current position in file.
+
+                Args:
+                state: Complete state dictionary
+                file_path: Path to the file
+
+                Returns:
+                int: Current position or 0
+
+                """
+                file_state = (
+                    FlextTapLdifUtilities.TapLdif.StateManagement.resolve_file_state(
+                        state,
+                        file_path,
+                    )
+                )
+                position = file_state.get("position", 0)
+                return position if isinstance(position, int) else 0
+
+            @classmethod
+            def resolve_file_state(
+                cls,
+                state: Mapping[str, t.Container],
+                file_path: str,
+            ) -> Mapping[str, t.Container]:
+                """Get state for a specific file.
+
+                Args:
+                state: Complete state dictionary
+                file_path: Path to the file
+
+                Returns:
+                t.ContainerValueMapping: File state
+
+                """
+                files_raw = state.get("files")
+                if not cls._is_str_object_mapping(files_raw):
+                    empty: Mapping[str, t.Container] = {}
+                    return empty
+                file_state_raw = files_raw.get(file_path)
+                if not cls._is_str_object_mapping(file_state_raw):
+                    empty_state: Mapping[str, t.Container] = {}
+                    return empty_state
+                return dict(file_state_raw)
+
+            @staticmethod
+            def update_file_position(
+                state: Mapping[str, t.Container],
+                file_path: str,
+                position: int,
+            ) -> Mapping[str, t.Container]:
+                """Set current position in file.
+
+                Args:
+                state: Complete state dictionary
+                file_path: Path to the file
+                position: Current position
+
+                Returns:
+                t.ContainerValueMapping: Updated state
+
+                """
+                file_state = (
+                    FlextTapLdifUtilities.TapLdif.StateManagement.resolve_file_state(
+                        state,
+                        file_path,
+                    )
+                )
+                file_state_dict: t.MutableRecursiveContainerMapping = dict(file_state)
+                file_state_dict["position"] = position
+                file_state_dict["last_updated"] = datetime.now(UTC).isoformat()
+                return FlextTapLdifUtilities.TapLdif.StateManagement.update_file_state(
+                    state,
+                    file_path,
+                    file_state_dict,
+                )
+
+            @classmethod
+            def update_file_state(
+                cls,
+                state: Mapping[str, t.Container],
+                file_path: str,
+                file_state: Mapping[str, t.Container],
+            ) -> Mapping[str, t.Container]:
+                """Set state for a specific file.
+
+                Args:
+                state: Complete state dictionary
+                file_path: Path to the file
+                file_state: State data for the file
+
+                Returns:
+                t.ContainerValueMapping: Updated state
+
+                """
+                files_raw = state.get("files")
+                files_dict: t.MutableRecursiveContainerMapping = {}
+                if isinstance(files_raw, Mapping):
+                    for k, v in files_raw.items():
+                        if isinstance(v, Mapping):
+                            files_dict[k] = dict(v)
+                files_dict[file_path] = dict(file_state)
+                updated_state: t.MutableRecursiveContainerMapping = dict(state)
+                updated_state["files"] = files_dict
+                return updated_state
+
+        class Processor:
+            """LDIF file processor using flext-ldif infrastructure.
+
+            Wraps flext-ldif parsing API to maintain Singer tap compatibility.
+            Previously in ldif_processor.py as FlextLdifProcessor.
+            """
+
+            def __init__(self, settings: t.ConfigurationMapping) -> None:
+                """Initialize the LDIF processor.
+
+                Args:
+                    settings: Configuration dictionary from the tap.
+
+                """
+                self.settings = settings
+                self._api = ldif()
+
+            def discover_files(
+                self,
+                directory_path: str | Path | None = None,
+                file_pattern: str = "*.ldif",
+                file_path: str | Path | None = None,
+                max_file_size_mb: int = 100,
+            ) -> p.Result[Sequence[Path]]:
+                """Discover LDIF files using local file discovery.
+
+                Args:
+                    directory_path: Directory to search for LDIF files
+                    file_pattern: Glob pattern for file matching
+                    file_path: Single file path (alternative to directory_path)
+                    max_file_size_mb: Maximum file size in MB
+
+                Returns:
+                    r[Sequence[Path]]: Success with discovered files or failure with error
+
+                """
+                max_size_bytes = max_file_size_mb * 1024 * 1024
+                discovered: MutableSequence[Path] = []
+                if file_path is not None:
+                    match file_path:
+                        case str() as file_path_text:
+                            p = Path(file_path_text)
+                        case _:
+                            p = file_path
+                    if not p.exists():
+                        return r[Sequence[Path]].fail(f"File not found: {p}")
+                    if p.stat().st_size > max_size_bytes:
+                        return r[Sequence[Path]].fail(f"File exceeds max size: {p}")
+                    discovered.append(p)
+                    return r[Sequence[Path]].ok(discovered)
+                if directory_path is not None:
+                    match directory_path:
+                        case str() as directory_path_text:
+                            d = Path(directory_path_text)
+                        case _:
+                            d = directory_path
+                    if not d.exists() or not d.is_dir():
+                        return r[Sequence[Path]].fail(f"Directory not found: {d}")
+                    discovered.extend(
+                        f
+                        for f in sorted(d.glob(file_pattern))
+                        if f.is_file() and f.stat().st_size <= max_size_bytes
+                    )
+                    return r[Sequence[Path]].ok(discovered)
+                return r[Sequence[Path]].fail(
+                    "No file_path or directory_path specified"
+                )
+
+            def process_file(
+                self,
+                file_path: Path,
+            ) -> Generator[
+                Mapping[str, str | int | Mapping[str, t.StrSequence] | t.StrSequence]
+            ]:
+                """Process a single LDIF file and yield records using flext-ldif.
+
+                Args:
+                    file_path: Path to the LDIF file.
+
+                Yields:
+                    Dictionary records representing LDIF entries.
+
+                """
+                FlextTapLdifUtilities._logger.info(
+                    "Processing LDIF file: %s",
+                    file_path,
+                )
+                try:
+                    encoding = self.settings.get("encoding", "utf-8")
+                    match encoding:
+                        case str() as text_encoding:
+                            file_encoding = text_encoding
+                        case _:
+                            file_encoding = "utf-8"
+                    with file_path.open("r", encoding=file_encoding) as file:
+                        content = file.read()
+                        parse_result = self._api.parse_ldif(content)
+                        if parse_result.failure:
+                            msg: str = f"Failed to parse LDIF: {parse_result.error}"
+                            self._raise_parse_error(msg)
+                        for raw_entry in parse_result.value.entries:
+                            entry = m.Ldif.Entry.model_validate(raw_entry)
+                            dn_val = entry.dn.value if entry.dn is not None else ""
+                            attrs_dict: dict[str, MutableSequence[str]] = (
+                                dict(entry.attributes.attributes)
+                                if entry.attributes is not None
+                                else {}
+                            )
+                            yield {
+                                c.TapLdif.EntrySchema.DN_FIELD: str(dn_val),
+                                c.TapLdif.EntrySchema.ATTRIBUTES_FIELD: attrs_dict,
+                                c.TapLdif.EntrySchema.OBJECT_CLASS_FIELD: attrs_dict.get(
+                                    "objectClass",
+                                    [],
+                                ),
+                                c.TapLdif.EntrySchema.CHANGE_TYPE_FIELD: c.TapLdif.EntrySchema.DEFAULT_CHANGE_TYPE,
+                                c.TapLdif.EntrySchema.SOURCE_FILE_FIELD: str(file_path),
+                                c.TapLdif.EntrySchema.LINE_NUMBER_FIELD: c.TapLdif.EntrySchema.DEFAULT_LINE_NUMBER,
+                                c.TapLdif.EntrySchema.ENTRY_SIZE_FIELD: len(
+                                    str(entry).encode("utf-8")
+                                ),
+                            }
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS:
+                    FlextTapLdifUtilities._logger.exception(
+                        "Failed to process LDIF file: %s",
+                        file_path,
+                    )
+                    if self.settings.get("strict_parsing", True):
+                        raise
+
+            def _raise_parse_error(self, msg: str) -> NoReturn:
+                """Raise parse error with message."""
+                raise ValueError(msg)
+
+        class EntriesStream(m.Meltano.SingerStreamBase):
+            """LDIF entries stream using flext-ldif for ALL processing.
+
+            Previously in streams.py as FlextTapLdifEntriesStream.
+            """
+
+            @override
+            def __init__(self, tap: m.Meltano.SingerTapBase) -> None:
+                """Initialize LDIF entries stream.
+
+                Args:
+                    tap: The parent tap instance.
+
+                """
+                super().__init__(tap, name="ldif_entries", schema=self._get_schema())
+                self._processor = FlextTapLdifUtilities.TapLdif.Processor(
+                    {str(key): value for key, value in tap.config.items()},
+                )
+                self._tap: m.Meltano.SingerTapBase = tap
+
+            @override
+            def get_records(
+                self,
+                context: Mapping[str, t.Container] | None = None,
+            ) -> Iterable[m.Meltano.SingerRecord]:
+                """Return a generator of record-type dictionary objects.
+
+                Args:
+                    context: Stream partition or context dictionary (unused).
+
+                Yields:
+                    Dictionary representations of LDIF entries.
+
+                """
+                _ = context
+                settings: t.MutableRecursiveContainerMapping = {
+                    str(key): value for key, value in self._tap.config.items()
+                }
+                dir_path_raw = settings.get("directory_path")
+                dir_path = dir_path_raw if isinstance(dir_path_raw, str) else None
+                pattern_raw = settings.get("file_pattern", "*.ldif")
+                pattern = pattern_raw if isinstance(pattern_raw, str) else "*.ldif"
+                fp_raw = settings.get("file_path")
+                fp_val = fp_raw if isinstance(fp_raw, str) else None
+                max_size_raw = settings.get(
+                    "max_file_size_mb", c.TapLdif.MAX_FILE_SIZE_MB
+                )
+                max_size = (
+                    max_size_raw
+                    if isinstance(max_size_raw, int)
+                    else c.TapLdif.MAX_FILE_SIZE_MB
+                )
+                files_result = self._processor.discover_files(
+                    directory_path=dir_path,
+                    file_pattern=pattern,
+                    file_path=fp_val,
+                    max_file_size_mb=max_size,
+                )
+                if files_result.failure:
+                    error_msg = files_result.error or "LDIF file discovery failed"
+                    if bool(settings.get("strict_parsing", True)):
+                        raise RuntimeError(error_msg)
+                    FlextTapLdifUtilities._logger.error(
+                        "File discovery failed: %s",
+                        error_msg,
+                    )
+                    return
+                files_to_process = files_result.value or []
+                FlextTapLdifUtilities._logger.info(
+                    "Processing %d LDIF files",
+                    len(files_to_process),
+                )
+                if not files_to_process:
+                    error_msg = "No LDIF files discovered"
+                    if bool(settings.get("strict_parsing", True)):
+                        raise RuntimeError(error_msg)
+                    FlextTapLdifUtilities._logger.warning(error_msg)
+                    return
+                for file_path in files_to_process:
+                    FlextTapLdifUtilities._logger.info(
+                        "Processing file: %s",
+                        file_path,
+                    )
+                    try:
+                        for record in self._processor.process_file(file_path):
+                            yield m.Meltano.SingerRecord(record)
+                    except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
+                        if settings.get("strict_parsing", True):
+                            FlextTapLdifUtilities._logger.exception(
+                                "Error processing file %s",
+                                file_path,
+                            )
+                            raise
+                        else:
+                            err_msg = str(e)
+                            FlextTapLdifUtilities._logger.warning(
+                                "Skipping file %s due to error: %s",
+                                file_path,
+                                err_msg,
+                            )
+                            continue
+
+            def _get_schema(self) -> dict[str, t.ContainerValue]:
+                """Get schema for LDIF entries."""
+                return {
+                    "type": "object",
+                    "properties": {
+                        c.TapLdif.EntrySchema.DN_FIELD: {"type": "string"},
+                        c.TapLdif.EntrySchema.ATTRIBUTES_FIELD: {"type": "object"},
+                        c.TapLdif.EntrySchema.OBJECT_CLASS_FIELD: {
+                            "type": "array",
+                            "items": {"type": "string"},
+                        },
+                        c.TapLdif.EntrySchema.CHANGE_TYPE_FIELD: {"type": "string"},
+                        c.TapLdif.EntrySchema.SOURCE_FILE_FIELD: {"type": "string"},
+                        c.TapLdif.EntrySchema.LINE_NUMBER_FIELD: {"type": "integer"},
+                        c.TapLdif.EntrySchema.ENTRY_SIZE_FIELD: {"type": "integer"},
+                    },
+                }
+
+
+u = FlextTapLdifUtilities
+
+__all__: list[str] = ["FlextTapLdifUtilities", "u"]
