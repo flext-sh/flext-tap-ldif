@@ -28,7 +28,7 @@ class FlextTapLdifConfig(FlextMeltanoConfig):
     )
 
     @cached_property
-    def TapLdif(self) -> FlextTapLdifConfigModels.TapLdif:  # noqa: N802
+    def TapLdif(self) -> FlextTapLdifConfigModels.TapLdif:
         """Validated ``TapLdif`` business-rule config namespace."""
         root = FlextTapLdifConfigModels.Root.model_validate(
             dict(self.model_extra or {}),

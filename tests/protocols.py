@@ -12,7 +12,6 @@ from typing import TYPE_CHECKING, Protocol, runtime_checkable
 from flext_tests import FlextTestsProtocols
 
 from flext_tap_ldif import FlextTapLdifProtocols
-from tests import p
 
 if TYPE_CHECKING:
     from tests import t
