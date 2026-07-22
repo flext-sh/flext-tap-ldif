@@ -25,14 +25,13 @@ class FlextTapLdifUtilitiesEntriesStream:
             """Initialize LDIF entries stream."""
             super().__init__(tap, name="ldif_entries", schema=self._get_schema())
             self._processor = FlextTapLdifUtilitiesProcessor.Processor(
-                t.scalar_mapping_adapter().validate_python(tap.config),
+                t.scalar_mapping_adapter().validate_python(tap.config)
             )
             self._tap: m.Meltano.SingerTapBase = tap
 
         @override
         def get_records(
-            self,
-            context: t.JsonMapping | None = None,
+            self, context: t.JsonMapping | None = None
         ) -> Iterable[m.Meltano.SingerRecord]:
             """Return a generator of record-type dictionary objects."""
             _ = context
@@ -60,14 +59,12 @@ class FlextTapLdifUtilitiesEntriesStream:
                 if bool(settings.get("strict_parsing", True)):
                     raise RuntimeError(error_msg)
                 FlextTapLdifUtilitiesEntriesStream.logger.error(
-                    "File discovery failed: %s",
-                    error_msg,
+                    "File discovery failed: %s", error_msg
                 )
                 return
             files_to_process = files_result.value or []
             FlextTapLdifUtilitiesEntriesStream.logger.info(
-                "Processing %d LDIF files",
-                len(files_to_process),
+                "Processing %d LDIF files", len(files_to_process)
             )
             if not files_to_process:
                 error_msg = "No LDIF files discovered"
@@ -77,8 +74,7 @@ class FlextTapLdifUtilitiesEntriesStream:
                 return
             for file_path in files_to_process:
                 FlextTapLdifUtilitiesEntriesStream.logger.info(
-                    "Processing file: %s",
-                    str(file_path),
+                    "Processing file: %s", str(file_path)
                 )
                 try:
                     for record in self._processor.process_file(file_path):
@@ -86,15 +82,12 @@ class FlextTapLdifUtilitiesEntriesStream:
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                     if settings.get("strict_parsing", True):
                         FlextTapLdifUtilitiesEntriesStream.logger.exception(
-                            "Error processing file %s",
-                            str(file_path),
+                            "Error processing file %s", str(file_path)
                         )
                         raise
                     err_msg = str(e)
                     FlextTapLdifUtilitiesEntriesStream.logger.warning(
-                        "Skipping file %s due to error: %s",
-                        str(file_path),
-                        err_msg,
+                        "Skipping file %s due to error: %s", str(file_path), err_msg
                     )
                     continue
 

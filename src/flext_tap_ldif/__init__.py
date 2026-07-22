@@ -43,48 +43,18 @@ if TYPE_CHECKING:
         FlextTapLdifUtilities as FlextTapLdifUtilities,
         u,
     )
-_LAZY_IMPORTS = build_lazy_import_map(
-    {
-        "._settings": ("FlextTapLdifSettings", "settings"),
-        ".api": (
-            "FlextTapLdifService",
-            "tap_ldif",
-        ),
-        ".cli": (
-            "FlextTapLdifCli",
-            "main",
-        ),
-        ".constants": (
-            "FlextTapLdifConstants",
-            "c",
-        ),
-        ".models": (
-            "FlextTapLdifModels",
-            "m",
-        ),
-        ".protocols": (
-            "FlextTapLdifProtocols",
-            "p",
-        ),
-        ".tap": ("FlextTapLdif",),
-        ".typings": (
-            "FlextTapLdifTypes",
-            "t",
-        ),
-        ".utilities": (
-            "FlextTapLdifUtilities",
-            "u",
-        ),
-        "flext_ldif": (
-            "d",
-            "e",
-            "h",
-            "r",
-            "s",
-            "x",
-        ),
-    },
-)
+_LAZY_IMPORTS = build_lazy_import_map({
+    "._settings": ("FlextTapLdifSettings", "settings"),
+    ".api": ("FlextTapLdifService", "tap_ldif"),
+    ".cli": ("FlextTapLdifCli", "main"),
+    ".constants": ("FlextTapLdifConstants", "c"),
+    ".models": ("FlextTapLdifModels", "m"),
+    ".protocols": ("FlextTapLdifProtocols", "p"),
+    ".tap": ("FlextTapLdif",),
+    ".typings": ("FlextTapLdifTypes", "t"),
+    ".utilities": ("FlextTapLdifUtilities", "u"),
+    "flext_ldif": ("d", "e", "h", "r", "s", "x"),
+})
 
 
 __all__: tuple[str, ...] = (
@@ -122,9 +92,4 @@ __all__: tuple[str, ...] = (
 )
 
 
-install_lazy_exports(
-    __name__,
-    globals(),
-    _LAZY_IMPORTS,
-    public_exports=__all__,
-)
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, public_exports=__all__)

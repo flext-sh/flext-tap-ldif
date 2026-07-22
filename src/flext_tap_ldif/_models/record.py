@@ -14,9 +14,7 @@ class FlextTapLdifModelsRecord:
         """LDIF validation result with detailed error reporting."""
 
         model_config: ClassVar[m.ConfigDict] = m.ConfigDict(
-            validate_assignment=True,
-            extra="forbid",
-            frozen=False,
+            validate_assignment=True, extra="forbid", frozen=False
         )
 
         file_path: Annotated[str, u.Field(..., description="Validated LDIF file path")]
@@ -25,37 +23,26 @@ class FlextTapLdifModelsRecord:
         # Validation results
         validation_errors: Annotated[
             t.SequenceOf[t.StrMapping],
-            u.Field(
-                description="Validation errors with details",
-            ),
+            u.Field(description="Validation errors with details"),
         ] = u.Field(default_factory=tuple)
         warnings: Annotated[
-            t.SequenceOf[t.StrMapping],
-            u.Field(
-                description="Validation warnings",
-            ),
+            t.SequenceOf[t.StrMapping], u.Field(description="Validation warnings")
         ] = u.Field(default_factory=tuple)
 
         # Statistics
         total_entries: Annotated[
-            t.NonNegativeInt,
-            u.Field(description="Total entries validated"),
+            t.NonNegativeInt, u.Field(description="Total entries validated")
         ] = 0
         valid_entries: Annotated[
-            t.NonNegativeInt,
-            u.Field(description="Valid entries count"),
+            t.NonNegativeInt, u.Field(description="Valid entries count")
         ] = 0
         invalid_entries: Annotated[
-            t.NonNegativeInt,
-            u.Field(description="Invalid entries count"),
+            t.NonNegativeInt, u.Field(description="Invalid entries count")
         ] = 0
 
         # Validation metadata
         validation_time: Annotated[
-            t.NonNegativeFloat,
-            u.Field(
-                description="Validation time in seconds",
-            ),
+            t.NonNegativeFloat, u.Field(description="Validation time in seconds")
         ] = 0.0
         validator_version: Annotated[str, u.Field(description="Validator version")] = (
             "1.0"

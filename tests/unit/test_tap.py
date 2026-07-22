@@ -5,9 +5,9 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
-from flext_tests import tm
 
 from flext_tap_ldif import FlextTapLdif
+from flext_tests import tm
 
 __all__: list[str] = ["TestsFlextTapLdifTap"]
 
@@ -27,8 +27,7 @@ class TestsFlextTapLdifTap:
         tm.that(tap.name, eq="tap-ldif")
 
     def test_discover_streams_returns_single_ldif_entries_stream(
-        self,
-        ldif_file: str,
+        self, ldif_file: str
     ) -> None:
         tap = FlextTapLdif(config={"file_path": ldif_file})
 
@@ -37,10 +36,7 @@ class TestsFlextTapLdifTap:
         tm.that(streams, len=1)
         tm.that(streams[0].name, eq="ldif_entries")
 
-    def test_discover_streams_is_idempotent_across_calls(
-        self,
-        ldif_file: str,
-    ) -> None:
+    def test_discover_streams_is_idempotent_across_calls(self, ldif_file: str) -> None:
         tap = FlextTapLdif(config={"file_path": ldif_file})
 
         first = [stream.name for stream in tap.discover_streams()]
@@ -69,9 +65,7 @@ class TestsFlextTapLdifTap:
         ],
     )
     def test_entries_stream_schema_declares_entry_field(
-        self,
-        ldif_file: str,
-        field_name: str,
+        self, ldif_file: str, field_name: str
     ) -> None:
         tap = FlextTapLdif(config={"file_path": ldif_file})
 
@@ -91,8 +85,7 @@ class TestsFlextTapLdifTap:
         ],
     )
     def test_config_jsonschema_publishes_supported_option(
-        self,
-        config_field: str,
+        self, config_field: str
     ) -> None:
         properties = FlextTapLdif.config_jsonschema["properties"]
 
