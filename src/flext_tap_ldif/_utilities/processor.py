@@ -65,32 +65,24 @@ class FlextTapLdifUtilitiesProcessor:
                 )
                 return r[t.SequenceOf[Path]].ok(discovered)
             return r[t.SequenceOf[Path]].fail(
-                "No file_path or directory_path specified",
+                "No file_path or directory_path specified"
             )
 
-        def process_file(
-            self,
-            file_path: Path,
-        ) -> Generator[t.JsonMapping]:
+        def process_file(self, file_path: Path) -> Generator[t.JsonMapping]:
             """Process a single LDIF file and yield records using flext-ldif."""
             FlextTapLdifUtilitiesProcessor.logger.info(
-                "Processing LDIF file: %s",
-                str(file_path),
+                "Processing LDIF file: %s", str(file_path)
             )
             try:
                 yield from self._yield_records(file_path)
             except c.Meltano.SINGER_SAFE_EXCEPTIONS:
                 FlextTapLdifUtilitiesProcessor.logger.exception(
-                    "Failed to process LDIF file: %s",
-                    str(file_path),
+                    "Failed to process LDIF file: %s", str(file_path)
                 )
                 if self._settings.get("strict_parsing", True):
                     raise
 
-        def _yield_records(
-            self,
-            file_path: Path,
-        ) -> Generator[t.JsonMapping]:
+        def _yield_records(self, file_path: Path) -> Generator[t.JsonMapping]:
             """Yield parsed Singer records from a file."""
             encoding = self._settings.get("encoding", c.DEFAULT_ENCODING)
             match encoding:
@@ -110,24 +102,21 @@ class FlextTapLdifUtilitiesProcessor:
                 attrs_dict: t.JsonMapping = t.Cli.JSON_MAPPING_ADAPTER.validate_python(
                     {k: list(v) for k, v in entry.attributes.attributes.items()}
                     if entry.attributes is not None
-                    else {},
+                    else {}
                 )
-                yield t.Cli.JSON_MAPPING_ADAPTER.validate_python(
-                    {
-                        c.TapLdif.EntrySchema.DN_FIELD: dn_val,
-                        c.TapLdif.EntrySchema.ATTRIBUTES_FIELD: attrs_dict,
-                        c.TapLdif.EntrySchema.OBJECT_CLASS_FIELD: attrs_dict.get(
-                            "objectClass",
-                            [],
-                        ),
-                        c.TapLdif.EntrySchema.CHANGE_TYPE_FIELD: c.TapLdif.EntrySchema.DEFAULT_CHANGE_TYPE,
-                        c.TapLdif.EntrySchema.SOURCE_FILE_FIELD: str(file_path),
-                        c.TapLdif.EntrySchema.LINE_NUMBER_FIELD: c.TapLdif.EntrySchema.DEFAULT_LINE_NUMBER,
-                        c.TapLdif.EntrySchema.ENTRY_SIZE_FIELD: len(
-                            str(entry).encode(c.DEFAULT_ENCODING),
-                        ),
-                    },
-                )
+                yield t.Cli.JSON_MAPPING_ADAPTER.validate_python({
+                    c.TapLdif.EntrySchema.DN_FIELD: dn_val,
+                    c.TapLdif.EntrySchema.ATTRIBUTES_FIELD: attrs_dict,
+                    c.TapLdif.EntrySchema.OBJECT_CLASS_FIELD: attrs_dict.get(
+                        "objectClass", []
+                    ),
+                    c.TapLdif.EntrySchema.CHANGE_TYPE_FIELD: c.TapLdif.EntrySchema.DEFAULT_CHANGE_TYPE,
+                    c.TapLdif.EntrySchema.SOURCE_FILE_FIELD: str(file_path),
+                    c.TapLdif.EntrySchema.LINE_NUMBER_FIELD: c.TapLdif.EntrySchema.DEFAULT_LINE_NUMBER,
+                    c.TapLdif.EntrySchema.ENTRY_SIZE_FIELD: len(
+                        str(entry).encode(c.DEFAULT_ENCODING)
+                    ),
+                })
 
         def _raise_parse_error(self, msg: str) -> NoReturn:
             """Raise parse error with message."""

@@ -25,8 +25,7 @@ class FlextTapLdifConfigModels:
         encoding: str = Field(description="File encoding.")
         strict_parsing: bool = Field(description="Strict LDIF parsing.")
         max_file_size_mb: int = Field(
-            ge=1,
-            description="Maximum file size in megabytes.",
+            ge=1, description="Maximum file size in megabytes."
         )
 
     class Processing(BaseModel):
@@ -35,15 +34,13 @@ class FlextTapLdifConfigModels:
         model_config = ConfigDict(frozen=True, extra="forbid")
 
         batch_size: int = Field(
-            ge=1,
-            description="Default batch size for LDIF processing.",
+            ge=1, description="Default batch size for LDIF processing."
         )
         default_change_type: str = Field(
-            description="Default changetype token for entries without one.",
+            description="Default changetype token for entries without one."
         )
         default_line_number: int = Field(
-            ge=0,
-            description="Default line number for entries without source location.",
+            ge=0, description="Default line number for entries without source location."
         )
 
     class EntrySchema(BaseModel):
@@ -65,13 +62,13 @@ class FlextTapLdifConfigModels:
         model_config = ConfigDict(frozen=True, extra="forbid")
 
         io: FlextTapLdifConfigModels.Io = Field(
-            description="LDIF input/output defaults.",
+            description="LDIF input/output defaults."
         )
         processing: FlextTapLdifConfigModels.Processing = Field(
-            description="LDIF processing defaults.",
+            description="LDIF processing defaults."
         )
         entry_schema: FlextTapLdifConfigModels.EntrySchema = Field(
-            description="LDIF entry schema field names.",
+            description="LDIF entry schema field names."
         )
 
     class Root(BaseModel):
@@ -80,7 +77,7 @@ class FlextTapLdifConfigModels:
         model_config = ConfigDict(frozen=True, extra="ignore")
 
         TapLdif: FlextTapLdifConfigModels.TapLdif = Field(
-            description="Tap LDIF business-rule config namespace.",
+            description="Tap LDIF business-rule config namespace."
         )
 
 

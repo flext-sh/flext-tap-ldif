@@ -47,50 +47,19 @@ if TYPE_CHECKING:
     )
 _LAZY_IMPORTS = merge_lazy_imports(
     (".unit",),
-    build_lazy_import_map(
-        {
-            ".base": (
-                "TestsFlextTapLdifServiceBase",
-                "s",
-            ),
-            ".conftest": ("conftest",),
-            ".constants": (
-                "TestsFlextTapLdifConstants",
-                "c",
-            ),
-            ".models": (
-                "TestsFlextTapLdifModels",
-                "m",
-            ),
-            ".protocols": (
-                "TestsFlextTapLdifProtocols",
-                "p",
-            ),
-            ".settings": ("TestsFlextTapLdifSettings",),
-            ".typings": (
-                "TestsFlextTapLdifTypes",
-                "t",
-            ),
-            ".unit": ("unit",),
-            ".unit.test_tap": ("TestsFlextTapLdifTap",),
-            ".utilities": (
-                "TestsFlextTapLdifUtilities",
-                "u",
-            ),
-            "flext_tests": (
-                "d",
-                "e",
-                "h",
-                "r",
-                "td",
-                "tf",
-                "tk",
-                "tm",
-                "tv",
-                "x",
-            ),
-        },
-    ),
+    build_lazy_import_map({
+        ".base": ("TestsFlextTapLdifServiceBase", "s"),
+        ".conftest": ("conftest",),
+        ".constants": ("TestsFlextTapLdifConstants", "c"),
+        ".models": ("TestsFlextTapLdifModels", "m"),
+        ".protocols": ("TestsFlextTapLdifProtocols", "p"),
+        ".settings": ("TestsFlextTapLdifSettings",),
+        ".typings": ("TestsFlextTapLdifTypes", "t"),
+        ".unit": ("unit",),
+        ".unit.test_tap": ("TestsFlextTapLdifTap",),
+        ".utilities": ("TestsFlextTapLdifUtilities", "u"),
+        "flext_tests": ("d", "e", "h", "r", "td", "tf", "tk", "tm", "tv", "x"),
+    }),
     exclude_names=(
         "cleanup_submodule_namespace",
         "install_lazy_exports",
@@ -114,9 +83,4 @@ _LAZY_IMPORTS = merge_lazy_imports(
 )
 
 
-install_lazy_exports(
-    __name__,
-    globals(),
-    _LAZY_IMPORTS,
-    publish_all=False,
-)
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, publish_all=False)

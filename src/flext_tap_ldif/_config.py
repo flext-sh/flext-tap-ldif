@@ -23,15 +23,13 @@ from flext_tap_ldif._models.config import FlextTapLdifConfigModels
 class FlextTapLdifConfig(FlextMeltanoConfig):
     """TapLdif config auto-loaded from ``config/*.yaml`` and validated via models."""
 
-    CONFIG_DIR: ClassVar[str] = str(
-        Path(__file__).resolve().parents[2] / "config",
-    )
+    CONFIG_DIR: ClassVar[str] = str(Path(__file__).resolve().parents[2] / "config")
 
     @cached_property
     def TapLdif(self) -> FlextTapLdifConfigModels.TapLdif:
         """Validated ``TapLdif`` business-rule config namespace."""
         root = FlextTapLdifConfigModels.Root.model_validate(
-            dict(self.model_extra or {}),
+            dict(self.model_extra or {})
         )
         return root.TapLdif
 

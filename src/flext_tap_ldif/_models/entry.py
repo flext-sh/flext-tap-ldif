@@ -27,53 +27,35 @@ class FlextTapLdifModelsEntry:
                     {
                         "dn": "cn=John Doe,ou=users,dc=example,dc=com",
                         "object_classes": ["inetOrgPerson", "organizationalPerson"],
-                    },
+                    }
                 ],
             },
         )
 
         dn: Annotated[str, u.Field(..., description="Distinguished Name")]
         attributes: Annotated[
-            t.MappingKV[str, t.StrSequence],
-            u.Field(
-                description="Entry attributes",
-            ),
+            t.MappingKV[str, t.StrSequence], u.Field(description="Entry attributes")
         ] = u.Field(default_factory=lambda: MappingProxyType({}))
         object_classes: Annotated[
-            t.StrSequence,
-            u.Field(
-                description="Object classes",
-            ),
+            t.StrSequence, u.Field(description="Object classes")
         ] = u.Field(default_factory=tuple)
 
         # LDIF metadata
         line_number: Annotated[
-            t.NonNegativeInt,
-            u.Field(
-                description="Source line number in LDIF file",
-            ),
+            t.NonNegativeInt, u.Field(description="Source line number in LDIF file")
         ] = 0
         source_file: Annotated[
-            str | None,
-            u.Field(
-                description="Source LDIF file path",
-            ),
+            str | None, u.Field(description="Source LDIF file path")
         ] = None
         entry_type: Annotated[str, u.Field(description="Type of LDIF entry")] = "entry"
 
         # Processing metadata
         extracted_at: Annotated[
-            datetime,
-            u.Field(
-                description="Extraction timestamp",
-            ),
+            datetime, u.Field(description="Extraction timestamp")
         ] = u.Field(default_factory=u.now)
         processed: Annotated[bool, u.Field(description="Processing status")] = False
         validation_errors: Annotated[
-            t.StrSequence,
-            u.Field(
-                description="Validation errors",
-            ),
+            t.StrSequence, u.Field(description="Validation errors")
         ] = u.Field(default_factory=tuple)
 
         @u.computed_field()
@@ -90,11 +72,8 @@ class FlextTapLdifModelsEntry:
                     "primary_object_class": primary_object_class,
                     "entry_type": self.entry_type,
                     "valid": not self.validation_errors,
-                    "source_location": {
-                        "file": source_file,
-                        "line": self.line_number,
-                    },
-                }),
+                    "source_location": {"file": source_file, "line": self.line_number},
+                })
             )
 
         def resolve_attribute_values(self, name: str) -> t.StrSequence:

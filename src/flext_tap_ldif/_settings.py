@@ -51,8 +51,7 @@ class FlextTapLdifSettings(FlextSettings):
         TapLdif: _TapLdif
     else:
         TapLdif: _TapLdif = Field(
-            default_factory=_TapLdif,
-            description="Namespaced tap-LDIF settings.",
+            default_factory=_TapLdif, description="Namespaced tap-LDIF settings."
         )
 
 

@@ -17,15 +17,11 @@ class FlextTapLdifUtilitiesStateManagement:
         """State management utilities for incremental syncs."""
 
         @staticmethod
-        def resolve_file_position(
-            state: t.JsonMapping,
-            file_path: str,
-        ) -> int:
+        def resolve_file_position(state: t.JsonMapping, file_path: str) -> int:
             """Get current position in file."""
             file_state = (
                 FlextTapLdifUtilitiesStateManagement.StateManagement.resolve_file_state(
-                    state,
-                    file_path,
+                    state, file_path
                 )
             )
             position = file_state.get("position", 0)
@@ -33,9 +29,7 @@ class FlextTapLdifUtilitiesStateManagement:
 
         @classmethod
         def resolve_file_state(
-            cls,
-            state: t.JsonMapping,
-            file_path: str,
+            cls, state: t.JsonMapping, file_path: str
         ) -> t.JsonMapping:
             """Get state for a specific file."""
             files_raw = state.get("files")
@@ -47,36 +41,28 @@ class FlextTapLdifUtilitiesStateManagement:
 
         @staticmethod
         def update_file_position(
-            state: t.JsonMapping,
-            file_path: str,
-            position: int,
+            state: t.JsonMapping, file_path: str, position: int
         ) -> t.JsonMapping:
             """Set current position in file."""
             file_state = (
                 FlextTapLdifUtilitiesStateManagement.StateManagement.resolve_file_state(
-                    state,
-                    file_path,
+                    state, file_path
                 )
             )
             file_state_dict: t.MutableJsonMapping = dict(
-                u.Cli.json_as_mapping(file_state),
+                u.Cli.json_as_mapping(file_state)
             )
             file_state_dict["position"] = position
             file_state_dict["last_updated"] = u.generate_datetime_utc().isoformat()
             return (
                 FlextTapLdifUtilitiesStateManagement.StateManagement.update_file_state(
-                    state,
-                    file_path,
-                    file_state_dict,
+                    state, file_path, file_state_dict
                 )
             )
 
         @classmethod
         def update_file_state(
-            cls,
-            state: t.JsonMapping,
-            file_path: str,
-            file_state: t.JsonMapping,
+            cls, state: t.JsonMapping, file_path: str, file_state: t.JsonMapping
         ) -> t.JsonMapping:
             """Set state for a specific file."""
             files_raw = state.get("files")
