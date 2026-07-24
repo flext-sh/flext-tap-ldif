@@ -73,7 +73,7 @@ tests/
 
 Test individual functions and classes in isolation:
 
-```python notest
+```python
 from __future__ import annotations
 import pytest
 from flext_core import FlextSettings
@@ -108,7 +108,7 @@ objectClass: inetOrgPerson"""
 
 Test component interactions and workflows:
 
-```python notest
+```python
 from __future__ import annotations
 import pytest
 from flext_core import FlextSettings
@@ -139,7 +139,7 @@ class TestLdifIntegration:
 
 Test complete workflows and user scenarios:
 
-```python notest
+```python
 from __future__ import annotations
 import pytest
 from pathlib import Path
@@ -183,7 +183,7 @@ objectClass: inetOrgPerson"""
 
 FLEXT uses pytest markers to categorize tests:
 
-```python notest
+```python
 from __future__ import annotations
 import pytest
 
@@ -257,7 +257,7 @@ pytest -n 4
 
 ### Pytest Fixtures
 
-```python notest
+```python
 from __future__ import annotations
 import pytest
 from pathlib import Path
@@ -299,7 +299,7 @@ def temp_directories(tmp_path):
 
 ### Using Fixtures
 
-```python notest
+```python
 from __future__ import annotations
 
 
@@ -326,7 +326,7 @@ def test_file_migration(ldif_service, temp_directories):
 
 ### Unit Test Mocking
 
-```python notest
+```python
 from __future__ import annotations
 from unittest.mock import Mock, patch
 from flext_core import FlextSettings
@@ -348,7 +348,7 @@ def test_with_mocked_dependency():
 
 ### Integration Test Stubbing
 
-```python notest
+```python
 from __future__ import annotations
 from unittest.mock import Mock
 from flext_core import FlextSettings
@@ -374,7 +374,7 @@ def test_with_stubbed_service():
 
 ### Load Testing
 
-```python notest
+```python
 from __future__ import annotations
 import pytest
 import time
@@ -407,7 +407,7 @@ def test_concurrent_processing():
 
 ### Memory Testing
 
-```python notest
+```python
 from __future__ import annotations
 import pytest
 import psutil
@@ -454,7 +454,7 @@ tests/
 
 ### Loading Test Data
 
-```python notest
+```python
 from __future__ import annotations
 import json
 from pathlib import Path
@@ -526,7 +526,7 @@ jobs:
 
 ### 1. Test Naming
 
-```python notest
+```python
 from __future__ import annotations
 
 
@@ -552,7 +552,7 @@ def test_ldif():
 
 ### 2. Test Organization
 
-```python notest
+```python
 from __future__ import annotations
 
 
@@ -582,7 +582,7 @@ class TestLdifMigration:
 
 ### 3. Assertion Quality
 
-```python notest
+```python
 from __future__ import annotations
 
 
@@ -605,7 +605,7 @@ def test_parse_result():
 
 ### 4. Test Independence
 
-```python notest
+```python
 from __future__ import annotations
 
 
@@ -650,7 +650,7 @@ def test_parse_invalid_ldif():
 
 1. **Fixture Not Found**
 
-   ```python notest
+   ```python
    from __future__ import annotations
 
 
