@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
-from datetime import datetime
-from typing import Annotated, ClassVar, Self
+from typing import TYPE_CHECKING, Annotated, ClassVar, Self
 
-from flext_tap_ldif import c, t, u
-from flext_tap_ldif.models import m
+from flext_tap_ldif import c, m, t, u
+
+if TYPE_CHECKING:
+    from datetime import datetime
 
 
 class FlextTapLdifModelsLdifFile:
@@ -26,7 +27,7 @@ class FlextTapLdifModelsLdifFile:
                         "file_path": "/data/directory-export.ldif",
                         "file_size": 1048576,
                         "encoding": c.DEFAULT_ENCODING,
-                    },
+                    }
                 ],
             },
         )
@@ -40,12 +41,10 @@ class FlextTapLdifModelsLdifFile:
         )
 
         created_at: Annotated[
-            datetime | None,
-            u.Field(description="File creation time"),
+            datetime | None, u.Field(description="File creation time")
         ] = None
         modified_at: Annotated[
-            datetime | None,
-            u.Field(description="File modification time"),
+            datetime | None, u.Field(description="File modification time")
         ] = None
 
         total_lines: Annotated[
@@ -55,32 +54,27 @@ class FlextTapLdifModelsLdifFile:
             t.NonNegativeInt, u.Field(description="Number of entries")
         ] = 0
         change_record_count: Annotated[
-            t.NonNegativeInt,
-            u.Field(description="Number of change records"),
+            t.NonNegativeInt, u.Field(description="Number of change records")
         ] = 0
         comment_lines: Annotated[
             t.NonNegativeInt, u.Field(description="Number of comment lines")
         ] = 0
 
-        processing_status: Annotated[
-            str,
-            u.Field(description="Processing status"),
-        ] = "pending"
+        processing_status: Annotated[str, u.Field(description="Processing status")] = (
+            "pending"
+        )
         last_processed_line: Annotated[
-            t.NonNegativeInt,
-            u.Field(description="Last processed line number"),
+            t.NonNegativeInt, u.Field(description="Last processed line number")
         ] = 0
         processing_errors: Annotated[
-            t.StrSequence,
-            u.Field(description="Processing errors"),
+            t.StrSequence, u.Field(description="Processing errors")
         ] = u.Field(default_factory=tuple)
 
         is_valid_ldif: Annotated[bool, u.Field(description="LDIF format validity")] = (
             True
         )
         validation_errors: Annotated[
-            t.StrSequence,
-            u.Field(description="Format validation errors"),
+            t.StrSequence, u.Field(description="Format validation errors")
         ] = u.Field(default_factory=tuple)
 
         @u.computed_field()

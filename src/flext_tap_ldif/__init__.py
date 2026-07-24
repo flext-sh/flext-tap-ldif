@@ -3,7 +3,9 @@
 
 from __future__ import annotations
 
-from flext_core.lazy import install_lazy_exports
+from typing import TYPE_CHECKING
+
+from flext_core.lazy import build_lazy_import_map, install_lazy_exports
 from flext_tap_ldif.__version__ import (
     __author__,
     __author_email__,
@@ -14,24 +16,48 @@ from flext_tap_ldif.__version__ import (
     __version__,
     __version_info__,
 )
-from flext_tap_ldif._exports import FLEXT_TAP_LDIF_LAZY_IMPORTS
 
-_LAZY_IMPORTS = FLEXT_TAP_LDIF_LAZY_IMPORTS
+if TYPE_CHECKING:
+    from flext_ldif import d as d, e as e, h as h, r as r, s as s, x as x
+    from flext_tap_ldif._settings import (
+        FlextTapLdifSettings as FlextTapLdifSettings,
+        settings as settings,
+    )
+    from flext_tap_ldif.api import (
+        FlextTapLdifService as FlextTapLdifService,
+        tap_ldif as tap_ldif,
+    )
+    from flext_tap_ldif.cli import FlextTapLdifCli as FlextTapLdifCli, main as main
+    from flext_tap_ldif.constants import (
+        FlextTapLdifConstants as FlextTapLdifConstants,
+        c as c,
+    )
+    from flext_tap_ldif.models import FlextTapLdifModels as FlextTapLdifModels, m as m
+    from flext_tap_ldif.protocols import (
+        FlextTapLdifProtocols as FlextTapLdifProtocols,
+        p,
+    )
+    from flext_tap_ldif.tap import FlextTapLdif as FlextTapLdif
+    from flext_tap_ldif.typings import FlextTapLdifTypes as FlextTapLdifTypes, t as t
+    from flext_tap_ldif.utilities import (
+        FlextTapLdifUtilities as FlextTapLdifUtilities,
+        u,
+    )
+_LAZY_IMPORTS = build_lazy_import_map({
+    "._settings": ("FlextTapLdifSettings", "settings"),
+    ".api": ("FlextTapLdifService", "tap_ldif"),
+    ".cli": ("FlextTapLdifCli", "main"),
+    ".constants": ("FlextTapLdifConstants", "c"),
+    ".models": ("FlextTapLdifModels", "m"),
+    ".protocols": ("FlextTapLdifProtocols", "p"),
+    ".tap": ("FlextTapLdif",),
+    ".typings": ("FlextTapLdifTypes", "t"),
+    ".utilities": ("FlextTapLdifUtilities", "u"),
+    "flext_ldif": ("d", "e", "h", "r", "s", "x"),
+})
 
 
-_EAGER_EXPORTS = (
-    __author__,
-    __author_email__,
-    __description__,
-    __license__,
-    __title__,
-    __url__,
-    __version__,
-    __version_info__,
-)
-
-
-_PUBLIC_EXPORTS: tuple[str, ...] = (
+__all__: tuple[str, ...] = (
     "FlextTapLdif",
     "FlextTapLdifCli",
     "FlextTapLdifConstants",
@@ -41,7 +67,6 @@ _PUBLIC_EXPORTS: tuple[str, ...] = (
     "FlextTapLdifSettings",
     "FlextTapLdifTypes",
     "FlextTapLdifUtilities",
-    "tap_ldif",
     "__author__",
     "__author_email__",
     "__description__",
@@ -59,15 +84,12 @@ _PUBLIC_EXPORTS: tuple[str, ...] = (
     "p",
     "r",
     "s",
+    "settings",
     "t",
+    "tap_ldif",
     "u",
     "x",
 )
 
 
-install_lazy_exports(
-    __name__,
-    globals(),
-    _LAZY_IMPORTS,
-    public_exports=_PUBLIC_EXPORTS,
-)
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, public_exports=__all__)

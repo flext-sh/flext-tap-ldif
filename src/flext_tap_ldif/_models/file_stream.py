@@ -5,8 +5,7 @@ from __future__ import annotations
 from types import MappingProxyType
 from typing import Annotated, ClassVar, Self
 
-from flext_tap_ldif import c, t, u
-from flext_tap_ldif.models import m
+from flext_tap_ldif import c, m, t, u
 
 
 class FlextTapLdifModelsLdifStream:
@@ -26,7 +25,7 @@ class FlextTapLdifModelsLdifStream:
                         "stream_name": "ldif_entries",
                         "file_path": "/data/users.ldif",
                         "replication_method": "FULL_TABLE",
-                    },
+                    }
                 ],
             },
         )
@@ -36,35 +35,28 @@ class FlextTapLdifModelsLdifStream:
 
         tap_stream_id: Annotated[str, u.Field(..., description="Singer tap stream ID")]
         replication_method: Annotated[
-            str,
-            u.Field(description="Replication method"),
+            str, u.Field(description="Replication method")
         ] = "FULL_TABLE"
         key_properties: Annotated[
-            t.StrSequence,
-            u.Field(description="Key properties"),
-        ] = u.Field(default_factory=lambda: ["dn"])
+            t.StrSequence, u.Field(description="Key properties")
+        ] = u.Field(default_factory=lambda: ("dn",))
 
         include_change_records: Annotated[
-            bool,
-            u.Field(description="Include LDIF change records"),
+            bool, u.Field(description="Include LDIF change records")
         ] = True
         filter_object_classes: Annotated[
-            t.StrSequence,
-            u.Field(description="Filter by object classes"),
+            t.StrSequence, u.Field(description="Filter by object classes")
         ] = u.Field(default_factory=tuple)
-        batch_size: Annotated[
-            int,
-            u.Field(description="Processing batch size"),
-        ] = c.DEFAULT_SIZE
+        batch_size: Annotated[int, u.Field(description="Processing batch size")] = (
+            c.DEFAULT_SIZE
+        )
 
-        stream_schema: Annotated[
-            t.JsonMapping,
-            u.Field(description="JSON schema"),
-        ] = u.Field(default_factory=lambda: MappingProxyType({}))
+        stream_schema: Annotated[t.JsonMapping, u.Field(description="JSON schema")] = (
+            u.Field(default_factory=lambda: MappingProxyType({}))
+        )
         stream_metadata: Annotated[
-            t.SequenceOf[t.StrMapping],
-            u.Field(description="Stream metadata"),
-        ] = u.Field(default_factory=lambda: list[t.StrMapping]())
+            t.SequenceOf[t.StrMapping], u.Field(description="Stream metadata")
+        ] = u.Field(default_factory=tuple)
 
         @u.computed_field()
         @property

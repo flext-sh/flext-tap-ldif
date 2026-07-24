@@ -20,19 +20,12 @@ if TYPE_CHECKING:
     from flext_tap_ldif._utilities.state_management import (
         FlextTapLdifUtilitiesStateManagement as FlextTapLdifUtilitiesStateManagement,
     )
-_LAZY_IMPORTS = build_lazy_import_map(
-    {
-        ".data_processing": ("FlextTapLdifUtilitiesLdifDataProcessing",),
-        ".entries_stream": ("FlextTapLdifUtilitiesEntriesStream",),
-        ".processor": ("FlextTapLdifUtilitiesProcessor",),
-        ".state_management": ("FlextTapLdifUtilitiesStateManagement",),
-    },
-)
+_LAZY_IMPORTS = build_lazy_import_map({
+    ".data_processing": ("FlextTapLdifUtilitiesLdifDataProcessing",),
+    ".entries_stream": ("FlextTapLdifUtilitiesEntriesStream",),
+    ".processor": ("FlextTapLdifUtilitiesProcessor",),
+    ".state_management": ("FlextTapLdifUtilitiesStateManagement",),
+})
 
 
-install_lazy_exports(
-    __name__,
-    globals(),
-    _LAZY_IMPORTS,
-    publish_all=False,
-)
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, publish_all=False)

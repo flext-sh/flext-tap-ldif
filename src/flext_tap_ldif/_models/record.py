@@ -4,8 +4,7 @@ from __future__ import annotations
 
 from typing import Annotated, ClassVar, Self
 
-from flext_tap_ldif import t, u
-from flext_tap_ldif.models import m
+from flext_tap_ldif import m, t, u
 
 
 class FlextTapLdifModelsRecord:
@@ -15,9 +14,7 @@ class FlextTapLdifModelsRecord:
         """LDIF validation result with detailed error reporting."""
 
         model_config: ClassVar[m.ConfigDict] = m.ConfigDict(
-            validate_assignment=True,
-            extra="forbid",
-            frozen=False,
+            validate_assignment=True, extra="forbid", frozen=False
         )
 
         file_path: Annotated[str, u.Field(..., description="Validated LDIF file path")]
@@ -26,16 +23,11 @@ class FlextTapLdifModelsRecord:
         # Validation results
         validation_errors: Annotated[
             t.SequenceOf[t.StrMapping],
-            u.Field(
-                description="Validation errors with details",
-            ),
-        ] = u.Field(default_factory=lambda: list[t.StrMapping]())
+            u.Field(description="Validation errors with details"),
+        ] = u.Field(default_factory=tuple)
         warnings: Annotated[
-            t.SequenceOf[t.StrMapping],
-            u.Field(
-                description="Validation warnings",
-            ),
-        ] = u.Field(default_factory=lambda: list[t.StrMapping]())
+            t.SequenceOf[t.StrMapping], u.Field(description="Validation warnings")
+        ] = u.Field(default_factory=tuple)
 
         # Statistics
         total_entries: Annotated[
@@ -50,10 +42,7 @@ class FlextTapLdifModelsRecord:
 
         # Validation metadata
         validation_time: Annotated[
-            t.NonNegativeFloat,
-            u.Field(
-                description="Validation time in seconds",
-            ),
+            t.NonNegativeFloat, u.Field(description="Validation time in seconds")
         ] = 0.0
         validator_version: Annotated[str, u.Field(description="Validator version")] = (
             "1.0"
