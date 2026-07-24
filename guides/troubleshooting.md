@@ -96,7 +96,7 @@ ModuleNotFoundError: No module named 'flext_core'
 
 ```bash
 export PYTHONPATH=src
-python -c "import flext_core; u.Cli.print(flext_core.__file__)"
+python -c "import flext_core; print(flext_core.__file__)"
 ```
 
 **Reinstall dependencies:**
@@ -119,17 +119,17 @@ poetry install
 # Debug import issues
 import sys
 
-u.Cli.print("Python path:")
+print("Python path:")
 for path in sys.path:
-    u.Cli.print(f"  {path}")
+    print(f"  {path}")
 
-u.Cli.print("\nTrying to import flext_core...")
+print("\nTrying to import flext_core...")
 try:
     import flext_core
 
-    u.Cli.print(f"Success: {flext_core.__file__}")
+    print(f"Success: {flext_core.__file__}")
 except ImportError as e:
-    u.Cli.print(f"Failed: {e}")
+    print(f"Failed: {e}")
 ```
 
 ### 2. Type Checking Errors
@@ -146,6 +146,9 @@ error: Argument 1 to "process" has incompatible type "str"; expected "t.JsonMapp
 **Fix type annotations:**
 
 ```python notest
+from __future__ import annotations
+
+
 # ❌ WRONG
 def process(data):
     return data
@@ -194,12 +197,15 @@ pytest tests/unit/test_module.py::TestClass::test_method -v --pdb
 **Check test data:**
 
 ```python notest
+from __future__ import annotations
+
+
 def test_with_debug():
     result = my_function()
-    u.Cli.print(f"Result: {result}")
-    u.Cli.print(f"Success: {result.success}")
+    print(f"Result: {result}")
+    print(f"Success: {result.success}")
     if result.failure:
-        u.Cli.print(f"Error: {result.failure()}")
+        print(f"Error: {result.failure()}")
     assert result.success
 ```
 
@@ -223,31 +229,29 @@ env | grep FLEXT_
 **Validate configuration:**
 
 ```python notest
-from flext_cli import u
 from flext_core import FlextSettings
 
 try:
     settings = FlextSettings()
-    u.Cli.print("Configuration valid")
+    print("Configuration valid")
 except c.ValidationError as e:
-    u.Cli.print(f"Configuration error: {e}")
+    print(f"Configuration error: {e}")
 ```
 
 **Debug configuration loading:**
 
 ```python notest
 import os
-from flext_cli import u
 from flext_core import FlextSettings
 
 # Print all FLEXT environment variables
 for key, value in os.environ.items():
     if key.startswith("FLEXT_"):
-        u.Cli.print(f"{key}={value}")
+        print(f"{key}={value}")
 
 # Load and print configuration
 settings = FlextSettings()
-u.Cli.print(f"Config: {settings.dict()}")
+print(f"Config: {settings.dict()}")
 ```
 
 ### 5. LDIF Processing Issues
@@ -272,8 +276,8 @@ objectClass: inetOrgPerson"""
 
 result = ldif.parse(content)
 if result.failure:
-    u.Cli.print(f"Parse error: {result.failure()}")
-    u.Cli.print(f"Content: {repr(content)}")
+    print(f"Parse error: {result.failure()}")
+    print(f"Content: {repr(content)}")
 ```
 
 **Enable debug logging:**
@@ -289,6 +293,9 @@ logging.basicConfig(level=logging.DEBUG)
 **Validate LDIF format:**
 
 ```python notest
+from __future__ import annotations
+
+
 # Check for common LDIF issues
 def validate_ldif_content(content: str) -> t.StringList:
     issues = []
@@ -330,7 +337,7 @@ settings = FlextLdifSettings(
     handle_schema_extensions=True,
 )
 
-u.Cli.print(f"Config: {settings.dict()}")
+print(f"Config: {settings.dict()}")
 ```
 
 **Enable server servers:**
@@ -351,9 +358,9 @@ objectClass: inetOrgPerson"""
 
 result = ldif.parse(sample_ldif)
 if result.success:
-    u.Cli.print("Sample parsing successful")
+    print("Sample parsing successful")
 else:
-    u.Cli.print(f"Sample parsing failed: {result.failure()}")
+    print(f"Sample parsing failed: {result.failure()}")
 ```
 
 ### 7. Performance Issues
@@ -372,6 +379,7 @@ else:
 **Profile memory usage:**
 
 ```python notest
+from __future__ import annotations
 import psutil
 import os
 
@@ -385,7 +393,7 @@ def profile_memory():
     final_memory = process.memory_info().rss
     memory_used = final_memory - initial_memory
 
-    u.Cli.print(f"Memory used: {memory_used / 1024 / 1024:.2f} MB")
+    print(f"Memory used: {memory_used / 1024 / 1024:.2f} MB")
 
 
 profile_memory()
@@ -418,7 +426,6 @@ settings = FlextLdifSettings(
 
 ```python notest
 import logging
-from flext_cli import u
 from flext_core import FlextSettings
 
 # Configure logging
@@ -437,7 +444,7 @@ logger.error("Error message")
 ### 2. Exception Handling
 
 ```python notest
-from flext_cli import u
+from __future__ import annotations
 from flext_core import FlextSettings
 
 
@@ -457,37 +464,39 @@ def safe_operation(data: dict) -> p.Result[dict]:
 ### 3. Debug Mode
 
 ```python notest
-from flext_cli import u
 from flext_core import FlextSettings
 
 # Enable debug mode
 settings = FlextSettings(debug=True)
 
 # Debug information will be printed
-u.Cli.print(f"Debug mode: {settings.debug}")
-u.Cli.print(f"Log level: {settings.log_level}")
+print(f"Debug mode: {settings.debug}")
+print(f"Log level: {settings.log_level}")
 ```
 
 ### 4. Step-by-Step Debugging
 
 ```python notest
+from __future__ import annotations
+
+
 def debug_ldif_processing(content: str):
     """Debug LDIF processing step by step."""
-    u.Cli.print(f"Input content length: {len(content)}")
-    u.Cli.print(f"First 100 chars: {repr(content[:100])}")
+    print(f"Input content length: {len(content)}")
+    print(f"First 100 chars: {repr(content[:100])}")
 
     # Step 1: Basic validation
     if not content.strip():
-        u.Cli.print("ERROR: Empty content")
+        print("ERROR: Empty content")
         return
 
     # Step 2: Check DN format
     lines = content.split("\n")
     dn_line = lines[0] if lines else ""
-    u.Cli.print(f"DN line: {repr(dn_line)}")
+    print(f"DN line: {repr(dn_line)}")
 
     if not dn_line.startswith("dn:"):
-        u.Cli.print("ERROR: Missing or invalid DN line")
+        print("ERROR: Missing or invalid DN line")
         return
 
     # Step 3: Try parsing
@@ -496,9 +505,9 @@ def debug_ldif_processing(content: str):
     result = ldif.parse(content)
     if result.success:
         entries = result.unwrap()
-        u.Cli.print(f"SUCCESS: Parsed {len(entries)} entries")
+        print(f"SUCCESS: Parsed {len(entries)} entries")
     else:
-        u.Cli.print(f"ERROR: Parse failed: {result.failure()}")
+        print(f"ERROR: Parse failed: {result.failure()}")
 ```
 
 ## Error Codes Reference
@@ -532,6 +541,8 @@ def debug_ldif_processing(content: str):
 ### Memory Issues
 
 ```python notest
+from __future__ import annotations
+
 # Monitor memory usage
 import psutil
 import os
@@ -541,12 +552,12 @@ def monitor_memory():
     process = psutil.Process(os.getpid())
     memory_info = process.memory_info()
 
-    u.Cli.print(f"RSS: {memory_info.rss / 1024 / 1024:.2f} MB")
-    u.Cli.print(f"VMS: {memory_info.vms / 1024 / 1024:.2f} MB")
+    print(f"RSS: {memory_info.rss / 1024 / 1024:.2f} MB")
+    print(f"VMS: {memory_info.vms / 1024 / 1024:.2f} MB")
 
     # Check for memory leaks
     if memory_info.rss > 500 * 1024 * 1024:  # 500MB
-        u.Cli.print("WARNING: High memory usage detected")
+        print("WARNING: High memory usage detected")
 
 
 monitor_memory()
@@ -555,6 +566,8 @@ monitor_memory()
 ### CPU Issues
 
 ```python notest
+from __future__ import annotations
+
 # Monitor CPU usage
 import psutil
 import time
@@ -566,7 +579,7 @@ def monitor_cpu():
     # Get CPU usage over time
     for i in range(10):
         cpu_percent = process.cpu_percent()
-        u.Cli.print(f"CPU usage: {cpu_percent}%")
+        print(f"CPU usage: {cpu_percent}%")
         time.sleep(1)
 
 
@@ -684,6 +697,9 @@ from flext_core import u
 1. **Always Use r**
 
 ```python notest
+from __future__ import annotations
+
+
 # ✅ GOOD
 def process(data: dict) -> p.Result[ProcessedData]:
     return r.ok(ProcessedData(**data))
@@ -697,6 +713,9 @@ def process(data: dict) -> ProcessedData:
 1. **Validate Input Early**
 
    ```python notest
+   from __future__ import annotations
+
+
    def process_data(data: dict) -> p.Result[dict]:
        if not data:
            return r.fail("Data required")
@@ -708,6 +727,9 @@ def process(data: dict) -> ProcessedData:
 1. **Use Type Hints**
 
    ```python notest
+   from __future__ import annotations
+
+
    # ✅ GOOD
    def process(items: t.SequenceOf[Item]) -> p.Result[Sequence[ProcessedItem]]:
        pass
@@ -721,6 +743,9 @@ def process(data: dict) -> ProcessedData:
 1. **Test Thoroughly**
 
    ```python notest
+   from __future__ import annotations
+
+
    def test_process_data():
        # Test success case
        result = process_data({"key": "value"})

@@ -99,7 +99,6 @@ docker run -v $(pwd)/data:/app/data flext:latest
 ### 1. Basic Setup
 
 ```python notest
-from flext_cli import u
 from flext_core import FlextSettings
 
 # Create dependency injection container
@@ -108,7 +107,7 @@ container = FlextContainer()
 # Register services (example)
 # container.bind(IService, ServiceImplementation())
 
-u.Cli.print("FLEXT application initialized!")
+print("FLEXT application initialized!")
 ```
 
 ### 2. Using flext-ldif for LDIF Processing
@@ -127,15 +126,15 @@ objectClass: inetOrgPerson"""
 result = ldif.parse(ldif_content)
 if result.success:
     entries = result.unwrap()
-    u.Cli.print(f"Successfully parsed {len(entries)} LDIF entries")
+    print(f"Successfully parsed {len(entries)} LDIF entries")
 else:
-    u.Cli.print(f"Failed to parse LDIF: {result.failure()}")
+    print(f"Failed to parse LDIF: {result.failure()}")
 ```
 
 ### 3. Railway-Oriented Error Handling
 
 ```python notest
-from flext_cli import u
+from __future__ import annotations
 from flext_core import FlextSettings
 
 
@@ -163,15 +162,15 @@ def process_entries(entries: list) -> str:
 # Usage
 result = process_ldif_data(ldif_content)
 if result.success:
-    u.Cli.print(f"Success: {result.unwrap()}")
+    print(f"Success: {result.unwrap()}")
 else:
-    u.Cli.print(f"Error: {result.failure()}")
+    print(f"Error: {result.failure()}")
 ```
 
 ### 4. CQRS Pattern with Commands and Queries
 
 ```python notest
-from flext_cli import u
+from __future__ import annotations
 from flext_core import FlextSettings
 from dataclasses import dataclass
 

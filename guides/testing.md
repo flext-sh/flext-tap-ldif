@@ -74,8 +74,8 @@ tests/
 Test individual functions and classes in isolation:
 
 ```python notest
+from __future__ import annotations
 import pytest
-from flext_cli import u
 from flext_core import FlextSettings
 from flext_ldif import ldif
 
@@ -109,8 +109,8 @@ objectClass: inetOrgPerson"""
 Test component interactions and workflows:
 
 ```python notest
+from __future__ import annotations
 import pytest
-from flext_cli import u
 from flext_core import FlextSettings
 from flext_ldif import ldif, FlextLdifSettings
 
@@ -140,6 +140,7 @@ class TestLdifIntegration:
 Test complete workflows and user scenarios:
 
 ```python notest
+from __future__ import annotations
 import pytest
 from pathlib import Path
 from flext_ldif import ldif, FlextLdifSettings
@@ -183,6 +184,7 @@ objectClass: inetOrgPerson"""
 FLEXT uses pytest markers to categorize tests:
 
 ```python notest
+from __future__ import annotations
 import pytest
 
 
@@ -256,6 +258,7 @@ pytest -n 4
 ### Pytest Fixtures
 
 ```python notest
+from __future__ import annotations
 import pytest
 from pathlib import Path
 from flext_ldif import ldif, FlextLdifSettings
@@ -297,6 +300,9 @@ def temp_directories(tmp_path):
 ### Using Fixtures
 
 ```python notest
+from __future__ import annotations
+
+
 def test_ldif_parsing(ldif_service, sample_ldif_content):
     """Test LDIF parsing with fixtures."""
     result = ldif_service.parse(sample_ldif_content)
@@ -321,8 +327,8 @@ def test_file_migration(ldif_service, temp_directories):
 ### Unit Test Mocking
 
 ```python notest
+from __future__ import annotations
 from unittest.mock import Mock, patch
-from flext_cli import u
 from flext_core import FlextSettings
 
 
@@ -343,8 +349,8 @@ def test_with_mocked_dependency():
 ### Integration Test Stubbing
 
 ```python notest
+from __future__ import annotations
 from unittest.mock import Mock
-from flext_cli import u
 from flext_core import FlextSettings
 
 
@@ -369,6 +375,7 @@ def test_with_stubbed_service():
 ### Load Testing
 
 ```python notest
+from __future__ import annotations
 import pytest
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -401,6 +408,7 @@ def test_concurrent_processing():
 ### Memory Testing
 
 ```python notest
+from __future__ import annotations
 import pytest
 import psutil
 import os
@@ -447,6 +455,7 @@ tests/
 ### Loading Test Data
 
 ```python notest
+from __future__ import annotations
 import json
 from pathlib import Path
 
@@ -518,6 +527,9 @@ jobs:
 ### 1. Test Naming
 
 ```python notest
+from __future__ import annotations
+
+
 # ✅ GOOD - Descriptive test names
 def test_parse_valid_ldif_returns_success():
     """Test that parsing valid LDIF returns success result."""
@@ -541,6 +553,9 @@ def test_ldif():
 ### 2. Test Organization
 
 ```python notest
+from __future__ import annotations
+
+
 class TestLdifParsing:
     """Test LDIF parsing functionality."""
 
@@ -568,6 +583,9 @@ class TestLdifMigration:
 ### 3. Assertion Quality
 
 ```python notest
+from __future__ import annotations
+
+
 # ✅ GOOD - Specific assertions
 def test_parse_result():
     result = ldif.parse(content)
@@ -588,6 +606,9 @@ def test_parse_result():
 ### 4. Test Independence
 
 ```python notest
+from __future__ import annotations
+
+
 # ✅ GOOD - Independent tests
 def test_parse_valid_ldif():
     ldif = ldif()  # Fresh instance
@@ -630,6 +651,9 @@ def test_parse_invalid_ldif():
 1. **Fixture Not Found**
 
    ```python notest
+   from __future__ import annotations
+
+
    # Check fixture scope and dependencies
    @pytest.fixture(scope="function")
    def my_fixture():
