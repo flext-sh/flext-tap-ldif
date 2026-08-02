@@ -48,7 +48,7 @@ class FlextTapLdifModelsRecord:
             "1.0"
         )
 
-        @u.computed_field()
+        @u.computed_field
         @property
         def validation_summary(self) -> t.JsonMapping:
             """LDIF validation complete summary."""

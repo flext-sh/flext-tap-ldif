@@ -77,7 +77,7 @@ class FlextTapLdifModelsLdifFile:
             t.StrSequence, u.Field(description="Format validation errors")
         ] = u.Field(default_factory=tuple)
 
-        @u.computed_field()
+        @u.computed_field
         @property
         def ldif_file_summary(self) -> t.JsonMapping:
             """LDIF file processing summary."""

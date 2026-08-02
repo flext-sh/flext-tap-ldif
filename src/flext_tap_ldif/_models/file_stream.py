@@ -58,7 +58,7 @@ class FlextTapLdifModelsLdifStream:
             t.SequenceOf[t.StrMapping], u.Field(description="Stream metadata")
         ] = u.Field(default_factory=tuple)
 
-        @u.computed_field()
+        @u.computed_field
         @property
         def ldif_stream_summary(self) -> t.JsonMapping:
             """LDIF stream configuration summary."""

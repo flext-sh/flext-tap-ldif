@@ -58,7 +58,7 @@ class FlextTapLdifModelsEntry:
             t.StrSequence, u.Field(description="Validation errors")
         ] = u.Field(default_factory=tuple)
 
-        @u.computed_field()
+        @u.computed_field
         @property
         def ldif_entry_summary(self) -> t.JsonMapping:
             """LDIF entry analysis summary."""
