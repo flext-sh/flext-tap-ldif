@@ -11,10 +11,9 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Annotated
 
-from pydantic import BaseModel, Field
 from pydantic_settings import SettingsConfigDict
 
-from flext_core import FlextSettings
+from flext_core import FlextSettings, m
 
 
 class FlextTapLdifSettings(FlextSettings):
@@ -27,30 +26,30 @@ class FlextTapLdifSettings(FlextSettings):
         validate_assignment=True,
     )
 
-    class _TapLdif(BaseModel):
+    class _TapLdif(m.BaseModel):
         """Namespaced tap-LDIF settings."""
 
         file_path: Annotated[
-            str | None, Field(default=None, description="LDIF file path")
+            str | None, m.Field(default=None, description="LDIF file path")
         ]
         directory_path: Annotated[
-            str | None, Field(default=None, description="LDIF directory path")
+            str | None, m.Field(default=None, description="LDIF directory path")
         ]
         file_pattern: Annotated[
-            str, Field(default="*.ldif", description="LDIF file glob pattern")
+            str, m.Field(default="*.ldif", description="LDIF file glob pattern")
         ]
-        encoding: Annotated[str, Field(default="utf-8", description="File encoding")]
+        encoding: Annotated[str, m.Field(default="utf-8", description="File encoding")]
         strict_parsing: Annotated[
-            bool, Field(default=True, description="Strict LDIF parsing")
+            bool, m.Field(default=True, description="Strict LDIF parsing")
         ]
         max_file_size_mb: Annotated[
-            int, Field(default=100, ge=1, description="Max file size (MB)")
+            int, m.Field(default=100, ge=1, description="Max file size (MB)")
         ]
 
     if TYPE_CHECKING:
         TapLdif: _TapLdif
     else:
-        TapLdif: _TapLdif = Field(
+        TapLdif: _TapLdif = m.Field(
             default_factory=_TapLdif, description="Namespaced tap-LDIF settings."
         )
 
