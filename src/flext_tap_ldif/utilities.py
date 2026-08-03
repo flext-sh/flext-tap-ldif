@@ -11,9 +11,7 @@ from flext_meltano import u
 from flext_tap_ldif._utilities.data_processing import (
     FlextTapLdifUtilitiesLdifDataProcessing,
 )
-from flext_tap_ldif._utilities.entries_stream import (
-    FlextTapLdifUtilitiesEntriesStream,
-)
+from flext_tap_ldif._utilities.entries_stream import FlextTapLdifUtilitiesEntriesStream
 from flext_tap_ldif._utilities.processor import FlextTapLdifUtilitiesProcessor
 from flext_tap_ldif._utilities.state_management import (
     FlextTapLdifUtilitiesStateManagement,

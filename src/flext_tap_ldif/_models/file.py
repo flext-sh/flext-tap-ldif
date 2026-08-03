@@ -6,8 +6,5 @@ from flext_tap_ldif._models.file_metadata import FlextTapLdifModelsLdifFile
 from flext_tap_ldif._models.file_stream import FlextTapLdifModelsLdifStream
 
 
-class FlextTapLdifModelsFile(
-    FlextTapLdifModelsLdifFile,
-    FlextTapLdifModelsLdifStream,
-):
+class FlextTapLdifModelsFile(FlextTapLdifModelsLdifFile, FlextTapLdifModelsLdifStream):
     """MRO mixin: LdifFile and LdifStream models."""
