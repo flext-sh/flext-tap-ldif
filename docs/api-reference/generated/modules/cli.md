@@ -2,6 +2,10 @@
 
 # flext_tap_ldif.cli
 
+<!-- TOC START -->
+- No sections found
+<!-- TOC END -->
+
 ::: flext_tap_ldif.cli
     options:
       show_root_heading: true
