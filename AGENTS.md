@@ -34,6 +34,11 @@ src/flext_tap_ldif/
 
 - The **active** entrypoint is `tap.py` (not a `.bak`). LDIF parsing is delegated to `flext-ldif`'s registry.
 
+## Conventions (specific to this package)
+
+- Config/settings canonical pattern: ADR-012.
+- Codemod governance (ast-grep + make mod): ADR-014.
+
 ## Commands
 
 ```bash
