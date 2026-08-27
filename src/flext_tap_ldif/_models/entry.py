@@ -11,6 +11,11 @@ if TYPE_CHECKING:
     from datetime import datetime
 
 
+def _empty_attributes() -> t.MappingKV[str, t.StrSequence]:
+    """Build an immutable, precisely typed empty attribute mapping."""
+    return MappingProxyType({})
+
+
 class FlextTapLdifModelsEntry:
     """MRO mixin: LdifEntry and LdifChangeRecord models."""
 
@@ -35,7 +40,7 @@ class FlextTapLdifModelsEntry:
         dn: Annotated[str, u.Field(..., description="Distinguished Name")]
         attributes: Annotated[
             t.MappingKV[str, t.StrSequence], u.Field(description="Entry attributes")
-        ] = u.Field(default_factory=lambda: MappingProxyType({}))
+        ] = u.Field(default_factory=_empty_attributes)
         object_classes: Annotated[
             t.StrSequence, u.Field(description="Object classes")
         ] = u.Field(default_factory=tuple)
