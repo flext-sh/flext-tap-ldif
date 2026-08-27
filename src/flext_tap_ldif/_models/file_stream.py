@@ -8,6 +8,11 @@ from typing import Annotated, ClassVar, Self
 from flext_tap_ldif import c, m, t, u
 
 
+def _empty_stream_schema() -> t.JsonMapping:
+    """Build an immutable, precisely typed empty Singer schema."""
+    return MappingProxyType({})
+
+
 class FlextTapLdifModelsLdifStream:
     """MRO mixin containing the LdifStream model."""
 
@@ -52,7 +57,7 @@ class FlextTapLdifModelsLdifStream:
         )
 
         stream_schema: Annotated[t.JsonMapping, u.Field(description="JSON schema")] = (
-            u.Field(default_factory=lambda: MappingProxyType({}))
+            u.Field(default_factory=_empty_stream_schema)
         )
         stream_metadata: Annotated[
             t.SequenceOf[t.StrMapping], u.Field(description="Stream metadata")
