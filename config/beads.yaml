@@ -1,0 +1,4 @@
+version: 1
+workspace: flext-tap-ldif
+database: flext-tap-ldif
+issue_prefix: flext-tap-ldif
