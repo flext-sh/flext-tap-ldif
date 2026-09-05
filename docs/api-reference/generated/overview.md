@@ -26,7 +26,7 @@
   `FlextTapLdifProtocols`, `FlextTapLdifService`, `FlextTapLdifSettings`,
   `FlextTapLdifTypes`, `FlextTapLdifUtilities` (+4 more)
 - Exported module shortcuts: _none_
-- Generated module pages: `0`
+- Generated module pages: `8`
 
 ## Next Pages
 

@@ -5,81 +5,80 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from flext_core.lazy import (
-    build_lazy_import_map,
-    install_lazy_exports,
-    merge_lazy_imports,
-)
+from types import MappingProxyType
+
+from flext_core.lazy import build_lazy_import_map, install_lazy_exports
 
 if TYPE_CHECKING:
-    from flext_tests import (
-        d as d,
-        e as e,
-        h as h,
-        r as r,
-        td as td,
-        tf as tf,
-        tk as tk,
-        tm as tm,
-        tv as tv,
-        x as x,
-    )
-    from tests.base import (
-        TestsFlextTapLdifServiceBase as TestsFlextTapLdifServiceBase,
-        s as s,
-    )
-    from tests.constants import (
-        TestsFlextTapLdifConstants as TestsFlextTapLdifConstants,
-        c as c,
-    )
-    from tests.models import TestsFlextTapLdifModels as TestsFlextTapLdifModels, m as m
-    from tests.protocols import (
-        TestsFlextTapLdifProtocols as TestsFlextTapLdifProtocols,
-        p,
-    )
-    from tests.settings import TestsFlextTapLdifSettings as TestsFlextTapLdifSettings
-    from tests.typings import TestsFlextTapLdifTypes as TestsFlextTapLdifTypes, t as t
-    from tests.unit.test_tap import TestsFlextTapLdifTap as TestsFlextTapLdifTap
-    from tests.utilities import (
-        TestsFlextTapLdifUtilities as TestsFlextTapLdifUtilities,
-        u,
-    )
-_LAZY_IMPORTS = merge_lazy_imports(
-    (".unit",),
-    build_lazy_import_map({
-        ".base": ("TestsFlextTapLdifServiceBase", "s"),
-        ".conftest": ("conftest",),
-        ".constants": ("TestsFlextTapLdifConstants", "c"),
-        ".models": ("TestsFlextTapLdifModels", "m"),
-        ".protocols": ("TestsFlextTapLdifProtocols", "p"),
-        ".settings": ("TestsFlextTapLdifSettings",),
-        ".typings": ("TestsFlextTapLdifTypes", "t"),
-        ".unit": ("unit",),
-        ".unit.test_tap": ("TestsFlextTapLdifTap",),
-        ".utilities": ("TestsFlextTapLdifUtilities", "u"),
-        "flext_tests": ("d", "e", "h", "r", "td", "tf", "tk", "tm", "tv", "x"),
-    }),
-    exclude_names=(
-        "cleanup_submodule_namespace",
-        "install_lazy_exports",
-        "lazy_getattr",
-        "logger",
-        "merge_lazy_imports",
-        "output",
-        "output_reporting",
-        "pytest_addoption",
-        "pytest_collect_file",
-        "pytest_collection_modifyitems",
-        "pytest_configure",
-        "pytest_runtest_setup",
-        "pytest_runtest_teardown",
-        "pytest_sessionfinish",
-        "pytest_sessionstart",
-        "pytest_terminal_summary",
-        "pytest_warning_recorded",
-    ),
-    module_name=__name__,
+    from . import unit as unit
+    from flext_tap_ldif import FlextTapLdifConstants
+    from flext_tests import FlextTestsConstants, d, e, h, r, td, tf, tk, tm, tv, x
+
+    from .base import TestsFlextTapLdifServiceBase, TestsFlextTapLdifServiceBase as s
+    from .constants import TestsFlextTapLdifConstants, TestsFlextTapLdifConstants as c
+    from .models import TestsFlextTapLdifModels, TestsFlextTapLdifModels as m
+    from .protocols import TestsFlextTapLdifProtocols, TestsFlextTapLdifProtocols as p
+    from .settings import TestsFlextTapLdifSettings
+    from .typings import TestsFlextTapLdifTypes, TestsFlextTapLdifTypes as t
+    from .utilities import TestsFlextTapLdifUtilities, TestsFlextTapLdifUtilities as u
+__all__: tuple[str, ...] = (
+    "FlextTapLdifConstants",
+    "FlextTestsConstants",
+    "TestsFlextTapLdifConstants",
+    "TestsFlextTapLdifModels",
+    "TestsFlextTapLdifProtocols",
+    "TestsFlextTapLdifServiceBase",
+    "TestsFlextTapLdifSettings",
+    "TestsFlextTapLdifTypes",
+    "TestsFlextTapLdifUtilities",
+    "c",
+    "d",
+    "e",
+    "h",
+    "m",
+    "p",
+    "r",
+    "s",
+    "t",
+    "td",
+    "tf",
+    "tk",
+    "tm",
+    "tv",
+    "u",
+    "unit",
+    "x",
 )
 
+_LAZY_IMPORTS = MappingProxyType(
+    build_lazy_import_map(
+        MappingProxyType({
+            ".base": ("TestsFlextTapLdifServiceBase", "s"),
+            ".constants": ("TestsFlextTapLdifConstants", "c"),
+            ".models": ("TestsFlextTapLdifModels", "m"),
+            ".protocols": ("TestsFlextTapLdifProtocols", "p"),
+            ".settings": ("TestsFlextTapLdifSettings",),
+            ".typings": ("TestsFlextTapLdifTypes", "t"),
+            ".unit": ("unit",),
+            ".utilities": ("TestsFlextTapLdifUtilities", "u"),
+            "flext_tap_ldif": ("FlextTapLdifConstants",),
+            "flext_tests": (
+                "FlextTestsConstants",
+                "d",
+                "e",
+                "h",
+                "r",
+                "td",
+                "tf",
+                "tk",
+                "tm",
+                "tv",
+                "x",
+            ),
+        }),
+        alias_groups=MappingProxyType({}),
+        sort_keys=False,
+    )
+)
 
-install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, publish_all=False)
+install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, public_exports=__all__)
