@@ -65,7 +65,7 @@ class FlextTapLdifUtilitiesLdifDataProcessing:
                 out: t.AttributeMapping = record
                 return r[t.AttributeMapping].ok(out)
             except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-                return r[t.AttributeMapping].fail(f"Error converting LDIF entry: {e}")
+                return r[t.AttributeMapping].fail(f"Error converting LDIF entry: {e}", exception=e)
 
         @staticmethod
         def normalize_ldif_attribute_name(attr_name: str) -> str:
@@ -95,7 +95,7 @@ class FlextTapLdifUtilitiesLdifDataProcessing:
                     )
                     return r[t.StrPair].ok((attr_name.strip(), decoded_value))
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-                    return r[t.StrPair].fail(f"Base64 decode error: {e}")
+                    return r[t.StrPair].fail(f"Base64 decode error: {e}", exception=e)
             if ":<" in line:
                 attr_name, url_value = line.split(":<", 1)
                 return r[t.StrPair].ok((attr_name.strip(), f"URL:{url_value.strip()}"))
