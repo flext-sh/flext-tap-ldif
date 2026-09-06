@@ -65,7 +65,9 @@ class FlextTapLdifUtilitiesLdifDataProcessing:
                 out: t.AttributeMapping = record
                 return r[t.AttributeMapping].ok(out)
             except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-                return r[t.AttributeMapping].fail(f"Error converting LDIF entry: {e}", exception=e)
+                return r[t.AttributeMapping].fail(
+                    f"Error converting LDIF entry: {e}", exception=e
+                )
 
         @staticmethod
         def normalize_ldif_attribute_name(attr_name: str) -> str:
