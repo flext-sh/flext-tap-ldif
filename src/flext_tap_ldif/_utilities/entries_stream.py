@@ -21,9 +21,16 @@ class FlextTapLdifUtilitiesEntriesStream:
         """LDIF entries stream using flext-ldif for ALL processing."""
 
         @override
-        def __init__(self, tap: m.Meltano.SingerTapBase) -> None:
+        def __init__(
+            self,
+            tap: m.Meltano.SingerTapBase,
+            name: str | None = None,
+            schema: t.JsonMapping | None = None,
+        ) -> None:
             """Initialize LDIF entries stream."""
-            super().__init__(tap, name="ldif_entries", schema=self._get_schema())
+            super().__init__(
+                tap, name=name or "ldif_entries", schema=schema or self._get_schema()
+            )
             self._processor = FlextTapLdifUtilitiesProcessor.Processor(
                 t.scalar_mapping_adapter().validate_python(tap.config)
             )
