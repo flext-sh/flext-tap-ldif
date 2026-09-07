@@ -29,9 +29,7 @@ class FlextTapLdifUtilitiesEntriesStream:
         ) -> None:
             """Initialize LDIF entries stream."""
             super().__init__(
-                tap,
-                name=name or "ldif_entries",
-                schema=schema or self._get_schema(),
+                tap, name=name or "ldif_entries", schema=schema or self._get_schema()
             )
             self._processor = FlextTapLdifUtilitiesProcessor.Processor(
                 t.scalar_mapping_adapter().validate_python(tap.config)
