@@ -6,7 +6,8 @@ from typing import TYPE_CHECKING, override
 
 from flext_meltano import u
 from flext_tap_ldif import c, m, t
-from flext_tap_ldif._utilities.processor import FlextTapLdifUtilitiesProcessor
+
+from .processor import FlextTapLdifUtilitiesProcessor
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -20,16 +21,15 @@ class FlextTapLdifUtilitiesEntriesStream:
     class EntriesStream(m.Meltano.SingerStreamBase):
         """LDIF entries stream using flext-ldif for ALL processing."""
 
-        @override
         def __init__(
             self,
             tap: m.Meltano.SingerTapBase,
+            schema: t.JsonDict | None = None,
             name: str | None = None,
-            schema: t.JsonMapping | None = None,
         ) -> None:
             """Initialize LDIF entries stream."""
             super().__init__(
-                tap, name=name or "ldif_entries", schema=schema or self._get_schema()
+                tap, schema=schema or self._get_schema(), name=name or "ldif_entries"
             )
             self._processor = FlextTapLdifUtilitiesProcessor.Processor(
                 t.scalar_mapping_adapter().validate_python(tap.config)

@@ -8,14 +8,11 @@ from __future__ import annotations
 
 from flext_ldif import FlextLdifUtilities
 from flext_meltano import u
-from flext_tap_ldif._utilities.data_processing import (
-    FlextTapLdifUtilitiesLdifDataProcessing,
-)
-from flext_tap_ldif._utilities.entries_stream import FlextTapLdifUtilitiesEntriesStream
-from flext_tap_ldif._utilities.processor import FlextTapLdifUtilitiesProcessor
-from flext_tap_ldif._utilities.state_management import (
-    FlextTapLdifUtilitiesStateManagement,
-)
+
+from ._utilities.data_processing import FlextTapLdifUtilitiesLdifDataProcessing
+from ._utilities.entries_stream import FlextTapLdifUtilitiesEntriesStream
+from ._utilities.processor import FlextTapLdifUtilitiesProcessor
+from ._utilities.state_management import FlextTapLdifUtilitiesStateManagement
 
 
 class FlextTapLdifUtilities(u, FlextLdifUtilities):
