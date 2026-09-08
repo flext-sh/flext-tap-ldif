@@ -20,9 +20,6 @@ from .__version__ import (
 )
 
 if TYPE_CHECKING:
-    from enum import StrEnum, unique
-    from typing import TYPE_CHECKING, ClassVar, Final
-
     from flext_ldif import FlextLdifConstants, d, e, h, r, s, x
 
     from ._config import FlextTapLdifConfig, config
@@ -36,9 +33,6 @@ if TYPE_CHECKING:
     from .typings import FlextTapLdifTypes, FlextTapLdifTypes as t
     from .utilities import FlextTapLdifUtilities, FlextTapLdifUtilities as u
 __all__: tuple[str, ...] = (
-    "TYPE_CHECKING",
-    "ClassVar",
-    "Final",
     "FlextLdifConstants",
     "FlextTapLdif",
     "FlextTapLdifCli",
@@ -50,7 +44,6 @@ __all__: tuple[str, ...] = (
     "FlextTapLdifSettings",
     "FlextTapLdifTypes",
     "FlextTapLdifUtilities",
-    "StrEnum",
     "__author__",
     "__author_email__",
     "__description__",
@@ -73,7 +66,6 @@ __all__: tuple[str, ...] = (
     "t",
     "tap_ldif",
     "u",
-    "unique",
     "x",
 )
 
@@ -90,9 +82,7 @@ _LAZY_IMPORTS = MappingProxyType(
             ".tap": ("FlextTapLdif",),
             ".typings": ("FlextTapLdifTypes", "t"),
             ".utilities": ("FlextTapLdifUtilities", "u"),
-            "enum": ("StrEnum", "unique"),
             "flext_ldif": ("FlextLdifConstants", "d", "e", "h", "r", "s", "x"),
-            "typing": ("ClassVar", "Final", "TYPE_CHECKING"),
         }),
         alias_groups=MappingProxyType({}),
         sort_keys=False,
