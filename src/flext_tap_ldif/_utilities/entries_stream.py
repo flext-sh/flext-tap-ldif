@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, override
 
 from flext_meltano import u
+
 from flext_tap_ldif import c, m, t
 
 from .processor import FlextTapLdifUtilitiesProcessor

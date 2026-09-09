@@ -14,6 +14,7 @@ from typing import Annotated, override
 
 from flext_meltano import FlextMeltanoTapServiceBase
 from flext_meltano.services.singer_sdk import FlextMeltanoSingerTapAdapter
+
 from flext_tap_ldif import FlextTapLdif, p, t, u
 
 
