@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from flext_tap_ldif._models.file_metadata import FlextTapLdifModelsLdifFile
-from flext_tap_ldif._models.file_stream import FlextTapLdifModelsLdifStream
+from .file_metadata import FlextTapLdifModelsLdifFile
+from .file_stream import FlextTapLdifModelsLdifStream
 
 
 class FlextTapLdifModelsFile(FlextTapLdifModelsLdifFile, FlextTapLdifModelsLdifStream):
