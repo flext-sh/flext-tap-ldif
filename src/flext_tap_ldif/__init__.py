@@ -20,7 +20,8 @@ from .__version__ import (
 )
 
 if TYPE_CHECKING:
-    from flext_ldif import FlextLdifConstants, d, e, h, r, s, x
+    from flext_ldif import FlextLdifConstants
+    from flext_meltano import d, e, h, r, s, x
 
     from ._config import FlextTapLdifConfig, config
     from ._settings import FlextTapLdifSettings, settings
@@ -82,7 +83,8 @@ _LAZY_IMPORTS = MappingProxyType(
             ".tap": ("FlextTapLdif",),
             ".typings": ("FlextTapLdifTypes", "t"),
             ".utilities": ("FlextTapLdifUtilities", "u"),
-            "flext_ldif": ("FlextLdifConstants", "d", "e", "h", "r", "s", "x"),
+            "flext_ldif": ("FlextLdifConstants",),
+            "flext_meltano": ("d", "e", "h", "r", "s", "x"),
         }),
         alias_groups=MappingProxyType({}),
         sort_keys=False,
