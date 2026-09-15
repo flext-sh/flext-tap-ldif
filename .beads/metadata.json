@@ -2,6 +2,6 @@
   "database": "dolt",
   "backend": "dolt",
   "dolt_mode": "server",
-  "dolt_database": "flext_tap_ldif",
+  "dolt_database": "flext",
   "project_id": "66f09316-c928-40df-8469-1ed87a08a274"
 }
