@@ -12,7 +12,7 @@
 
 <!-- AUTO-GENERATED — DO NOT EDIT MANUALLY -->
 
-- Version: `0.12.0rc0`
+- Version: `0.12.0`
 - Project class: `integration`
 - Package: `flext_tap_ldif`
 - Description: FLEXT Tap LDIF - Singer Tap for LDIF file format data extraction

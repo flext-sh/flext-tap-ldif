@@ -9,7 +9,7 @@
 <!-- AUTO-GENERATED — DO NOT EDIT MANUALLY -->
 
 - Package: `flext_tap_ldif`
-- Version: `0.12.0rc0`
+- Version: `0.12.0`
 - Description: FLEXT Tap LDIF - Singer Tap for LDIF file format data extraction
 - Doc summary: Flext Tap Ldif package.
 - Classifiers: `Development Status :: 3 - Alpha`, `Intended Audience :: Developers`,
