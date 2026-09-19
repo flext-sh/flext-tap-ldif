@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Annotated, ClassVar, Self
 
-from flext_tap_ldif import c, m, t, u
+from flext_tap_ldif import c, m, t
 
 if TYPE_CHECKING:
     from datetime import datetime
@@ -32,52 +32,52 @@ class FlextTapLdifModelsLdifFile:
             },
         )
 
-        file_path: Annotated[str, u.Field(..., description="Path to LDIF file")]
+        file_path: Annotated[str, m.Field(..., description="Path to LDIF file")]
         file_size: Annotated[
-            t.NonNegativeInt, u.Field(description="File size in bytes")
+            t.NonNegativeInt, m.Field(description="File size in bytes")
         ] = 0
-        encoding: Annotated[str, u.Field(description="File encoding")] = (
+        encoding: Annotated[str, m.Field(description="File encoding")] = (
             c.DEFAULT_ENCODING
         )
 
         created_at: Annotated[
-            datetime | None, u.Field(description="File creation time")
+            datetime | None, m.Field(description="File creation time")
         ] = None
         modified_at: Annotated[
-            datetime | None, u.Field(description="File modification time")
+            datetime | None, m.Field(description="File modification time")
         ] = None
 
         total_lines: Annotated[
-            t.NonNegativeInt, u.Field(description="Total lines in file")
+            t.NonNegativeInt, m.Field(description="Total lines in file")
         ] = 0
         entry_count: Annotated[
-            t.NonNegativeInt, u.Field(description="Number of entries")
+            t.NonNegativeInt, m.Field(description="Number of entries")
         ] = 0
         change_record_count: Annotated[
-            t.NonNegativeInt, u.Field(description="Number of change records")
+            t.NonNegativeInt, m.Field(description="Number of change records")
         ] = 0
         comment_lines: Annotated[
-            t.NonNegativeInt, u.Field(description="Number of comment lines")
+            t.NonNegativeInt, m.Field(description="Number of comment lines")
         ] = 0
 
-        processing_status: Annotated[str, u.Field(description="Processing status")] = (
+        processing_status: Annotated[str, m.Field(description="Processing status")] = (
             "pending"
         )
         last_processed_line: Annotated[
-            t.NonNegativeInt, u.Field(description="Last processed line number")
+            t.NonNegativeInt, m.Field(description="Last processed line number")
         ] = 0
         processing_errors: Annotated[
-            t.StrSequence, u.Field(description="Processing errors")
-        ] = u.Field(default_factory=tuple)
+            t.StrSequence, m.Field(description="Processing errors")
+        ] = m.Field(default_factory=tuple)
 
-        is_valid_ldif: Annotated[bool, u.Field(description="LDIF format validity")] = (
+        is_valid_ldif: Annotated[bool, m.Field(description="LDIF format validity")] = (
             True
         )
         validation_errors: Annotated[
-            t.StrSequence, u.Field(description="Format validation errors")
-        ] = u.Field(default_factory=tuple)
+            t.StrSequence, m.Field(description="Format validation errors")
+        ] = m.Field(default_factory=tuple)
 
-        @u.computed_field
+        @m.computed_field
         @property
         def ldif_file_summary(self) -> t.JsonMapping:
             """LDIF file processing summary."""
@@ -104,7 +104,7 @@ class FlextTapLdifModelsLdifFile:
                 },
             }
 
-        @u.model_validator(mode="after")
+        @m.model_validator(mode="after")
         def validate_ldif_file(self) -> Self:
             """Validate LDIF file configuration."""
             if not self.file_path:

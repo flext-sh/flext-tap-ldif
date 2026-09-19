@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Annotated, ClassVar, Self
 
-from flext_tap_ldif import m, t, u
+from flext_tap_ldif import m, t
 
 
 class FlextTapLdifModelsRecord:
@@ -17,38 +17,38 @@ class FlextTapLdifModelsRecord:
             validate_assignment=True, extra="forbid", frozen=False
         )
 
-        file_path: Annotated[str, u.Field(..., description="Validated LDIF file path")]
-        valid: Annotated[bool, u.Field(..., description="Overall validation result")]
+        file_path: Annotated[str, m.Field(..., description="Validated LDIF file path")]
+        valid: Annotated[bool, m.Field(..., description="Overall validation result")]
 
         # Validation results
         validation_errors: Annotated[
             t.SequenceOf[t.StrMapping],
-            u.Field(description="Validation errors with details"),
-        ] = u.Field(default_factory=tuple)
+            m.Field(description="Validation errors with details"),
+        ] = m.Field(default_factory=tuple)
         warnings: Annotated[
-            t.SequenceOf[t.StrMapping], u.Field(description="Validation warnings")
-        ] = u.Field(default_factory=tuple)
+            t.SequenceOf[t.StrMapping], m.Field(description="Validation warnings")
+        ] = m.Field(default_factory=tuple)
 
         # Statistics
         total_entries: Annotated[
-            t.NonNegativeInt, u.Field(description="Total entries validated")
+            t.NonNegativeInt, m.Field(description="Total entries validated")
         ] = 0
         valid_entries: Annotated[
-            t.NonNegativeInt, u.Field(description="Valid entries count")
+            t.NonNegativeInt, m.Field(description="Valid entries count")
         ] = 0
         invalid_entries: Annotated[
-            t.NonNegativeInt, u.Field(description="Invalid entries count")
+            t.NonNegativeInt, m.Field(description="Invalid entries count")
         ] = 0
 
         # Validation metadata
         validation_time: Annotated[
-            t.NonNegativeFloat, u.Field(description="Validation time in seconds")
+            t.NonNegativeFloat, m.Field(description="Validation time in seconds")
         ] = 0.0
-        validator_version: Annotated[str, u.Field(description="Validator version")] = (
+        validator_version: Annotated[str, m.Field(description="Validator version")] = (
             "1.0"
         )
 
-        @u.computed_field
+        @m.computed_field
         @property
         def validation_summary(self) -> t.JsonMapping:
             """LDIF validation complete summary."""
@@ -81,7 +81,7 @@ class FlextTapLdifModelsRecord:
                 },
             }
 
-        @u.model_validator(mode="after")
+        @m.model_validator(mode="after")
         def validate_result_consistency(self) -> Self:
             """Validate result consistency."""
             if self.valid_entries + self.invalid_entries != self.total_entries:
