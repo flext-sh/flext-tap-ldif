@@ -8,7 +8,8 @@ from typing import TYPE_CHECKING, NoReturn
 from flext_ldif import ldif
 from flext_meltano import u
 
-from flext_tap_ldif import c, m, p, r, t
+from flext_core import r
+from flext_tap_ldif import c, m, p, t
 
 if TYPE_CHECKING:
     from collections.abc import Generator
