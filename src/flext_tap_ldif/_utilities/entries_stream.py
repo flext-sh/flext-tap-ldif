@@ -12,6 +12,7 @@ from .processor import FlextTapLdifUtilitiesProcessor
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
+    from pathlib import Path
 
 
 class FlextTapLdifUtilitiesEntriesStream:
@@ -62,7 +63,7 @@ class FlextTapLdifUtilitiesEntriesStream:
                 file_path=fp_val,
                 max_file_size_mb=max_size,
             )
-            files_to_process = []
+            files_to_process: t.SequenceOf[Path] = []
             if files_result.success:
                 files_to_process = files_result.value or []
             else:
