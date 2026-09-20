@@ -5,7 +5,8 @@ from __future__ import annotations
 from types import MappingProxyType
 from typing import TYPE_CHECKING, Annotated, ClassVar, Self
 
-from flext_tap_ldif import m, t, u
+from flext_core import u
+from flext_tap_ldif import m, t
 
 if TYPE_CHECKING:
     from datetime import datetime
@@ -37,33 +38,33 @@ class FlextTapLdifModelsEntry:
             },
         )
 
-        dn: Annotated[str, u.Field(..., description="Distinguished Name")]
+        dn: Annotated[str, m.Field(..., description="Distinguished Name")]
         attributes: Annotated[
-            t.MappingKV[str, t.StrSequence], u.Field(description="Entry attributes")
-        ] = u.Field(default_factory=_empty_attributes)
+            t.MappingKV[str, t.StrSequence], m.Field(description="Entry attributes")
+        ] = m.Field(default_factory=_empty_attributes)
         object_classes: Annotated[
-            t.StrSequence, u.Field(description="Object classes")
-        ] = u.Field(default_factory=tuple)
+            t.StrSequence, m.Field(description="Object classes")
+        ] = m.Field(default_factory=tuple)
 
         # LDIF metadata
         line_number: Annotated[
-            t.NonNegativeInt, u.Field(description="Source line number in LDIF file")
+            t.NonNegativeInt, m.Field(description="Source line number in LDIF file")
         ] = 0
         source_file: Annotated[
-            str | None, u.Field(description="Source LDIF file path")
+            str | None, m.Field(description="Source LDIF file path")
         ] = None
-        entry_type: Annotated[str, u.Field(description="Type of LDIF entry")] = "entry"
+        entry_type: Annotated[str, m.Field(description="Type of LDIF entry")] = "entry"
 
         # Processing metadata
         extracted_at: Annotated[
-            datetime, u.Field(description="Extraction timestamp")
-        ] = u.Field(default_factory=u.now)
-        processed: Annotated[bool, u.Field(description="Processing status")] = False
+            datetime, m.Field(description="Extraction timestamp")
+        ] = m.Field(default_factory=u.now)
+        processed: Annotated[bool, m.Field(description="Processing status")] = False
         validation_errors: Annotated[
-            t.StrSequence, u.Field(description="Validation errors")
-        ] = u.Field(default_factory=tuple)
+            t.StrSequence, m.Field(description="Validation errors")
+        ] = m.Field(default_factory=tuple)
 
-        @u.computed_field
+        @m.computed_field
         @property
         def ldif_entry_summary(self) -> t.JsonMapping:
             """LDIF entry analysis summary."""
@@ -94,7 +95,7 @@ class FlextTapLdifModelsEntry:
             values = self.resolve_attribute_values(name)
             return values[0] if values else None
 
-        @u.model_validator(mode="after")
+        @m.model_validator(mode="after")
         def validate_ldif_entry(self) -> Self:
             """Validate LDIF entry structure."""
             if not self.dn:

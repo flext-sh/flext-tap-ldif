@@ -62,15 +62,16 @@ class FlextTapLdifUtilitiesEntriesStream:
                 file_path=fp_val,
                 max_file_size_mb=max_size,
             )
-            if files_result.failure:
+            files_to_process = []
+            if files_result.success:
+                files_to_process = files_result.value or []
+            else:
                 error_msg = files_result.error or "LDIF file discovery failed"
                 if bool(settings.get("strict_parsing", True)):
                     raise RuntimeError(error_msg)
                 FlextTapLdifUtilitiesEntriesStream.logger.error(
                     "File discovery failed: %s", error_msg
                 )
-                return
-            files_to_process = files_result.value or []
             FlextTapLdifUtilitiesEntriesStream.logger.info(
                 "Processing %d LDIF files", len(files_to_process)
             )
