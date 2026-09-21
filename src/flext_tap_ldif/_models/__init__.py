@@ -17,13 +17,8 @@ if TYPE_CHECKING:
     from .record import FlextTapLdifModelsRecord
     from .settings import FlextTapLdifModelsSettings
 __all__: tuple[str, ...] = (
-    "FlextTapLdifModelsBatch",
-    "FlextTapLdifModelsEntry",
-    "FlextTapLdifModelsFile",
-    "FlextTapLdifModelsLdifFile",
-    "FlextTapLdifModelsLdifStream",
-    "FlextTapLdifModelsRecord",
-    "FlextTapLdifModelsSettings",
+    "FlextTapLdifModelsBatch", "FlextTapLdifModelsEntry", "FlextTapLdifModelsFile", "FlextTapLdifModelsLdifFile",
+    "FlextTapLdifModelsLdifStream", "FlextTapLdifModelsRecord", "FlextTapLdifModelsSettings",
 )
 
 _LAZY_IMPORTS = MappingProxyType(

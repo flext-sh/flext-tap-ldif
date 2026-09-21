@@ -20,7 +20,7 @@ from .__version__ import (
 )
 
 if TYPE_CHECKING:
-    from flext_ldif import FlextLdifConstants, d, e, h, r, s, x
+    from flext_ldif import d, e, h, r, s, x
 
     from .__version__ import FlextTapLdifVersion
     from ._config import FlextTapLdifConfig, config
@@ -34,41 +34,15 @@ if TYPE_CHECKING:
     from .typings import FlextTapLdifTypes, FlextTapLdifTypes as t
     from .utilities import FlextTapLdifUtilities, FlextTapLdifUtilities as u
 __all__: tuple[str, ...] = (
-    "FlextLdifConstants",
-    "FlextTapLdif",
-    "FlextTapLdifCli",
-    "FlextTapLdifConfig",
-    "FlextTapLdifConstants",
-    "FlextTapLdifModels",
-    "FlextTapLdifProtocols",
-    "FlextTapLdifService",
-    "FlextTapLdifSettings",
-    "FlextTapLdifTypes",
-    "FlextTapLdifUtilities",
-    "FlextTapLdifVersion",
-    "__author__",
-    "__author_email__",
-    "__description__",
-    "__license__",
-    "__title__",
-    "__url__",
-    "__version__",
-    "__version_info__",
-    "c",
-    "config",
-    "d",
-    "e",
-    "h",
-    "m",
-    "main",
-    "p",
-    "r",
-    "s",
-    "settings",
-    "t",
-    "tap_ldif",
-    "u",
-    "x",
+    "FlextTapLdif", "FlextTapLdifCli", "FlextTapLdifConfig", "FlextTapLdifConstants",
+    "FlextTapLdifModels", "FlextTapLdifProtocols", "FlextTapLdifService", "FlextTapLdifSettings",
+    "FlextTapLdifTypes", "FlextTapLdifUtilities", "FlextTapLdifVersion", "__author__",
+    "__author_email__", "__description__", "__license__", "__title__",
+    "__url__", "__version__", "__version_info__", "c",
+    "config", "d", "e", "h",
+    "m", "main", "p", "r",
+    "s", "settings", "t", "tap_ldif",
+    "u", "x",
 )
 
 _LAZY_IMPORTS = MappingProxyType(
@@ -85,7 +59,7 @@ _LAZY_IMPORTS = MappingProxyType(
             ".tap": ("FlextTapLdif",),
             ".typings": ("FlextTapLdifTypes", "t"),
             ".utilities": ("FlextTapLdifUtilities", "u"),
-            "flext_ldif": ("FlextLdifConstants", "d", "e", "h", "r", "s", "x"),
+            "flext_ldif": ("d", "e", "h", "r", "s", "x"),
         }),
         alias_groups=MappingProxyType({}),
         sort_keys=False,
