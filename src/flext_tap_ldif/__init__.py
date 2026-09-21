@@ -20,8 +20,9 @@ from .__version__ import (
 )
 
 if TYPE_CHECKING:
-    from flext_core import d, e, h, r, x
     from flext_ldif import s
+
+    from flext_core import d, e, h, r, x
 
     from .__version__ import FlextTapLdifVersion
     from ._config import FlextTapLdifConfig, config
