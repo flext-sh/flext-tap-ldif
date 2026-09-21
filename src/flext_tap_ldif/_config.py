@@ -49,7 +49,9 @@ class FlextTapLdifConfig(FlextSettings, FlextMeltanoConfig):
 
     TapLdif: Annotated[
         _TapLdifNamespace,
-        m.Field(description="Open namespace exposing ``config/*.yaml`` under ``TapLdif``."),
+        m.Field(
+            description="Open namespace exposing ``config/*.yaml`` under ``TapLdif``."
+        ),
     ] = _TapLdifNamespace()
 
 
