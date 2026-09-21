@@ -11,14 +11,14 @@ import re
 from enum import StrEnum, unique
 from typing import TYPE_CHECKING, ClassVar, Final
 
-from flext_ldif import FlextLdifConstants
+from flext_ldif import c as _ldif_c
 from flext_meltano import c
 
 if TYPE_CHECKING:
     from flext_tap_ldif import t
 
 
-class FlextTapLdifConstants(c, FlextLdifConstants):
+class FlextTapLdifConstants(c, _ldif_c):
     """LDIF tap extraction-specific constants following flext-core patterns.
 
     Composes with FlextTapLdifConstants to avoid duplication and ensure consistency.
@@ -33,7 +33,7 @@ class FlextTapLdifConstants(c, FlextLdifConstants):
         # === Regex authority for the TapLdif domain ===
         ATTRIBUTE_NORMALIZE_RE: ClassVar[t.RegexPattern] = re.compile(r"[^a-zA-Z0-9]")
 
-        DEFAULT_LDIF_ENCODING: Final[str] = FlextLdifConstants.Ldif.Encoding.UTF8
+        DEFAULT_LDIF_ENCODING: Final[str] = _ldif_c.Ldif.Encoding.UTF8
         DEFAULT_FILE_PATTERN: Final[str] = "*.ldif"
         DEFAULT_STRICT_PARSING: Final[bool] = True
         MAX_FILE_SIZE_MB: Final[int] = 100
@@ -50,7 +50,7 @@ class FlextTapLdifConstants(c, FlextLdifConstants):
         class Format:
             """LDIF format specifications."""
 
-            MAX_LINE_LENGTH: Final[int] = FlextLdifConstants.Ldif.DEFAULT_LINE_WIDTH
+            MAX_LINE_LENGTH: Final[int] = _ldif_c.Ldif.DEFAULT_LINE_WIDTH
             LINE_CONTINUATION: Final[str] = " "
 
         class TapLdifPerformance:

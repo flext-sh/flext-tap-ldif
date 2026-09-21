@@ -22,6 +22,7 @@ from .__version__ import (
 if TYPE_CHECKING:
     from flext_ldif import FlextLdifConstants, d, e, h, r, s, x
 
+    from .__version__ import FlextTapLdifVersion
     from ._config import FlextTapLdifConfig, config
     from ._settings import FlextTapLdifSettings, settings
     from .api import FlextTapLdifService, tap_ldif
@@ -44,6 +45,7 @@ __all__: tuple[str, ...] = (
     "FlextTapLdifSettings",
     "FlextTapLdifTypes",
     "FlextTapLdifUtilities",
+    "FlextTapLdifVersion",
     "__author__",
     "__author_email__",
     "__description__",
@@ -72,6 +74,7 @@ __all__: tuple[str, ...] = (
 _LAZY_IMPORTS = MappingProxyType(
     build_lazy_import_map(
         MappingProxyType({
+            ".__version__": ("FlextTapLdifVersion",),
             "._config": ("FlextTapLdifConfig", "config"),
             "._settings": ("FlextTapLdifSettings", "settings"),
             ".api": ("FlextTapLdifService", "tap_ldif"),
