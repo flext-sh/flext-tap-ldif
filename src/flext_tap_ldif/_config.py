@@ -10,7 +10,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import Self
+from typing import Annotated, Self
 
 from flext_meltano import FlextMeltanoConfig, m
 
@@ -47,7 +47,10 @@ class FlextTapLdifConfig(FlextSettings, FlextMeltanoConfig):
 
     __hash__ = object.__hash__
 
-    TapLdif: _TapLdifNamespace = _TapLdifNamespace()
+    TapLdif: Annotated[
+        _TapLdifNamespace,
+        m.Field(description="Open namespace exposing ``config/*.yaml`` under ``TapLdif``."),
+    ] = _TapLdifNamespace()
 
 
 config: FlextTapLdifConfig = FlextTapLdifConfig.fetch_global()
