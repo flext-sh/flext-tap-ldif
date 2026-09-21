@@ -11,8 +11,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Annotated
 
-from pydantic_settings import SettingsConfigDict
-
 from flext_core import FlextSettings
 from flext_tap_ldif import m
 
@@ -20,7 +18,7 @@ from flext_tap_ldif import m
 class FlextTapLdifSettings(FlextSettings):
     """Tap-LDIF runtime settings; fields under ``settings.TapLdif.*``."""
 
-    model_config = SettingsConfigDict(
+    model_config = m.SettingsConfigDict(
         env_prefix="FLEXT_TAP_LDIF_",
         env_nested_delimiter="__",
         extra="ignore",
