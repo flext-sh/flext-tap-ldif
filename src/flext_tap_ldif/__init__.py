@@ -22,16 +22,17 @@ from .__version__ import (
 if TYPE_CHECKING:
     from flext_ldif import d, e, h, r, s, x
 
+    from .__version__ import FlextTapLdifVersion
     from ._config import FlextTapLdifConfig, config
     from ._settings import FlextTapLdifSettings, settings
     from .api import FlextTapLdifService, tap_ldif
     from .cli import FlextTapLdifCli, main
-    from .constants import FlextTapLdifConstants, c
-    from .models import FlextTapLdifModels, m
-    from .protocols import FlextTapLdifProtocols, p
+    from .constants import FlextTapLdifConstants, FlextTapLdifConstants as c
+    from .models import FlextTapLdifModels, FlextTapLdifModels as m
+    from .protocols import FlextTapLdifProtocols, FlextTapLdifProtocols as p
     from .tap import FlextTapLdif
-    from .typings import FlextTapLdifTypes, t
-    from .utilities import FlextTapLdifUtilities, u
+    from .typings import FlextTapLdifTypes, FlextTapLdifTypes as t
+    from .utilities import FlextTapLdifUtilities, FlextTapLdifUtilities as u
 __all__: tuple[str, ...] = (
     "FlextTapLdif",
     "FlextTapLdifCli",
@@ -43,6 +44,7 @@ __all__: tuple[str, ...] = (
     "FlextTapLdifSettings",
     "FlextTapLdifTypes",
     "FlextTapLdifUtilities",
+    "FlextTapLdifVersion",
     "__author__",
     "__author_email__",
     "__description__",
@@ -52,26 +54,18 @@ __all__: tuple[str, ...] = (
     "__version__",
     "__version_info__",
     "c",
-    "cli",
     "config",
-    "core",
     "d",
     "e",
-    "from_json",
     "h",
-    "lazy_attribute",
-    "ldif",
     "m",
     "main",
-    "meltano",
     "p",
     "r",
     "s",
     "settings",
     "t",
     "tap_ldif",
-    "to_json",
-    "to_jsonable_python",
     "u",
     "x",
 )
@@ -79,6 +73,7 @@ __all__: tuple[str, ...] = (
 _LAZY_IMPORTS = MappingProxyType(
     build_lazy_import_map(
         MappingProxyType({
+            ".__version__": ("FlextTapLdifVersion",),
             "._config": ("FlextTapLdifConfig", "config"),
             "._settings": ("FlextTapLdifSettings", "settings"),
             ".api": ("FlextTapLdifService", "tap_ldif"),
