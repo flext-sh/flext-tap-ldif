@@ -5,7 +5,8 @@ from __future__ import annotations
 from types import MappingProxyType
 from typing import Annotated, ClassVar, Self
 
-from flext_tap_ldif import c, m, t
+from flext_meltano import m
+from flext_tap_ldif import c, t
 
 
 def _empty_stream_schema() -> t.JsonMapping:
