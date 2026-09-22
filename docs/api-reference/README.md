@@ -28,7 +28,7 @@ This section is generated from public exports and real docstrings.
 ## Surface Summary
 
 - Primary facades: `FlextTapLdif`, `FlextTapLdifCli`, `FlextTapLdifConfig`,
-  `FlextTapLdifConstants`, `FlextTapLdifModels`, `FlextTapLdifProtocols` (+4 more)
+  `FlextTapLdifConstants`, `FlextTapLdifModels`, `FlextTapLdifProtocols` (+5 more)
 - Generated module pages: `8`
 
 Back to [project docs](../index.md).

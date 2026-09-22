@@ -14,6 +14,8 @@ from typing import TYPE_CHECKING, ClassVar, Final
 from flext_ldif import c as _ldif_c
 from flext_meltano import c
 
+from ._constants.values import FlextTapLdifConstantsValues
+
 if TYPE_CHECKING:
     from flext_tap_ldif import t
 
@@ -24,7 +26,7 @@ class FlextTapLdifConstants(c, _ldif_c):
     Composes with FlextTapLdifConstants to avoid duplication and ensure consistency.
     """
 
-    class TapLdif:
+    class TapLdif(FlextTapLdifConstantsValues.TapLdif):
         """LDIF tap processing configuration.
 
         Note: Does not override parent Processing class to avoid inheritance conflicts.
@@ -33,7 +35,6 @@ class FlextTapLdifConstants(c, _ldif_c):
         # === Regex authority for the TapLdif domain ===
         ATTRIBUTE_NORMALIZE_RE: ClassVar[t.RegexPattern] = re.compile(r"[^a-zA-Z0-9]")
 
-        DEFAULT_LDIF_ENCODING: Final[str] = _ldif_c.Ldif.Encoding.UTF8
         DEFAULT_FILE_PATTERN: Final[str] = "*.ldif"
         DEFAULT_STRICT_PARSING: Final[bool] = True
         MAX_FILE_SIZE_MB: Final[int] = 100
@@ -47,21 +48,19 @@ class FlextTapLdifConstants(c, _ldif_c):
             DELETE = "delete"
             MODRDN = "modrdn"
 
-        class Format:
+        class Format(FlextTapLdifConstantsValues.TapLdif.Format):
             """LDIF format specifications."""
 
-            MAX_LINE_LENGTH: Final[int] = _ldif_c.Ldif.DEFAULT_LINE_WIDTH
             LINE_CONTINUATION: Final[str] = " "
 
-        class TapLdifPerformance:
+        class TapLdifPerformance(
+            FlextTapLdifConstantsValues.TapLdif.TapLdifPerformance
+        ):
             """Tap LDIF performance constants."""
 
-            DEFAULT_BATCH_SIZE: Final[int] = 1000
-
-        class EntrySchema:
+        class EntrySchema(FlextTapLdifConstantsValues.TapLdif.EntrySchema):
             """LDIF entry schema field names."""
 
-            DN_FIELD: Final[str] = "dn"
             ATTRIBUTES_FIELD: Final[str] = "attributes"
             OBJECT_CLASS_FIELD: Final[str] = "object_class"
             CHANGE_TYPE_FIELD: Final[str] = "change_type"
