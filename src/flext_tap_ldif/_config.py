@@ -23,7 +23,7 @@ class _TapLdifNamespace(m.BaseModel):
     model_config = m.ConfigDict(extra="allow", frozen=True)
 
 
-class FlextTapLdifConfig(FlextSettings, FlextMeltanoConfig):
+class FlextTapLdifConfig(FlextMeltanoConfig):
     """TapLdif config auto-loaded model-less from ``config/*.yaml``.
 
     MRO carries ``FlextSettings`` FIRST (ENFORCE-042); the class stays a frozen,
