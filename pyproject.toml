@@ -55,7 +55,6 @@ name = "FLEXT Team"
 [project.scripts]
 flext-tap-ldif = "flext_tap_ldif.cli:main"
 tap-ldif = "flext_tap_ldif.cli:main"
-tap-ldif-legacy = "flext_tap_ldif.tap:main"
 
 [project.urls]
 Documentation = "https://github.com/flext-sh/flext/blob/main/README.md"

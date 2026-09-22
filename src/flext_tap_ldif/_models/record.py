@@ -4,7 +4,8 @@ from __future__ import annotations
 
 from typing import Annotated, ClassVar, Self
 
-from flext_tap_ldif import m, t
+from flext_meltano import m
+from flext_tap_ldif import t
 
 
 class FlextTapLdifModelsRecord:

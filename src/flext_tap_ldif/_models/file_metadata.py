@@ -4,7 +4,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Annotated, ClassVar, Self
 
-from flext_tap_ldif import c, m, t
+from flext_meltano import m
+from flext_tap_ldif import c, t
 
 if TYPE_CHECKING:
     from datetime import datetime
