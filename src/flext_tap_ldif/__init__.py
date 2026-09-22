@@ -20,18 +20,12 @@ from .__version__ import (
 )
 
 if TYPE_CHECKING:
-<<<<<<< HEAD
     from flext_cli import cli
     from flext_ldif import ldif
     from flext_meltano import meltano, s
     from pydantic_core import from_json, to_json, to_jsonable_python
 
     from flext_core import core, d, e, h, lazy_attribute, r, x
-=======
-    from flext_ldif import s
-
-    from flext_core import d, e, h, r, x
->>>>>>> origin/0.12.0-dev
 
     from ._config import FlextTapLdifConfig, config
     from ._settings import FlextTapLdifSettings, settings
@@ -100,16 +94,11 @@ _LAZY_IMPORTS = MappingProxyType(
             ".tap": ("FlextTapLdif",),
             ".typings": ("FlextTapLdifTypes", "t"),
             ".utilities": ("FlextTapLdifUtilities", "u"),
-<<<<<<< HEAD
             "flext_cli": ("cli",),
             "flext_core": ("core", "d", "e", "h", "lazy_attribute", "r", "x"),
             "flext_ldif": ("ldif",),
             "flext_meltano": ("meltano", "s"),
             "pydantic_core": ("from_json", "to_json", "to_jsonable_python"),
-=======
-            "flext_core": ("d", "e", "h", "r", "x"),
-            "flext_ldif": ("s",),
->>>>>>> origin/0.12.0-dev
         }),
         alias_groups=MappingProxyType({}),
         sort_keys=False,
