@@ -20,9 +20,7 @@ from .__version__ import (
 )
 
 if TYPE_CHECKING:
-    from flext_ldif import s
-
-    from flext_core import d, e, h, r, x
+    from flext_ldif import d, e, h, r, s, x
 
     from .__version__ import FlextTapLdifVersion
     from ._config import FlextTapLdifConfig, config
@@ -86,8 +84,7 @@ _LAZY_IMPORTS = MappingProxyType(
             ".tap": ("FlextTapLdif",),
             ".typings": ("FlextTapLdifTypes", "t"),
             ".utilities": ("FlextTapLdifUtilities", "u"),
-            "flext_core": ("d", "e", "h", "r", "x"),
-            "flext_ldif": ("s",),
+            "flext_ldif": ("d", "e", "h", "r", "s", "x"),
         }),
         alias_groups=MappingProxyType({}),
         sort_keys=False,
