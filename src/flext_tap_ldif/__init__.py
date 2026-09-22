@@ -20,17 +20,11 @@ from .__version__ import (
 )
 
 if TYPE_CHECKING:
-    from flext_ldif import (
-        cli,
-        core,
-        from_json,
-        lazy_attribute,
-        ldif,
-        servers,
-        to_json,
-        to_jsonable_python,
-    )
-    from flext_meltano import d, e, h, meltano, r, s, services, x
+    from flext_cli import cli
+    from flext_ldif import ldif
+    from flext_meltano import meltano, s
+
+    from flext_core import core, d, e, h, lazy_attribute, r, x
 
     from ._config import FlextTapLdifConfig, config
     from ._settings import FlextTapLdifSettings, settings
@@ -42,6 +36,8 @@ if TYPE_CHECKING:
     from .tap import FlextTapLdif
     from .typings import FlextTapLdifTypes, t
     from .utilities import FlextTapLdifUtilities, u
+
+
 __all__: tuple[str, ...] = (
     "FlextTapLdif",
     "FlextTapLdifCli",
@@ -67,7 +63,6 @@ __all__: tuple[str, ...] = (
     "core",
     "d",
     "e",
-    "from_json",
     "h",
     "lazy_attribute",
     "ldif",
@@ -77,13 +72,9 @@ __all__: tuple[str, ...] = (
     "p",
     "r",
     "s",
-    "servers",
-    "services",
     "settings",
     "t",
     "tap_ldif",
-    "to_json",
-    "to_jsonable_python",
     "u",
     "x",
 )
@@ -101,17 +92,10 @@ _LAZY_IMPORTS = MappingProxyType(
             ".tap": ("FlextTapLdif",),
             ".typings": ("FlextTapLdifTypes", "t"),
             ".utilities": ("FlextTapLdifUtilities", "u"),
-            "flext_ldif": (
-                "cli",
-                "core",
-                "from_json",
-                "lazy_attribute",
-                "ldif",
-                "servers",
-                "to_json",
-                "to_jsonable_python",
-            ),
-            "flext_meltano": ("d", "e", "h", "meltano", "r", "s", "services", "x"),
+            "flext_cli": ("cli",),
+            "flext_core": ("core", "d", "e", "h", "lazy_attribute", "r", "x"),
+            "flext_ldif": ("ldif",),
+            "flext_meltano": ("meltano", "s"),
         }),
         alias_groups=MappingProxyType({}),
         sort_keys=False,

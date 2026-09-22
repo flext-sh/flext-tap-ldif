@@ -9,33 +9,26 @@ from typing import TYPE_CHECKING
 from flext_core.lazy import build_lazy_import_map, install_lazy_exports
 
 if TYPE_CHECKING:
-    from flext_ldif import ldif, servers
+    from flext_cli import cli
+    from flext_ldif import ldif
     from flext_meltano import meltano
     from flext_tests import (
+        active_rules,
         api,
-        cli,
         config,
-        core,
-        d,
-        e,
-        from_json,
-        h,
+        discover_repository_root,
         install_local_packages,
-        lazy_attribute,
         load_infra_report,
-        r,
-        services,
         settings,
+        split_csv,
         td,
         tf,
         tk,
         tm,
-        to_json,
-        to_jsonable_python,
         tv,
-        x,
     )
 
+    from flext_core import core, d, e, h, lazy_attribute, r, x
     from flext_tap_ldif import main, tap_ldif
 
     from . import unit
@@ -46,6 +39,8 @@ if TYPE_CHECKING:
     from .settings import TestsFlextTapLdifSettings
     from .typings import TestsFlextTapLdifTypes, TestsFlextTapLdifTypes as t
     from .utilities import TestsFlextTapLdifUtilities, TestsFlextTapLdifUtilities as u
+
+
 __all__: tuple[str, ...] = (
     "TestsFlextTapLdifConstants",
     "TestsFlextTapLdifModels",
@@ -54,14 +49,15 @@ __all__: tuple[str, ...] = (
     "TestsFlextTapLdifSettings",
     "TestsFlextTapLdifTypes",
     "TestsFlextTapLdifUtilities",
+    "active_rules",
     "api",
     "c",
     "cli",
     "config",
     "core",
     "d",
+    "discover_repository_root",
     "e",
-    "from_json",
     "h",
     "install_local_packages",
     "lazy_attribute",
@@ -73,17 +69,14 @@ __all__: tuple[str, ...] = (
     "p",
     "r",
     "s",
-    "servers",
-    "services",
     "settings",
+    "split_csv",
     "t",
     "tap_ldif",
     "td",
     "tf",
     "tk",
     "tm",
-    "to_json",
-    "to_jsonable_python",
     "tv",
     "u",
     "unit",
@@ -101,32 +94,25 @@ _LAZY_IMPORTS = MappingProxyType(
             ".typings": ("TestsFlextTapLdifTypes", "t"),
             ".unit": ("unit",),
             ".utilities": ("TestsFlextTapLdifUtilities", "u"),
-            "flext_ldif": ("ldif", "servers"),
+            "flext_cli": ("cli",),
+            "flext_core": ("core", "d", "e", "h", "lazy_attribute", "r", "x"),
+            "flext_ldif": ("ldif",),
             "flext_meltano": ("meltano",),
             "flext_tap_ldif": ("main", "tap_ldif"),
             "flext_tests": (
+                "active_rules",
                 "api",
-                "cli",
                 "config",
-                "core",
-                "d",
-                "e",
-                "from_json",
-                "h",
+                "discover_repository_root",
                 "install_local_packages",
-                "lazy_attribute",
                 "load_infra_report",
-                "r",
-                "services",
                 "settings",
+                "split_csv",
                 "td",
                 "tf",
                 "tk",
                 "tm",
-                "to_json",
-                "to_jsonable_python",
                 "tv",
-                "x",
             ),
         }),
         alias_groups=MappingProxyType({}),

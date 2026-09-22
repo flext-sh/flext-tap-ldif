@@ -16,6 +16,8 @@ if TYPE_CHECKING:
     from .file_stream import FlextTapLdifModelsLdifStream
     from .record import FlextTapLdifModelsRecord
     from .settings import FlextTapLdifModelsSettings
+
+
 __all__: tuple[str, ...] = (
     "FlextTapLdifModelsBatch",
     "FlextTapLdifModelsEntry",
