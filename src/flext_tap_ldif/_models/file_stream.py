@@ -6,6 +6,7 @@ from types import MappingProxyType
 from typing import Annotated, ClassVar, Self
 
 from flext_meltano import m
+
 from flext_tap_ldif import c, t
 
 
