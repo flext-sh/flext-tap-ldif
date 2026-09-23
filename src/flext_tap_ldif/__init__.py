@@ -36,6 +36,8 @@ if TYPE_CHECKING:
     from .tap import FlextTapLdif
     from .typings import FlextTapLdifTypes, t
     from .utilities import FlextTapLdifUtilities, u
+
+
 __all__: tuple[str, ...] = (
     "FlextTapLdif",
     "FlextTapLdifCli",

@@ -57,7 +57,7 @@ verification).
   classes listed under Module Map above.
 - Public extensions exposed by this project: `FlextTapLdif`, `FlextTapLdifCli`,
   `FlextTapLdifConfig`, `FlextTapLdifConstants`, `FlextTapLdifModels`,
-  `FlextTapLdifProtocols` (+5 more).
+  `FlextTapLdifProtocols` (+4 more).
 - Library abstraction boundaries: see AGENTS.md §2.7.
 
 ## Quality Gates
