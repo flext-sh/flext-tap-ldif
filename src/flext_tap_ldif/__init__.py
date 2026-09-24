@@ -20,11 +20,7 @@ from .__version__ import (
 )
 
 if TYPE_CHECKING:
-    from flext_cli import cli
-    from flext_ldif import ldif
-    from flext_meltano import meltano, s
-
-    from flext_core import core, d, e, h, lazy_attribute, r, x
+    from flext_meltano import d, e, h, r, s, x
 
     from ._config import FlextTapLdifConfig, config
     from ._settings import FlextTapLdifSettings, settings
@@ -58,17 +54,12 @@ __all__: tuple[str, ...] = (
     "__version__",
     "__version_info__",
     "c",
-    "cli",
     "config",
-    "core",
     "d",
     "e",
     "h",
-    "lazy_attribute",
-    "ldif",
     "m",
     "main",
-    "meltano",
     "p",
     "r",
     "s",
@@ -92,10 +83,7 @@ _LAZY_IMPORTS = MappingProxyType(
             ".tap": ("FlextTapLdif",),
             ".typings": ("FlextTapLdifTypes", "t"),
             ".utilities": ("FlextTapLdifUtilities", "u"),
-            "flext_cli": ("cli",),
-            "flext_core": ("core", "d", "e", "h", "lazy_attribute", "r", "x"),
-            "flext_ldif": ("ldif",),
-            "flext_meltano": ("meltano", "s"),
+            "flext_meltano": ("d", "e", "h", "r", "s", "x"),
         }),
         alias_groups=MappingProxyType({}),
         sort_keys=False,
