@@ -26,12 +26,12 @@ if TYPE_CHECKING:
     from ._settings import FlextTapLdifSettings, settings
     from .api import FlextTapLdifService, tap_ldif
     from .cli import FlextTapLdifCli, main
-    from .constants import FlextTapLdifConstants, c
-    from .models import FlextTapLdifModels, m
-    from .protocols import FlextTapLdifProtocols, p
+    from .constants import FlextTapLdifConstants, FlextTapLdifConstants as c
+    from .models import FlextTapLdifModels, FlextTapLdifModels as m
+    from .protocols import FlextTapLdifProtocols, FlextTapLdifProtocols as p
     from .tap import FlextTapLdif
-    from .typings import FlextTapLdifTypes, t
-    from .utilities import FlextTapLdifUtilities, u
+    from .typings import FlextTapLdifTypes, FlextTapLdifTypes as t
+    from .utilities import FlextTapLdifUtilities, FlextTapLdifUtilities as u
 
 
 __all__: tuple[str, ...] = (
