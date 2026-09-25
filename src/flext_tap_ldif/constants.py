@@ -11,8 +11,8 @@ import re
 from enum import StrEnum, unique
 from typing import TYPE_CHECKING, ClassVar, Final
 
-from flext_ldif import c as _ldif_c
-from flext_meltano import c
+from flext_ldif import FlextLdifConstants
+from flext_meltano import FlextMeltanoConstants
 
 from ._constants.values import FlextTapLdifConstantsValues
 
@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from flext_tap_ldif import t
 
 
-class FlextTapLdifConstants(c, _ldif_c):
+class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
     """LDIF tap extraction-specific constants following flext-core patterns.
 
     Composes with FlextTapLdifConstants to avoid duplication and ensure consistency.

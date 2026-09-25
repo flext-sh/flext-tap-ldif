@@ -9,8 +9,6 @@ from flext_tests import tm
 
 from flext_tap_ldif import FlextTapLdif
 
-__all__: list[str] = ["TestsFlextTapLdifTap"]
-
 
 class TestsFlextTapLdifTap:
     """Public-contract behavior for FlextTapLdif."""
