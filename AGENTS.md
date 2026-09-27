@@ -48,8 +48,8 @@ src/flext_tap_ldif/
 ## Commands
 
 ```bash
-make check PROJECT=flext-tap-ldif
-make test PROJECT=flext-tap-ldif # tests/unit
+make check
+make test # tests/unit
 ```
 
 <!-- AIHUB-AGENTS-SCOPE-LOCAL-END -->
