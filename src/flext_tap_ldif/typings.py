@@ -10,11 +10,11 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_ldif import t as _ldif_t
-from flext_meltano import t
+from flext_ldif import FlextLdifTypes
+from flext_meltano import FlextMeltanoTypes
 
 
-class FlextTapLdifTypes(t, _ldif_t):
+class FlextTapLdifTypes(FlextMeltanoTypes, FlextLdifTypes):
     """MRO facade composing Meltano + LDIF type namespaces.
 
     Access: ``t.Meltano.*`` (Singer protocol), ``t.Ldif.*`` (LDIF domain),
