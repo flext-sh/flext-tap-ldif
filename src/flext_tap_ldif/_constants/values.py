@@ -25,6 +25,8 @@ class FlextTapLdifConstantsValues:
 
         DEFAULT_LDIF_ENCODING: Final[str] = _ldif_c.Ldif.Encoding.UTF8
         DEFAULT_FILE_PATTERN: Final[str] = "*.ldif"
+        DEFAULT_STRICT_PARSING: Final[bool] = True
+        MAX_FILE_SIZE_MB: Final[int] = 100
 
         class Format:
             """LDIF format specifications."""
@@ -42,6 +44,13 @@ class FlextTapLdifConstantsValues:
 
             DN_FIELD: Final[str] = "dn"
             ATTRIBUTES_FIELD: Final[str] = "attributes"
+            OBJECT_CLASS_FIELD: Final[str] = "object_class"
+            CHANGE_TYPE_FIELD: Final[str] = "change_type"
+            SOURCE_FILE_FIELD: Final[str] = "source_file"
+            LINE_NUMBER_FIELD: Final[str] = "line_number"
+            ENTRY_SIZE_FIELD: Final[str] = "entry_size"
+            DEFAULT_CHANGE_TYPE: Final[str] = "None"
+            DEFAULT_LINE_NUMBER: Final[int] = 0
 
 
 __all__: list[str] = ["FlextTapLdifConstantsValues"]
