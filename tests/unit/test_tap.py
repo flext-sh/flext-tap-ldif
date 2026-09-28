@@ -31,8 +31,8 @@ class TestsFlextTapLdifTap:
 
         streams = tap.discover_streams()
 
-        tm.that(streams, len=1)
-        tm.that(streams[0].name, eq="ldif_entries")
+        names = [stream.name for stream in streams]
+        tm.that(names, eq=["ldif_entries"])
 
     def test_discover_streams_is_idempotent_across_calls(self, ldif_file: str) -> None:
         tap = FlextTapLdif(config={"file_path": ldif_file})

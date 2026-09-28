@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import re
 from enum import StrEnum, unique
-from typing import TYPE_CHECKING, ClassVar, Final
+from typing import TYPE_CHECKING, ClassVar
 
 from flext_ldif import FlextLdifConstants
 from flext_meltano import FlextMeltanoConstants
@@ -35,10 +35,6 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
         # === Regex authority for the TapLdif domain ===
         ATTRIBUTE_NORMALIZE_RE: ClassVar[t.RegexPattern] = re.compile(r"[^a-zA-Z0-9]")
 
-        DEFAULT_FILE_PATTERN: Final[str] = "*.ldif"
-        DEFAULT_STRICT_PARSING: Final[bool] = True
-        MAX_FILE_SIZE_MB: Final[int] = 100
-
         @unique
         class LdifChangeType(StrEnum):
             """Supported LDIF changetype tokens for tap processing."""
@@ -51,8 +47,6 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
         class Format(FlextTapLdifConstantsValues.TapLdif.Format):
             """LDIF format specifications."""
 
-            LINE_CONTINUATION: Final[str] = " "
-
         class TapLdifPerformance(
             FlextTapLdifConstantsValues.TapLdif.TapLdifPerformance
         ):
@@ -60,15 +54,6 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
 
         class EntrySchema(FlextTapLdifConstantsValues.TapLdif.EntrySchema):
             """LDIF entry schema field names."""
-
-            ATTRIBUTES_FIELD: Final[str] = "attributes"
-            OBJECT_CLASS_FIELD: Final[str] = "object_class"
-            CHANGE_TYPE_FIELD: Final[str] = "change_type"
-            SOURCE_FILE_FIELD: Final[str] = "source_file"
-            LINE_NUMBER_FIELD: Final[str] = "line_number"
-            ENTRY_SIZE_FIELD: Final[str] = "entry_size"
-            DEFAULT_CHANGE_TYPE: Final[str] = "None"
-            DEFAULT_LINE_NUMBER: Final[int] = 0
 
 
 c = FlextTapLdifConstants
