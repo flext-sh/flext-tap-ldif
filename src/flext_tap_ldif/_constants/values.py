@@ -24,11 +24,13 @@ class FlextTapLdifConstantsValues:
         """Tap LDIF scalar constants."""
 
         DEFAULT_LDIF_ENCODING: Final[str] = _ldif_c.Ldif.Encoding.UTF8
+        DEFAULT_FILE_PATTERN: Final[str] = "*.ldif"
 
         class Format:
             """LDIF format specifications."""
 
             MAX_LINE_LENGTH: Final[int] = _ldif_c.Ldif.DEFAULT_LINE_WIDTH
+            LINE_CONTINUATION: Final[str] = " "
 
         class TapLdifPerformance:
             """Tap LDIF performance constants."""
@@ -39,6 +41,7 @@ class FlextTapLdifConstantsValues:
             """LDIF entry schema field names."""
 
             DN_FIELD: Final[str] = "dn"
+            ATTRIBUTES_FIELD: Final[str] = "attributes"
 
 
 __all__: list[str] = ["FlextTapLdifConstantsValues"]
