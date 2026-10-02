@@ -1,37 +1,40 @@
 # AUTO-GENERATED FILE — Regenerate with: make gen
-"""Flext Tap Ldif package."""
+"""Flext Tap Ldif package.
+
+Copyright (c) 2026 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
+"""
 
 from __future__ import annotations
 
 from types import MappingProxyType
 from typing import TYPE_CHECKING
 
-from flext_core.lazy import build_lazy_import_map, install_lazy_exports
-
-from .__version__ import (
-    __author__ as __author__,
-    __author_email__ as __author_email__,
-    __description__ as __description__,
-    __license__ as __license__,
-    __title__ as __title__,
-    __url__ as __url__,
-    __version__ as __version__,
-    __version_info__ as __version_info__,
+from flext_core import build_lazy_import_map, install_lazy_exports
+from flext_tap_ldif.__version__ import (
+    __author__,
+    __author_email__,
+    __description__,
+    __license__,
+    __title__,
+    __url__,
+    __version__,
+    __version_info__,
 )
 
 if TYPE_CHECKING:
     from flext_meltano import d, e, h, r, s, x
 
-    from ._config import FlextTapLdifConfig, config
-    from ._settings import FlextTapLdifSettings, settings
-    from .api import FlextTapLdifService, tap_ldif
-    from .cli import FlextTapLdifCli, main
-    from .constants import FlextTapLdifConstants, FlextTapLdifConstants as c
-    from .models import FlextTapLdifModels, FlextTapLdifModels as m
-    from .protocols import FlextTapLdifProtocols, FlextTapLdifProtocols as p
-    from .tap import FlextTapLdif
-    from .typings import FlextTapLdifTypes, FlextTapLdifTypes as t
-    from .utilities import FlextTapLdifUtilities, FlextTapLdifUtilities as u
+    from flext_tap_ldif._config import FlextTapLdifConfig, config
+    from flext_tap_ldif._settings import FlextTapLdifSettings, settings
+    from flext_tap_ldif.api import FlextTapLdifService, tap_ldif
+    from flext_tap_ldif.cli import FlextTapLdifCli, main
+    from flext_tap_ldif.constants import FlextTapLdifConstants, c
+    from flext_tap_ldif.models import FlextTapLdifModels, m
+    from flext_tap_ldif.protocols import FlextTapLdifProtocols, p
+    from flext_tap_ldif.tap import FlextTapLdif
+    from flext_tap_ldif.typings import FlextTapLdifTypes, t
+    from flext_tap_ldif.utilities import FlextTapLdifUtilities, u
 
 
 __all__: tuple[str, ...] = (
@@ -87,7 +90,7 @@ _LAZY_IMPORTS = MappingProxyType(
         }),
         alias_groups=MappingProxyType({}),
         sort_keys=False,
-    )
+    ),
 )
 
 install_lazy_exports(__name__, globals(), _LAZY_IMPORTS, public_exports=__all__)
