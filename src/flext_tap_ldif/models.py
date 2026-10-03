@@ -1,6 +1,9 @@
 """Models for LDIF tap operations.
 
 This module provides data models for LDIF tap operations.
+
+Copyright (c) 2026 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
 """
 
 from __future__ import annotations
@@ -8,7 +11,7 @@ from __future__ import annotations
 from flext_ldif import FlextLdifModels
 from flext_meltano import FlextMeltanoModels
 
-from ._models import (
+from flext_tap_ldif._models import (
     FlextTapLdifModelsBatch,
     FlextTapLdifModelsEntry,
     FlextTapLdifModelsFile,

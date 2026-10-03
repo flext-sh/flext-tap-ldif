@@ -1,4 +1,8 @@
-"""Singer entries stream utilities for the LDIF tap."""
+"""Singer entries stream utilities for the LDIF tap.
+
+Copyright (c) 2026 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
+"""
 
 from __future__ import annotations
 
@@ -7,8 +11,7 @@ from typing import TYPE_CHECKING, override
 from flext_meltano import u
 
 from flext_tap_ldif import c, m, t
-
-from .processor import FlextTapLdifUtilitiesProcessor
+from flext_tap_ldif._utilities.processor import FlextTapLdifUtilitiesProcessor
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -31,18 +34,27 @@ class FlextTapLdifUtilitiesEntriesStream:
         ) -> None:
             """Initialize LDIF entries stream."""
             super().__init__(
-                tap, schema=schema or self._get_schema(), name=name or "ldif_entries"
+                tap, schema=schema or self._get_schema(), name=name or "ldif_entries",
             )
             self._processor = FlextTapLdifUtilitiesProcessor.Processor(
-                t.scalar_mapping_adapter().validate_python(tap.config)
+                t.scalar_mapping_adapter().validate_python(tap.config),
             )
             self._tap: m.Meltano.SingerTapBase = tap
 
         @override
         def get_records(
-            self, context: t.JsonMapping | None = None
+            self, context: t.JsonMapping | None = None,
         ) -> Iterable[m.Meltano.SingerRecord]:
-            """Return a generator of record-type dictionary objects."""
+            """Return a generator of record-type dictionary objects.
+
+            Yields:
+                Each ``m.Meltano.SingerRecord``.
+
+            Raises:
+                RuntimeError: If ``bool(settings.get('strict_parsing', True))``; or if
+                    No LDIF files discovered.
+                SINGER_SAFE_EXCEPTIONS: If ``settings.get('strict_parsing', True)``.
+            """
             _ = context
             settings = t.json_dict_adapter().validate_python(self._tap.config)
             dir_path_raw = settings.get("directory_path")
@@ -71,10 +83,10 @@ class FlextTapLdifUtilitiesEntriesStream:
                 if bool(settings.get("strict_parsing", True)):
                     raise RuntimeError(error_msg)
                 FlextTapLdifUtilitiesEntriesStream.logger.error(
-                    "File discovery failed: %s", error_msg
+                    "File discovery failed: %s", error_msg,
                 )
             FlextTapLdifUtilitiesEntriesStream.logger.info(
-                "Processing %d LDIF files", len(files_to_process)
+                "Processing %d LDIF files", len(files_to_process),
             )
             if not files_to_process:
                 error_msg = "No LDIF files discovered"
@@ -84,7 +96,7 @@ class FlextTapLdifUtilitiesEntriesStream:
                 return
             for file_path in files_to_process:
                 FlextTapLdifUtilitiesEntriesStream.logger.info(
-                    "Processing file: %s", str(file_path)
+                    "Processing file: %s", str(file_path),
                 )
                 try:
                     for record in self._processor.process_file(file_path):
@@ -92,17 +104,22 @@ class FlextTapLdifUtilitiesEntriesStream:
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                     if settings.get("strict_parsing", True):
                         FlextTapLdifUtilitiesEntriesStream.logger.exception(
-                            "Error processing file %s", str(file_path)
+                            "Error processing file %s", str(file_path),
                         )
                         raise
                     err_msg = str(e)
                     FlextTapLdifUtilitiesEntriesStream.logger.warning(
-                        "Skipping file %s due to error: %s", str(file_path), err_msg
+                        "Skipping file %s due to error: %s", str(file_path), err_msg,
                     )
                     continue
 
-        def _get_schema(self) -> t.JsonDict:
-            """Get schema for LDIF entries."""
+        @staticmethod
+        def _get_schema() -> t.JsonDict:
+            """Get schema for LDIF entries.
+
+            Returns:
+                The resulting ``t.JsonDict``.
+            """
             return {
                 "type": "object",
                 "properties": {

@@ -22,17 +22,21 @@ class FlextTapLdifService(FlextMeltanoTapServiceBase):
     """Orchestrator for tap-ldif. All behavior from base via MRO."""
 
     tap_name: Annotated[
-        t.NonEmptyStr, u.Field(description="Canonical Singer tap identifier.")
+        t.NonEmptyStr, u.Field(description="Canonical Singer tap identifier."),
     ] = "tap-ldif"
 
     @override
     def create_tap_instance(
-        self, settings: p.Settings | t.JsonMapping | None = None
+        self, settings: p.Settings | t.JsonMapping | None = None,
     ) -> p.Meltano.SingerTapInstance:
-        """Create the internal tap runtime backed by Singer SDK."""
+        """Create the internal tap runtime backed by Singer SDK.
+
+        Returns:
+            The resulting ``p.Meltano.SingerTapInstance``.
+        """
         raw_config = (
             t.json_dict_adapter().validate_python(
-                settings.model_dump() if hasattr(settings, "model_dump") else settings
+                settings.model_dump() if hasattr(settings, "model_dump") else settings,
             )
             if settings is not None
             else None

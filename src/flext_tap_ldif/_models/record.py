@@ -1,4 +1,8 @@
-"""Record, validation, and performance models for LDIF tap."""
+"""Record, validation, and performance models for LDIF tap.
+
+Copyright (c) 2026 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
+"""
 
 from __future__ import annotations
 
@@ -16,7 +20,7 @@ class FlextTapLdifModelsRecord:
         """LDIF validation result with detailed error reporting."""
 
         model_config: ClassVar[m.ConfigDict] = m.ConfigDict(
-            validate_assignment=True, extra="forbid", frozen=False
+            validate_assignment=True, extra="forbid", frozen=False,
         )
 
         file_path: Annotated[str, m.Field(..., description="Validated LDIF file path")]
@@ -28,23 +32,23 @@ class FlextTapLdifModelsRecord:
             m.Field(description="Validation errors with details"),
         ] = m.Field(default_factory=tuple)
         warnings: Annotated[
-            t.SequenceOf[t.StrMapping], m.Field(description="Validation warnings")
+            t.SequenceOf[t.StrMapping], m.Field(description="Validation warnings"),
         ] = m.Field(default_factory=tuple)
 
         # Statistics
         total_entries: Annotated[
-            t.NonNegativeInt, m.Field(description="Total entries validated")
+            t.NonNegativeInt, m.Field(description="Total entries validated"),
         ] = 0
         valid_entries: Annotated[
-            t.NonNegativeInt, m.Field(description="Valid entries count")
+            t.NonNegativeInt, m.Field(description="Valid entries count"),
         ] = 0
         invalid_entries: Annotated[
-            t.NonNegativeInt, m.Field(description="Invalid entries count")
+            t.NonNegativeInt, m.Field(description="Invalid entries count"),
         ] = 0
 
         # Validation metadata
         validation_time: Annotated[
-            t.NonNegativeFloat, m.Field(description="Validation time in seconds")
+            t.NonNegativeFloat, m.Field(description="Validation time in seconds"),
         ] = 0.0
         validator_version: Annotated[str, m.Field(description="Validator version")] = (
             "1.0"
@@ -85,7 +89,15 @@ class FlextTapLdifModelsRecord:
 
         @m.model_validator(mode="after")
         def validate_result_consistency(self) -> Self:
-            """Validate result consistency."""
+            """Validate result consistency.
+
+            Returns:
+                The resulting ``Self``.
+
+            Raises:
+                ValueError: If Valid + invalid entries must equal total entries; or if
+                    Cannot be valid with validation errors.
+            """
             if self.valid_entries + self.invalid_entries != self.total_entries:
                 msg = "Valid + invalid entries must equal total entries"
                 raise ValueError(msg)

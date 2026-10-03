@@ -1,4 +1,8 @@
-"""LDIF file metadata model for the tap."""
+"""LDIF file metadata model for the tap.
+
+Copyright (c) 2026 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
+"""
 
 from __future__ import annotations
 
@@ -29,54 +33,54 @@ class FlextTapLdifModelsLdifFile:
                         "file_path": "/data/directory-export.ldif",
                         "file_size": 1048576,
                         "encoding": c.DEFAULT_ENCODING,
-                    }
+                    },
                 ],
             },
         )
 
         file_path: Annotated[str, m.Field(..., description="Path to LDIF file")]
         file_size: Annotated[
-            t.NonNegativeInt, m.Field(description="File size in bytes")
+            t.NonNegativeInt, m.Field(description="File size in bytes"),
         ] = 0
         encoding: Annotated[str, m.Field(description="File encoding")] = (
             c.DEFAULT_ENCODING
         )
 
         created_at: Annotated[
-            datetime | None, m.Field(description="File creation time")
+            datetime | None, m.Field(description="File creation time"),
         ] = None
         modified_at: Annotated[
-            datetime | None, m.Field(description="File modification time")
+            datetime | None, m.Field(description="File modification time"),
         ] = None
 
         total_lines: Annotated[
-            t.NonNegativeInt, m.Field(description="Total lines in file")
+            t.NonNegativeInt, m.Field(description="Total lines in file"),
         ] = 0
         entry_count: Annotated[
-            t.NonNegativeInt, m.Field(description="Number of entries")
+            t.NonNegativeInt, m.Field(description="Number of entries"),
         ] = 0
         change_record_count: Annotated[
-            t.NonNegativeInt, m.Field(description="Number of change records")
+            t.NonNegativeInt, m.Field(description="Number of change records"),
         ] = 0
         comment_lines: Annotated[
-            t.NonNegativeInt, m.Field(description="Number of comment lines")
+            t.NonNegativeInt, m.Field(description="Number of comment lines"),
         ] = 0
 
         processing_status: Annotated[str, m.Field(description="Processing status")] = (
             "pending"
         )
         last_processed_line: Annotated[
-            t.NonNegativeInt, m.Field(description="Last processed line number")
+            t.NonNegativeInt, m.Field(description="Last processed line number"),
         ] = 0
         processing_errors: Annotated[
-            t.StrSequence, m.Field(description="Processing errors")
+            t.StrSequence, m.Field(description="Processing errors"),
         ] = m.Field(default_factory=tuple)
 
         is_valid_ldif: Annotated[bool, m.Field(description="LDIF format validity")] = (
             True
         )
         validation_errors: Annotated[
-            t.StrSequence, m.Field(description="Format validation errors")
+            t.StrSequence, m.Field(description="Format validation errors"),
         ] = m.Field(default_factory=tuple)
 
         @m.computed_field
@@ -108,7 +112,15 @@ class FlextTapLdifModelsLdifFile:
 
         @m.model_validator(mode="after")
         def validate_ldif_file(self) -> Self:
-            """Validate LDIF file configuration."""
+            """Validate LDIF file configuration.
+
+            Returns:
+                The resulting ``Self``.
+
+            Raises:
+                ValueError: If LDIF file path is required; or if File size cannot be
+                    negative.
+            """
             if not self.file_path:
                 msg = "LDIF file path is required"
                 raise ValueError(msg)
