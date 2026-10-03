@@ -1,10 +1,15 @@
-"""LDIF data processing utilities for the tap namespace."""
+"""LDIF data processing utilities for the tap namespace.
+
+Copyright (c) 2026 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
+"""
 
 from __future__ import annotations
 
 import base64
 
-from flext_tap_ldif import c, p, r, t
+from flext_core import r
+from flext_tap_ldif import c, p, t
 
 
 class FlextTapLdifUtilitiesLdifDataProcessing:
@@ -17,7 +22,11 @@ class FlextTapLdifUtilitiesLdifDataProcessing:
         def build_record_from_lines(
             entry_lines: t.StrSequence,
         ) -> t.MutableAttributeMapping:
-            """Build record dict from LDIF lines."""
+            """Build record dict from LDIF lines.
+
+            Returns:
+                The resulting ``t.MutableAttributeMapping``.
+            """
             record: t.MutableAttributeMapping = {}
             current_attr: str | None = None
             current_value: str = ""
@@ -28,7 +37,7 @@ class FlextTapLdifUtilitiesLdifDataProcessing:
                     continue
                 if current_attr is not None and current_value:
                     normalized_attr = FlextTapLdifUtilitiesLdifDataProcessing.LdifDataProcessing.normalize_ldif_attribute_name(
-                        current_attr
+                        current_attr,
                     )
                     if normalized_attr in record:
                         existing_value = record[normalized_attr]
@@ -42,7 +51,7 @@ class FlextTapLdifUtilitiesLdifDataProcessing:
                     else:
                         record[normalized_attr] = current_value
                 parse_result = FlextTapLdifUtilitiesLdifDataProcessing.LdifDataProcessing.parse_ldif_line(
-                    line
+                    line,
                 )
                 if parse_result.success:
                     a, v = parse_result.value
@@ -57,23 +66,33 @@ class FlextTapLdifUtilitiesLdifDataProcessing:
         def convert_ldif_entry_to_record(
             entry_lines: t.StrSequence,
         ) -> p.Result[t.AttributeMapping]:
-            """Convert LDIF entry lines to Singer record."""
+            """Convert LDIF entry lines to Singer record.
+
+            Returns:
+                The resulting ``p.Result[t.AttributeMapping]``.
+            """
             try:
                 record = FlextTapLdifUtilitiesLdifDataProcessing.LdifDataProcessing.build_record_from_lines(
-                    entry_lines
+                    entry_lines,
                 )
                 out: t.AttributeMapping = record
                 return r[t.AttributeMapping].ok(out)
             except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-                return r[t.AttributeMapping].fail(f"Error converting LDIF entry: {e}")
+                return r[t.AttributeMapping].fail(
+                    f"Error converting LDIF entry: {e}", exception=e,
+                )
 
         @staticmethod
         def normalize_ldif_attribute_name(attr_name: str) -> str:
-            """Normalize LDIF attribute name for JSON schema."""
+            """Normalize LDIF attribute name for JSON schema.
+
+            Returns:
+                The resulting ``str``.
+            """
             if not attr_name:
                 return ""
             normalized: str = c.TapLdif.ATTRIBUTE_NORMALIZE_RE.sub(
-                "_", attr_name.lower()
+                "_", attr_name.lower(),
             )
             if normalized and normalized[0].isdigit():
                 normalized = f"attr_{normalized}"
@@ -81,7 +100,11 @@ class FlextTapLdifUtilitiesLdifDataProcessing:
 
         @staticmethod
         def parse_ldif_line(line: str) -> p.Result[t.StrPair]:
-            """Parse LDIF attribute line."""
+            """Parse LDIF attribute line.
+
+            Returns:
+                The resulting ``p.Result[t.StrPair]``.
+            """
             line = line.strip()
             if not line or line.startswith("#"):
                 return r[t.StrPair].fail("Empty or comment line")
@@ -91,11 +114,11 @@ class FlextTapLdifUtilitiesLdifDataProcessing:
                 attr_name, encoded_value = line.split("::", 1)
                 try:
                     decoded_value = base64.b64decode(encoded_value.strip()).decode(
-                        c.DEFAULT_ENCODING
+                        c.DEFAULT_ENCODING,
                     )
                     return r[t.StrPair].ok((attr_name.strip(), decoded_value))
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
-                    return r[t.StrPair].fail(f"Base64 decode error: {e}")
+                    return r[t.StrPair].fail(f"Base64 decode error: {e}", exception=e)
             if ":<" in line:
                 attr_name, url_value = line.split(":<", 1)
                 return r[t.StrPair].ok((attr_name.strip(), f"URL:{url_value.strip()}"))

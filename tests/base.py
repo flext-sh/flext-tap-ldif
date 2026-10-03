@@ -1,16 +1,20 @@
-"""Service base for flext-tap-ldif tests."""
+"""Service base for flext-tap-ldif tests.
+
+Copyright (c) 2026 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
+"""
 
 from __future__ import annotations
 
 from typing import override
 
-from flext_tests import s as tests_s
+from flext_tests import FlextTestsServiceBase
 
-from flext_tap_ldif import m, p
+from flext_tap_ldif import m
 from tests.settings import TestsFlextTapLdifSettings
 
 
-class TestsFlextTapLdifServiceBase(tests_s):
+class TestsFlextTapLdifServiceBase(FlextTestsServiceBase):
     """Tap LDIF test service base with source and test settings namespaces."""
 
     # NOTE (multi-agent): flext-tests owns fetch_settings; this project
@@ -18,7 +22,7 @@ class TestsFlextTapLdifServiceBase(tests_s):
     # pattern per flext-cli tests/base.py).
     @classmethod
     @override
-    def _runtime_bootstrap_options(cls) -> p.RuntimeBootstrapOptions:
+    def runtime_bootstrap_options(cls) -> m.RuntimeBootstrapOptions:
         return m.RuntimeBootstrapOptions(settings_type=TestsFlextTapLdifSettings)
 
 

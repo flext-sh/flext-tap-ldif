@@ -1,11 +1,18 @@
-"""Entry and change record models for LDIF tap."""
+"""Entry and change record models for LDIF tap.
+
+Copyright (c) 2026 FLEXT Team. All rights reserved.
+SPDX-License-Identifier: MIT
+"""
 
 from __future__ import annotations
 
 from types import MappingProxyType
 from typing import TYPE_CHECKING, Annotated, ClassVar, Self
 
-from flext_tap_ldif import m, t, u
+from flext_meltano import m
+
+from flext_core import u
+from flext_tap_ldif import t
 
 if TYPE_CHECKING:
     from datetime import datetime
@@ -14,10 +21,19 @@ if TYPE_CHECKING:
 class FlextTapLdifModelsEntry:
     """MRO mixin: LdifEntry and LdifChangeRecord models."""
 
+    @staticmethod
+    def _empty_attributes() -> t.MappingKV[str, t.StrSequence]:
+        """Build an immutable, precisely typed empty attribute mapping.
+
+        Returns:
+            The resulting ``t.MappingKV[str, t.StrSequence]``.
+        """
+        return MappingProxyType({})
+
     class LdifEntry(m.EnforcedModel):
         """Represents an LDIF entry with complete parsing support."""
 
-        model_config: ClassVar[t.ConfigDict] = m.ConfigDict(
+        model_config: ClassVar[m.ConfigDict] = m.ConfigDict(
             validate_assignment=True,
             extra="forbid",
             frozen=False,
@@ -27,38 +43,44 @@ class FlextTapLdifModelsEntry:
                     {
                         "dn": "cn=John Doe,ou=users,dc=example,dc=com",
                         "object_classes": ["inetOrgPerson", "organizationalPerson"],
-                    }
+                    },
                 ],
             },
         )
 
-        dn: Annotated[str, u.Field(..., description="Distinguished Name")]
+        dn: Annotated[str, m.Field(..., description="Distinguished Name")]
         attributes: Annotated[
-            t.MappingKV[str, t.StrSequence], u.Field(description="Entry attributes")
-        ] = u.Field(default_factory=lambda: MappingProxyType({}))
+            t.MappingKV[str, t.StrSequence],
+            m.Field(description="Entry attributes"),
+        ] = m.Field(default_factory=FlextTapLdifModelsEntry._empty_attributes)
         object_classes: Annotated[
-            t.StrSequence, u.Field(description="Object classes")
-        ] = u.Field(default_factory=tuple)
+            t.StrSequence,
+            m.Field(description="Object classes"),
+        ] = m.Field(default_factory=tuple)
 
         # LDIF metadata
         line_number: Annotated[
-            t.NonNegativeInt, u.Field(description="Source line number in LDIF file")
+            t.NonNegativeInt,
+            m.Field(description="Source line number in LDIF file"),
         ] = 0
         source_file: Annotated[
-            str | None, u.Field(description="Source LDIF file path")
+            str | None,
+            m.Field(description="Source LDIF file path"),
         ] = None
-        entry_type: Annotated[str, u.Field(description="Type of LDIF entry")] = "entry"
+        entry_type: Annotated[str, m.Field(description="Type of LDIF entry")] = "entry"
 
         # Processing metadata
         extracted_at: Annotated[
-            datetime, u.Field(description="Extraction timestamp")
-        ] = u.Field(default_factory=u.now)
-        processed: Annotated[bool, u.Field(description="Processing status")] = False
+            datetime,
+            m.Field(description="Extraction timestamp"),
+        ] = m.Field(default_factory=u.now)
+        processed: Annotated[bool, m.Field(description="Processing status")] = False
         validation_errors: Annotated[
-            t.StrSequence, u.Field(description="Validation errors")
-        ] = u.Field(default_factory=tuple)
+            t.StrSequence,
+            m.Field(description="Validation errors"),
+        ] = m.Field(default_factory=tuple)
 
-        @u.computed_field()
+        @m.computed_field
         @property
         def ldif_entry_summary(self) -> t.JsonMapping:
             """LDIF entry analysis summary."""
@@ -73,11 +95,15 @@ class FlextTapLdifModelsEntry:
                     "entry_type": self.entry_type,
                     "valid": not self.validation_errors,
                     "source_location": {"file": source_file, "line": self.line_number},
-                })
+                }),
             )
 
         def resolve_attribute_values(self, name: str) -> t.StrSequence:
-            """Get attribute values by name (case-insensitive)."""
+            """Get attribute values by name (case-insensitive).
+
+            Returns:
+                The resulting ``t.StrSequence``.
+            """
             normalized_name = name.lower()
             for attr_name, values in self.attributes.items():
                 if attr_name.lower() == normalized_name:
@@ -85,13 +111,24 @@ class FlextTapLdifModelsEntry:
             return ()
 
         def resolve_first_attribute_value(self, name: str) -> str | None:
-            """Get first attribute value by name."""
+            """Get first attribute value by name.
+
+            Returns:
+                The resulting ``str | None``.
+            """
             values = self.resolve_attribute_values(name)
             return values[0] if values else None
 
-        @u.model_validator(mode="after")
+        @m.model_validator(mode="after")
         def validate_ldif_entry(self) -> Self:
-            """Validate LDIF entry structure."""
+            """Validate LDIF entry structure.
+
+            Returns:
+                The resulting ``Self``.
+
+            Raises:
+                ValueError: If DN cannot be empty.
+            """
             if not self.dn:
                 msg = "DN cannot be empty"
                 raise ValueError(msg)
@@ -103,3 +140,6 @@ class FlextTapLdifModelsEntry:
                 self.attributes = MappingProxyType(attributes)
 
             return self
+
+
+__all__: list[str] = ["FlextTapLdifModelsEntry"]
