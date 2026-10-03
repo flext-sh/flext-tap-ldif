@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from flext_tap_ldif._models.entry import FlextTapLdifModelsEntry
     from flext_tap_ldif._models.file import FlextTapLdifModelsFile
     from flext_tap_ldif._models.file_metadata import FlextTapLdifModelsLdifFile
-    from flext_tap_ldif._models.file_stream import FlextTapLdifModelsLdifStream
+    from flext_tap_ldif._models.file_stream import FlextTapLdifModelsFileStream
     from flext_tap_ldif._models.record import FlextTapLdifModelsRecord
     from flext_tap_ldif._models.settings import FlextTapLdifModelsSettings
 
@@ -26,8 +26,8 @@ __all__: tuple[str, ...] = (
     "FlextTapLdifModelsBatch",
     "FlextTapLdifModelsEntry",
     "FlextTapLdifModelsFile",
+    "FlextTapLdifModelsFileStream",
     "FlextTapLdifModelsLdifFile",
-    "FlextTapLdifModelsLdifStream",
     "FlextTapLdifModelsRecord",
     "FlextTapLdifModelsSettings",
 )
@@ -39,7 +39,7 @@ _LAZY_IMPORTS = MappingProxyType(
             ".entry": ("FlextTapLdifModelsEntry",),
             ".file": ("FlextTapLdifModelsFile",),
             ".file_metadata": ("FlextTapLdifModelsLdifFile",),
-            ".file_stream": ("FlextTapLdifModelsLdifStream",),
+            ".file_stream": ("FlextTapLdifModelsFileStream",),
             ".record": ("FlextTapLdifModelsRecord",),
             ".settings": ("FlextTapLdifModelsSettings",),
         }),

@@ -47,7 +47,8 @@ class FlextTapLdif(m.Meltano.SingerTapBase):
         """
         return [FlextTapLdifUtilities.TapLdif.EntriesStream(tap=self)]
 
-    def _get_ldif_entries_schema(self) -> t.JsonMapping:
+    @staticmethod
+    def _get_ldif_entries_schema() -> t.JsonMapping:
         """Get the schema for LDIF entries stream.
 
         Returns:

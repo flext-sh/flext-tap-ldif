@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING, ClassVar
 from flext_ldif import FlextLdifConstants
 from flext_meltano import FlextMeltanoConstants
 
-from ._constants.values import FlextTapLdifConstantsValues
+from flext_tap_ldif._constants.values import FlextTapLdifConstantsValues
 
 if TYPE_CHECKING:
     from flext_tap_ldif import t
@@ -48,7 +48,7 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
             """LDIF format specifications."""
 
         class TapLdifPerformance(
-            FlextTapLdifConstantsValues.TapLdif.TapLdifPerformance
+            FlextTapLdifConstantsValues.TapLdif.TapLdifPerformance,
         ):
             """Tap LDIF performance constants."""
 
