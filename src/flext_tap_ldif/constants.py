@@ -7,9 +7,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-import re
-from enum import StrEnum, unique
-from typing import TYPE_CHECKING, ClassVar
+from typing import TYPE_CHECKING
 
 from flext_ldif import FlextLdifConstants
 from flext_meltano import FlextMeltanoConstants
@@ -31,26 +29,6 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
 
         Note: Does not override parent Processing class to avoid inheritance conflicts.
         """
-
-        # === Regex authority for the TapLdif domain ===
-        ATTRIBUTE_NORMALIZE_RE: ClassVar[t.RegexPattern] = re.compile(r"[^a-zA-Z0-9]")
-
-        @unique
-        class ChangeType(StrEnum):
-            """Supported LDIF changetype tokens for tap processing."""
-
-            ADD = "add"
-            MODIFY = "modify"
-            DELETE = "delete"
-            MODRDN = "modrdn"
-
-        class Format(FlextTapLdifConstantsValues.TapLdif.Format):
-            """LDIF format specifications."""
-
-        class TapLdifPerformance(
-            FlextTapLdifConstantsValues.TapLdif.TapLdifPerformance,
-        ):
-            """Tap LDIF performance constants."""
 
         class EntrySchema(FlextTapLdifConstantsValues.TapLdif.EntrySchema):
             """LDIF entry schema field names."""
