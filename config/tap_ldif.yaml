@@ -1,0 +1,18 @@
+TapLdif:
+  io:
+    file_pattern: "*.ldif"
+    encoding: "utf-8"
+    strict_parsing: true
+    max_file_size_mb: 100
+  processing:
+    batch_size: 1000
+    default_change_type: "None"
+    default_line_number: 0
+  entry_schema:
+    dn_field: "dn"
+    attributes_field: "attributes"
+    object_class_field: "object_class"
+    change_type_field: "change_type"
+    source_file_field: "source_file"
+    line_number_field: "line_number"
+    entry_size_field: "entry_size"

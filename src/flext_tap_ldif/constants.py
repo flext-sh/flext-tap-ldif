@@ -36,7 +36,7 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
         ATTRIBUTE_NORMALIZE_RE: ClassVar[t.RegexPattern] = re.compile(r"[^a-zA-Z0-9]")
 
         @unique
-        class LdifChangeType(StrEnum):
+        class ChangeType(StrEnum):
             """Supported LDIF changetype tokens for tap processing."""
 
             ADD = "add"
