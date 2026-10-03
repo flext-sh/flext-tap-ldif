@@ -12,6 +12,7 @@ import pytest
 from flext_tests import tm
 
 from flext_tap_ldif import FlextTapLdif
+from tests import u
 
 
 class TestsFlextTapLdifTap:
@@ -77,7 +78,8 @@ class TestsFlextTapLdifTap:
         ],
     )
     def test_entries_stream_schema_declares_entry_field(
-        ldif_file: str, field_name: str,
+        ldif_file: str,
+        field_name: str,
     ) -> None:
         """Test entries stream schema declares entry field."""
         tap = FlextTapLdif(config={"file_path": ldif_file})
@@ -85,6 +87,21 @@ class TestsFlextTapLdifTap:
         properties = tap.discover_streams()[0].schema["properties"]
 
         tm.that(properties, has=field_name)
+
+    @staticmethod
+    def test_processor_yields_records_parsed_by_flext_ldif(tmp_path: Path) -> None:
+        """Entries in an LDIF file surface as Singer records keyed by DN."""
+        dn = "uid=jdoe,ou=people,dc=example,dc=com"
+        source = tmp_path / "people.ldif"
+        source.write_text(
+            f"dn: {dn}\nobjectClass: inetOrgPerson\nuid: jdoe\ncn: John Doe\nsn: Doe\n",
+            encoding="utf-8",
+        )
+
+        records = list(u.TapLdif.Processor({}).process_file(source))
+
+        tm.that([record["dn"] for record in records], eq=[dn])
+        tm.that([record["source_file"] for record in records], eq=[str(source)])
 
     @staticmethod
     @pytest.mark.parametrize(

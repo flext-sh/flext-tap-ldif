@@ -89,13 +89,15 @@ class FlextTapLdifUtilitiesProcessor:
                     True)``.
             """
             FlextTapLdifUtilitiesProcessor.logger.info(
-                "Processing LDIF file: %s", str(file_path),
+                "Processing LDIF file: %s",
+                str(file_path),
             )
             try:
                 yield from self._yield_records(file_path)
             except c.Meltano.SINGER_SAFE_EXCEPTIONS:
                 FlextTapLdifUtilitiesProcessor.logger.exception(
-                    "Failed to process LDIF file: %s", str(file_path),
+                    "Failed to process LDIF file: %s",
+                    str(file_path),
                 )
                 if self._settings.get("strict_parsing", True):
                     raise
@@ -126,7 +128,8 @@ class FlextTapLdifUtilitiesProcessor:
                     c.TapLdif.EntrySchema.DN_FIELD: dn_val,
                     c.TapLdif.EntrySchema.ATTRIBUTES_FIELD: attrs_dict,
                     c.TapLdif.EntrySchema.OBJECT_CLASS_FIELD: attrs_dict.get(
-                        "objectClass", [],
+                        "objectClass",
+                        [],
                     ),
                     c.TapLdif.EntrySchema.CHANGE_TYPE_FIELD: c.TapLdif.EntrySchema.DEFAULT_CHANGE_TYPE,
                     c.TapLdif.EntrySchema.SOURCE_FILE_FIELD: str(file_path),

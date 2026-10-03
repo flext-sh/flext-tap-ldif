@@ -47,32 +47,5 @@ class FlextTapLdif(m.Meltano.SingerTapBase):
         """
         return [FlextTapLdifUtilities.TapLdif.EntriesStream(tap=self)]
 
-    @staticmethod
-    def _get_ldif_entries_schema() -> t.JsonMapping:
-        """Get the schema for LDIF entries stream.
-
-        Returns:
-        Schema definition for LDIF entries.
-
-        """
-        return t.Cli.JSON_MAPPING_ADAPTER.validate_python({
-            "type": "object",
-            "properties": {
-                "dn": {"type": "string"},
-                "object_class": {"type": "array", "items": {"type": "string"}},
-                "attributes": {"type": "object"},
-                "change_type": {"type": "string"},
-                "source_file": {"type": "string"},
-                "line_number": {"type": "integer"},
-                "entry_size": {"type": "integer"},
-            },
-        })
-
-
-if __name__ == "__main__":
-    from flext_tap_ldif import main as _main
-
-    raise SystemExit(_main())
-
 
 __all__: list[str] = ["FlextTapLdif"]

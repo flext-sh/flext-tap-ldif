@@ -9,8 +9,6 @@ from __future__ import annotations
 
 from typing import Final
 
-from flext_ldif import c as _ldif_c
-
 
 class FlextTapLdifConstantsValues:
     """Scalar constants mixed into the ``c.TapLdif`` namespace tree.
@@ -23,21 +21,7 @@ class FlextTapLdifConstantsValues:
     class TapLdif:
         """Tap LDIF scalar constants."""
 
-        DEFAULT_LDIF_ENCODING: Final[str] = _ldif_c.Ldif.Encoding.UTF8
-        DEFAULT_FILE_PATTERN: Final[str] = "*.ldif"
-        DEFAULT_STRICT_PARSING: Final[bool] = True
         MAX_FILE_SIZE_MB: Final[int] = 100
-
-        class Format:
-            """LDIF format specifications."""
-
-            MAX_LINE_LENGTH: Final[int] = _ldif_c.Ldif.DEFAULT_LINE_WIDTH
-            LINE_CONTINUATION: Final[str] = " "
-
-        class TapLdifPerformance:
-            """Tap LDIF performance constants."""
-
-            DEFAULT_BATCH_SIZE: Final[int] = 1000
 
         class EntrySchema:
             """LDIF entry schema field names."""
