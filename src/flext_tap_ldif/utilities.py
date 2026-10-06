@@ -9,8 +9,10 @@ from __future__ import annotations
 from flext_ldif import FlextLdifUtilities
 from flext_meltano import FlextMeltanoUtilities
 
-from flext_tap_ldif._utilities.entries_stream import FlextTapLdifUtilitiesEntriesStream
-from flext_tap_ldif._utilities.processor import FlextTapLdifUtilitiesProcessor
+from flext_tap_ldif._utilities import (
+    FlextTapLdifUtilitiesEntriesStream,
+    FlextTapLdifUtilitiesProcessor,
+)
 
 
 class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
