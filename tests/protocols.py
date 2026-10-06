@@ -18,9 +18,10 @@ if TYPE_CHECKING:
 
 
 class TestsFlextTapLdifProtocols(FlextTestsProtocols, FlextTapLdifProtocols):
-    """Protocols for flext-tap-ldif tests - combines TestsFlextProtocols with FlextTapLdifProtocols.
+    """Protocols for flext-tap-ldif tests: TestsFlextProtocols + FlextTapLdifProtocols.
 
-    Architecture: Uses composition (not inheritance) with TestsFlextProtocols and FlextTapLdifProtocols
+    Architecture: Uses composition (not inheritance) with TestsFlextProtocols
+    and FlextTapLdifProtocols
     for flext-tap-ldif-specific protocol definitions.
 
     Access patterns:

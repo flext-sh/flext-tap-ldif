@@ -131,9 +131,13 @@ class FlextTapLdifUtilitiesProcessor:
                         "objectClass",
                         [],
                     ),
-                    c.TapLdif.EntrySchema.CHANGE_TYPE_FIELD: c.TapLdif.EntrySchema.DEFAULT_CHANGE_TYPE,
+                    c.TapLdif.EntrySchema.CHANGE_TYPE_FIELD: (
+                        c.TapLdif.EntrySchema.DEFAULT_CHANGE_TYPE
+                    ),
                     c.TapLdif.EntrySchema.SOURCE_FILE_FIELD: str(file_path),
-                    c.TapLdif.EntrySchema.LINE_NUMBER_FIELD: c.TapLdif.EntrySchema.DEFAULT_LINE_NUMBER,
+                    c.TapLdif.EntrySchema.LINE_NUMBER_FIELD: (
+                        c.TapLdif.EntrySchema.DEFAULT_LINE_NUMBER
+                    ),
                     c.TapLdif.EntrySchema.ENTRY_SIZE_FIELD: len(
                         str(entry).encode(c.DEFAULT_ENCODING),
                     ),

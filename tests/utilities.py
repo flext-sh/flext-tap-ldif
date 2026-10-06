@@ -1,6 +1,6 @@
 """Test utilities for flext-tap-ldif - uses u.TapLdif.* namespace pattern.
 
-This module provides test-specific utilities that extend the main flext-tap-ldif utilities.
+Provides test-specific utilities extending the main flext-tap-ldif utilities.
 Uses the unified namespace pattern u.TapLdif.* for test-only utilities.
 Combines TestsFlextUtilities functionality with project-specific test utilities.
 
