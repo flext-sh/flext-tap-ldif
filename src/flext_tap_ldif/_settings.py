@@ -60,6 +60,6 @@ class FlextTapLdifSettings(FlextSettings):
 
 
 settings: FlextTapLdifSettings = FlextTapLdifSettings.fetch_global()
-"""Pre-instantiated project settings singleton — ``from flext_tap_ldif import settings``."""
+"""Pre-instantiated settings singleton — ``from flext_tap_ldif import settings``."""
 
 __all__: list[str] = ["FlextTapLdifSettings", "settings"]

@@ -15,7 +15,8 @@ from flext_tap_ldif import FlextTapLdifTypes
 class TestsFlextTapLdifTypes(FlextTestsTypes, FlextTapLdifTypes):
     """Types for flext-tap-ldif tests - uses composition with TestsFlextTypes.
 
-    Architecture: Uses composition (not inheritance) with TestsFlextTypes and FlextTapLdifTypes
+    Architecture: Uses composition (not inheritance) with TestsFlextTypes
+    and FlextTapLdifTypes
     for flext-tap-ldif-specific type definitions.
 
     Access patterns:
