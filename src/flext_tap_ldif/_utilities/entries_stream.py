@@ -11,6 +11,7 @@ from typing import TYPE_CHECKING, override
 from flext_meltano import u
 
 from flext_tap_ldif import c, m, t
+from flext_tap_ldif._utilities.processor import FlextTapLdifUtilitiesProcessor
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -32,8 +33,6 @@ class FlextTapLdifUtilitiesEntriesStream:
             name: str | None = None,
         ) -> None:
             """Initialize LDIF entries stream."""
-            from flext_tap_ldif._utilities import FlextTapLdifUtilitiesProcessor
-
             super().__init__(
                 tap,
                 schema=schema or self._get_schema(),

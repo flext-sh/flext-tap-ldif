@@ -10,6 +10,7 @@ from __future__ import annotations
 from typing import ClassVar, override
 
 from flext_tap_ldif import FlextTapLdifSettings, c, m, t
+from flext_tap_ldif.utilities import FlextTapLdifUtilities
 
 
 class FlextTapLdif(m.Meltano.SingerTapBase):
@@ -45,8 +46,6 @@ class FlextTapLdif(m.Meltano.SingerTapBase):
         A list of discovered streams.
 
         """
-        from flext_tap_ldif import FlextTapLdifUtilities
-
         return [FlextTapLdifUtilities.TapLdif.EntriesStream(tap=self)]
 
 

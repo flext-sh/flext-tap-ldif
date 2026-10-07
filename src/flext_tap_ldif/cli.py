@@ -7,6 +7,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from flext_tap_ldif import t
+from flext_tap_ldif.api import FlextTapLdifService
 
 
 class FlextTapLdifCli:
@@ -19,8 +20,6 @@ class FlextTapLdifCli:
         Returns:
             The resulting ``int``.
         """
-        from flext_tap_ldif import FlextTapLdifService
-
         _ = cls
         exit_code: int = FlextTapLdifService().cli_main(args)
         return exit_code
