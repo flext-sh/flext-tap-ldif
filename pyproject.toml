@@ -400,6 +400,8 @@ testpaths = ["tests"]
 
 [tool.ruff]
 extend-exclude = [
+  "**/.archive/**",
+  "**/protos/**",
   "**/.agents/aihub-hooks/**",
   "**/.claude/aihub-hooks/**",
   "**/.codex/aihub-hooks/**",
@@ -456,6 +458,7 @@ notice-rgx = "Copyright \\(c\\) \\d{4} \\S[^\\n]*\\. All rights reserved\\."
 [tool.ruff.lint.flake8-type-checking]
 runtime-evaluated-base-classes = [
   "flext_core.FlextSettings",
+  "flext_core.m.BaseModel",
   "flext_meltano.FlextMeltanoConfig",
   "flext_meltano.FlextMeltanoTapServiceBase",
   "flext_tap_ldif.FlextTapLdifSettings",
