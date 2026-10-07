@@ -11,8 +11,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Annotated
 
-from flext_core import FlextSettings
-from flext_tap_ldif import m
+from flext_core import FlextSettings, m
 
 
 class FlextTapLdifSettings(FlextSettings):

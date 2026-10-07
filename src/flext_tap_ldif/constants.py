@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING
 from flext_ldif import FlextLdifConstants
 from flext_meltano import FlextMeltanoConstants
 
-from flext_tap_ldif._constants.values import FlextTapLdifConstantsValues
+from flext_tap_ldif._constants import FlextTapLdifConstantsValues
 
 if TYPE_CHECKING:
     from flext_tap_ldif import t
