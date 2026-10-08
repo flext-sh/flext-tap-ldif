@@ -106,7 +106,7 @@ class FlextTapLdifUtilitiesEntriesStream:
                 )
                 try:
                     for record in self._processor.process_file(file_path):
-                        yield m.Meltano.SingerRecord(record)
+                        yield dict(record)
                 except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
                     if settings.get("strict_parsing", True):
                         FlextTapLdifUtilitiesEntriesStream.logger.exception(
