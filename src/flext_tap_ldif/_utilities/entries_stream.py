@@ -45,8 +45,8 @@ class FlextTapLdifUtilitiesEntriesStream:
             )
             self._tap: m.Meltano.SingerTapBase = tap
 
-        @override
         @property
+        @override
         def schema(self) -> t.JsonDict:
             """Typed JSON schema carried by this stream.
 
