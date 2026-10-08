@@ -40,9 +40,21 @@ class FlextTapLdifConfig(FlextMeltanoConfig):
         _ = args, kwargs
         return object.__new__(cls)
 
-    __eq__ = object.__eq__
+    def __eq__(self, other: object) -> bool:
+        """Identity equality per the frozen-config singleton contract.
 
-    __hash__ = object.__hash__
+        Returns:
+            The resulting ``bool``.
+        """
+        return object.__eq__(self, other)
+
+    def __hash__(self) -> int:
+        """Identity hash per the frozen-config singleton contract.
+
+        Returns:
+            The resulting ``int``.
+        """
+        return object.__hash__(self)
 
     TapLdif: Annotated[
         _TapLdifNamespace,
