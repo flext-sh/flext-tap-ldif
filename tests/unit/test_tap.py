@@ -11,7 +11,7 @@ from pathlib import Path
 import pytest
 from flext_tests import tm
 
-from flext_tap_ldif import FlextTapLdif, t
+from flext_tap_ldif import FlextTapLdif
 from tests import u
 
 
@@ -60,9 +60,7 @@ class TestsFlextTapLdifTap:
         """Test entries stream schema is object type."""
         tap = FlextTapLdif(config={"file_path": ldif_file})
 
-        schema = t.json_dict_adapter().validate_python(
-            tap.discover_streams()[0].schema,
-        )
+        schema = tap.discover_streams()[0].schema
 
         tm.that(schema, kv={"type": "object"})
 
@@ -86,10 +84,7 @@ class TestsFlextTapLdifTap:
         """Test entries stream schema declares entry field."""
         tap = FlextTapLdif(config={"file_path": ldif_file})
 
-        schema = t.json_dict_adapter().validate_python(
-            tap.discover_streams()[0].schema,
-        )
-        properties = schema["properties"]
+        properties = tap.discover_streams()[0].schema["properties"]
 
         tm.that(properties, has=field_name)
 
