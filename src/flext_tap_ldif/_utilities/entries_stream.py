@@ -33,15 +33,27 @@ class FlextTapLdifUtilitiesEntriesStream:
             name: str | None = None,
         ) -> None:
             """Initialize LDIF entries stream."""
+            schema_typed: t.JsonDict = schema or self._get_schema()
             super().__init__(
                 tap,
-                schema=schema or self._get_schema(),
+                schema=schema_typed,
                 name=name or "ldif_entries",
             )
+            self._schema_typed: t.JsonDict = schema_typed
             self._processor = FlextTapLdifUtilitiesProcessor.Processor(
                 t.scalar_mapping_adapter().validate_python(tap.config),
             )
             self._tap: m.Meltano.SingerTapBase = tap
+
+        @property
+        @override
+        def schema(self) -> t.JsonDict:
+            """Typed JSON schema carried by this stream.
+
+            Returns:
+                The resulting ``t.JsonDict``.
+            """
+            return self._schema_typed
 
         @override
         def get_records(

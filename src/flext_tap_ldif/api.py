@@ -39,7 +39,9 @@ class FlextTapLdifService(FlextMeltanoTapServiceBase):
         """
         raw_config = (
             t.json_dict_adapter().validate_python(
-                settings.model_dump() if hasattr(settings, "model_dump") else settings,
+                settings.model_dump()
+                if isinstance(settings, p.HasModelDump)
+                else settings,
             )
             if settings is not None
             else None

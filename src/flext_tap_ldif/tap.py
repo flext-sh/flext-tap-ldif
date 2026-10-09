@@ -39,7 +39,9 @@ class FlextTapLdif(m.Meltano.SingerTapBase):
     }
 
     @override
-    def discover_streams(self) -> t.SequenceOf[m.Meltano.SingerStreamBase]:
+    def discover_streams(
+        self,
+    ) -> t.SequenceOf[FlextTapLdifUtilities.TapLdif.EntriesStream]:
         """Return a list of discovered streams.
 
         Returns:
