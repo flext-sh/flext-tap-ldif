@@ -43,7 +43,7 @@ class FlextTapLdifUtilitiesEntriesStream:
             self._processor = FlextTapLdifUtilitiesProcessor.Processor(
                 t.scalar_mapping_adapter().validate_python(tap.config),
             )
-            self._tap: m.Meltano.SingerTapBase = tap
+            self._tap = tap
 
         @property
         @override
