@@ -27,27 +27,20 @@ class FlextTapLdifSettings(FlextSettings):
     class _TapLdif(m.BaseModel):
         """Namespaced tap-LDIF settings."""
 
-        file_path: Annotated[
-            str | None,
-            m.Field(default=None, description="LDIF file path"),
-        ]
+        file_path: Annotated[str | None, m.Field(description="LDIF file path")] = None
         directory_path: Annotated[
-            str | None,
-            m.Field(default=None, description="LDIF directory path"),
-        ]
-        file_pattern: Annotated[
-            str,
-            m.Field(default="*.ldif", description="LDIF file glob pattern"),
-        ]
-        encoding: Annotated[str, m.Field(default="utf-8", description="File encoding")]
-        strict_parsing: Annotated[
-            bool,
-            m.Field(default=True, description="Strict LDIF parsing"),
-        ]
+            str | None, m.Field(description="LDIF directory path")
+        ] = None
+        file_pattern: Annotated[str, m.Field(description="LDIF file glob pattern")] = (
+            "*.ldif"
+        )
+        encoding: Annotated[str, m.Field(description="File encoding")] = "utf-8"
+        strict_parsing: Annotated[bool, m.Field(description="Strict LDIF parsing")] = (
+            True
+        )
         max_file_size_mb: Annotated[
-            int,
-            m.Field(default=100, ge=1, description="Max file size (MB)"),
-        ]
+            int, m.Field(ge=1, description="Max file size (MB)")
+        ] = 100
 
     if TYPE_CHECKING:
         TapLdif: _TapLdif
