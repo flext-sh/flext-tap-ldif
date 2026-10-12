@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, override
 
 from flext_meltano import u
 
-from flext_tap_ldif import c, m, t
+from flext_tap_ldif import c, e, m, t
 from flext_tap_ldif._utilities.processor import FlextTapLdifUtilitiesProcessor
 
 if TYPE_CHECKING:
