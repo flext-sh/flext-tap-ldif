@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, override
 
 from flext_meltano import u
 
-from flext_tap_ldif import c, e, m, t
+from flext_tap_ldif import c, m, t
 from flext_tap_ldif._utilities.processor import FlextTapLdifUtilitiesProcessor
 
 if TYPE_CHECKING:
@@ -119,14 +119,14 @@ class FlextTapLdifUtilitiesEntriesStream:
                 try:
                     for record in self._processor.process_file(file_path):
                         yield dict(record)
-                except c.Meltano.SINGER_SAFE_EXCEPTIONS as e:
+                except c.Meltano.SINGER_SAFE_EXCEPTIONS as exc:
                     if settings.get("strict_parsing", True):
                         FlextTapLdifUtilitiesEntriesStream.logger.exception(
                             "Error processing file %s",
                             str(file_path),
                         )
                         raise
-                    err_msg = str(e)
+                    err_msg = str(exc)
                     FlextTapLdifUtilitiesEntriesStream.logger.warning(
                         "Skipping file %s due to error: %s",
                         str(file_path),

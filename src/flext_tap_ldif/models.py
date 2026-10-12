@@ -12,11 +12,13 @@ from __future__ import annotations
 from flext_ldif import FlextLdifModels
 from flext_meltano import FlextMeltanoModels
 
+from flext_tap_ldif._models.base import FlextTapLdifModelsBase
+
 
 class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
     """Models facade for the LDIF tap composed from flext-meltano and flext-ldif."""
 
-    class TapLdif:
+    class TapLdif(FlextTapLdifModelsBase):
         """TapLdif domain namespace."""
 
 
