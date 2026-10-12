@@ -9,6 +9,7 @@ from __future__ import annotations
 from flext_ldif import FlextLdifUtilities
 from flext_meltano import FlextMeltanoUtilities
 
+from flext_tap_ldif._utilities.base import FlextTapLdifUtilitiesBase
 from flext_tap_ldif._utilities.entries_stream import FlextTapLdifUtilitiesEntriesStream
 from flext_tap_ldif._utilities.processor import FlextTapLdifUtilitiesProcessor
 
@@ -17,6 +18,7 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
     """Single unified utilities class for Singer tap LDIF operations."""
 
     class TapLdif(
+        FlextTapLdifUtilitiesBase,
         FlextTapLdifUtilitiesProcessor,
         FlextTapLdifUtilitiesEntriesStream,
     ):

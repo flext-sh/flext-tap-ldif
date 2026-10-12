@@ -13,14 +13,18 @@ from typing import TYPE_CHECKING
 from flext_core.lazy import install_lazy_exports
 
 if TYPE_CHECKING:
+    from flext_tap_ldif._constants.base import FlextTapLdifConstantsBase
     from flext_tap_ldif._constants.values import FlextTapLdifConstantsValues
 
 
-__all__: tuple[str, ...] = ("FlextTapLdifConstantsValues",)
+__all__: tuple[str, ...] = ("FlextTapLdifConstantsBase", "FlextTapLdifConstantsValues")
 
 install_lazy_exports(
     __name__,
     globals(),
-    MappingProxyType({"FlextTapLdifConstantsValues": ".values"}),
+    MappingProxyType({
+        "FlextTapLdifConstantsBase": ".base",
+        "FlextTapLdifConstantsValues": ".values",
+    }),
     public_exports=__all__,
 )

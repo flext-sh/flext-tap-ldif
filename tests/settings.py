@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from flext_tests import FlextTestsSettings
 
-from flext_tap_ldif._settings import FlextTapLdifSettings
+from flext_tap_ldif import FlextTapLdifSettings
 
 
 class TestsFlextTapLdifSettings(FlextTapLdifSettings, FlextTestsSettings):
