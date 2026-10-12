@@ -15,8 +15,7 @@ from typing import Annotated, override
 from flext_meltano import FlextMeltanoTapServiceBase
 from flext_meltano.services.singer_sdk import FlextMeltanoSingerTapAdapter
 
-from flext_tap_ldif import p, t, u
-from flext_tap_ldif.tap import FlextTapLdif
+from flext_tap_ldif import FlextTapLdif, p, t, u
 
 
 class FlextTapLdifService(FlextMeltanoTapServiceBase):
@@ -38,7 +37,7 @@ class FlextTapLdifService(FlextMeltanoTapServiceBase):
             The resulting ``p.Meltano.SingerTapInstance``.
         """
         raw_config = (
-            t.json_dict_adapter().validate_python(
+            u.json_dict_adapter().validate_python(
                 settings.model_dump()
                 if isinstance(settings, p.HasModelDump)
                 else settings,

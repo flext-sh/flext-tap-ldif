@@ -41,7 +41,7 @@ class FlextTapLdifUtilitiesEntriesStream:
             )
             self._schema_typed: t.JsonDict = schema_typed
             self._processor = FlextTapLdifUtilitiesProcessor.Processor(
-                t.scalar_mapping_adapter().validate_python(tap.config),
+                u.scalar_mapping_adapter().validate_python(tap.config),
             )
             self._tap = tap
 
@@ -71,7 +71,7 @@ class FlextTapLdifUtilitiesEntriesStream:
                 SINGER_SAFE_EXCEPTIONS: If ``settings.get('strict_parsing', True)``.
             """
             _ = context
-            settings = t.json_dict_adapter().validate_python(self._tap.config)
+            settings = u.json_dict_adapter().validate_python(self._tap.config)
             dir_path_raw = settings.get("directory_path")
             dir_path = dir_path_raw if isinstance(dir_path_raw, str) else None
             pattern_raw = settings.get("file_pattern", "*.ldif")
