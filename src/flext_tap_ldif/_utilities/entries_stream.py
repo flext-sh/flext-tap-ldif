@@ -2,6 +2,7 @@
 
 Copyright (c) 2026 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
+
 """
 
 from __future__ import annotations
@@ -32,7 +33,15 @@ class FlextTapLdifUtilitiesEntriesStream:
             schema: t.JsonDict | None = None,
             name: str | None = None,
         ) -> None:
-            """Initialize LDIF entries stream."""
+            """Initialize LDIF entries stream.
+
+            Args:
+                tap: Parent Singer tap providing the runtime config.
+                schema: Optional JSON schema; defaults to the LDIF entries
+                    schema when omitted.
+                name: Optional stream name; defaults to ``ldif_entries``.
+
+            """
             schema_typed: t.JsonDict = schema or self._get_schema()
             super().__init__(
                 tap,
@@ -52,6 +61,7 @@ class FlextTapLdifUtilitiesEntriesStream:
 
             Returns:
                 The resulting ``t.JsonDict``.
+
             """
             return self._schema_typed
 
@@ -62,13 +72,19 @@ class FlextTapLdifUtilitiesEntriesStream:
         ) -> Iterable[m.Meltano.SingerRecord]:
             """Return a generator of record-type dictionary objects.
 
+            Args:
+                context: Unused partition context; accepted for the Singer
+                    stream interface.
+
             Yields:
                 Each ``m.Meltano.SingerRecord``.
 
             Raises:
-                RuntimeError: If ``bool(settings.get('strict_parsing', True))``; or if
-                    No LDIF files discovered.
-                SINGER_SAFE_EXCEPTIONS: If ``settings.get('strict_parsing', True)``.
+                RuntimeError: If file discovery fails or no LDIF files are
+                    discovered while strict parsing is enabled.
+                SINGER_SAFE_EXCEPTIONS: If processing a file fails while
+                    strict parsing is enabled.
+
             """
             _ = context
             settings = u.json_dict_adapter().validate_python(self._tap.config)
@@ -136,10 +152,11 @@ class FlextTapLdifUtilitiesEntriesStream:
 
         @staticmethod
         def _get_schema() -> t.JsonDict:
-            """Get schema for LDIF entries.
+            """Return the schema for LDIF entries.
 
             Returns:
                 The resulting ``t.JsonDict``.
+
             """
             return {
                 "type": "object",

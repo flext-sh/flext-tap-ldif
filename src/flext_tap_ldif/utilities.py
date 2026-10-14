@@ -1,7 +1,11 @@
 """Singer tap utilities for LDIF domain operations.
 
+Composes the tap's ``_utilities`` helpers with the flext-meltano and
+flext-ldif utility facades; consumers reach every helper via ``u.TapLdif.*``.
+
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
+
 """
 
 from __future__ import annotations

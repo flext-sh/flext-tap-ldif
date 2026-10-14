@@ -44,7 +44,7 @@ class FlextTapLdif(m.Meltano.SingerTapBase):
         """Return a list of discovered streams.
 
         Returns:
-        A list of discovered streams.
+            A list of discovered streams.
 
         """
         return [FlextTapLdifUtilities.TapLdif.EntriesStream(tap=self)]
