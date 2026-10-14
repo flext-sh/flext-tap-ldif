@@ -22,7 +22,8 @@ if TYPE_CHECKING:
 class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
     """LDIF tap extraction-specific constants following flext-core patterns.
 
-    Composes with FlextTapLdifConstants to avoid duplication and ensure consistency.
+    Composes with the flext-meltano and flext-ldif constant facades to avoid
+    duplication and ensure consistency.
     """
 
     class TapLdif(

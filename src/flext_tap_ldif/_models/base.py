@@ -11,7 +11,7 @@ from flext_meltano import m
 
 
 class FlextTapLdifModelsBase:
-    """Base models for flext-tap-ldif."""
+    """Family base for the tap's Pydantic model namespaces."""
 
     class ConfigNamespace(m.BaseModel):
         """Open, frozen namespace exposing every ``config/*.yaml`` domain."""

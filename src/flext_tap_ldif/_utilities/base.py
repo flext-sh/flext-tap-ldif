@@ -9,7 +9,7 @@ from __future__ import annotations
 
 
 class FlextTapLdifUtilitiesBase:
-    """Base utilities for flext-tap-ldif."""
+    """Family base mixed into the tap's ``_utilities`` mixin classes."""
 
 
 __all__: list[str] = ["FlextTapLdifUtilitiesBase"]
