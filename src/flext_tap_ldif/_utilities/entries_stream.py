@@ -173,3 +173,6 @@ class FlextTapLdifUtilitiesEntriesStream:
                     c.TapLdif.EntrySchema.ENTRY_SIZE_FIELD: {"type": "integer"},
                 },
             }
+
+
+__all__: list[str] = ["FlextTapLdifUtilitiesEntriesStream"]

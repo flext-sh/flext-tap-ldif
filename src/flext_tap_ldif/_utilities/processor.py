@@ -171,3 +171,6 @@ class FlextTapLdifUtilitiesProcessor:
 
             """
             raise ValueError(msg)
+
+
+__all__: list[str] = ["FlextTapLdifUtilitiesProcessor"]
