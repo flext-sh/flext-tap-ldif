@@ -10,10 +10,10 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING, NoReturn
 
+from flext_core import r
 from flext_ldif import ldif
 from flext_meltano import u
 
-from flext_core import r
 from flext_tap_ldif import c, m, p, t
 
 if TYPE_CHECKING:
