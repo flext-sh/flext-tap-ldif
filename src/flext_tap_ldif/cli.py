@@ -1,13 +1,16 @@
 """CLI entrypoint for flext-tap-ldif.
 
+Dispatches the flat Singer CLI through ``FlextTapLdifService.cli_main``, the
+``meltano.Tap``-provided entry point of the tap service facade.
+
 Copyright (c) 2026 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
+
 """
 
 from __future__ import annotations
 
-from flext_tap_ldif import t
-from flext_tap_ldif.api import FlextTapLdifService
+from flext_tap_ldif import FlextTapLdifService, t
 
 
 class FlextTapLdifCli:
@@ -17,8 +20,13 @@ class FlextTapLdifCli:
     def run(cls, args: t.StrSequence | None = None) -> int:
         """Run the tap entry point through the FLEXT service facade.
 
+        Args:
+            args: Optional CLI arguments; ``None`` delegates argv handling to
+                the Singer CLI.
+
         Returns:
             The resulting ``int``.
+
         """
         _ = cls
         exit_code: int = FlextTapLdifService().cli_main(args)
@@ -28,8 +36,13 @@ class FlextTapLdifCli:
 def main(args: t.StrSequence | None = None) -> int:
     """Run the canonical tap-ldif CLI.
 
+    Args:
+        args: Optional CLI arguments; ``None`` delegates argv handling to the
+            Singer CLI.
+
     Returns:
         The resulting ``int``.
+
     """
     return FlextTapLdifCli.run(args)
 

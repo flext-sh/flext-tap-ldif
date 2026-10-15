@@ -2,6 +2,7 @@
 
 Copyright (c) 2026 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
+
 """
 
 from __future__ import annotations
@@ -9,10 +10,10 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING, NoReturn
 
+from flext_core import r
 from flext_ldif import ldif
 from flext_meltano import u
 
-from flext_core import r
 from flext_tap_ldif import c, m, p, t
 
 if TYPE_CHECKING:
@@ -28,7 +29,13 @@ class FlextTapLdifUtilitiesProcessor:
         """LDIF file processor using flext-ldif infrastructure."""
 
         def __init__(self, settings: t.ConfigurationMapping) -> None:
-            """Initialize the LDIF processor."""
+            """Initialize the LDIF processor.
+
+            Args:
+                settings: Tap configuration mapping read by the processing
+                    methods (encoding, strict parsing).
+
+            """
             # NOTE (multi-agent): mro-rn88 — retain the injected config mapping; methods
             # below read self._settings.get(...) (was an undefined bare `settings`).
             self._settings = settings
@@ -43,8 +50,16 @@ class FlextTapLdifUtilitiesProcessor:
         ) -> p.Result[t.SequenceOf[Path]]:
             """Discover LDIF files using local file discovery.
 
+            Args:
+                directory_path: Directory to glob for LDIF files.
+                file_pattern: Glob pattern applied inside ``directory_path``.
+                file_path: Explicit single file to process; takes precedence
+                    over ``directory_path``.
+                max_file_size_mb: Maximum accepted file size in megabytes.
+
             Returns:
                 The resulting ``p.Result[t.SequenceOf[Path]]``.
+
             """
             max_size_bytes = max_file_size_mb * 1024 * 1024
             discovered: t.MutableSequenceOf[Path] = []
@@ -81,12 +96,16 @@ class FlextTapLdifUtilitiesProcessor:
         def process_file(self, file_path: Path) -> Generator[t.JsonMapping]:
             """Process a single LDIF file and yield records using flext-ldif.
 
+            Args:
+                file_path: LDIF file to parse into Singer records.
+
             Yields:
                 Each ``t.JsonMapping``.
 
             Raises:
-                SINGER_SAFE_EXCEPTIONS: If ``self._settings.get('strict_parsing',
-                    True)``.
+                SINGER_SAFE_EXCEPTIONS: If reading or parsing the file fails
+                    while strict parsing is enabled.
+
             """
             FlextTapLdifUtilitiesProcessor.logger.info(
                 "Processing LDIF file: %s",
@@ -149,5 +168,6 @@ class FlextTapLdifUtilitiesProcessor:
 
             Raises:
                 ValueError: Always.
+
             """
             raise ValueError(msg)

@@ -13,6 +13,7 @@ from flext_ldif import FlextLdifConstants
 from flext_meltano import FlextMeltanoConstants
 
 from flext_tap_ldif._constants import FlextTapLdifConstantsValues
+from flext_tap_ldif._constants.base import FlextTapLdifConstantsBase
 
 if TYPE_CHECKING:
     from flext_tap_ldif import t
@@ -21,17 +22,18 @@ if TYPE_CHECKING:
 class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
     """LDIF tap extraction-specific constants following flext-core patterns.
 
-    Composes with FlextTapLdifConstants to avoid duplication and ensure consistency.
+    Composes with the flext-meltano and flext-ldif constant facades to avoid
+    duplication and ensure consistency.
     """
 
-    class TapLdif(FlextTapLdifConstantsValues.TapLdif):
+    class TapLdif(
+        FlextTapLdifConstantsBase,
+        FlextTapLdifConstantsValues,
+    ):
         """LDIF tap processing configuration.
 
         Note: Does not override parent Processing class to avoid inheritance conflicts.
         """
-
-        class EntrySchema(FlextTapLdifConstantsValues.TapLdif.EntrySchema):
-            """LDIF entry schema field names."""
 
 
 c = FlextTapLdifConstants
