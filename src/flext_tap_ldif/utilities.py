@@ -1,3 +1,4 @@
+# AUTO-GENERATED FILE — Regenerate with: make gen
 """Singer tap utilities for LDIF domain operations.
 
 Composes the tap's ``_utilities`` helpers with the flext-meltano and
@@ -13,9 +14,11 @@ from __future__ import annotations
 from flext_ldif import FlextLdifUtilities
 from flext_meltano import FlextMeltanoUtilities
 
-from flext_tap_ldif._utilities.base import FlextTapLdifUtilitiesBase
-from flext_tap_ldif._utilities.entries_stream import FlextTapLdifUtilitiesEntriesStream
-from flext_tap_ldif._utilities.processor import FlextTapLdifUtilitiesProcessor
+from flext_tap_ldif._utilities import (
+    FlextTapLdifUtilitiesBase,
+    FlextTapLdifUtilitiesEntriesStream,
+    FlextTapLdifUtilitiesProcessor,
+)
 
 
 class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
@@ -23,8 +26,8 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
     class TapLdif(
         FlextTapLdifUtilitiesBase,
-        FlextTapLdifUtilitiesProcessor,
         FlextTapLdifUtilitiesEntriesStream,
+        FlextTapLdifUtilitiesProcessor,
     ):
         """Utility functions for LDIF data processing."""
 
