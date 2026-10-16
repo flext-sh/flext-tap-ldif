@@ -1,11 +1,11 @@
 """FLEXT service orchestrator for tap-ldif.
 
-from flext_tap_ldif import u
 Thin facade — all infrastructure from ``FlextMeltanoTapServiceBase`` via MRO.
 Only domain-specific tap creation defined here.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
+
 """
 
 from __future__ import annotations
@@ -15,8 +15,7 @@ from typing import Annotated, override
 from flext_meltano import FlextMeltanoTapServiceBase
 from flext_meltano.services.singer_sdk import FlextMeltanoSingerTapAdapter
 
-from flext_tap_ldif import p, t, u
-from flext_tap_ldif.tap import FlextTapLdif
+from flext_tap_ldif import FlextTapLdif, p, t, u
 
 
 class FlextTapLdifService(FlextMeltanoTapServiceBase):
@@ -34,11 +33,16 @@ class FlextTapLdifService(FlextMeltanoTapServiceBase):
     ) -> p.Meltano.SingerTapInstance:
         """Create the internal tap runtime backed by Singer SDK.
 
+        Args:
+            settings: Optional settings payload (model or mapping) for the tap;
+                ``None`` starts the tap with its default config.
+
         Returns:
             The resulting ``p.Meltano.SingerTapInstance``.
+
         """
         raw_config = (
-            t.json_dict_adapter().validate_python(
+            u.json_dict_adapter().validate_python(
                 settings.model_dump()
                 if isinstance(settings, p.HasModelDump)
                 else settings,

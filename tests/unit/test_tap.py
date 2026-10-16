@@ -9,10 +9,9 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
-from flext_tests import tm
 
 from flext_tap_ldif import FlextTapLdif
-from tests import u
+from tests import tm, u
 
 
 class TestsFlextTapLdifTap:
