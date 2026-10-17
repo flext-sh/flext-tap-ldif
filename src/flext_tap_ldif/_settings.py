@@ -25,7 +25,7 @@ class FlextTapLdifSettings(FlextSettings):
         validate_assignment=True,
     )
 
-    class _TapLdif(m.BaseModel):
+    class _TapLdif(m.StrictModel):
         """Namespaced tap-LDIF settings."""
 
         file_path: Annotated[str | None, m.Field(description="LDIF file path")] = None
