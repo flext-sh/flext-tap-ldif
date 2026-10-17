@@ -8,7 +8,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TYPE_CHECKING, NoReturn
+from typing import TYPE_CHECKING, ClassVar, NoReturn
 
 from flext_core import r
 from flext_ldif import ldif
@@ -23,7 +23,7 @@ if TYPE_CHECKING:
 class FlextTapLdifUtilitiesProcessor:
     """MRO mixin exposing Processor under u.TapLdif."""
 
-    logger = u.fetch_logger(__name__)
+    logger: ClassVar[p.Logger] = u.fetch_logger(__name__)
 
     class Processor:
         """LDIF file processor using flext-ldif infrastructure."""
