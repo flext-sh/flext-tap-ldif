@@ -138,12 +138,12 @@ class FlextTapLdifUtilitiesProcessor:
             for raw_entry in parse_result.value.entries:
                 entry = m.Ldif.Entry.model_validate(raw_entry)
                 dn_val = entry.dn.value if entry.dn is not None else ""
-                attrs_dict: t.JsonMapping = t.Cli.JSON_MAPPING_ADAPTER.validate_python(
+                attrs_dict: t.JsonMapping = u.Cli.JSON_MAPPING_ADAPTER.validate_python(
                     {k: list(v) for k, v in entry.attributes.attributes.items()}
                     if entry.attributes is not None
                     else {},
                 )
-                yield t.Cli.JSON_MAPPING_ADAPTER.validate_python({
+                yield u.Cli.JSON_MAPPING_ADAPTER.validate_python({
                     c.TapLdif.EntrySchema.DN_FIELD: dn_val,
                     c.TapLdif.EntrySchema.ATTRIBUTES_FIELD: attrs_dict,
                     c.TapLdif.EntrySchema.OBJECT_CLASS_FIELD: attrs_dict.get(
