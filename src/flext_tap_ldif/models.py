@@ -1,3 +1,4 @@
+# AUTO-GENERATED FILE — Regenerate with: make gen
 """Models for LDIF tap operations.
 
 Entry and Singer shapes come from the parent libraries (``m.Ldif.*`` from
@@ -13,7 +14,7 @@ from __future__ import annotations
 from flext_ldif import FlextLdifModels
 from flext_meltano import FlextMeltanoModels
 
-from flext_tap_ldif._models.base import FlextTapLdifModelsBase
+from flext_tap_ldif._models import FlextTapLdifModelsBase
 
 
 class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):

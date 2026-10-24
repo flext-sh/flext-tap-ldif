@@ -1,3 +1,4 @@
+# AUTO-GENERATED FILE — Regenerate with: make gen
 """FLEXT Tap LDIF Constants - LDIF tap extraction constants.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
@@ -12,8 +13,10 @@ from typing import TYPE_CHECKING
 from flext_ldif import FlextLdifConstants
 from flext_meltano import FlextMeltanoConstants
 
-from flext_tap_ldif._constants import FlextTapLdifConstantsValues
-from flext_tap_ldif._constants.base import FlextTapLdifConstantsBase
+from flext_tap_ldif._constants import (
+    FlextTapLdifConstantsBase,
+    FlextTapLdifConstantsValues,
+)
 
 if TYPE_CHECKING:
     from flext_tap_ldif import t

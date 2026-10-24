@@ -8,7 +8,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TYPE_CHECKING, NoReturn
+from typing import TYPE_CHECKING, ClassVar, NoReturn
 
 from flext_core import r
 from flext_ldif import ldif
@@ -23,7 +23,7 @@ if TYPE_CHECKING:
 class FlextTapLdifUtilitiesProcessor:
     """MRO mixin exposing Processor under u.TapLdif."""
 
-    logger = u.fetch_logger(__name__)
+    logger: ClassVar[p.Logger] = u.fetch_logger(__name__)
 
     class Processor:
         """LDIF file processor using flext-ldif infrastructure."""
@@ -138,12 +138,12 @@ class FlextTapLdifUtilitiesProcessor:
             for raw_entry in parse_result.value.entries:
                 entry = m.Ldif.Entry.model_validate(raw_entry)
                 dn_val = entry.dn.value if entry.dn is not None else ""
-                attrs_dict: t.JsonMapping = t.Cli.JSON_MAPPING_ADAPTER.validate_python(
+                attrs_dict: t.JsonMapping = u.Cli.JSON_MAPPING_ADAPTER.validate_python(
                     {k: list(v) for k, v in entry.attributes.attributes.items()}
                     if entry.attributes is not None
                     else {},
                 )
-                yield t.Cli.JSON_MAPPING_ADAPTER.validate_python({
+                yield u.Cli.JSON_MAPPING_ADAPTER.validate_python({
                     c.TapLdif.EntrySchema.DN_FIELD: dn_val,
                     c.TapLdif.EntrySchema.ATTRIBUTES_FIELD: attrs_dict,
                     c.TapLdif.EntrySchema.OBJECT_CLASS_FIELD: attrs_dict.get(

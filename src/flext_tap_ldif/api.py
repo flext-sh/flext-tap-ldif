@@ -12,10 +12,9 @@ from __future__ import annotations
 
 from typing import Annotated, override
 
-from flext_meltano import FlextMeltanoTapServiceBase
-from flext_meltano.services.singer_sdk import FlextMeltanoSingerTapAdapter
+from flext_meltano import FlextMeltanoSingerTapAdapter, FlextMeltanoTapServiceBase
 
-from flext_tap_ldif import FlextTapLdif, p, t, u
+from flext_tap_ldif import FlextTapLdif, m, p, t, u
 
 
 class FlextTapLdifService(FlextMeltanoTapServiceBase):
@@ -23,7 +22,7 @@ class FlextTapLdifService(FlextMeltanoTapServiceBase):
 
     tap_name: Annotated[
         t.NonEmptyStr,
-        u.Field(description="Canonical Singer tap identifier."),
+        m.Field(description="Canonical Singer tap identifier."),
     ] = "tap-ldif"
 
     @override

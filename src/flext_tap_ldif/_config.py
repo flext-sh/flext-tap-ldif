@@ -15,8 +15,6 @@ from typing import Annotated
 
 from flext_meltano import FlextMeltanoConfig, m
 
-from flext_tap_ldif._models.base import FlextTapLdifModelsBase
-
 
 class FlextTapLdifConfig(FlextMeltanoConfig):
     """TapLdif config auto-loaded model-less from ``config/*.yaml``.
@@ -26,11 +24,11 @@ class FlextTapLdifConfig(FlextMeltanoConfig):
     """
 
     TapLdif: Annotated[
-        FlextTapLdifModelsBase.ConfigNamespace,
+        m.Meltano.MeltanoNamespace,
         m.Field(
             description="Open namespace exposing ``config/*.yaml`` under ``TapLdif``.",
         ),
-    ] = FlextTapLdifModelsBase.ConfigNamespace()
+    ] = m.Meltano.MeltanoNamespace()
 
 
 config: FlextTapLdifConfig = FlextTapLdifConfig.fetch_global()

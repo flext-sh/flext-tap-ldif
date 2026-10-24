@@ -7,11 +7,11 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, override
+from typing import TYPE_CHECKING, ClassVar, override
 
 from flext_meltano import u
 
-from flext_tap_ldif import c, m, t
+from flext_tap_ldif import c, m, p, t
 from flext_tap_ldif._utilities.processor import FlextTapLdifUtilitiesProcessor
 
 if TYPE_CHECKING:
@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 class FlextTapLdifUtilitiesEntriesStream:
     """MRO mixin exposing EntriesStream under u.TapLdif."""
 
-    logger = u.fetch_logger(__name__)
+    logger: ClassVar[p.Logger] = u.fetch_logger(__name__)
 
     class EntriesStream(m.Meltano.SingerStreamBase):
         """LDIF entries stream using flext-ldif for ALL processing."""
