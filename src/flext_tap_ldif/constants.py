@@ -8,8 +8,6 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from flext_ldif import FlextLdifConstants
 from flext_meltano import FlextMeltanoConstants
 
@@ -17,9 +15,6 @@ from flext_tap_ldif._constants import (
     FlextTapLdifConstantsBase,
     FlextTapLdifConstantsValues,
 )
-
-if TYPE_CHECKING:
-    from flext_tap_ldif import t
 
 
 class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
@@ -40,4 +35,4 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
 
 
 c = FlextTapLdifConstants
-__all__: t.StrSequence = ("FlextTapLdifConstants", "c")
+__all__: list[str] = ["FlextTapLdifConstants", "c"]

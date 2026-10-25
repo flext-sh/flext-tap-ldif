@@ -26,5 +26,4 @@ class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
 
 # Short aliases
 m = FlextTapLdifModels
-
 __all__: list[str] = ["FlextTapLdifModels", "m"]

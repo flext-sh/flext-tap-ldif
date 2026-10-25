@@ -33,5 +33,4 @@ class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
 
 
 u = FlextTapLdifUtilities
-
 __all__: list[str] = ["FlextTapLdifUtilities", "u"]
