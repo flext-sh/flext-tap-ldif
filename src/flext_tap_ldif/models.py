@@ -11,13 +11,13 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_ldif import FlextLdifModels
+from flext_ldif import m
 from flext_meltano import FlextMeltanoModels
 
 from flext_tap_ldif._models import FlextTapLdifModelsBase
 
 
-class FlextTapLdifModels(FlextMeltanoModels, FlextLdifModels):
+class FlextTapLdifModels(FlextMeltanoModels, m):
     """Models facade for the LDIF tap composed from flext-meltano and flext-ldif."""
 
     class TapLdif(FlextTapLdifModelsBase):

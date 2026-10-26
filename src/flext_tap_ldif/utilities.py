@@ -11,7 +11,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_ldif import FlextLdifUtilities
+from flext_ldif import u
 from flext_meltano import FlextMeltanoUtilities
 
 from flext_tap_ldif._utilities import (
@@ -21,7 +21,7 @@ from flext_tap_ldif._utilities import (
 )
 
 
-class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
+class FlextTapLdifUtilities(FlextMeltanoUtilities, u):
     """Single unified utilities class for Singer tap LDIF operations."""
 
     class TapLdif(

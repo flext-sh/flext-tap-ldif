@@ -8,7 +8,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_ldif import FlextLdifConstants
+from flext_ldif import c
 from flext_meltano import FlextMeltanoConstants
 
 from flext_tap_ldif._constants import (
@@ -17,7 +17,7 @@ from flext_tap_ldif._constants import (
 )
 
 
-class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
+class FlextTapLdifConstants(FlextMeltanoConstants, c):
     """LDIF tap extraction-specific constants following flext-core patterns.
 
     Composes with the flext-meltano and flext-ldif constant facades to avoid
