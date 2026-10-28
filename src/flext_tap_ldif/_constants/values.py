@@ -18,6 +18,7 @@ class FlextTapLdifConstantsValues:
     keeps resolving.
     """
 
+    TAP_NAME: Final[str] = "tap-ldif"
     MAX_FILE_SIZE_MB: Final[int] = 100
 
     class EntrySchema:

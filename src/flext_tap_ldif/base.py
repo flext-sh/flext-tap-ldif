@@ -12,18 +12,18 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from flext_ldif import ldif
-from flext_meltano import FlextMeltanoTapServiceBase
+from flext_meltano import FlextMeltanoServiceBase
 
 from flext_tap_ldif import m, p
 
 
-class FlextTapLdifServiceBase(FlextMeltanoTapServiceBase):
+class FlextTapLdifServiceBase(FlextMeltanoServiceBase):
     """Tap-LDIF service base: meltano service runtime plus injected LDIF facade."""
 
-    _ldif: p.Ldif.LdifService = m.PrivateAttr(default_factory=lambda: ldif)
+    _ldif: p.Ldif.Client = m.PrivateAttr(default_factory=lambda: ldif)
 
     @property
-    def ldif(self) -> p.Ldif.LdifService:
+    def ldif(self) -> p.Ldif.Client:
         """The shared flext-ldif facade for tap services."""
         return self._ldif
 

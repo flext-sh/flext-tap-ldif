@@ -69,7 +69,16 @@ class FlextTapLdifExtractService(s):
         file_path: Path,
         encoding: str,
     ) -> p.Result[t.SequenceOf[t.JsonMapping]]:
-        """Read and parse one LDIF file into Singer records."""
+        """Read and parse one LDIF file into Singer records.
+
+        Args:
+            file_path: Source LDIF file path.
+            encoding: Text encoding to use.
+
+        Returns:
+            The resulting ``p.Result[t.SequenceOf[t.JsonMapping]]``.
+
+        """
         try:
             content = file_path.read_text(encoding=encoding)
         except OSError as exc:

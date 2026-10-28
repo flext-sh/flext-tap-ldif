@@ -12,6 +12,7 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from pathlib import Path
+from typing import ClassVar
 
 from flext_meltano import u
 
@@ -21,7 +22,7 @@ from flext_tap_ldif import c, config, m, p, r, settings, t
 class FlextTapLdifUtilitiesExtractSupport:
     """Extract helpers consumed by the tap services and CLI facade."""
 
-    logger: t.ClassVar[p.Logger] = u.fetch_logger(__name__)
+    logger: ClassVar[p.Logger] = u.fetch_logger(__name__)
 
     @staticmethod
     def tap_spec() -> m.Meltano.TapSpec:
@@ -44,6 +45,36 @@ class FlextTapLdifUtilitiesExtractSupport:
             config_jsonschema=type(settings).model_json_schema(),
             streams=streams,
         )
+
+    @staticmethod
+    def _resolve_single_file(
+        path_str: str,
+        max_bytes: int,
+    ) -> p.Result[t.SequenceOf[Path]]:
+        path = Path(path_str)
+        if not path.exists():
+            return r[t.SequenceOf[Path]].fail(f"File not found: {path}")
+        if path.stat().st_size > max_bytes:
+            return r[t.SequenceOf[Path]].fail(f"File exceeds max size: {path}")
+        return r[t.SequenceOf[Path]].ok((path,))
+
+    @staticmethod
+    def _resolve_dir_files(
+        dir_str: str,
+        pattern: str,
+        max_bytes: int,
+    ) -> p.Result[t.SequenceOf[Path]]:
+        dir_path = Path(dir_str)
+        if not dir_path.is_dir():
+            return r[t.SequenceOf[Path]].fail(f"Directory not found: {dir_path}")
+        matched = tuple(
+            f
+            for f in sorted(dir_path.glob(pattern))
+            if f.is_file() and f.stat().st_size <= max_bytes
+        )
+        if not matched:
+            return r[t.SequenceOf[Path]].fail("No LDIF files discovered")
+        return r[t.SequenceOf[Path]].ok(matched)
 
     @staticmethod
     def resolve_files(source: t.JsonMapping) -> p.Result[t.SequenceOf[Path]]:
@@ -72,25 +103,17 @@ class FlextTapLdifUtilitiesExtractSupport:
         )
 
         if isinstance(file_path_raw, str) and file_path_raw:
-            path = Path(file_path_raw)
-            if not path.exists():
-                return r[t.SequenceOf[Path]].fail(f"File not found: {path}")
-            if path.stat().st_size > max_bytes:
-                return r[t.SequenceOf[Path]].fail(f"File exceeds max size: {path}")
-            return r[t.SequenceOf[Path]].ok((path,))
+            return FlextTapLdifUtilitiesExtractSupport._resolve_single_file(
+                file_path_raw,
+                max_bytes,
+            )
 
         if isinstance(dir_path_raw, str) and dir_path_raw:
-            dir_path = Path(dir_path_raw)
-            if not dir_path.is_dir():
-                return r[t.SequenceOf[Path]].fail(f"Directory not found: {dir_path}")
-            matched = tuple(
-                f
-                for f in sorted(dir_path.glob(pattern))
-                if f.is_file() and f.stat().st_size <= max_bytes
+            return FlextTapLdifUtilitiesExtractSupport._resolve_dir_files(
+                dir_path_raw,
+                pattern,
+                max_bytes,
             )
-            if not matched:
-                return r[t.SequenceOf[Path]].fail("No LDIF files discovered")
-            return r[t.SequenceOf[Path]].ok(matched)
 
         return r[t.SequenceOf[Path]].fail("No file_path or directory_path specified")
 

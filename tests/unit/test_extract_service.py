@@ -22,7 +22,13 @@ class TestsFlextTapLdifExtractService:
         service = FlextTapLdifExtractService()
         sample = tmp_path / "people.ldif"
         dn = "uid=jdoe,ou=people,dc=example,dc=com"
-        content = f"dn: {dn}\nobjectClass: inetOrgPerson\nuid: jdoe\ncn: John Doe\nsn: Doe\n\n"
+        content = (
+            f"dn: {dn}\n"
+            "objectClass: inetOrgPerson\n"
+            "uid: jdoe\n"
+            "cn: John Doe\n"
+            "sn: Doe\n\n"
+        )
         sample.write_text(content, encoding="utf-8")
 
         request = m.Meltano.FetchRequest(
