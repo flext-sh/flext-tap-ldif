@@ -33,17 +33,17 @@ if TYPE_CHECKING:
     from flext_tap_ldif.base import FlextTapLdifServiceBase, s
     from flext_tap_ldif.cli import FlextTapLdifCli, main
     from flext_tap_ldif.constants import FlextTapLdifConstants, c
-    from flext_tap_ldif.models import FlextTapLdifModels, m
+    from flext_tap_ldif.models import FlextModelsTapLdif, m
     from flext_tap_ldif.protocols import FlextTapLdifProtocols, p
     from flext_tap_ldif.typings import FlextTapLdifTypes, t
     from flext_tap_ldif.utilities import FlextTapLdifUtilities, u
 
 
 __all__: tuple[str, ...] = (
+    "FlextModelsTapLdif",
     "FlextTapLdifCli",
     "FlextTapLdifConfig",
     "FlextTapLdifConstants",
-    "FlextTapLdifModels",
     "FlextTapLdifProtocols",
     "FlextTapLdifService",
     "FlextTapLdifServiceBase",
@@ -86,7 +86,7 @@ install_lazy_exports(
         "FlextTapLdifCli": ".cli",
         "FlextTapLdifConfig": "._config",
         "FlextTapLdifConstants": ".constants",
-        "FlextTapLdifModels": ".models",
+        "FlextModelsTapLdif": ".models",
         "FlextTapLdifProtocols": ".protocols",
         "FlextTapLdifService": ".api",
         "FlextTapLdifServiceBase": ".base",

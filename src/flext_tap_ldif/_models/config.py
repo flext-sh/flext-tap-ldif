@@ -12,7 +12,7 @@ from __future__ import annotations
 from flext_meltano import m, t
 
 
-class FlextTapLdifConfigModels:
+class FlextModelsTapLdifConfig:
     """Namespace of typed flext-tap-ldif config models."""
 
     class TapLdif(m.FrozenModel):
@@ -38,9 +38,9 @@ class FlextTapLdifConfigModels:
 
         model_config = m.ConfigDict(extra="allow")
 
-        TapLdif: FlextTapLdifConfigModels.TapLdif = m.Field(
+        TapLdif: FlextModelsTapLdifConfig.TapLdif = m.Field(
             description="TapLdif business-rule config domain",
         )
 
 
-__all__: list[str] = ["FlextTapLdifConfigModels"]
+__all__: list[str] = ["FlextModelsTapLdifConfig"]

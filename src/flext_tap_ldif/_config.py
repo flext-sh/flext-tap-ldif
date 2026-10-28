@@ -17,7 +17,7 @@ from typing import Annotated
 
 from flext_meltano import FlextMeltanoConfig, m
 
-from flext_tap_ldif._models.config import FlextTapLdifConfigModels
+from flext_tap_ldif._models.config import FlextModelsTapLdifConfig
 
 
 class FlextTapLdifConfig(FlextMeltanoConfig):
@@ -35,10 +35,10 @@ class FlextTapLdifConfig(FlextMeltanoConfig):
     ] = m.Meltano.MeltanoNamespace()
 
     @cached_property
-    def tap_ldif(self) -> FlextTapLdifConfigModels.TapLdif:
+    def tap_ldif(self) -> FlextModelsTapLdifConfig.TapLdif:
         """Validated TapLdif business-rule config (streams and their contracts)."""
         payload = self.TapLdif.model_dump()
-        return FlextTapLdifConfigModels.TapLdif.model_validate(payload)
+        return FlextModelsTapLdifConfig.TapLdif.model_validate(payload)
 
 
 config: FlextTapLdifConfig = FlextTapLdifConfig.fetch_global()

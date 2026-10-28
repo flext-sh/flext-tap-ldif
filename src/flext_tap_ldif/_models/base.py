@@ -8,8 +8,8 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 
-class FlextTapLdifModelsBase:
+class FlextModelsTapLdifBase:
     """Family base for the tap's Pydantic model namespaces."""
 
 
-__all__: list[str] = ["FlextTapLdifModelsBase"]
+__all__: list[str] = ["FlextModelsTapLdifBase"]

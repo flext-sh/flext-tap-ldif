@@ -20,11 +20,11 @@
 - Project class: `integration`
 - Keywords: `data-extraction`, `enterprise`, `etl`, `flext`, `singer`, `tap`, `typed`
 - Main facades: `FlextTapLdif`, `FlextTapLdifCli`, `FlextTapLdifConfig`,
-  `FlextTapLdifConstants`, `FlextTapLdifModels`, `FlextTapLdifProtocols`,
+  `FlextTapLdifConstants`, `FlextModelsTapLdif`, `FlextTapLdifProtocols`,
   `FlextTapLdifService`, `FlextTapLdifSettings` (+3 more)
 - Alias exports: `c`, `d`, `e`, `h`, `m`, `p`, `r`, `s`, `t`, `u`, `x`
 - Public symbol exports: `FlextTapLdif`, `FlextTapLdifCli`, `FlextTapLdifConfig`,
-  `FlextTapLdifConstants`, `FlextTapLdifModels`, `FlextTapLdifProtocols`,
+  `FlextTapLdifConstants`, `FlextModelsTapLdif`, `FlextTapLdifProtocols`,
   `FlextTapLdifService`, `FlextTapLdifSettings`, `FlextTapLdifTypes`,
   `FlextTapLdifUtilities` (+5 more)
 - Exported module shortcuts: _none_
