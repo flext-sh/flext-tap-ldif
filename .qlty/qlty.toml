@@ -18,6 +18,8 @@ exclude_patterns = [
   "**/src/flext_tap_ldif/utilities.py",
   "**/tests/__init__.py",
   "**/tests/unit/__init__.py",
+  "**/tests/models.py",
+  "**/tests/utilities.py",
 ]
 
 [smells]

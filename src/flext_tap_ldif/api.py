@@ -1,7 +1,8 @@
-"""FLEXT service orchestrator for tap-ldif.
+"""FLEXT service orchestrator for tap-ldif — declarative Singer tap.
 
-Thin facade — all infrastructure from ``FlextMeltanoTapServiceBase`` via MRO.
-Only domain-specific tap creation defined here.
+Thin facade over ``meltano.Tap``: declares the tap by building a
+``m.Meltano.TapSpec`` from config business rules and delegating record fetching
+to ``FlextTapLdifExtractService``. flext-meltano owns every ``singer_sdk`` detail.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -12,47 +13,43 @@ from __future__ import annotations
 
 from typing import Annotated, override
 
-from flext_meltano import FlextMeltanoSingerTapAdapter, FlextMeltanoTapServiceBase
+from flext_meltano import FlextMeltanoTapServiceBase
 
-from flext_tap_ldif import FlextTapLdif, m, p, t, u
+from flext_tap_ldif import c, m, p, t, u
+from flext_tap_ldif.services.extract import FlextTapLdifExtractService
 
 
 class FlextTapLdifService(FlextMeltanoTapServiceBase):
-    """Orchestrator for tap-ldif. All behavior from base via MRO."""
+    """Declarative tap-ldif orchestrator built from config + settings SSOT."""
 
     tap_name: Annotated[
         t.NonEmptyStr,
         m.Field(description="Canonical Singer tap identifier."),
-    ] = "tap-ldif"
+    ] = c.TapLdif.TAP_NAME
 
     @override
     def create_tap_instance(
         self,
-        settings: p.Settings | t.JsonMapping | None = None,
+        settings: p.Settings | None = None,
     ) -> p.Meltano.SingerTapInstance:
-        """Create the internal tap runtime backed by Singer SDK.
+        """Build the declarative Singer tap from config streams + a fetcher.
 
         Args:
-            settings: Optional settings payload (model or mapping) for the tap;
-                ``None`` starts the tap with its default config.
+            settings: Unused; the tap is built from the config SSOT.
 
         Returns:
             The resulting ``p.Meltano.SingerTapInstance``.
 
         """
-        raw_config = (
-            u.json_dict_adapter().validate_python(
-                settings.model_dump()
-                if isinstance(settings, p.HasModelDump)
-                else settings,
-            )
-            if settings is not None
-            else None
+        _ = settings
+        tap: p.Meltano.SingerTapInstance = self.build_declarative_tap(
+            u.TapLdif.tap_spec(),
+            FlextTapLdifExtractService(),
         )
-        return FlextMeltanoSingerTapAdapter(FlextTapLdif(config=raw_config))
+        return tap
 
 
 tap_ldif: FlextTapLdifService = FlextTapLdifService.fetch_global()
-"""Shared FlextTapLdifService facade instance."""
+"""Process-wide FlextTapLdifService facade singleton from the service container."""
 
 __all__: list[str] = ["FlextTapLdifService", "tap_ldif"]

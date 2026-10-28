@@ -1,29 +1,27 @@
 # AUTO-GENERATED FILE — Regenerate with: make gen
-"""Models for LDIF tap operations.
+"""FLEXT Models Facade - LDIF Tap Models.
 
-Entry and Singer shapes come from the parent libraries (``m.Ldif.*`` from
-flext-ldif, ``m.Meltano.*`` from flext-meltano); the tap declares no copies.
-
-Copyright (c) 2026 FLEXT Team. All rights reserved.
+Copyright (c) 2025 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
-
 """
 
 from __future__ import annotations
 
-from flext_ldif import m
-from flext_meltano import m as flext_meltano_m
+from flext_ldif import FlextLdifModels
+from flext_meltano import FlextMeltanoModels
 
-from flext_tap_ldif._models import FlextTapLdifModelsBase
-
-
-class FlextTapLdifModels(flext_meltano_m, m):
-    """Models facade for the LDIF tap composed from flext-meltano and flext-ldif."""
-
-    class TapLdif(FlextTapLdifModelsBase):
-        """TapLdif domain namespace."""
+from flext_tap_ldif._models.base import FlextTapLdifModelsBase
+from flext_tap_ldif._models.config import FlextTapLdifConfigModels
 
 
-# Short aliases
+class FlextTapLdifModels(
+    FlextTapLdifConfigModels,
+    FlextMeltanoModels,
+    FlextLdifModels,
+    FlextTapLdifModelsBase,
+):
+    """Facade for tap-ldif data models."""
+
+
 m = FlextTapLdifModels
 __all__: list[str] = ["FlextTapLdifModels", "m"]

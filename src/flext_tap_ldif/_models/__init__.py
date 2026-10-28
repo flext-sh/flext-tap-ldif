@@ -14,13 +14,20 @@ from flext_core.lazy import install_lazy_exports
 
 if TYPE_CHECKING:
     from flext_tap_ldif._models.base import FlextTapLdifModelsBase
+    from flext_tap_ldif._models.config import FlextTapLdifConfigModels
 
 
-__all__: tuple[str, ...] = ("FlextTapLdifModelsBase",)
+__all__: tuple[str, ...] = (
+    "FlextTapLdifConfigModels",
+    "FlextTapLdifModelsBase",
+)
 
 install_lazy_exports(
     __name__,
     globals(),
-    MappingProxyType({"FlextTapLdifModelsBase": ".base"}),
+    MappingProxyType({
+        "FlextTapLdifConfigModels": ".config",
+        "FlextTapLdifModelsBase": ".base",
+    }),
     public_exports=__all__,
 )

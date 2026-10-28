@@ -1,26 +1,30 @@
 """FlextTapLdifConfig — frozen config singleton for flext-tap-ldif (ADR-005 §7).
 
-Model-less: business rules live in ``config/*.yaml`` under the ``TapLdif:`` key and
-are exposed through the open ``config.TapLdif`` namespace (``extra="allow"``), with
-no per-domain model. Access is ``config.TapLdif.<domain>[<key>...]``.
+Business-rule SSOT: the stream contracts (name, Singer schema, primary keys)
+live in the packaged ``flext_tap_ldif/config/tap-ldif.yaml`` under the ``TapLdif:``
+key and are exposed through the open ``config.TapLdif`` namespace (``extra="allow"``).
+``config.tap_ldif`` is the validated typed view of that namespace.
 
-Copyright (c) 2025 FLEXT Team. All rights reserved.
+Copyright (c) 2026 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
 
 """
 
 from __future__ import annotations
 
+from functools import cached_property
 from typing import Annotated
 
 from flext_meltano import FlextMeltanoConfig, m
 
+from flext_tap_ldif._models.config import FlextTapLdifConfigModels
+
 
 class FlextTapLdifConfig(FlextMeltanoConfig):
-    """TapLdif config auto-loaded model-less from ``config/*.yaml``.
+    """TapLdif config auto-loaded from ``config/*.yaml``.
 
-    MRO carries ``FlextSettings`` FIRST (ENFORCE-042); the class stays a frozen,
-    YAML-validated config singleton.
+    The YAML ``TapLdif:`` slice is exposed as an open namespace and validated
+    into the typed config models behind ``config.tap_ldif``.
     """
 
     TapLdif: Annotated[
@@ -29,6 +33,12 @@ class FlextTapLdifConfig(FlextMeltanoConfig):
             description="Open namespace exposing ``config/*.yaml`` under ``TapLdif``.",
         ),
     ] = m.Meltano.MeltanoNamespace()
+
+    @cached_property
+    def tap_ldif(self) -> FlextTapLdifConfigModels.TapLdif:
+        """Validated TapLdif business-rule config (streams and their contracts)."""
+        payload = self.TapLdif.model_dump()
+        return FlextTapLdifConfigModels.TapLdif.model_validate(payload)
 
 
 config: FlextTapLdifConfig = FlextTapLdifConfig.fetch_global()

@@ -14,16 +14,14 @@ from flext_core.lazy import install_lazy_exports
 
 if TYPE_CHECKING:
     from flext_tap_ldif._utilities.base import FlextTapLdifUtilitiesBase
-    from flext_tap_ldif._utilities.entries_stream import (
-        FlextTapLdifUtilitiesEntriesStream,
+    from flext_tap_ldif._utilities.extract_support import (
+        FlextTapLdifUtilitiesExtractSupport,
     )
-    from flext_tap_ldif._utilities.processor import FlextTapLdifUtilitiesProcessor
 
 
 __all__: tuple[str, ...] = (
     "FlextTapLdifUtilitiesBase",
-    "FlextTapLdifUtilitiesEntriesStream",
-    "FlextTapLdifUtilitiesProcessor",
+    "FlextTapLdifUtilitiesExtractSupport",
 )
 
 install_lazy_exports(
@@ -31,8 +29,7 @@ install_lazy_exports(
     globals(),
     MappingProxyType({
         "FlextTapLdifUtilitiesBase": ".base",
-        "FlextTapLdifUtilitiesEntriesStream": ".entries_stream",
-        "FlextTapLdifUtilitiesProcessor": ".processor",
+        "FlextTapLdifUtilitiesExtractSupport": ".extract_support",
     }),
     public_exports=__all__,
 )

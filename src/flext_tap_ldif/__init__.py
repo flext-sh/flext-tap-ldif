@@ -14,7 +14,7 @@ from flext_core.lazy import install_lazy_exports
 
 if TYPE_CHECKING:
     from flext_ldif import ldif
-    from flext_meltano import cli, d, e, h, meltano, r, s, x
+    from flext_meltano import cli, d, e, h, meltano, r, x
 
     from flext_tap_ldif.__version__ import (
         FlextTapLdifVersion,
@@ -30,23 +30,23 @@ if TYPE_CHECKING:
     from flext_tap_ldif._config import FlextTapLdifConfig, config
     from flext_tap_ldif._settings import FlextTapLdifSettings, settings
     from flext_tap_ldif.api import FlextTapLdifService, tap_ldif
+    from flext_tap_ldif.base import FlextTapLdifServiceBase, s
     from flext_tap_ldif.cli import FlextTapLdifCli, main
     from flext_tap_ldif.constants import FlextTapLdifConstants, c
     from flext_tap_ldif.models import FlextTapLdifModels, m
     from flext_tap_ldif.protocols import FlextTapLdifProtocols, p
-    from flext_tap_ldif.tap import FlextTapLdif
     from flext_tap_ldif.typings import FlextTapLdifTypes, t
     from flext_tap_ldif.utilities import FlextTapLdifUtilities, u
 
 
 __all__: tuple[str, ...] = (
-    "FlextTapLdif",
     "FlextTapLdifCli",
     "FlextTapLdifConfig",
     "FlextTapLdifConstants",
     "FlextTapLdifModels",
     "FlextTapLdifProtocols",
     "FlextTapLdifService",
+    "FlextTapLdifServiceBase",
     "FlextTapLdifSettings",
     "FlextTapLdifTypes",
     "FlextTapLdifUtilities",
@@ -83,13 +83,13 @@ install_lazy_exports(
     __name__,
     globals(),
     MappingProxyType({
-        "FlextTapLdif": ".tap",
         "FlextTapLdifCli": ".cli",
         "FlextTapLdifConfig": "._config",
         "FlextTapLdifConstants": ".constants",
         "FlextTapLdifModels": ".models",
         "FlextTapLdifProtocols": ".protocols",
         "FlextTapLdifService": ".api",
+        "FlextTapLdifServiceBase": ".base",
         "FlextTapLdifSettings": "._settings",
         "FlextTapLdifTypes": ".typings",
         "FlextTapLdifUtilities": ".utilities",
@@ -113,7 +113,7 @@ install_lazy_exports(
         "meltano": "flext_meltano",
         "p": ".protocols",
         "r": "flext_meltano",
-        "s": "flext_meltano",
+        "s": ".base",
         "settings": "._settings",
         "t": ".typings",
         "tap_ldif": ".api",
