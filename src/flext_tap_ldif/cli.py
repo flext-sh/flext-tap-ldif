@@ -10,14 +10,16 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_tap_ldif import t, tap_ldif
+from collections.abc import Sequence
+
+from flext_tap_ldif import tap_ldif
 
 
 class FlextTapLdifCli:
     """Canonical CLI wrapper for tap-ldif service execution."""
 
     @classmethod
-    def run(cls, args: t.StrSequence | None = None) -> int:
+    def run(cls, args: Sequence[str] | None = None) -> int:
         """Run the tap entry point through the FLEXT service facade.
 
         Args:
@@ -33,7 +35,7 @@ class FlextTapLdifCli:
         return exit_code
 
 
-def main(args: t.StrSequence | None = None) -> int:
+def main(args: Sequence[str] | None = None) -> int:
     """Run the canonical tap-ldif CLI.
 
     Args:

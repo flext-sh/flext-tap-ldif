@@ -9,6 +9,8 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Sequence
+
 from flext_meltano import m, t
 
 
@@ -22,13 +24,13 @@ class FlextModelsTapLdifConfig:
             """One declarative stream business rule."""
 
             name: str = m.Field(description="Singer stream name")
-            primary_keys: t.StrSequence = m.Field(description="Record primary keys")
+            primary_keys: Sequence[str] = m.Field(description="Record primary keys")
             stream_schema: t.JsonMapping = m.Field(
                 alias="schema",
                 description="Singer stream JSON schema",
             )
 
-        streams: t.SequenceOf[StreamRule] = m.Field(
+        streams: Sequence[StreamRule] = m.Field(
             default=(),
             description="Declarative stream business rules",
         )

@@ -11,6 +11,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from pathlib import Path
 
 from flext_tap_ldif import c, m, p, r, s, t, u
@@ -39,9 +40,9 @@ class FlextTapLdifExtractService(s):
 
     def _parse_files(
         self,
-        files: t.SequenceOf[Path],
+        files: Sequence[Path],
         config_map: t.JsonMapping,
-    ) -> p.Result[t.SequenceOf[t.JsonMapping]]:
+    ) -> p.Result[Sequence[t.JsonMapping]]:
         """Parse LDIF files and pack into Singer records.
 
         Args:
@@ -49,7 +50,7 @@ class FlextTapLdifExtractService(s):
             config_map: Tap configuration mapping.
 
         Returns:
-            The resulting ``p.Result[t.SequenceOf[t.JsonMapping]]``.
+            The resulting ``p.Result[Sequence[t.JsonMapping]]``.
 
         """
         encoding_raw = config_map.get("encoding", c.DEFAULT_ENCODING)
@@ -59,16 +60,16 @@ class FlextTapLdifExtractService(s):
         for file_path in files:
             read_res = self._read_and_parse(file_path, encoding)
             if read_res.failure:
-                return r[t.SequenceOf[t.JsonMapping]].from_failure(read_res)
+                return r[Sequence[t.JsonMapping]].from_failure(read_res)
             all_records.extend(read_res.value)
 
-        return r[t.SequenceOf[t.JsonMapping]].ok(all_records)
+        return r[Sequence[t.JsonMapping]].ok(all_records)
 
     def _read_and_parse(
         self,
         file_path: Path,
         encoding: str,
-    ) -> p.Result[t.SequenceOf[t.JsonMapping]]:
+    ) -> p.Result[Sequence[t.JsonMapping]]:
         """Read and parse one LDIF file into Singer records.
 
         Args:
@@ -76,19 +77,19 @@ class FlextTapLdifExtractService(s):
             encoding: Text encoding to use.
 
         Returns:
-            The resulting ``p.Result[t.SequenceOf[t.JsonMapping]]``.
+            The resulting ``p.Result[Sequence[t.JsonMapping]]``.
 
         """
         try:
             content = file_path.read_text(encoding=encoding)
         except OSError as exc:
-            return r[t.SequenceOf[t.JsonMapping]].fail(
+            return r[Sequence[t.JsonMapping]].fail(
                 f"Failed to read LDIF file {file_path}: {exc}",
             )
 
         parse_result = self.ldif.parse_ldif(content)
         if parse_result.failure:
-            return r[t.SequenceOf[t.JsonMapping]].from_failure(parse_result)
+            return r[Sequence[t.JsonMapping]].from_failure(parse_result)
 
         records: list[t.JsonMapping] = [
             u.TapLdif.pack_entry(
@@ -97,7 +98,7 @@ class FlextTapLdifExtractService(s):
             )
             for raw_entry in parse_result.value.entries
         ]
-        return r[t.SequenceOf[t.JsonMapping]].ok(records)
+        return r[Sequence[t.JsonMapping]].ok(records)
 
 
 __all__: list[str] = ["FlextTapLdifExtractService"]

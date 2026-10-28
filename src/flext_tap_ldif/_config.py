@@ -3,7 +3,11 @@
 Business-rule SSOT: the stream contracts (name, Singer schema, primary keys)
 live in the packaged ``flext_tap_ldif/config/tap-ldif.yaml`` under the ``TapLdif:``
 key and are exposed through the open ``config.TapLdif`` namespace (``extra="allow"``).
-``config.tap_ldif`` is the validated typed view of that namespace.
+The typed validated view of that namespace is built by the consumers in the
+``u`` family (``u.TapLdif.tap_ldif()``) — config never imports the model layer
+(ADR-005 §2).
+Config holds the business rules; ``settings`` holds the adjustable runtime
+parameters (``.env`` / env vars / local settings / CLI).
 
 Copyright (c) 2026 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -12,19 +16,18 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from functools import cached_property
 from typing import Annotated
 
 from flext_meltano import FlextMeltanoConfig, m
-
-from flext_tap_ldif._models.config import FlextModelsTapLdifConfig
 
 
 class FlextTapLdifConfig(FlextMeltanoConfig):
     """TapLdif config auto-loaded from ``config/*.yaml``.
 
-    The YAML ``TapLdif:`` slice is exposed as an open namespace and validated
-    into the typed config models behind ``config.tap_ldif``.
+    ``FlextMeltanoConfig`` already carries ``FlextSettings`` first (ENFORCE-042),
+    so the class stays a frozen, YAML-validated config singleton. The YAML
+    ``TapLdif:`` slice is exposed as an open namespace; the typed validated
+    view lives behind ``u.TapLdif.tap_ldif()``.
     """
 
     TapLdif: Annotated[
@@ -33,12 +36,6 @@ class FlextTapLdifConfig(FlextMeltanoConfig):
             description="Open namespace exposing ``config/*.yaml`` under ``TapLdif``.",
         ),
     ] = m.Meltano.MeltanoNamespace()
-
-    @cached_property
-    def tap_ldif(self) -> FlextModelsTapLdifConfig.TapLdif:
-        """Validated TapLdif business-rule config (streams and their contracts)."""
-        payload = self.TapLdif.model_dump()
-        return FlextModelsTapLdifConfig.TapLdif.model_validate(payload)
 
 
 config: FlextTapLdifConfig = FlextTapLdifConfig.fetch_global()

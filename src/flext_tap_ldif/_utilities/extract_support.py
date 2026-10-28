@@ -2,7 +2,8 @@
 
 All the tap's non-trivial logic lives here as a ``_utilities`` mixin composed
 into the ``u`` facade; ``services/*`` stay thin orchestrators. Business rules are
-read from ``config.tap_ldif`` and packed into flext-meltano transport models.
+read from ``config.TapLdif`` (validated by ``u.TapLdif.tap_ldif()``) and packed
+into flext-meltano transport models.
 
 Copyright (c) 2026 FLEXT Team. All rights reserved.
 SPDX-License-Identifier: MIT
@@ -11,6 +12,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from pathlib import Path
 from typing import ClassVar
 
@@ -23,6 +25,17 @@ class FlextTapLdifUtilitiesExtractSupport:
     """Extract helpers consumed by the tap services and CLI facade."""
 
     logger: ClassVar[p.Logger] = u.fetch_logger(__name__)
+
+    @staticmethod
+    def tap_ldif() -> m.TapLdif:
+        """Validated TapLdif business-rule config (streams and their contracts).
+
+        Returns:
+            The resulting ``m.TapLdif``.
+
+        """
+        payload: t.JsonMapping = config.TapLdif.model_dump()
+        return m.TapLdif.model_validate(dict(payload))
 
     @staticmethod
     def tap_spec() -> m.Meltano.TapSpec:
@@ -38,7 +51,7 @@ class FlextTapLdifUtilitiesExtractSupport:
                 json_schema=rule.stream_schema,
                 primary_keys=tuple(rule.primary_keys),
             )
-            for rule in config.tap_ldif.streams
+            for rule in FlextTapLdifUtilitiesExtractSupport.tap_ldif().streams
         )
         return m.Meltano.TapSpec(
             tap_name=c.TapLdif.TAP_NAME,
@@ -50,41 +63,41 @@ class FlextTapLdifUtilitiesExtractSupport:
     def _resolve_single_file(
         path_str: str,
         max_bytes: int,
-    ) -> p.Result[t.SequenceOf[Path]]:
+    ) -> p.Result[Sequence[Path]]:
         path = Path(path_str)
         if not path.exists():
-            return r[t.SequenceOf[Path]].fail(f"File not found: {path}")
+            return r[Sequence[Path]].fail(f"File not found: {path}")
         if path.stat().st_size > max_bytes:
-            return r[t.SequenceOf[Path]].fail(f"File exceeds max size: {path}")
-        return r[t.SequenceOf[Path]].ok((path,))
+            return r[Sequence[Path]].fail(f"File exceeds max size: {path}")
+        return r[Sequence[Path]].ok((path,))
 
     @staticmethod
     def _resolve_dir_files(
         dir_str: str,
         pattern: str,
         max_bytes: int,
-    ) -> p.Result[t.SequenceOf[Path]]:
+    ) -> p.Result[Sequence[Path]]:
         dir_path = Path(dir_str)
         if not dir_path.is_dir():
-            return r[t.SequenceOf[Path]].fail(f"Directory not found: {dir_path}")
+            return r[Sequence[Path]].fail(f"Directory not found: {dir_path}")
         matched = tuple(
             f
             for f in sorted(dir_path.glob(pattern))
             if f.is_file() and f.stat().st_size <= max_bytes
         )
         if not matched:
-            return r[t.SequenceOf[Path]].fail("No LDIF files discovered")
-        return r[t.SequenceOf[Path]].ok(matched)
+            return r[Sequence[Path]].fail("No LDIF files discovered")
+        return r[Sequence[Path]].ok(matched)
 
     @staticmethod
-    def resolve_files(source: t.JsonMapping) -> p.Result[t.SequenceOf[Path]]:
+    def resolve_files(source: t.JsonMapping) -> p.Result[Sequence[Path]]:
         """Discover LDIF files from the tap runtime config mapping.
 
         Args:
             source: Tap runtime config mapping.
 
         Returns:
-            The resulting ``p.Result[t.SequenceOf[Path]]``.
+            The resulting ``p.Result[Sequence[Path]]``.
 
         """
         file_path_raw = source.get("file_path")
@@ -115,7 +128,7 @@ class FlextTapLdifUtilitiesExtractSupport:
                 max_bytes,
             )
 
-        return r[t.SequenceOf[Path]].fail("No file_path or directory_path specified")
+        return r[Sequence[Path]].fail("No file_path or directory_path specified")
 
     @staticmethod
     def pack_entry(
