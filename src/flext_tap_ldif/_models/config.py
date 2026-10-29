@@ -27,7 +27,7 @@ class FlextModelsTapLdifConfig:
 
             name: str = m.Field(description="Singer stream name")
             primary_keys: Sequence[str] = m.Field(description="Record primary keys")
-            stream_schema: t.JsonMapping = m.Field(
+            stream_schema: t.MappingKV[str, t.JsonValue] = m.Field(
                 alias="schema",
                 description="Singer stream JSON schema",
             )

@@ -8,13 +8,13 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from collections.abc import (
-    Mapping as collections_abc_Mapping,
-    Sequence as collections_abc_Sequence,
-)
-from typing import Protocol, runtime_checkable
+from collections.abc import Sequence as collections_abc_Sequence
+from typing import TYPE_CHECKING, Protocol, runtime_checkable
 
 import pydantic
+
+if TYPE_CHECKING:
+    from flext_tap_ldif import t as flext_tap_ldif_t
 
 
 class FlextTapLdifTapLdifProtocolsGeneratedModelsStreamRule:
@@ -26,7 +26,7 @@ class FlextTapLdifTapLdifProtocolsGeneratedModelsStreamRule:
 
         name: str
         primary_keys: collections_abc_Sequence[str]
-        stream_schema: collections_abc_Mapping[str, pydantic.JsonValue]
+        stream_schema: flext_tap_ldif_t.MappingKV[str, pydantic.JsonValue]
 
 
 __all__: list[str] = [
