@@ -43,15 +43,13 @@ class TestsFlextTapLdifTypes(FlextTestsTypes, FlextTapLdifTypes):
 
         type MockLdifEntry = Mapping[
             str,
-            str | Mapping[str, FlextTestsTypes.Sequence[str]],
+            str | Mapping[str, Sequence[str]],
         ]
-        type MockLdifFile = Sequence[
-            Mapping[str, str | Mapping[str, FlextTestsTypes.Sequence[str]]]
-        ]
+        type MockLdifFile = Sequence[Mapping[str, str | Mapping[str, Sequence[str]]]]
         type TestLdifScenario = FlextTestsTypes.JsonMapping
         type TestLdifValidationResult = Mapping[
             str,
-            bool | str | FlextTestsTypes.Sequence[str],
+            bool | str | Sequence[str],
         ]
         type TestLdifParsingResult = FlextTestsTypes.JsonMapping
 

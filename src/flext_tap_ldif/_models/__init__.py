@@ -17,17 +17,14 @@ if TYPE_CHECKING:
     from flext_tap_ldif._models.config import FlextModelsTapLdifConfig
 
 
-__all__: tuple[str, ...] = (
-    "FlextModelsTapLdifBase",
-    "FlextModelsTapLdifConfig",
-)
+__all__: tuple[str, ...] = ("FlextModelsTapLdifBase", "FlextModelsTapLdifConfig")
 
 install_lazy_exports(
     __name__,
     globals(),
     MappingProxyType({
-        "FlextModelsTapLdifConfig": ".config",
         "FlextModelsTapLdifBase": ".base",
+        "FlextModelsTapLdifConfig": ".config",
     }),
     public_exports=__all__,
 )

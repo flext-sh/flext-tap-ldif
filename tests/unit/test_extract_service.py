@@ -8,9 +8,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from flext_tap_ldif import m
 from flext_tap_ldif.services.extract import FlextTapLdifExtractService
-from tests import tm
+from tests import m, tm
 
 
 class TestsFlextTapLdifExtractService:

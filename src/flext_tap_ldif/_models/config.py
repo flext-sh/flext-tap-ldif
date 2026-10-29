@@ -11,7 +11,9 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 
-from flext_meltano import m, t
+from flext_meltano import m
+
+from flext_tap_ldif import t
 
 
 class FlextModelsTapLdifConfig:

@@ -1,6 +1,6 @@
 """Behavioral tests for the tap-ldif extract-support helpers.
 
-Expected values are read from the ``config.tap_ldif`` business-rule SSOT, so the
+Expected values are read from the ``config.TapLdif`` business-rule SSOT, so the
 tests stay valid for any configured stream set.
 
 Copyright (c) 2026 FLEXT Team. All rights reserved.
@@ -11,7 +11,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from flext_tap_ldif import config
 from tests import c, tm, u
 
 
@@ -26,11 +25,11 @@ class TestsFlextTapLdifExtractSupport:
         tm.that(spec.tap_name, eq=c.TapLdif.TAP_NAME)
         tm.that(
             [stream.name for stream in spec.streams],
-            eq=[rule.name for rule in config.tap_ldif.streams],
+            eq=[rule.name for rule in u.TapLdif.tap_ldif().streams],
         )
         tm.that(
             [list(stream.primary_keys) for stream in spec.streams],
-            eq=[list(rule.primary_keys) for rule in config.tap_ldif.streams],
+            eq=[list(rule.primary_keys) for rule in u.TapLdif.tap_ldif().streams],
         )
 
     @staticmethod

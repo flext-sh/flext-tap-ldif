@@ -11,10 +11,9 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_ldif import ldif
 from flext_meltano import FlextMeltanoServiceBase
 
-from flext_tap_ldif import m, p
+from flext_tap_ldif import ldif, m, p
 
 
 class FlextTapLdifServiceBase(FlextMeltanoServiceBase):

@@ -7,18 +7,17 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_ldif import FlextLdifModels
-from flext_meltano import FlextMeltanoModels
+from flext_ldif import m as flext_ldif_m
+from flext_meltano import m as flext_meltano_m
 
-from flext_tap_ldif._models.base import FlextModelsTapLdifBase
-from flext_tap_ldif._models.config import FlextModelsTapLdifConfig
+from flext_tap_ldif._models import FlextModelsTapLdifBase, FlextModelsTapLdifConfig
 
 
 class FlextModelsTapLdif(
-    FlextModelsTapLdifConfig,
-    FlextMeltanoModels,
-    FlextLdifModels,
     FlextModelsTapLdifBase,
+    FlextModelsTapLdifConfig,
+    flext_meltano_m,
+    flext_ldif_m,
 ):
     """Facade for tap-ldif data models."""
 
