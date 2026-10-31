@@ -1,3 +1,23 @@
 TapLdif:
-  name: flext-tap-ldif
-  version: "0.20.0-dev"
+  streams:
+    - name: ldif_entries
+      primary_keys: ["dn"]
+      schema:
+        type: object
+        properties:
+          dn:
+            type: string
+          attributes:
+            type: object
+          object_class:
+            type: array
+            items:
+              type: string
+          change_type:
+            type: string
+          source_file:
+            type: string
+          line_number:
+            type: integer
+          entry_size:
+            type: integer

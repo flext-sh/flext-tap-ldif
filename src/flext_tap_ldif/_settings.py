@@ -10,7 +10,7 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Annotated
+from typing import TYPE_CHECKING, Annotated, ClassVar
 
 from flext_core import FlextSettings, m
 
@@ -18,14 +18,14 @@ from flext_core import FlextSettings, m
 class FlextTapLdifSettings(FlextSettings):
     """Tap-LDIF runtime settings; fields under ``settings.TapLdif.*``."""
 
-    model_config = m.SettingsConfigDict(
+    model_config: ClassVar[m.SettingsConfigDict] = m.SettingsConfigDict(
         env_prefix="FLEXT_TAP_LDIF_",
         env_nested_delimiter="__",
         extra="ignore",
         validate_assignment=True,
     )
 
-    class _TapLdif(m.BaseModel):
+    class _TapLdif(m.StrictModel):
         """Namespaced tap-LDIF settings."""
 
         file_path: Annotated[str | None, m.Field(description="LDIF file path")] = None

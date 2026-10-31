@@ -12,12 +12,28 @@ from typing import TYPE_CHECKING
 
 from flext_core.lazy import install_lazy_exports
 
-from flext_tap_ldif.__version__ import __version__
-
 if TYPE_CHECKING:
-    from flext_meltano import d, e, h, r, s, x
+    from flext_ldif import ldif
+    from flext_meltano import (
+        build_lazy_import_map,
+        cleanup_submodule_namespace,
+        cli,
+        core,
+        d,
+        e,
+        h,
+        install_lazy_exports,
+        lazy,
+        lazy_getattr,
+        lazy_member,
+        meltano,
+        merge_lazy_imports,
+        normalize_lazy_imports,
+        r,
+        resolve_lazy_members,
+        x,
+    )
 
-    from flext_tap_ldif import _constants, _models, _utilities
     from flext_tap_ldif.__version__ import (
         FlextTapLdifVersion,
         __author__,
@@ -26,28 +42,29 @@ if TYPE_CHECKING:
         __license__,
         __title__,
         __url__,
+        __version__,
         __version_info__,
     )
     from flext_tap_ldif._config import FlextTapLdifConfig, config
     from flext_tap_ldif._settings import FlextTapLdifSettings, settings
     from flext_tap_ldif.api import FlextTapLdifService, tap_ldif
+    from flext_tap_ldif.base import FlextTapLdifServiceBase, s
     from flext_tap_ldif.cli import FlextTapLdifCli, main
     from flext_tap_ldif.constants import FlextTapLdifConstants, c
-    from flext_tap_ldif.models import FlextTapLdifModels, m
+    from flext_tap_ldif.models import FlextModelsTapLdif, m
     from flext_tap_ldif.protocols import FlextTapLdifProtocols, p
-    from flext_tap_ldif.tap import FlextTapLdif
     from flext_tap_ldif.typings import FlextTapLdifTypes, t
     from flext_tap_ldif.utilities import FlextTapLdifUtilities, u
 
 
 __all__: tuple[str, ...] = (
-    "FlextTapLdif",
+    "FlextModelsTapLdif",
     "FlextTapLdifCli",
     "FlextTapLdifConfig",
     "FlextTapLdifConstants",
-    "FlextTapLdifModels",
     "FlextTapLdifProtocols",
     "FlextTapLdifService",
+    "FlextTapLdifServiceBase",
     "FlextTapLdifSettings",
     "FlextTapLdifTypes",
     "FlextTapLdifUtilities",
@@ -60,18 +77,28 @@ __all__: tuple[str, ...] = (
     "__url__",
     "__version__",
     "__version_info__",
-    "_constants",
-    "_models",
-    "_utilities",
+    "build_lazy_import_map",
     "c",
+    "cleanup_submodule_namespace",
+    "cli",
     "config",
+    "core",
     "d",
     "e",
     "h",
+    "install_lazy_exports",
+    "lazy",
+    "lazy_getattr",
+    "lazy_member",
+    "ldif",
     "m",
     "main",
+    "meltano",
+    "merge_lazy_imports",
+    "normalize_lazy_imports",
     "p",
     "r",
+    "resolve_lazy_members",
     "s",
     "settings",
     "t",
@@ -84,13 +111,13 @@ install_lazy_exports(
     __name__,
     globals(),
     MappingProxyType({
-        "FlextTapLdif": ".tap",
+        "FlextModelsTapLdif": ".models",
         "FlextTapLdifCli": ".cli",
         "FlextTapLdifConfig": "._config",
         "FlextTapLdifConstants": ".constants",
-        "FlextTapLdifModels": ".models",
         "FlextTapLdifProtocols": ".protocols",
         "FlextTapLdifService": ".api",
+        "FlextTapLdifServiceBase": ".base",
         "FlextTapLdifSettings": "._settings",
         "FlextTapLdifTypes": ".typings",
         "FlextTapLdifUtilities": ".utilities",
@@ -102,19 +129,29 @@ install_lazy_exports(
         "__title__": ".__version__",
         "__url__": ".__version__",
         "__version_info__": ".__version__",
-        "_constants": "._constants",
-        "_models": "._models",
-        "_utilities": "._utilities",
+        "build_lazy_import_map": "flext_meltano",
         "c": ".constants",
+        "cleanup_submodule_namespace": "flext_meltano",
+        "cli": "flext_meltano",
         "config": "._config",
+        "core": "flext_meltano",
         "d": "flext_meltano",
         "e": "flext_meltano",
         "h": "flext_meltano",
+        "install_lazy_exports": "flext_meltano",
+        "lazy": "flext_meltano",
+        "lazy_getattr": "flext_meltano",
+        "lazy_member": "flext_meltano",
+        "ldif": "flext_ldif",
         "m": ".models",
         "main": ".cli",
+        "meltano": "flext_meltano",
+        "merge_lazy_imports": "flext_meltano",
+        "normalize_lazy_imports": "flext_meltano",
         "p": ".protocols",
         "r": "flext_meltano",
-        "s": "flext_meltano",
+        "resolve_lazy_members": "flext_meltano",
+        "s": ".base",
         "settings": "._settings",
         "t": ".typings",
         "tap_ldif": ".api",
@@ -123,3 +160,6 @@ install_lazy_exports(
     }),
     public_exports=__all__,
 )
+
+if not TYPE_CHECKING:
+    from flext_tap_ldif.__version__ import __version__

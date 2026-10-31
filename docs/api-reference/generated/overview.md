@@ -19,13 +19,13 @@
   Typed
 - Project class: `integration`
 - Keywords: `data-extraction`, `enterprise`, `etl`, `flext`, `singer`, `tap`, `typed`
-- Main facades: `FlextTapLdif`, `FlextTapLdifCli`, `FlextTapLdifConfig`,
-  `FlextTapLdifConstants`, `FlextTapLdifModels`, `FlextTapLdifProtocols`,
-  `FlextTapLdifService`, `FlextTapLdifSettings` (+3 more)
+- Main facades: `FlextTapLdifCli`, `FlextTapLdifConfig`, `FlextTapLdifConstants`,
+  `FlextTapLdifProtocols`, `FlextTapLdifService`, `FlextTapLdifServiceBase`,
+  `FlextTapLdifSettings`, `FlextTapLdifTypes` (+2 more)
 - Alias exports: `c`, `d`, `e`, `h`, `m`, `p`, `r`, `s`, `t`, `u`, `x`
-- Public symbol exports: `FlextTapLdif`, `FlextTapLdifCli`, `FlextTapLdifConfig`,
-  `FlextTapLdifConstants`, `FlextTapLdifModels`, `FlextTapLdifProtocols`,
-  `FlextTapLdifService`, `FlextTapLdifSettings`, `FlextTapLdifTypes`,
+- Public symbol exports: `FlextModelsTapLdif`, `FlextTapLdifCli`, `FlextTapLdifConfig`,
+  `FlextTapLdifConstants`, `FlextTapLdifProtocols`, `FlextTapLdifService`,
+  `FlextTapLdifServiceBase`, `FlextTapLdifSettings`, `FlextTapLdifTypes`,
   `FlextTapLdifUtilities` (+5 more)
 - Exported module shortcuts: _none_
 - Generated module pages: `8`
