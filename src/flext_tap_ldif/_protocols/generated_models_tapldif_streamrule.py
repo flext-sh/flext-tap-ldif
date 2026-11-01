@@ -9,12 +9,11 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from collections.abc import Sequence as collections_abc_Sequence
-from typing import TYPE_CHECKING, Protocol, runtime_checkable
+from typing import Protocol, runtime_checkable
 
 import pydantic
 
-if TYPE_CHECKING:
-    from flext_tap_ldif import t as flext_tap_ldif_t
+from flext_tap_ldif import t as flext_tap_ldif_t
 
 
 class FlextTapLdifTapLdifProtocolsGeneratedModelsStreamRule:
