@@ -31,7 +31,7 @@ class FlextTapLdifCli:
 
         """
         _ = cls
-        exit_code: int = tap_ldif.cli_main(args)  # pyright: ignore[reportUnknownMemberType]
+        exit_code: int = tap_ldif.cli_main(args)
         return exit_code
 
 
