@@ -17,8 +17,18 @@ from __future__ import annotations
 from flext_ldif import p as flext_ldif_p
 from flext_meltano import p as flext_meltano_p
 
+from flext_tap_ldif._protocols import (
+    FlextTapLdifProtocolsGeneratedModelsTapLdif,
+    FlextTapLdifTapLdifProtocolsGeneratedModelsStreamRule,
+)
 
-class FlextTapLdifProtocols(flext_meltano_p, flext_ldif_p):
+
+class FlextTapLdifProtocols(
+    flext_meltano_p,
+    flext_ldif_p,
+    FlextTapLdifProtocolsGeneratedModelsTapLdif,
+    FlextTapLdifTapLdifProtocolsGeneratedModelsStreamRule,
+):
     """Singer Tap LDIF protocols facade — composes Meltano + LDIF."""
 
 
