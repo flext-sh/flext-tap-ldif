@@ -18,7 +18,7 @@ from flext_core import FlextSettings, m
 class FlextTapLdifSettings(FlextSettings):
     """Tap-LDIF runtime settings; fields under ``settings.TapLdif.*``."""
 
-    model_config: ClassVar[m.SettingsConfigDict] = m.SettingsConfigDict(
+    model_config: ClassVar[p.SettingsConfigDict] = m.SettingsConfigDict(
         env_prefix="FLEXT_TAP_LDIF_",
         env_nested_delimiter="__",
         extra="ignore",

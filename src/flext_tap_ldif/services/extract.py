@@ -20,14 +20,14 @@ from flext_tap_ldif import c, m, p, r, s, t, u
 class FlextTapLdifExtractService(s):
     """Thin orchestrator: discover, parse, and pack LDIF records."""
 
-    def fetch(self, request: m.Meltano.FetchRequest) -> p.Result[m.Meltano.FetchResult]:
+    def fetch(self, request: p.Meltano.FetchRequest) -> p.Result[p.Meltano.FetchResult]:
         """Return the records for ``request.stream_name`` as a typed result.
 
         Args:
             request: Fetch request naming the stream and carrying the tap config.
 
         Returns:
-            The resulting ``p.Result[m.Meltano.FetchResult]``.
+            The resulting ``p.Result[p.Meltano.FetchResult]``.
 
         """
         config_map = dict(request.config)
@@ -35,7 +35,7 @@ class FlextTapLdifExtractService(s):
             u.TapLdif
             .resolve_files(config_map)
             .flat_map(lambda files: self._parse_files(files, config_map))
-            .map(lambda records: m.Meltano.FetchResult(records=tuple(records)))
+            .map(lambda records: p.Meltano.FetchResult(records=tuple(records)))
         )
 
     def _parse_files(
