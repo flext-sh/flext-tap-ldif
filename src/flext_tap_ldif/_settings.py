@@ -12,13 +12,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Annotated, ClassVar
 
-from flext_core import FlextSettings, m
+from flext_core import FlextSettings, m, t
 
 
 class FlextTapLdifSettings(FlextSettings):
     """Tap-LDIF runtime settings; fields under ``settings.TapLdif.*``."""
 
-    model_config: ClassVar[p.SettingsConfigDict] = m.SettingsConfigDict(
+    model_config: ClassVar[t.SettingsConfigDict] = m.SettingsConfigDict(
         env_prefix="FLEXT_TAP_LDIF_",
         env_nested_delimiter="__",
         extra="ignore",
