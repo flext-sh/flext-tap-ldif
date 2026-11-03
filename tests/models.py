@@ -13,13 +13,13 @@ from __future__ import annotations
 
 from flext_tests import FlextTestsModels
 
-from flext_tap_ldif import FlextModelsTapLdif
+from flext_tap_ldif import FlextTapLdifModels
 
 
-class TestsFlextTapLdifModels(FlextTestsModels, FlextModelsTapLdif):
+class TestsFlextTapLdifModels(FlextTestsModels, FlextTapLdifModels):
     """Test models combining TestsFlextModels with flext-tap-ldif models."""
 
-    class TapLdif(FlextModelsTapLdif.TapLdif):
+    class TapLdif(FlextTapLdifModels.TapLdif):
         """TapLdif domain models extending project models."""
 
         class Tests:

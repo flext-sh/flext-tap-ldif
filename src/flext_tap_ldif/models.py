@@ -10,17 +10,17 @@ from __future__ import annotations
 from flext_ldif import m as flext_ldif_m
 from flext_meltano import m as flext_meltano_m
 
-from flext_tap_ldif._models import FlextModelsTapLdifBase, FlextModelsTapLdifConfig
+from flext_tap_ldif._models import FlextTapLdifModelsBase, FlextTapLdifModelsConfig
 
 
-class FlextModelsTapLdif(
-    FlextModelsTapLdifBase,
-    FlextModelsTapLdifConfig,
+class FlextTapLdifModels(
     flext_meltano_m,
     flext_ldif_m,
+    FlextTapLdifModelsBase,
+    FlextTapLdifModelsConfig,
 ):
     """Facade for tap-ldif data models."""
 
 
-m = FlextModelsTapLdif
-__all__: list[str] = ["FlextModelsTapLdif", "m"]
+m = FlextTapLdifModels
+__all__: list[str] = ["FlextTapLdifModels", "m"]

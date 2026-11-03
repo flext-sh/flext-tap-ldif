@@ -11,16 +11,15 @@ from __future__ import annotations
 from flext_ldif import u as flext_ldif_u
 from flext_meltano import u as flext_meltano_u
 
-from flext_tap_ldif._utilities import (
-    FlextTapLdifUtilitiesBase,
-    FlextTapLdifUtilitiesExtractSupport,
-)
+from flext_tap_ldif._utilities import FlextTapLdifUtilitiesExtractSupport
 
 
 class FlextTapLdifUtilities(flext_meltano_u, flext_ldif_u):
     """LDIF tap extraction-specific utilities following flext-core patterns."""
 
-    class TapLdif(FlextTapLdifUtilitiesExtractSupport, FlextTapLdifUtilitiesBase):
+    class TapLdif(
+        FlextTapLdifUtilitiesExtractSupport,
+    ):
         """Tap LDIF utilities namespace."""
 
 
