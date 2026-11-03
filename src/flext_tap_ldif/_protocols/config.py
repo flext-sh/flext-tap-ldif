@@ -9,18 +9,19 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from collections.abc import Sequence
-from typing import Protocol, runtime_checkable
+from typing import TYPE_CHECKING, Protocol, runtime_checkable
 
 from flext_meltano import FlextMeltanoProtocols
 
-from flext_tap_ldif import t
+if TYPE_CHECKING:
+    from flext_tap_ldif import t
 
 
 class FlextTapLdifProtocolsConfig:
     """Own the structural contracts declared by its model source."""
 
     @runtime_checkable
-    class TapLdif(FlextMeltanoProtocols.Model, Protocol):
+    class TapLdif(FlextMeltanoProtocols.BaseModel, Protocol):
         """Structural data contract projected from the owning model."""
 
         @property
@@ -29,7 +30,7 @@ class FlextTapLdifProtocolsConfig:
             ...
 
     @runtime_checkable
-    class TapLdifStreamRule(FlextMeltanoProtocols.Model, Protocol):
+    class TapLdifStreamRule(FlextMeltanoProtocols.BaseModel, Protocol):
         """Structural data contract projected from the owning model."""
 
         @property
@@ -48,13 +49,10 @@ class FlextTapLdifProtocolsConfig:
             ...
 
     @runtime_checkable
-    class Root(FlextMeltanoProtocols.Model, Protocol):
+    class Root(FlextMeltanoProtocols.BaseModel, Protocol):
         """Structural data contract projected from the owning model."""
 
-        @property
-        def TapLdif(self) -> FlextTapLdifProtocolsConfig.TapLdif:
-            """TapLdif business-rule config domain."""
-            ...
+        TapLdif: FlextTapLdifProtocolsConfig.TapLdif
 
 
 __all__: list[str] = [

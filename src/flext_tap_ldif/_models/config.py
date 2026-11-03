@@ -10,10 +10,11 @@ SPDX-License-Identifier: MIT
 from __future__ import annotations
 
 from collections.abc import Sequence
+from typing import Annotated
 
 from flext_meltano import m
 
-from flext_tap_ldif import t
+from flext_tap_ldif import p, t
 
 
 class FlextTapLdifModelsConfig:
@@ -37,12 +38,14 @@ class FlextTapLdifModelsConfig:
             description="Declarative stream business rules",
         )
 
-    class Root(m.FrozenModel):
+    class Root(m.StrictModel):
         """Root flext-tap-ldif config validated from ``config/*.yaml``."""
 
         model_config = m.ConfigDict(extra="allow")
 
-        TapLdif: FlextTapLdifModelsConfig.TapLdif = m.Field(
+        TapLdif: Annotated[
+            p.TapLdif, t.schema_for_model(FlextTapLdifModelsConfig.TapLdif)
+        ] = m.Field(
             description="TapLdif business-rule config domain",
         )
 
