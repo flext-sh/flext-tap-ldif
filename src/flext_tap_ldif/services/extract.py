@@ -35,7 +35,7 @@ class FlextTapLdifExtractService(s):
             u.TapLdif
             .resolve_files(config_map)
             .flat_map(lambda files: self._parse_files(files, config_map))
-            .map(lambda records: p.Meltano.FetchResult(records=tuple(records)))
+            .map(lambda records: m.Meltano.FetchResult(records=tuple(records)))
         )
 
     def _parse_files(
