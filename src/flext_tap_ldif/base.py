@@ -14,7 +14,8 @@ from __future__ import annotations
 from flext_ldif import ldif
 from flext_meltano import FlextMeltanoServiceBase
 
-from flext_tap_ldif import m, p
+from flext_tap_ldif.models import m
+from flext_tap_ldif.protocols import p
 
 
 class FlextTapLdifServiceBase(FlextMeltanoServiceBase):

@@ -14,7 +14,13 @@ from __future__ import annotations
 from collections.abc import Sequence
 from pathlib import Path
 
-from flext_tap_ldif import c, m, p, r, s, t, u
+from flext_tap_ldif.constants import c
+from flext_tap_ldif.models import m
+from flext_tap_ldif.protocols import p
+from flext_tap_ldif.result import r
+from flext_tap_ldif.service import s
+from flext_tap_ldif.typings import t
+from flext_tap_ldif.utilities import u
 
 
 class FlextTapLdifExtractService(s):

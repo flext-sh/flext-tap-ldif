@@ -14,7 +14,8 @@ from typing import Annotated
 
 from flext_meltano import m
 
-from flext_tap_ldif import p, t
+from flext_tap_ldif.protocols import p
+from flext_tap_ldif.typings import t
 
 
 class FlextTapLdifModelsConfig:
