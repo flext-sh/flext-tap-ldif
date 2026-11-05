@@ -16,7 +16,9 @@ from collections.abc import Sequence
 from pathlib import Path
 from typing import ClassVar
 
-from flext_tap_ldif import c, config, m, p, r, settings, t, u
+from flext_meltano import r, u
+
+from flext_tap_ldif import c, config, m, p, settings, t
 
 
 class FlextTapLdifUtilitiesExtractSupport:
