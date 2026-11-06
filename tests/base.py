@@ -10,8 +10,7 @@ from typing import override
 
 from flext_tests import FlextTestsServiceBase
 
-from flext_tap_ldif import m
-from tests.settings import TestsFlextTapLdifSettings
+from tests import TestsFlextTapLdifSettings, m, p
 
 
 class TestsFlextTapLdifServiceBase(FlextTestsServiceBase):
@@ -22,7 +21,7 @@ class TestsFlextTapLdifServiceBase(FlextTestsServiceBase):
     # pattern per flext-cli tests/base.py).
     @classmethod
     @override
-    def runtime_bootstrap_options(cls) -> m.RuntimeBootstrapOptions:
+    def runtime_bootstrap_options(cls) -> p.RuntimeBootstrapOptions:
         return m.RuntimeBootstrapOptions(settings_type=TestsFlextTapLdifSettings)
 
 

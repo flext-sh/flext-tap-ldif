@@ -1,3 +1,4 @@
+# AUTO-GENERATED FILE — Regenerate with: make gen
 """FLEXT Tap LDIF Protocols — domain-specific LDIF tap protocol facade.
 
 The 5 inner ``TapLdif.*`` Protocol classes that previously lived here had
@@ -13,11 +14,17 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_ldif import FlextLdifProtocols
-from flext_meltano import FlextMeltanoProtocols
+from flext_ldif import p as flext_ldif_p
+from flext_meltano import p as flext_meltano_p
+
+from flext_tap_ldif._protocols import FlextTapLdifProtocolsConfig
 
 
-class FlextTapLdifProtocols(FlextMeltanoProtocols, FlextLdifProtocols):
+class FlextTapLdifProtocols(
+    flext_meltano_p,
+    flext_ldif_p,
+    FlextTapLdifProtocolsConfig,
+):
     """Singer Tap LDIF protocols facade — composes Meltano + LDIF."""
 
 

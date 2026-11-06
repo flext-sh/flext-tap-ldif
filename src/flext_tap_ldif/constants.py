@@ -1,3 +1,4 @@
+# AUTO-GENERATED FILE — Regenerate with: make gen
 """FLEXT Tap LDIF Constants - LDIF tap extraction constants.
 
 Copyright (c) 2025 FLEXT Team. All rights reserved.
@@ -7,19 +8,16 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from flext_ldif import c as flext_ldif_c
+from flext_meltano import c as flext_meltano_c
 
-from flext_ldif import FlextLdifConstants
-from flext_meltano import FlextMeltanoConstants
-
-from flext_tap_ldif._constants import FlextTapLdifConstantsValues
-from flext_tap_ldif._constants.base import FlextTapLdifConstantsBase
-
-if TYPE_CHECKING:
-    from flext_tap_ldif import t
+from flext_tap_ldif._constants import (
+    FlextTapLdifConstantsBase,
+    FlextTapLdifConstantsValues,
+)
 
 
-class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
+class FlextTapLdifConstants(flext_meltano_c, flext_ldif_c):
     """LDIF tap extraction-specific constants following flext-core patterns.
 
     Composes with the flext-meltano and flext-ldif constant facades to avoid
@@ -37,4 +35,4 @@ class FlextTapLdifConstants(FlextMeltanoConstants, FlextLdifConstants):
 
 
 c = FlextTapLdifConstants
-__all__: t.StrSequence = ("FlextTapLdifConstants", "c")
+__all__: list[str] = ["FlextTapLdifConstants", "c"]

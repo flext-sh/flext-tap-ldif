@@ -7,20 +7,28 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from types import MappingProxyType
 from typing import TYPE_CHECKING
 
 from flext_core.lazy import install_lazy_exports
 
 if TYPE_CHECKING:
     from flext_tap_ldif._utilities.base import FlextTapLdifUtilitiesBase
+    from flext_tap_ldif._utilities.extract_support import (
+        FlextTapLdifUtilitiesExtractSupport,
+    )
 
 
-__all__: tuple[str, ...] = ("FlextTapLdifUtilitiesBase",)
+__all__: tuple[str, ...] = (
+    "FlextTapLdifUtilitiesBase",
+    "FlextTapLdifUtilitiesExtractSupport",
+)
 
 install_lazy_exports(
     __name__,
     globals(),
-    MappingProxyType({"FlextTapLdifUtilitiesBase": ".base"}),
+    {
+        "FlextTapLdifUtilitiesBase": ".base",
+        "FlextTapLdifUtilitiesExtractSupport": ".extract_support",
+    },
     public_exports=__all__,
 )
