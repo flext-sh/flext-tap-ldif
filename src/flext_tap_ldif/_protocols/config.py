@@ -52,7 +52,10 @@ class FlextTapLdifProtocolsConfig:
     class Root(FlextMeltanoProtocols.BaseModel, Protocol):
         """Structural data contract projected from the owning model."""
 
-        TapLdif: FlextTapLdifProtocolsConfig.TapLdif
+        @property
+        def TapLdif(self) -> FlextTapLdifProtocolsConfig.TapLdif:
+            """TapLdif business-rule config domain."""
+            ...
 
 
 __all__: list[str] = [
