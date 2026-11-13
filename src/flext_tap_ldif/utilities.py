@@ -8,13 +8,13 @@ SPDX-License-Identifier: MIT
 
 from __future__ import annotations
 
-from flext_ldif import u as flext_ldif_u
-from flext_meltano import u as flext_meltano_u
+from flext_ldif import FlextLdifUtilities
+from flext_meltano import FlextMeltanoUtilities
 
 from flext_tap_ldif._utilities import FlextTapLdifUtilitiesExtractSupport
 
 
-class FlextTapLdifUtilities(flext_meltano_u, flext_ldif_u):
+class FlextTapLdifUtilities(FlextMeltanoUtilities, FlextLdifUtilities):
     """LDIF tap extraction-specific utilities following flext-core patterns."""
 
     class TapLdif(
