@@ -37,10 +37,7 @@ if TYPE_CHECKING:
     from tests.protocols import TestsFlextTapLdifProtocols, p
     from tests.settings import TestsFlextTapLdifSettings
     from tests.typings import TestsFlextTapLdifTypes, t
-    from tests.unit import (
-        TestsFlextTapLdifExtractService,
-        TestsFlextTapLdifExtractSupport,
-    )
+    from tests.unit import TestsFlextTapLdifExtractSupport
     from tests.utilities import TestsFlextTapLdifUtilities, u
 
 
@@ -57,7 +54,6 @@ __all__: tuple[str, ...] = (
     "FlextTapLdifUtilities",
     "FlextTapLdifVersion",
     "TestsFlextTapLdifConstants",
-    "TestsFlextTapLdifExtractService",
     "TestsFlextTapLdifExtractSupport",
     "TestsFlextTapLdifModels",
     "TestsFlextTapLdifProtocols",
@@ -103,7 +99,6 @@ install_lazy_exports(
         "FlextTapLdifUtilities": "flext_tap_ldif",
         "FlextTapLdifVersion": "flext_tap_ldif",
         "TestsFlextTapLdifConstants": ".constants",
-        "TestsFlextTapLdifExtractService": ".unit",
         "TestsFlextTapLdifExtractSupport": ".unit",
         "TestsFlextTapLdifModels": ".models",
         "TestsFlextTapLdifProtocols": ".protocols",
