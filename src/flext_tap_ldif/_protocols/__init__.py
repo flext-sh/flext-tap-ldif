@@ -22,4 +22,11 @@ install_lazy_exports(
     globals(),
     {"FlextTapLdifProtocolsConfig": ".config"},
     public_exports=__all__,
+    deferred_members={
+        "FlextTapLdifProtocolsConfig": (
+            "TapLdif",
+            "TapLdifStreamRule",
+            "Root",
+        ),
+    },
 )
