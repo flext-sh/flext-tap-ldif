@@ -23,4 +23,10 @@ install_lazy_exports(
     globals(),
     {"FlextTapLdifModelsBase": ".base", "FlextTapLdifModelsConfig": ".config"},
     public_exports=__all__,
+    deferred_members={
+        "FlextTapLdifModelsConfig": (
+            "TapLdif",
+            "Root",
+        ),
+    },
 )

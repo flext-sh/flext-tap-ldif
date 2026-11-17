@@ -20,8 +20,6 @@ __all__: tuple[str, ...] = ("TestsFlextTapLdifExtractSupport",)
 install_lazy_exports(
     __name__,
     globals(),
-    {
-        "TestsFlextTapLdifExtractSupport": ".test_extract_support",
-    },
+    {"TestsFlextTapLdifExtractSupport": ".test_extract_support"},
     public_exports=__all__,
 )
