@@ -31,15 +31,5 @@ install_lazy_exports(
         "FlextTapLdifUtilitiesExtractSupport": ".extract_support",
     },
     public_exports=__all__,
-    deferred_members={
-        "FlextTapLdifUtilitiesExtractSupport": (
-            "logger",
-            "tap_ldif",
-            "tap_spec",
-            "_resolve_single_file",
-            "_resolve_dir_files",
-            "resolve_files",
-            "pack_entry",
-        ),
-    },
+    deferred_members=("FlextTapLdifUtilitiesExtractSupport",),
 )
