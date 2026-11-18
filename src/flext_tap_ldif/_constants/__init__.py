@@ -23,11 +23,5 @@ install_lazy_exports(
     globals(),
     {"FlextTapLdifConstantsBase": ".base", "FlextTapLdifConstantsValues": ".values"},
     public_exports=__all__,
-    deferred_members={
-        "FlextTapLdifConstantsValues": (
-            "TAP_NAME",
-            "MAX_FILE_SIZE_MB",
-            "EntrySchema",
-        ),
-    },
+    deferred_members=("FlextTapLdifConstantsValues",),
 )
