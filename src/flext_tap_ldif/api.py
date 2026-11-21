@@ -16,7 +16,7 @@ from typing import Annotated, override
 from flext_meltano import FlextMeltanoTapServiceBase
 
 from flext_tap_ldif import c, m, p, t, u
-from flext_tap_ldif.services.extract import FlextTapLdifExtractService
+from flext_tap_ldif.services import FlextTapLdifExtractService
 
 
 class FlextTapLdifService(FlextMeltanoTapServiceBase):
