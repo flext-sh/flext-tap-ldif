@@ -1,0 +1,1 @@
+{"id":"exports--flext_tap_ldif._protocols","language":"Python","rule":{"regex":"^(?:FlextTapLdifProtocolsConfig)$"}}

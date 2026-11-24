@@ -1,0 +1,1 @@
+{"id":"exports--flext_tap_ldif.services","language":"Python","rule":{"regex":"^(?:FlextTapLdifExtractService)$"}}
