@@ -16,10 +16,11 @@ from flext_tap_ldif._models import FlextTapLdifModelsBase, FlextTapLdifModelsCon
 class FlextTapLdifModels(
     FlextMeltanoModels,
     FlextLdifModels,
-    FlextTapLdifModelsBase,
-    FlextTapLdifModelsConfig,
 ):
     """Facade for tap-ldif data models."""
+
+    class TapLdif(FlextTapLdifModelsBase, FlextTapLdifModelsConfig):
+        """Domain namespace of the package parts."""
 
 
 m = FlextTapLdifModels

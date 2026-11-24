@@ -23,9 +23,11 @@ from flext_tap_ldif._protocols import FlextTapLdifProtocolsConfig
 class FlextTapLdifProtocols(
     FlextMeltanoProtocols,
     FlextLdifProtocols,
-    FlextTapLdifProtocolsConfig,
 ):
     """Singer Tap LDIF protocols facade — composes Meltano + LDIF."""
+
+    class TapLdif(FlextTapLdifProtocolsConfig):
+        """Domain namespace of the package parts."""
 
 
 p = FlextTapLdifProtocols
