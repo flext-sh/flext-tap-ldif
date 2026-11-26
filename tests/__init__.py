@@ -31,13 +31,13 @@ if TYPE_CHECKING:
         settings,
         tap_ldif,
     )
+    from flext_tap_ldif.services import FlextTapLdifExtractService
     from tests.base import TestsFlextTapLdifServiceBase, s
     from tests.constants import TestsFlextTapLdifConstants, c
     from tests.models import TestsFlextTapLdifModels, m
     from tests.protocols import TestsFlextTapLdifProtocols, p
     from tests.settings import TestsFlextTapLdifSettings
     from tests.typings import TestsFlextTapLdifTypes, t
-    from tests.unit import TestsFlextTapLdifExtractSupport
     from tests.utilities import TestsFlextTapLdifUtilities, u
 
 
@@ -45,6 +45,7 @@ __all__: tuple[str, ...] = (
     "FlextTapLdifCli",
     "FlextTapLdifConfig",
     "FlextTapLdifConstants",
+    "FlextTapLdifExtractService",
     "FlextTapLdifModels",
     "FlextTapLdifProtocols",
     "FlextTapLdifService",
@@ -54,7 +55,6 @@ __all__: tuple[str, ...] = (
     "FlextTapLdifUtilities",
     "FlextTapLdifVersion",
     "TestsFlextTapLdifConstants",
-    "TestsFlextTapLdifExtractSupport",
     "TestsFlextTapLdifModels",
     "TestsFlextTapLdifProtocols",
     "TestsFlextTapLdifServiceBase",
@@ -90,6 +90,7 @@ install_lazy_exports(
         "FlextTapLdifCli": "flext_tap_ldif",
         "FlextTapLdifConfig": "flext_tap_ldif",
         "FlextTapLdifConstants": "flext_tap_ldif",
+        "FlextTapLdifExtractService": "flext_tap_ldif.services",
         "FlextTapLdifModels": "flext_tap_ldif",
         "FlextTapLdifProtocols": "flext_tap_ldif",
         "FlextTapLdifService": "flext_tap_ldif",
@@ -99,7 +100,6 @@ install_lazy_exports(
         "FlextTapLdifUtilities": "flext_tap_ldif",
         "FlextTapLdifVersion": "flext_tap_ldif",
         "TestsFlextTapLdifConstants": ".constants",
-        "TestsFlextTapLdifExtractSupport": ".unit",
         "TestsFlextTapLdifModels": ".models",
         "TestsFlextTapLdifProtocols": ".protocols",
         "TestsFlextTapLdifServiceBase": ".base",
