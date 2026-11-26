@@ -27,7 +27,7 @@ class FlextTapLdifUtilitiesExtractSupport:
     logger: ClassVar[p.Logger] = u.fetch_logger(__name__)
 
     @staticmethod
-    def tap_ldif() -> p.TapLdif:
+    def tap_ldif() -> m.TapLdif.TapLdif:
         """Validated TapLdif business-rule config (streams and their contracts).
 
         Returns:
@@ -35,7 +35,7 @@ class FlextTapLdifUtilitiesExtractSupport:
 
         """
         payload: t.JsonMapping = config.TapLdif.model_dump()
-        return m.TapLdif.model_validate(dict(payload))
+        return m.TapLdif.TapLdif.model_validate(dict(payload))
 
     @staticmethod
     def tap_spec() -> p.Meltano.TapSpec:
